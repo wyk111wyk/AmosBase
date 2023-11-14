@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct ToastBaseView: View{
+public struct ToastView: View{
     /// Determine how the alert will be display
     public enum DisplayMode: String, Equatable{
         case centerToast, topToast, bottomToast
@@ -48,7 +48,7 @@ public struct ToastBaseView: View{
     ///The subtitle of the alert (`Optional(String)`)
     public var subTitle: String? = nil
     
-    public init(displayMode: DisplayMode = .topToast,
+    public init(displayMode: DisplayMode,
                 type: AlertType,
                 bgColor: Color? = nil,
                 title: String? = nil,
@@ -190,8 +190,8 @@ public struct ToastBaseView: View{
     }
 }
 
-extension ToastBaseView: Equatable {
-    public static func == (lhs: ToastBaseView, rhs: ToastBaseView) -> Bool {
+extension ToastView: Equatable {
+    public static func == (lhs: ToastView, rhs: ToastView) -> Bool {
         lhs.title == rhs.title &&
         lhs.subTitle == rhs.subTitle &&
         lhs.displayMode == rhs.displayMode
@@ -201,11 +201,11 @@ extension ToastBaseView: Equatable {
 #Preview("Banner") {
     ScrollView {
         VStack(spacing: 15) {
-            ToastBaseView(displayMode: .topToast, type: .success(), title: "Success", subTitle: "I am subtitle")
-            ToastBaseView(displayMode: .topToast, type: .error(), bgColor: .red, title: "Error", subTitle: "I am subtitle I am subtitle")
-            ToastBaseView(displayMode: .topToast, type: .systemImage("trash", .brown), title: "Trash", subTitle: "I am subtitle I am subtitle")
-            ToastBaseView(displayMode: .topToast, type: .loading, title: "Loading", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle")
-            ToastBaseView(displayMode: .topToast, type: .regular, title: "Regular", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle")
+            ToastView(displayMode: .topToast, type: .success(), title: "Success", subTitle: "I am subtitle")
+            ToastView(displayMode: .topToast, type: .error(), bgColor: .red, title: "Error", subTitle: "I am subtitle I am subtitle")
+            ToastView(displayMode: .topToast, type: .systemImage("trash", .brown), title: "Trash", subTitle: "I am subtitle I am subtitle")
+            ToastView(displayMode: .topToast, type: .loading, title: "Loading", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle")
+            ToastView(displayMode: .topToast, type: .regular, title: "Regular", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle")
         }
     }
 }
@@ -213,11 +213,11 @@ extension ToastBaseView: Equatable {
 #Preview("Center") {
     ScrollView {
         VStack(spacing: 15) {
-            ToastBaseView(displayMode: .centerToast, type: .success(), title: "Success", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle")
-            ToastBaseView(displayMode: .centerToast, type: .error(), title: "Error", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle")
-            ToastBaseView(displayMode: .centerToast, type: .systemImage("trash", .brown), title: "Trash", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle")
-            ToastBaseView(displayMode: .centerToast, type: .loading, title: "Loading")
-            ToastBaseView(displayMode: .centerToast, type: .regular, title: "Regular", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle")
+            ToastView(displayMode: .centerToast, type: .success(), title: "Success", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle")
+            ToastView(displayMode: .centerToast, type: .error(), title: "Error", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle")
+            ToastView(displayMode: .centerToast, type: .systemImage("trash", .brown), title: "Trash", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle")
+            ToastView(displayMode: .centerToast, type: .loading, title: "Loading")
+            ToastView(displayMode: .centerToast, type: .regular, title: "Regular", subTitle: "I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle I am subtitle")
         }
     }
 }

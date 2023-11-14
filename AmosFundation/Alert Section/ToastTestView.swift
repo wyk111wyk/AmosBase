@@ -9,7 +9,7 @@ import SwiftUI
 import AmosBase
 import Combine
 
-struct ToastView: View {
+struct ToastTestView: View {
     @State private var selectedToast: ToastType? = nil
     @State private var simpleError = false
     @State private var simpleLoading = false
@@ -154,6 +154,6 @@ struct ToastView: View {
 
 #Preview {
     NavigationStack {
-        ToastView()
+        ToastTestView()
     }
 }

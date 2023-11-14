@@ -29,7 +29,7 @@ public struct AlertToastModifier: ViewModifier{
     var withHaptic: Bool = true
     
     ///Init `AlertToast` View
-    var toast: () -> ToastBaseView?
+    var toast: () -> ToastView?
     
     ///Completion block returns `true` after dismiss
     var onTap: (() -> ())? = nil
@@ -124,7 +124,7 @@ public struct AlertToastModifier: ViewModifier{
 }
 
 fileprivate struct ToastTransition: ViewModifier {
-    let mode: ToastBaseView.DisplayMode
+    let mode: ToastView.DisplayMode
     var transition: AnyTransition? = nil
     
     @ViewBuilder
@@ -160,7 +160,7 @@ public extension View{
                      offsetY: CGFloat = 0,
                      transition: AnyTransition? = nil,
                      withHaptic: Bool = true,
-                     toast: @escaping () -> ToastBaseView?,
+                     toast: @escaping () -> ToastView?,
                      onTap: (() -> ())? = nil,
                      completion: (() -> ())? = nil) -> some View{
         return modifier(AlertToastModifier(isPresenting: isPresenting,
@@ -176,15 +176,15 @@ public extension View{
     
     /// 简单UI组件 - 顶部错误提示（可进一步定制）
     func simpleErrorToast(isPresenting: Binding<Bool>,
-                          displayMode: ToastBaseView.DisplayMode = .topToast,
-                          title: String,
+                          displayMode: ToastView.DisplayMode = .topToast,
+                          title: String?,
                           subtitle: String? = nil,
                           labelColor: Color = .red,
                           bgColor: Color? = .red,
                           withHaptic: Bool = true,
                           onTap: (() -> ())? = nil,
                           completion: (() -> ())? = nil) -> some View{
-        let errorToast = ToastBaseView(displayMode: displayMode,
+        let errorToast = ToastView(displayMode: displayMode,
                                    type: .error(labelColor),
                                    bgColor: bgColor,
                                    title: title,
@@ -198,7 +198,7 @@ public extension View{
     
     /// 简单UI组件 - 中央成功动画提示（可进一步定制）
     func simpleSuccessToast(isPresenting: Binding<Bool>,
-                            displayMode: ToastBaseView.DisplayMode = .centerToast,
+                            displayMode: ToastView.DisplayMode = .centerToast,
                             title: String,
                             subtitle: String? = nil,
                             labelColor: Color = .green,
@@ -206,7 +206,7 @@ public extension View{
                             withHaptic: Bool = true,
                             onTap: (() -> ())? = nil,
                             completion: (() -> ())? = nil) -> some View{
-        let errorToast = ToastBaseView(displayMode: displayMode,
+        let errorToast = ToastView(displayMode: displayMode,
                                    type: .success(labelColor),
                                    bgColor: bgColor,
                                    title: title,
@@ -222,14 +222,14 @@ public extension View{
     ///
     /// 不会自动从屏幕消失，需要程序dismss或手动点击
     func simpleLoadingToast(isPresenting: Binding<Bool>,
-                            displayMode: ToastBaseView.DisplayMode = .centerToast,
+                            displayMode: ToastView.DisplayMode = .centerToast,
                             title: String,
                             subtitle: String? = nil,
                             withHaptic: Bool = true,
                             tapToDismiss: Bool = true,
                             onTap: (() -> ())? = nil,
                             completion: (() -> ())? = nil) -> some View{
-        let errorToast = ToastBaseView(displayMode: displayMode,
+        let errorToast = ToastView(displayMode: displayMode,
                                    type: .loading,
                                    title: title,
                                    subTitle: subtitle)

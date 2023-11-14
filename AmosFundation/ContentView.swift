@@ -53,7 +53,7 @@ struct ContentView: View {
             if let selectedPage {
                 switch selectedPage.id {
                 case 0:
-                    ToastView(selectedPage.title)
+                    ToastTestView(selectedPage.title)
                 case 1:
                     AlertView(selectedPage.title)
                 case 2:

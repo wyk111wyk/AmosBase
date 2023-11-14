@@ -12,7 +12,7 @@
 		B03750FA2AFC7B2D00FEF42E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B03750F92AFC7B2D00FEF42E /* Assets.xcassets */; };
 		B03750FE2AFC7B2D00FEF42E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B03750FD2AFC7B2D00FEF42E /* Preview Assets.xcassets */; };
 		B0C593EA2B0239B900E591B4 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593E92B0239B900E591B4 /* Page.swift */; };
-		B0C593EC2B023A0400E591B4 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593EB2B023A0400E591B4 /* ToastView.swift */; };
+		B0C593EC2B023A0400E591B4 /* ToastTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593EB2B023A0400E591B4 /* ToastTestView.swift */; };
 		B0C593EE2B023A0D00E591B4 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593ED2B023A0D00E591B4 /* AlertView.swift */; };
 		B0C593F02B023A1500E591B4 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593EF2B023A1500E591B4 /* ButtonView.swift */; };
 		B0C593F42B02482000E591B4 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593F32B02482000E591B4 /* PlaceholderView.swift */; };
@@ -36,7 +36,7 @@
 		B03750FB2AFC7B2D00FEF42E /* AmosFundation.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AmosFundation.entitlements; sourceTree = "<group>"; };
 		B03750FD2AFC7B2D00FEF42E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B0C593E92B0239B900E591B4 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
-		B0C593EB2B023A0400E591B4 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		B0C593EB2B023A0400E591B4 /* ToastTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastTestView.swift; sourceTree = "<group>"; };
 		B0C593ED2B023A0D00E591B4 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		B0C593EF2B023A1500E591B4 /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
 		B0C593F32B02482000E591B4 /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
@@ -126,7 +126,7 @@
 		B0C593F12B023A1900E591B4 /* Alert Section */ = {
 			isa = PBXGroup;
 			children = (
-				B0C593EB2B023A0400E591B4 /* ToastView.swift */,
+				B0C593EB2B023A0400E591B4 /* ToastTestView.swift */,
 				B0C593ED2B023A0D00E591B4 /* AlertView.swift */,
 			);
 			path = "Alert Section";
@@ -290,7 +290,7 @@
 				B0C593EE2B023A0D00E591B4 /* AlertView.swift in Sources */,
 				B0C593F92B030F2500E591B4 /* ArrayView.swift in Sources */,
 				B0C593F02B023A1500E591B4 /* ButtonView.swift in Sources */,
-				B0C593EC2B023A0400E591B4 /* ToastView.swift in Sources */,
+				B0C593EC2B023A0400E591B4 /* ToastTestView.swift in Sources */,
 				B0C593FE2B031C6B00E591B4 /* ImageView.swift in Sources */,
 				B03750F82AFC7B2C00FEF42E /* ContentView.swift in Sources */,
 				B0C593FB2B03157D00E591B4 /* DateView.swift in Sources */,
@@ -512,7 +512,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"WatchFundation Watch App/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Watch/Preview Content\"";
 				DEVELOPMENT_TEAM = D3FXKEY64K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -542,7 +542,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"WatchFundation Watch App/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Watch/Preview Content\"";
 				DEVELOPMENT_TEAM = D3FXKEY64K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
