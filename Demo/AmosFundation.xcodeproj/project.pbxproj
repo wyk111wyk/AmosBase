@@ -11,6 +11,8 @@
 		B03750F82AFC7B2C00FEF42E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03750F72AFC7B2C00FEF42E /* ContentView.swift */; };
 		B03750FA2AFC7B2D00FEF42E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B03750F92AFC7B2D00FEF42E /* Assets.xcassets */; };
 		B03750FE2AFC7B2D00FEF42E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B03750FD2AFC7B2D00FEF42E /* Preview Assets.xcassets */; };
+		B0921D4E2B03610000FC1764 /* AmosBase in Frameworks */ = {isa = PBXBuildFile; productRef = B0921D4D2B03610000FC1764 /* AmosBase */; };
+		B0921D502B03610600FC1764 /* AmosBase in Frameworks */ = {isa = PBXBuildFile; productRef = B0921D4F2B03610600FC1764 /* AmosBase */; };
 		B0C593EA2B0239B900E591B4 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593E92B0239B900E591B4 /* Page.swift */; };
 		B0C593EC2B023A0400E591B4 /* ToastTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593EB2B023A0400E591B4 /* ToastTestView.swift */; };
 		B0C593EE2B023A0D00E591B4 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593ED2B023A0D00E591B4 /* AlertView.swift */; };
@@ -20,12 +22,10 @@
 		B0C593F92B030F2500E591B4 /* ArrayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593F82B030F2500E591B4 /* ArrayView.swift */; };
 		B0C593FB2B03157D00E591B4 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593FA2B03157D00E591B4 /* DateView.swift */; };
 		B0C593FE2B031C6B00E591B4 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593FD2B031C6B00E591B4 /* ImageView.swift */; };
-		B0C5940B2B0339D300E591B4 /* AmosBase in Frameworks */ = {isa = PBXBuildFile; productRef = B0C5940A2B0339D300E591B4 /* AmosBase */; };
 		B0C594192B033A3700E591B4 /* WatchFundationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C594182B033A3700E591B4 /* WatchFundationApp.swift */; };
 		B0C5941B2B033A3700E591B4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C5941A2B033A3700E591B4 /* ContentView.swift */; };
 		B0C5941D2B033A3800E591B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0C5941C2B033A3800E591B4 /* Assets.xcassets */; };
 		B0C594202B033A3800E591B4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0C5941F2B033A3800E591B4 /* Preview Assets.xcassets */; };
-		B0C594292B033A7000E591B4 /* AmosBase in Frameworks */ = {isa = PBXBuildFile; productRef = B0C594282B033A7000E591B4 /* AmosBase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +35,7 @@
 		B03750F92AFC7B2D00FEF42E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B03750FB2AFC7B2D00FEF42E /* AmosFundation.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AmosFundation.entitlements; sourceTree = "<group>"; };
 		B03750FD2AFC7B2D00FEF42E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		B05391F12B035C8E005D80E6 /* AmosBase */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AmosBase; path = ../..; sourceTree = "<group>"; };
+		B0921D4C2B0360FB00FC1764 /* AmosBase */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AmosBase; path = ..; sourceTree = "<group>"; };
 		B0C593E92B0239B900E591B4 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		B0C593EB2B023A0400E591B4 /* ToastTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastTestView.swift; sourceTree = "<group>"; };
 		B0C593ED2B023A0D00E591B4 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
@@ -57,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B0C5940B2B0339D300E591B4 /* AmosBase in Frameworks */,
+				B0921D4E2B03610000FC1764 /* AmosBase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,7 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B0C594292B033A7000E591B4 /* AmosBase in Frameworks */,
+				B0921D502B03610600FC1764 /* AmosBase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +75,7 @@
 		B00811102AFC8455002CE8BC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0921D4C2B0360FB00FC1764 /* AmosBase */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -82,7 +83,6 @@
 		B03750E92AFC7B2C00FEF42E = {
 			isa = PBXGroup;
 			children = (
-				B05391F12B035C8E005D80E6 /* AmosBase */,
 				B03750F42AFC7B2C00FEF42E /* AmosFundation */,
 				B0C594172B033A3700E591B4 /* Watch */,
 				B03750F32AFC7B2C00FEF42E /* Products */,
@@ -196,7 +196,7 @@
 			);
 			name = AmosFundation;
 			packageProductDependencies = (
-				B0C5940A2B0339D300E591B4 /* AmosBase */,
+				B0921D4D2B03610000FC1764 /* AmosBase */,
 			);
 			productName = AmosFundation;
 			productReference = B03750F22AFC7B2C00FEF42E /* AmosFundation.app */;
@@ -216,7 +216,7 @@
 			);
 			name = Watch;
 			packageProductDependencies = (
-				B0C594282B033A7000E591B4 /* AmosBase */,
+				B0921D4F2B03610600FC1764 /* AmosBase */,
 			);
 			productName = "WatchFundation Watch App";
 			productReference = B0C594132B033A3700E591B4 /* Watch.app */;
@@ -599,11 +599,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B0C5940A2B0339D300E591B4 /* AmosBase */ = {
+		B0921D4D2B03610000FC1764 /* AmosBase */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AmosBase;
 		};
-		B0C594282B033A7000E591B4 /* AmosBase */ = {
+		B0921D4F2B03610600FC1764 /* AmosBase */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AmosBase;
 		};
