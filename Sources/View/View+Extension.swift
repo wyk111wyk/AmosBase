@@ -174,6 +174,8 @@ public struct SimplePlaceholder<V: View>: View {
     let maxWidth: CGFloat
     @ViewBuilder let buttonView: () -> V
     
+    @State private var isAnimate = false
+    
     public init(systemImageName: String? = nil,
                 imageName: String? = nil,
                 imageLength: CGFloat = 90,
@@ -217,9 +219,11 @@ public struct SimplePlaceholder<V: View>: View {
             if let systemImageName {
                 Image(systemName: systemImageName)
                     .imageModify(color: imageColor, length: imageLength)
+                    .modifier(TapImageAnimation())
             }else if let imageName {
                 Image(imageName)
                     .imageModify(length: imageLength)
+                    .modifier(TapImageAnimation())
             }
             VStack(spacing: 8) {
                 Text(title)
@@ -245,6 +249,23 @@ public struct SimplePlaceholder<V: View>: View {
         }
         .frame(maxWidth: maxWidth)
         .offset(x: 0, y: offsetY)
+    }
+}
+
+struct TapImageAnimation: ViewModifier {
+    // the animation is triggered each time the value changes
+    @State private var isAnimate: Bool = false
+    
+    func body(content: Content) -> some View {
+        if #available(iOS 17, *) {
+            content
+                .symbolEffect(.bounce, value: isAnimate)
+                .onTapGesture {
+                    self.isAnimate.toggle()
+                }
+        }else {
+            content
+        }
     }
 }
 

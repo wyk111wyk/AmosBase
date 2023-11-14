@@ -51,7 +51,7 @@ public struct ToastView: View{
     public init(displayMode: DisplayMode,
                 type: AlertType,
                 bgColor: Color? = nil,
-                title: String? = nil,
+                title: String?,
                 subTitle: String? = nil){
         
         self.displayMode = displayMode

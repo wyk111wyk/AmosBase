@@ -77,7 +77,7 @@ struct ToastTestView: View {
         }
         .navigationTitle(title)
         .simpleToast(isPresenting: .isPresented($selectedToast)) {
-            return selectedToast?.toast()
+            selectedToast?.toast()
         }
         .simpleErrorToast(isPresenting: $simpleError, title: "发生了一个错误", subtitle: "请仔细检查网络连接")
         .simpleSuccessToast(isPresenting: $simpleSuccess, title: "保存数据成功")
@@ -89,8 +89,8 @@ struct ToastTestView: View {
         case centerSuccess, centerError, centerSystemImage, centerImage, centerLoading, centerRegular
         case bottomSuccess, bottomError, bottomSystemImage, bottomImage, bottomLoading, bottomRegular
         
-        var para: (mode: ToastBaseView.DisplayMode, 
-                   type: ToastBaseView.AlertType) {
+        var para: (mode: ToastView.DisplayMode,
+                   type: ToastView.AlertType) {
             switch self {
             case .topSuccess:
                 (.topToast, .success())
@@ -131,8 +131,8 @@ struct ToastTestView: View {
             }
         }
         
-        func toast() -> ToastBaseView {
-            ToastBaseView(displayMode: para.mode,
+        func toast() -> ToastView {
+            ToastView(displayMode: para.mode,
                           type: para.type,
                           title: rawValue,
                           subTitle: "I am content but not very long I am content but not very long I am content but not very long")

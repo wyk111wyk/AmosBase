@@ -160,7 +160,7 @@ public extension View{
                      offsetY: CGFloat = 0,
                      transition: AnyTransition? = nil,
                      withHaptic: Bool = true,
-                     toast: @escaping () -> ToastView?,
+                     @ViewBuilder toast: @escaping () -> ToastView?,
                      onTap: (() -> ())? = nil,
                      completion: (() -> ())? = nil) -> some View{
         return modifier(AlertToastModifier(isPresenting: isPresenting,
