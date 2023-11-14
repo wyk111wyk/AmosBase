@@ -1,0 +1,148 @@
+//
+//  Location+Extension.swift
+//  AmosGym
+//
+//  Created by 吴昱珂 on 2022/8/9.
+//
+
+import Foundation
+import CoreLocation
+import MapKit
+import OSLog
+
+private let mylog = Logger(subsystem: "Location+Extension", category: "AmosBase")
+public extension CLPlacemark {
+    func address() -> String {
+        var address = ""
+        address += self.administrativeArea ?? ""
+        address += self.subAdministrativeArea ?? ""
+        address += self.locality ?? ""
+        address += self.subLocality ?? ""
+        address += self.thoroughfare ?? ""
+        address += self.subThoroughfare ?? ""
+        address += self.name ?? ""
+        mylog.log("AppleMap Address: \(address)")
+        return address
+    }
+    
+    func city() -> String? {
+        self.locality
+    }
+}
+
+extension CLLocationCoordinate2D: Equatable {
+    public static func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
+    }
+    public static func !=(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        lhs.latitude != rhs.latitude || lhs.longitude != rhs.longitude
+    }
+}
+
+public extension CLLocationCoordinate2D {
+    /// longitude 120, latitude 29
+    func toAmapString() -> String {
+        if self.longitude == 0 && self.latitude == 0 {
+            return "N/A"
+        }else {
+            return "\(self.longitude),\(self.latitude)"
+        }
+    }
+    
+    /// 将地点转换为地址
+    ///
+    /// 使用Apple Map的API
+    func address(locale: Locale = .current) async -> [CLPlacemark]  {
+        let loction: CLLocation = CLLocation(latitude: self.latitude, longitude: self.longitude)
+        let places = try? await CLGeocoder().reverseGeocodeLocation(loction, preferredLocale: locale)
+        guard let places else {
+            return []
+        }
+        
+        return places
+    }
+    
+    /// 两个地点之间的距离 -  单位是 米
+    ///
+    /// 传入为起点，本体为终点
+    func distance(from coordinate: CLLocationCoordinate2D?) -> Double? {
+        guard let fromCoordinate = coordinate else {
+            return nil
+        }
+        let start = CLLocation(latitude: fromCoordinate.latitude,
+                               longitude: fromCoordinate.longitude)
+        let end = CLLocation(latitude: self.latitude,
+                             longitude: self.longitude)
+        let distance: CLLocationDistance = end.distance(from: start)
+        return distance
+    }
+    
+    /// 两个地点之间的距离：xx米
+    func meter(from coordinate: CLLocationCoordinate2D? = nil) -> String {
+        guard let distance = self.distance(from: coordinate) else {
+            return "N/A"
+        }
+        
+        mylog.log("====> 两点间距离是：\(distance)m")
+        if distance == 0 {
+            return 0.toUnit(unit: UnitLength.meters,
+                            option: .providedUnit)
+        }else {
+            return distance.toUnit(unit: UnitLength.meters,
+                                   degit: 1)
+        }
+    }
+    
+    /// 距离我所在的地点的距离
+    func meterFromMe() -> String {
+        meter(from: LocationHelper().manager.location?.coordinate)
+    }
+    
+    /// 计算两点间的所有行车路线
+    func routes(from coordinate: CLLocationCoordinate2D? = nil) async -> [MKRoute]? {
+        var fromCoordinate: CLLocationCoordinate2D?
+        
+        if coordinate == nil {
+            // 使用当前位置
+            fromCoordinate = LocationHelper().manager.location?.coordinate
+        }else {
+            // 使用传入位置
+            fromCoordinate = coordinate
+        }
+        
+        guard let fromCoordinate = fromCoordinate else {
+            return nil
+        }
+        
+        // 起点
+        let start = MKMapItem(placemark: MKPlacemark(
+            coordinate: fromCoordinate,
+            addressDictionary: nil))
+        // 目的地
+        let destination = MKMapItem(placemark: MKPlacemark(
+            coordinate: self,
+            addressDictionary: nil))
+        
+        let directionsRequest = MKDirections.Request()
+        directionsRequest.transportType = .automobile
+        directionsRequest.source = start
+        directionsRequest.destination = destination
+        directionsRequest.requestsAlternateRoutes = true
+        
+        let directions = MKDirections(request: directionsRequest)
+        if let routes = try? await directions.calculate().routes {
+            return routes
+        }else {
+            return nil
+        }
+    }
+    
+    /// 计算两点间的推荐行车路线（一条）
+    func route(from coordinate: CLLocationCoordinate2D? = nil) async -> MKRoute? {
+        if let route = await self.routes(from: coordinate)?.first {
+            return route
+        }else {
+            return nil
+        }
+    }
+}
