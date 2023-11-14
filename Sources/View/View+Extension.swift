@@ -257,7 +257,7 @@ struct TapImageAnimation: ViewModifier {
     @State private var isAnimate: Bool = false
     
     func body(content: Content) -> some View {
-        if #available(iOS 17, *) {
+        if #available(iOS 17, watchOS 10, *) {
             content
                 .symbolEffect(.bounce, value: isAnimate)
                 .onTapGesture {
