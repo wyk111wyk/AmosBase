@@ -9,7 +9,7 @@ let package = Package(
             .iOS(.v16),
             .macOS(.v10_13),
             .tvOS(.v12),
-            .watchOS(.v6)
+            .watchOS(.v9)
     ],
     products: [
         // 产品定义包生成的可执行文件和库，并使其对其他包可见。

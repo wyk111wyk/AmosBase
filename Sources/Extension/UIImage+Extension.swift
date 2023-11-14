@@ -6,11 +6,14 @@
 //
 
 import Foundation
-import Vision
 import UIKit
 import SwiftUI
-import VisionKit
 import OSLog
+
+#if canImport(Vision)
+import Vision
+import VisionKit
+#endif
 
 private let mylog = Logger(subsystem: "UIImage+Extension", category: "AmosBase")
 public extension Image {
@@ -25,6 +28,7 @@ public extension Image {
     }
 }
 
+#if canImport(Vision)
 // MARK: - 图片检测文字或人脸
 public extension UIImage {
     /// 识别图片内的文字 -  使用Vision框架
@@ -75,25 +79,6 @@ public extension UIImage {
                                     orientation: orientation)
         
         return facePoseRequest.results
-    }
-    
-    /// 获取一幅图片的平均颜色
-    ///
-    /// 返回值为可选
-    func averageColor() -> UIColor? {
-        guard let inputImage = CIImage(image: self) else { return nil }
-        let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
-
-        guard let filter = CIFilter(name: "CIAreaAverage", 
-                                    parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector])
-        else { return nil }
-        guard let outputImage = filter.outputImage else { return nil }
-
-        var bitmap = [UInt8](repeating: 0, count: 4)
-        let context = CIContext(options: [.workingColorSpace: kCFNull!])
-        context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
-
-        return UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
     }
     
     /// 获取图片的EXIF信息
@@ -208,9 +193,31 @@ public extension UIImage {
         return resultImage
     }
 }
+#endif
+
+#if !os(watchOS)
 
 // MARK: - 对图片添加滤镜等效果
 public extension UIImage {
+    /// 获取一幅图片的平均颜色
+    ///
+    /// 返回值为可选
+    func averageColor() -> UIColor? {
+        guard let inputImage = CIImage(image: self) else { return nil }
+        let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
+
+        guard let filter = CIFilter(name: "CIAreaAverage",
+                                    parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector])
+        else { return nil }
+        guard let outputImage = filter.outputImage else { return nil }
+
+        var bitmap = [UInt8](repeating: 0, count: 4)
+        let context = CIContext(options: [.workingColorSpace: kCFNull!])
+        context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
+
+        return UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
+    }
+    
     enum CIEffectType {
         case blur_Box, blur_Disc, blur_Gaussian, blur_MotionBlur, blur_Zoom
         case color_Clamp, color_Invert
@@ -273,4 +280,4 @@ public extension UIImage {
         }
     }
 }
-
+#endif

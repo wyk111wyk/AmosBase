@@ -30,6 +30,7 @@ public extension Binding {
     }
 }
 
+#if !os(watchOS)
 public extension UIView {
     // This is the function to convert UIView to UIImage
     func asUIImage() -> UIImage {
@@ -62,7 +63,10 @@ public extension View {
         controller.view.removeFromSuperview()
         return image
     }
+}
+#endif
     
+public extension View {
     /// 简单UI组件 -  定制化的占位符
     ///
     /// 设置 themeColor 后替代所有颜色

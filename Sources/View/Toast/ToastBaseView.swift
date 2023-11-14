@@ -163,7 +163,7 @@ public struct ToastBaseView: View{
         }
         .padding()
         .frame(minWidth: 180, maxWidth: 200, minHeight: 100, alignment: .center)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
+        .modifier(BackgroundColorModifier(bgColor: bgColor))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(RoundedRectangle(cornerRadius: 12)
             .stroke(Color.gray.opacity(0.2), lineWidth: 1))
@@ -320,9 +320,15 @@ fileprivate struct BackgroundColorModifier: ViewModifier {
                     bgColor
                 }
         }else{
-            content
-                .background(.regularMaterial, 
-                            in: RoundedRectangle(cornerRadius: 12))
+            if #available(watchOS 10.0, *) {
+                content
+                    .background(.regularMaterial,
+                                in: RoundedRectangle(cornerRadius: 12))
+            }else {
+                content
+                    .background(.gray.opacity(0.7),
+                                in: RoundedRectangle(cornerRadius: 12))
+            }
         }
     }
 }

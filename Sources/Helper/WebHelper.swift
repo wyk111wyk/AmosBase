@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 #if !os(watchOS)
 import WebKit
-#endif
 
 // 针对兔小巢账户的结构体
 public struct FeedbackUser: Identifiable {
@@ -151,3 +150,4 @@ public class WebCoordinator: NSObject, WKNavigationDelegate {
 #Preview {
     SimpleWebView(url: URL(string: "https://www.baidu.com")!)
 }
+#endif

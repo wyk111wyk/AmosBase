@@ -92,6 +92,7 @@ public struct AlertToastModifier: ViewModifier{
             return
         }
         
+        #if !os(watchOS)
         // 决定是否震动
         if let toastView = toast(), withHaptic {
             switch toastView.type {
@@ -103,6 +104,7 @@ public struct AlertToastModifier: ViewModifier{
                 break
             }
         }
+        #endif
         
         // 结束Toast的任务
         let dismissTask = DispatchWorkItem {

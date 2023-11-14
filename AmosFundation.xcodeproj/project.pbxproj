@@ -1,0 +1,613 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B03750F62AFC7B2C00FEF42E /* AmosFundationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03750F52AFC7B2C00FEF42E /* AmosFundationApp.swift */; };
+		B03750F82AFC7B2C00FEF42E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03750F72AFC7B2C00FEF42E /* ContentView.swift */; };
+		B03750FA2AFC7B2D00FEF42E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B03750F92AFC7B2D00FEF42E /* Assets.xcassets */; };
+		B03750FE2AFC7B2D00FEF42E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B03750FD2AFC7B2D00FEF42E /* Preview Assets.xcassets */; };
+		B0C593EA2B0239B900E591B4 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593E92B0239B900E591B4 /* Page.swift */; };
+		B0C593EC2B023A0400E591B4 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593EB2B023A0400E591B4 /* ToastView.swift */; };
+		B0C593EE2B023A0D00E591B4 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593ED2B023A0D00E591B4 /* AlertView.swift */; };
+		B0C593F02B023A1500E591B4 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593EF2B023A1500E591B4 /* ButtonView.swift */; };
+		B0C593F42B02482000E591B4 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593F32B02482000E591B4 /* PlaceholderView.swift */; };
+		B0C593F72B02505B00E591B4 /* DeviceInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593F62B02505B00E591B4 /* DeviceInfoView.swift */; };
+		B0C593F92B030F2500E591B4 /* ArrayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593F82B030F2500E591B4 /* ArrayView.swift */; };
+		B0C593FB2B03157D00E591B4 /* DateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593FA2B03157D00E591B4 /* DateView.swift */; };
+		B0C593FE2B031C6B00E591B4 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C593FD2B031C6B00E591B4 /* ImageView.swift */; };
+		B0C5940B2B0339D300E591B4 /* AmosBase in Frameworks */ = {isa = PBXBuildFile; productRef = B0C5940A2B0339D300E591B4 /* AmosBase */; };
+		B0C594192B033A3700E591B4 /* WatchFundationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C594182B033A3700E591B4 /* WatchFundationApp.swift */; };
+		B0C5941B2B033A3700E591B4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C5941A2B033A3700E591B4 /* ContentView.swift */; };
+		B0C5941D2B033A3800E591B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0C5941C2B033A3800E591B4 /* Assets.xcassets */; };
+		B0C594202B033A3800E591B4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0C5941F2B033A3800E591B4 /* Preview Assets.xcassets */; };
+		B0C594292B033A7000E591B4 /* AmosBase in Frameworks */ = {isa = PBXBuildFile; productRef = B0C594282B033A7000E591B4 /* AmosBase */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B03750F22AFC7B2C00FEF42E /* AmosFundation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AmosFundation.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B03750F52AFC7B2C00FEF42E /* AmosFundationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmosFundationApp.swift; sourceTree = "<group>"; };
+		B03750F72AFC7B2C00FEF42E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B03750F92AFC7B2D00FEF42E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B03750FB2AFC7B2D00FEF42E /* AmosFundation.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AmosFundation.entitlements; sourceTree = "<group>"; };
+		B03750FD2AFC7B2D00FEF42E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		B0C593E92B0239B900E591B4 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
+		B0C593EB2B023A0400E591B4 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		B0C593ED2B023A0D00E591B4 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
+		B0C593EF2B023A1500E591B4 /* ButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
+		B0C593F32B02482000E591B4 /* PlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderView.swift; sourceTree = "<group>"; };
+		B0C593F62B02505B00E591B4 /* DeviceInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoView.swift; sourceTree = "<group>"; };
+		B0C593F82B030F2500E591B4 /* ArrayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayView.swift; sourceTree = "<group>"; };
+		B0C593FA2B03157D00E591B4 /* DateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateView.swift; sourceTree = "<group>"; };
+		B0C593FD2B031C6B00E591B4 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
+		B0C594092B0339CC00E591B4 /* AmosBase */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = AmosBase; path = ../AmosBase; sourceTree = "<group>"; };
+		B0C594132B033A3700E591B4 /* Watch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Watch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0C594182B033A3700E591B4 /* WatchFundationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchFundationApp.swift; sourceTree = "<group>"; };
+		B0C5941A2B033A3700E591B4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B0C5941C2B033A3800E591B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B0C5941F2B033A3800E591B4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B03750EF2AFC7B2C00FEF42E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0C5940B2B0339D300E591B4 /* AmosBase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0C594102B033A3700E591B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0C594292B033A7000E591B4 /* AmosBase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B00811102AFC8455002CE8BC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B03750E92AFC7B2C00FEF42E = {
+			isa = PBXGroup;
+			children = (
+				B0C594092B0339CC00E591B4 /* AmosBase */,
+				B03750F42AFC7B2C00FEF42E /* AmosFundation */,
+				B0C594172B033A3700E591B4 /* Watch */,
+				B03750F32AFC7B2C00FEF42E /* Products */,
+				B00811102AFC8455002CE8BC /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		B03750F32AFC7B2C00FEF42E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B03750F22AFC7B2C00FEF42E /* AmosFundation.app */,
+				B0C594132B033A3700E591B4 /* Watch.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B03750F42AFC7B2C00FEF42E /* AmosFundation */ = {
+			isa = PBXGroup;
+			children = (
+				B03750F52AFC7B2C00FEF42E /* AmosFundationApp.swift */,
+				B03750F72AFC7B2C00FEF42E /* ContentView.swift */,
+				B0C593FC2B031BF000E591B4 /* Data View */,
+				B0C593F22B0247B800E591B4 /* Model */,
+				B0C593F12B023A1900E591B4 /* Alert Section */,
+				B0C593F52B02504600E591B4 /* View Section */,
+				B03750F92AFC7B2D00FEF42E /* Assets.xcassets */,
+				B03750FB2AFC7B2D00FEF42E /* AmosFundation.entitlements */,
+				B03750FC2AFC7B2D00FEF42E /* Preview Content */,
+			);
+			path = AmosFundation;
+			sourceTree = "<group>";
+		};
+		B03750FC2AFC7B2D00FEF42E /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				B03750FD2AFC7B2D00FEF42E /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B0C593F12B023A1900E591B4 /* Alert Section */ = {
+			isa = PBXGroup;
+			children = (
+				B0C593EB2B023A0400E591B4 /* ToastView.swift */,
+				B0C593ED2B023A0D00E591B4 /* AlertView.swift */,
+			);
+			path = "Alert Section";
+			sourceTree = "<group>";
+		};
+		B0C593F22B0247B800E591B4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B0C593E92B0239B900E591B4 /* Page.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		B0C593F52B02504600E591B4 /* View Section */ = {
+			isa = PBXGroup;
+			children = (
+				B0C593EF2B023A1500E591B4 /* ButtonView.swift */,
+				B0C593F32B02482000E591B4 /* PlaceholderView.swift */,
+				B0C593F62B02505B00E591B4 /* DeviceInfoView.swift */,
+			);
+			path = "View Section";
+			sourceTree = "<group>";
+		};
+		B0C593FC2B031BF000E591B4 /* Data View */ = {
+			isa = PBXGroup;
+			children = (
+				B0C593F82B030F2500E591B4 /* ArrayView.swift */,
+				B0C593FA2B03157D00E591B4 /* DateView.swift */,
+				B0C593FD2B031C6B00E591B4 /* ImageView.swift */,
+			);
+			path = "Data View";
+			sourceTree = "<group>";
+		};
+		B0C594172B033A3700E591B4 /* Watch */ = {
+			isa = PBXGroup;
+			children = (
+				B0C594182B033A3700E591B4 /* WatchFundationApp.swift */,
+				B0C5941A2B033A3700E591B4 /* ContentView.swift */,
+				B0C5941C2B033A3800E591B4 /* Assets.xcassets */,
+				B0C5941E2B033A3800E591B4 /* Preview Content */,
+			);
+			path = Watch;
+			sourceTree = "<group>";
+		};
+		B0C5941E2B033A3800E591B4 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				B0C5941F2B033A3800E591B4 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B03750F12AFC7B2C00FEF42E /* AmosFundation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B03751012AFC7B2D00FEF42E /* Build configuration list for PBXNativeTarget "AmosFundation" */;
+			buildPhases = (
+				B03750EE2AFC7B2C00FEF42E /* Sources */,
+				B03750EF2AFC7B2C00FEF42E /* Frameworks */,
+				B03750F02AFC7B2C00FEF42E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AmosFundation;
+			packageProductDependencies = (
+				B0C5940A2B0339D300E591B4 /* AmosBase */,
+			);
+			productName = AmosFundation;
+			productReference = B03750F22AFC7B2C00FEF42E /* AmosFundation.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B0C594122B033A3700E591B4 /* Watch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0C594212B033A3800E591B4 /* Build configuration list for PBXNativeTarget "Watch" */;
+			buildPhases = (
+				B0C5940F2B033A3700E591B4 /* Sources */,
+				B0C594102B033A3700E591B4 /* Frameworks */,
+				B0C594112B033A3700E591B4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Watch;
+			packageProductDependencies = (
+				B0C594282B033A7000E591B4 /* AmosBase */,
+			);
+			productName = "WatchFundation Watch App";
+			productReference = B0C594132B033A3700E591B4 /* Watch.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B03750EA2AFC7B2C00FEF42E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					B03750F12AFC7B2C00FEF42E = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					B0C594122B033A3700E591B4 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = B03750ED2AFC7B2C00FEF42E /* Build configuration list for PBXProject "AmosFundation" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B03750E92AFC7B2C00FEF42E;
+			packageReferences = (
+			);
+			productRefGroup = B03750F32AFC7B2C00FEF42E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B03750F12AFC7B2C00FEF42E /* AmosFundation */,
+				B0C594122B033A3700E591B4 /* Watch */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B03750F02AFC7B2C00FEF42E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B03750FE2AFC7B2D00FEF42E /* Preview Assets.xcassets in Resources */,
+				B03750FA2AFC7B2D00FEF42E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0C594112B033A3700E591B4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0C594202B033A3800E591B4 /* Preview Assets.xcassets in Resources */,
+				B0C5941D2B033A3800E591B4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B03750EE2AFC7B2C00FEF42E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0C593EE2B023A0D00E591B4 /* AlertView.swift in Sources */,
+				B0C593F92B030F2500E591B4 /* ArrayView.swift in Sources */,
+				B0C593F02B023A1500E591B4 /* ButtonView.swift in Sources */,
+				B0C593EC2B023A0400E591B4 /* ToastView.swift in Sources */,
+				B0C593FE2B031C6B00E591B4 /* ImageView.swift in Sources */,
+				B03750F82AFC7B2C00FEF42E /* ContentView.swift in Sources */,
+				B0C593FB2B03157D00E591B4 /* DateView.swift in Sources */,
+				B03750F62AFC7B2C00FEF42E /* AmosFundationApp.swift in Sources */,
+				B0C593F42B02482000E591B4 /* PlaceholderView.swift in Sources */,
+				B0C593F72B02505B00E591B4 /* DeviceInfoView.swift in Sources */,
+				B0C593EA2B0239B900E591B4 /* Page.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B0C5940F2B033A3700E591B4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B0C5941B2B033A3700E591B4 /* ContentView.swift in Sources */,
+				B0C594192B033A3700E591B4 /* WatchFundationApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B03750FF2AFC7B2D00FEF42E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B03751002AFC7B2D00FEF42E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		B03751022AFC7B2D00FEF42E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AmosFundation/AmosFundation.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AmosFundation/Preview Content\"";
+				DEVELOPMENT_TEAM = D3FXKEY64K;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Amos基础库";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AmosStudio.AmosFundation;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B03751032AFC7B2D00FEF42E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AmosFundation/AmosFundation.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"AmosFundation/Preview Content\"";
+				DEVELOPMENT_TEAM = D3FXKEY64K;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Amos基础库";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AmosStudio.AmosFundation;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B0C594222B033A3800E591B4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"WatchFundation Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = D3FXKEY64K;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchFundation;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AmosStudio.WatchFundation.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		B0C594232B033A3800E591B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"WatchFundation Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = D3FXKEY64K;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchFundation;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AmosStudio.WatchFundation.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B03750ED2AFC7B2C00FEF42E /* Build configuration list for PBXProject "AmosFundation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B03750FF2AFC7B2D00FEF42E /* Debug */,
+				B03751002AFC7B2D00FEF42E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B03751012AFC7B2D00FEF42E /* Build configuration list for PBXNativeTarget "AmosFundation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B03751022AFC7B2D00FEF42E /* Debug */,
+				B03751032AFC7B2D00FEF42E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0C594212B033A3800E591B4 /* Build configuration list for PBXNativeTarget "Watch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0C594222B033A3800E591B4 /* Debug */,
+				B0C594232B033A3800E591B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B0C5940A2B0339D300E591B4 /* AmosBase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AmosBase;
+		};
+		B0C594282B033A7000E591B4 /* AmosBase */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AmosBase;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = B03750EA2AFC7B2C00FEF42E /* Project object */;
+}

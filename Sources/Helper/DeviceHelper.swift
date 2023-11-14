@@ -7,10 +7,13 @@
 
 import Foundation
 import UIKit
+import SwiftUI
+#if canImport(CoreTelephony)
 import CoreTelephony
+#endif
 
-///public
 public class DeviceInfo: NSObject {
+#if !os(watchOS)
     /// 设备进行震动 -  根据传入状态
     ///
     /// 可自动判断设备是否支持
@@ -27,6 +30,17 @@ public class DeviceInfo: NSObject {
             UIApplication.shared.open(url)
         }
     }
+    #else
+    /// 设备进行震动 -  根据传入状态
+    ///
+    /// 可自动判断设备是否支持
+    public static func playHaptic() {
+        
+//        WKInterfaceDevice.current().play(hapticType!)
+    }
+#endif
+    
+#if canImport(CoreTelephony)
     
     ///获取系统名称 iOS
     public static func getSystemName() -> String {
@@ -43,16 +57,35 @@ public class DeviceInfo: NSObject {
         return UIDevice.current.model
     }
     
+    ///获取设备名称 如 XXX的iPhone 15 Pro
+    public static func getDeviceName() -> String {
+        return UIDevice.current.name
+    }
+    
+    class public override func description() -> String {
+        var message = "系统版本: \(getSystemVersion())\n"
+        message += "系统名称: \(getSystemName())\n"
+        message += "设备类型: \(getModel())\n"
+        message += "设备型号全称: \(getFullModel())\n"
+        message += "设备名称: \(getDeviceName())\n"
+        message += "总磁盘: \(getDiskTotalSize())\n"
+        message += "可用磁盘: \(getAvalibleDiskSize())\n"
+        message += "当前设备IP: \(getDeviceIP())\n"
+        message += "应用名称: \(getAppName())\n"
+        message += "应用版本: \(getAppVersion())"
+        
+//        print(message)
+        return message
+    }
+#endif
+}
+
+extension DeviceInfo {
     /// 获取设备型号
     ///
     /// iPhone / iPad / Airpods / Touch / Apple Watch / AirTag
     public static func getFullModel() -> String {
         deviceName()
-    }
-    
-    ///获取设备名称 如 XXX的iPhone 15 Pro
-    public static func getDeviceName() -> String {
-        return UIDevice.current.name
     }
     
     ///获取总磁盘 931.5 GB
@@ -78,24 +111,6 @@ public class DeviceInfo: NSObject {
     /// 应用版本
     public static func getAppVersion() -> String {
         appVersion()
-    }
-}
-
-extension DeviceInfo {
-    class public override func description() -> String {
-        var message = "系统版本: \(getSystemVersion())\n"
-        message += "系统名称: \(getSystemName())\n"
-        message += "设备类型: \(getModel())\n"
-        message += "设备型号全称: \(getFullModel())\n"
-        message += "设备名称: \(getDeviceName())\n"
-        message += "总磁盘: \(getDiskTotalSize())\n"
-        message += "可用磁盘: \(getAvalibleDiskSize())\n"
-        message += "当前设备IP: \(getDeviceIP())\n"
-        message += "应用名称: \(getAppName())\n"
-        message += "应用版本: \(getAppVersion())"
-        
-//        print(message)
-        return message
     }
 }
 

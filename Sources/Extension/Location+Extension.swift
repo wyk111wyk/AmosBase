@@ -98,6 +98,7 @@ public extension CLLocationCoordinate2D {
         meter(from: LocationHelper().manager.location?.coordinate)
     }
     
+    #if !os(watchOS)
     /// 计算两点间的所有行车路线
     func routes(from coordinate: CLLocationCoordinate2D? = nil) async -> [MKRoute]? {
         var fromCoordinate: CLLocationCoordinate2D?
@@ -145,4 +146,5 @@ public extension CLLocationCoordinate2D {
             return nil
         }
     }
+    #endif
 }

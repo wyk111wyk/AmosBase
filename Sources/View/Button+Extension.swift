@@ -30,7 +30,9 @@ struct ButtonTestView: View {
                 SimpleMiddleButton("Middle button", role: .destructive) {}
             }
         }
+        #if !os(watchOS)
         .listStyle(.insetGrouped)
+        #endif
     }
 }
 
@@ -64,7 +66,9 @@ public struct SimpleMiddleButton: View {
                 Spacer()
             }
         }
+    #if !os(watchOS)
         .listRowSeparator(.hidden)
+        #endif
     }
 }
 
@@ -147,7 +151,9 @@ public struct SimpleCell<V: View>: View {
             }
 //            .frame(maxWidth: stateWidth, alignment: .trailing)
 //            .padding(.leading, 8)
+    #if !os(watchOS)
             .textSelection(.enabled)
+            #endif
         }
     }
 }
@@ -313,7 +319,7 @@ struct ButtonCircleBackground: ViewModifier {
     }
     
     func body(content: Content) -> some View {
-        if #available(iOS 17.0, *) {
+        if #available(iOS 17.0, watchOS 10.0, *) {
             content
                 .foregroundStyle(labelColor ?? Color.accentColor)
                 .buttonBorderShape(.circle)
@@ -323,7 +329,11 @@ struct ButtonCircleBackground: ViewModifier {
                 .labelStyle(.iconOnly)
                 .padding(6)
                 .background {
-                    Circle().foregroundStyle(.regularMaterial)
+                    if #available(watchOS 10.0, *) {
+                        Circle().foregroundStyle(.regularMaterial)
+                    }else {
+                        Circle().foregroundStyle(.gray.opacity(0.7))
+                    }
                 }
         }
     }
