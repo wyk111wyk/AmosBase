@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-#if !os(watchOS)
+#if !os(watchOS) && !os(macOS)
 import WebKit
 
 // 针对兔小巢账户的结构体

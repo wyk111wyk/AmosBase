@@ -21,6 +21,7 @@ struct ImageView: View {
     
     @State private var aveColor: Color?
     @State private var exif: String = ""
+    @State private var randomColor: Color?
     
     var body: some View {
         Form {
@@ -33,6 +34,7 @@ struct ImageView: View {
                         if let selectedItem {
                             Task {
                                 selectedImage = try? await selectedItem.loadTransferable(type: Image.self)
+                                #if os(iOS)
                                 // 分析图片的主题颜色
                                 if let newImage = selectedImage?.asUIImage(),
                                    let avg = newImage.averageColor() {
@@ -41,6 +43,7 @@ struct ImageView: View {
                                         self.exif = exif.description
                                     }
                                 }
+                                #endif
                             }
                         }
                     }
@@ -48,10 +51,24 @@ struct ImageView: View {
             
             Section("图片处理") {
                 SimpleCell("图片平均色") {
-                    Circle().frame(width: 30)
-                        .foregroundStyle(aveColor ?? .clear)
+                    if let aveColor {
+                        Circle().frame(width: 30)
+                            .foregroundStyle(aveColor)
+                    }
                 }
                 SimpleCell("图片Exif信息", content: exif)
+#if canImport(UIKit)
+                Button {
+                    randomColor = Color.random()
+                } label: {
+                    SimpleCell("随机颜色") {
+                        if let randomColor {
+                            Circle().frame(width: 30)
+                                .foregroundStyle(randomColor)
+                        }
+                    }
+                }
+                #endif
             }
         }
         .navigationTitle(title)

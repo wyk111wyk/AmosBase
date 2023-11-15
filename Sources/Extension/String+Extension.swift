@@ -9,6 +9,18 @@ import Foundation
 import SwiftUI
 import CoreLocation
 
+#if canImport(UIKit)
+import UIKit
+/// SwifterSwift: Font
+public typealias SFFont = UIFont
+#endif
+
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+/// SwifterSwift: Font
+public typealias SFFont = NSFont
+#endif
+
 // MARK: - 进行转换
 public extension String {
     /// 根据format将文字转换为日期
@@ -327,14 +339,14 @@ public extension String {
     }
     
     /// 计算字符的宽度 -  使用UIFont
-    func getWidth(font: UIFont) -> CGFloat {
+    func getWidth(font: SFFont) -> CGFloat {
         let fontAttributes = [NSAttributedString.Key.font: font]
         let size = self.size(withAttributes: fontAttributes)
         return size.width
     }
     
     /// 计算字符的高度 -  使用UIFont
-    func getHeight(font: UIFont) -> CGFloat {
+    func getHeight(font: SFFont) -> CGFloat {
         let fontAttributes = [NSAttributedString.Key.font: font]
         let size = self.size(withAttributes: fontAttributes)
         return size.height

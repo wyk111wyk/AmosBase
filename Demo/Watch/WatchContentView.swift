@@ -8,18 +8,20 @@
 import SwiftUI
 import AmosBase
 
-struct ContentView: View {
+struct WatchContentView: View {
     var body: some View {
         VStack {
             Image(systemName: "globe")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Hello, world!")
+            Button("Play Haptics") {
+                DeviceInfo.playWatchHaptic(.success)
+            }
         }
         .padding()
     }
 }
 
 #Preview {
-    ContentView()
+    WatchContentView()
 }

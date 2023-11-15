@@ -10,9 +10,10 @@ import AmosBase
 import CoreLocation
 
 struct ContentView: View {
-    
     @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
     @State private var selectedPage: Page?
+    
+    @State private var showToastPage = false
     @State private var showMapShare = false
     
     var body: some View {
@@ -27,17 +28,23 @@ struct ContentView: View {
                 }
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
-                        if page.id == 4 {
-                            Button {
-                                showMapShare.toggle()
-                            } label: {
-                                Label(page.title, systemImage: "map")
-                            }
-                        }else {
-                            NavigationLink(value: page) {
-                                Label(page.title, systemImage: "display")
-                            }
+                        NavigationLink(value: page) {
+                            Label(page.title, systemImage: "display")
                         }
+                    }
+                }
+                Section("Sheet - 按钮") {
+                    #if os(iOS)
+                    Button {
+                        showMapShare.toggle()
+                    } label: {
+                        Label("Map Share - 导航按钮", systemImage: "map")
+                    }
+                    #endif
+                    Button {
+                        showToastPage.toggle()
+                    } label: {
+                        Label("Toast - Sheet页面", systemImage: "bell")
                     }
                 }
                 Section("Data - 数据处理") {
@@ -49,6 +56,12 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Amos基础库")
+            .sheet(isPresented: $showToastPage) {
+                NavigationStack {
+                    ToastTestView("Sheet页面测试")
+                        .buttonCircleNavi(role: .cancel) { showToastPage.toggle() }
+                }
+            }
         } detail: {
             if let selectedPage {
                 switch selectedPage.id {
@@ -60,18 +73,22 @@ struct ContentView: View {
                     ButtonView(selectedPage.title, selectedPage: $selectedPage)
                 case 3:
                     PlaceholderView(selectedPage.title)
-                case 5:
+                case 4:
+                    #if !os(macOS) && !os(watchOS)
                     SimpleWebView(url: URL(string: "https://www.baidu.com")!,
                                   pushIn: true)
                     .navigationTitle(selectedPage.title)
                     .navigationBarTitleDisplayMode(.inline)
-                case 6:
+                    #else
+                    Text(selectedPage.title)
+                    #endif
+                case 5:
                     DeviceInfoView(selectedPage.title)
-                case 7:
+                case 6:
                     ArrayView(selectedPage.title)
-                case 8:
+                case 7:
                     DateView(selectedPage.title)
-                case 9:
+                case 8:
                     ImageView(selectedPage.title)
                 default:
                     Text(selectedPage.title)

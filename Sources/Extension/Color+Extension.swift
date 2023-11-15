@@ -20,17 +20,28 @@ public typealias SFColor = NSColor
 #endif
 
 public extension Color {
+    #if canImport(UIKit)
     /// HEX颜色 - 使用hex创建颜色，可不带 # 符号
     ///
     /// 常见颜色：黑 000000 白 FFFFFF 淡灰 D3D3D3
     ///
     /// 透明度后缀 E6-90% D9-85% CC-80% BF-75% B3-70% A6-65% 99-60%
     init(hex: String) {
-        self.init(uiColor: UIColor(hexString: hex) ?? UIColor.white)
+        self.init(uiColor: SFColor(hexString: hex) ?? .white)
     }
+    #else
+    /// HEX颜色 - 使用hex创建颜色，可不带 # 符号
+    ///
+    /// 常见颜色：黑 000000 白 FFFFFF 淡灰 D3D3D3
+    ///
+    /// 透明度后缀 E6-90% D9-85% CC-80% BF-75% B3-70% A6-65% 99-60%
+    init(hex: String) {
+        self.init(nsColor: SFColor(hexString: hex) ?? .white)
+    }
+    #endif
     
     /// 随机颜色
-    static var random: Color {
+    static func random() -> Color {
         var generator: RandomNumberGenerator = SystemRandomNumberGenerator()
         return random(using: &generator)
     }

@@ -28,15 +28,14 @@ struct Page: Identifiable, Equatable, Hashable {
     static func elementSection() -> [Self] {
         [.init(id: 2, title: "Button & Cell - 按钮表格"),
          .init(id: 3, title: "Placeholder - 占位符"),
-         .init(id: 4, title: "Map Share - 导航按钮"),
-         .init(id: 5, title: "Web Page - 网页"),
-         .init(id: 6, title: "Device Info - 设备信息")]
+         .init(id: 4, title: "Web Page - 网页"),
+         .init(id: 5, title: "Device Info - 设备信息")]
     }
     
     static func dataSection() -> [Self] {
-        [.init(id: 7, title: "Array - 数组"),
-         .init(id: 8, title: "Date - 日期"),
-         .init(id: 9, title: "Image - 图片")
+        [.init(id: 6, title: "Array - 数组"),
+         .init(id: 7, title: "Date - 日期"),
+         .init(id: 8, title: "Image - 图片")
         ]
     }
 }

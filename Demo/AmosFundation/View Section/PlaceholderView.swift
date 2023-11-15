@@ -17,7 +17,6 @@ struct PlaceholderView: View {
     var body: some View {
         List {
             Text("")
-                .listRowSeparator(.hidden)
         }
         .listStyle(.plain)
         .navigationTitle(title)

@@ -22,7 +22,7 @@ struct AlertTestView: View {
     init() {}
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section("Simple Toast") {
                     Button("Simple Error") {
@@ -77,12 +77,12 @@ struct AlertTestView: View {
                 }
             }
         }
-        .simpleToast(isPresenting: .isPresented($selectedToast)) {
-            return selectedToast?.toast()
-        }
         .simpleErrorToast(isPresenting: $simpleError, title: "发生了一个错误", subtitle: "请仔细检查网络连接")
         .simpleSuccessToast(isPresenting: $simpleSuccess, title: "保存数据成功")
         .simpleLoadingToast(isPresenting: $simpleLoading, title: "正在载入...")
+        .simpleToast(isPresenting: .isPresented($selectedToast)) {
+            return selectedToast?.toast()
+        }
     }
     
     enum ToastType: String, CaseIterable {

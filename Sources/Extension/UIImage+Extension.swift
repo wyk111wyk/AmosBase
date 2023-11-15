@@ -6,10 +6,14 @@
 //
 
 import Foundation
-import UIKit
 import SwiftUI
 import OSLog
-
+#if canImport(UIKit)
+import UIKit
+#endif
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 #if canImport(Vision)
 import Vision
 import VisionKit
@@ -28,7 +32,7 @@ public extension Image {
     }
 }
 
-#if canImport(Vision)
+#if canImport(Vision) && canImport(UIKit)
 // MARK: - 图片检测文字或人脸
 public extension UIImage {
     /// 识别图片内的文字 -  使用Vision框架
@@ -195,7 +199,7 @@ public extension UIImage {
 }
 #endif
 
-#if !os(watchOS)
+#if !os(watchOS) && canImport(UIKit)
 
 // MARK: - 对图片添加滤镜等效果
 public extension UIImage {
@@ -278,6 +282,61 @@ public extension UIImage {
         }else {
             return nil
         }
+    }
+}
+#endif
+
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+public extension NSImage {
+    /// SwifterSwift: NSImage scaled to maximum size with respect to aspect ratio.
+    ///
+    /// - Parameter maxSize: maximum size
+    /// - Returns: scaled NSImage
+    func scaled(toMaxSize maxSize: NSSize) -> NSImage {
+        let imageWidth = size.width
+        let imageHeight = size.height
+
+        guard imageHeight > 0 else { return self }
+
+        // Get ratio (landscape or portrait)
+        let ratio: CGFloat
+        if imageWidth > imageHeight {
+            // Landscape
+            ratio = maxSize.width / imageWidth
+        } else {
+            // Portrait
+            ratio = maxSize.height / imageHeight
+        }
+
+        // Calculate new size based on the ratio
+        let newWidth = imageWidth * ratio
+        let newHeight = imageHeight * ratio
+
+        // Create a new NSSize object with the newly calculated size
+        let newSize = NSSize(width: newWidth.rounded(.down), height: newHeight.rounded(.down))
+
+        // Cast the NSImage to a CGImage
+        var imageRect = CGRect(origin: .zero, size: size)
+        guard let imageRef = cgImage(forProposedRect: &imageRect, context: nil, hints: nil) else { return self }
+
+        return NSImage(cgImage: imageRef, size: newSize)
+    }
+
+    /// SwifterSwift: Write NSImage to url.
+    ///
+    /// - Parameters:
+    ///   - url: Desired file URL.
+    ///   - type: Type of image (default is .jpeg).
+    ///   - compressionFactor: used only for JPEG files. The value is a float between 0.0 and 1.0, with 1.0 resulting in
+    /// no compression and 0.0 resulting in the maximum compression possible.
+    func write(to url: URL, fileType type: NSBitmapImageRep.FileType = .jpeg, compressionFactor: NSNumber = 1.0) {
+        // https://stackoverflow.com/a/45042611/3882644
+
+        guard let data = tiffRepresentation else { return }
+        guard let imageRep = NSBitmapImageRep(data: data) else { return }
+
+        guard let imageData = imageRep.representation(using: type, properties: [.compressionFactor: compressionFactor]) else { return }
+        try? imageData.write(to: url)
     }
 }
 #endif

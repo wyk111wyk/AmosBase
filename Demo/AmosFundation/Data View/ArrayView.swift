@@ -44,7 +44,7 @@ struct ArrayView: View {
                 Button {
                     answerDic.removeAll()
                 } label: {
-                    Image(systemName: "arrow.clockwise.circle")
+                    Image(systemName: "arrow.clockwise")
                 }
             }
         }

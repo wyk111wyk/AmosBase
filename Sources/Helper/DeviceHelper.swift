@@ -6,14 +6,22 @@
 //
 
 import Foundation
-import UIKit
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+import AppKit
+#endif
 #if canImport(CoreTelephony)
 import CoreTelephony
 #endif
+#if canImport(WatchKit)
+import WatchKit
+#endif
 
 public class DeviceInfo: NSObject {
-#if !os(watchOS)
+    #if os(iOS)
     /// 设备进行震动 -  根据传入状态
     ///
     /// 可自动判断设备是否支持
@@ -21,7 +29,17 @@ public class DeviceInfo: NSObject {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(type)
     }
+    #elseif canImport(WatchKit)
     
+    /// 手表进行震动和声音 -  根据传入状态
+    ///
+    /// 该方法仅支持手表：notification、directionUp、directionDown、success、failure、retry、start、stop、click
+    public static func playWatchHaptic(_ type: WKHapticType) {
+        WKInterfaceDevice.current().play(type)
+    }
+    #endif
+    
+    #if os(iOS)
     /// 打开系统设置 -  本App的页面
     ///
     /// 使用 UIApplication.shared.open(url)
@@ -30,17 +48,6 @@ public class DeviceInfo: NSObject {
             UIApplication.shared.open(url)
         }
     }
-    #else
-    /// 设备进行震动 -  根据传入状态
-    ///
-    /// 可自动判断设备是否支持
-    public static func playHaptic() {
-        
-//        WKInterfaceDevice.current().play(hapticType!)
-    }
-#endif
-    
-#if canImport(CoreTelephony)
     
     ///获取系统名称 iOS
     public static func getSystemName() -> String {
