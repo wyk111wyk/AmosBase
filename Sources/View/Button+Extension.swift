@@ -83,12 +83,16 @@ extension View {
     public func buttonCircleNavi(role: ButtonRole? = nil,
                                  imageName: String? = nil,
                                  labelColor: Color? = nil,
+                                 isDisable: Bool = false,
                                  isPresent: Bool = true,
+                                 placement: ToolbarItemPlacement? = nil,
                                  callback: @escaping () -> Void = {}) -> some View {
         modifier(CircleButtonNavi(role: role,
                                   imageName: imageName,
                                   labelColor: labelColor,
+                                  isDisable: isDisable,
                                   isPresent: isPresent,
+                                  placement: placement,
                                   callback: callback))
     }
     
@@ -100,12 +104,16 @@ extension View {
     public func buttonCirclePage(role: ButtonRole? = nil,
                                  imageName: String? = nil,
                                  labelColor: Color? = nil,
+                                 isDisable: Bool = false,
                                  isPresent: Bool = true,
+                                 alignment: Alignment? = nil,
                                  callback: @escaping () -> Void = {}) -> some View {
         modifier(CircleButtonPage(role: role,
                                   imageName: imageName,
                                   labelColor: labelColor,
+                                  isDisable: isDisable,
                                   isPresent: isPresent,
+                                  alignment: alignment,
                                   callback: callback))
     }
 }
@@ -159,6 +167,7 @@ struct CircleButtonPage: ViewModifier {
     let role: ButtonRole?
     let imageName: String?
     let labelColor: Color?
+    let isDisable: Bool
     let isPresent: Bool
     let callback: () -> Void
     
@@ -167,17 +176,24 @@ struct CircleButtonPage: ViewModifier {
     init(role: ButtonRole? = nil,
          imageName: String? = nil,
          labelColor: Color? = nil,
+         isDisable: Bool = false,
          isPresent: Bool = true,
+         alignment: Alignment? = nil,
          callback: @escaping () -> Void = {}) {
         self.role = role
         self.imageName = imageName
         self.labelColor = labelColor
+        self.isDisable = isDisable
         self.isPresent = isPresent
         self.callback = callback
-        if role == .cancel {
-            alignment = .topLeading
+        if let alignment {
+            self.alignment = alignment
         }else {
-            alignment = .topTrailing
+            if role == .cancel {
+                self.alignment = .topLeading
+            }else {
+                self.alignment = .topTrailing
+            }
         }
     }
     
@@ -188,6 +204,7 @@ struct CircleButtonPage: ViewModifier {
                              imageName: imageName,
                              labelColor: labelColor,
                              callback: callback)
+                .disabled(isDisable)
                 .padding()
             }
         }else {
@@ -200,6 +217,7 @@ struct CircleButtonNavi: ViewModifier {
     let role: ButtonRole?
     let imageName: String?
     let labelColor: Color?
+    let isDisable: Bool
     let isPresent: Bool
     let callback: () -> Void
     
@@ -208,17 +226,24 @@ struct CircleButtonNavi: ViewModifier {
     init(role: ButtonRole? = nil,
          imageName: String? = nil,
          labelColor: Color? = nil,
+         isDisable: Bool = false,
          isPresent: Bool = true,
+         placement: ToolbarItemPlacement? = nil,
          callback: @escaping () -> Void = {}) {
         self.role = role
         self.imageName = imageName
         self.labelColor = labelColor
+        self.isDisable = isDisable
         self.isPresent = isPresent
         self.callback = callback
-        if role == .cancel {
-            placement = .cancellationAction
+        if let placement {
+            self.placement = placement
         }else {
-            placement = .confirmationAction
+            if role == .cancel {
+                self.placement = .cancellationAction
+            }else {
+                self.placement = .confirmationAction
+            }
         }
     }
     
@@ -230,6 +255,7 @@ struct CircleButtonNavi: ViewModifier {
                                  imageName: imageName,
                                  labelColor: labelColor,
                                  callback: callback)
+                    .disabled(isDisable)
                 }
             }
         }else {
