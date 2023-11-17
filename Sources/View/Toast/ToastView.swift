@@ -140,7 +140,7 @@ public struct ToastView: View{
     let centerMinWidth: CGFloat = 180
     let centerMaxWidth: CGFloat = 200
     let centerMinHight: CGFloat = 100
-    let centerMaxHight: CGFloat = 330
+    let centerMaxHight: CGFloat = 300
     #endif
     ///Alert View
     public var centerToastView: some View{
@@ -195,7 +195,7 @@ public struct ToastView: View{
         }
         .padding()
         .frame(minWidth: centerMinWidth, maxWidth: centerMaxWidth, 
-               minHeight: centerMinHight, maxHeight: centerMaxHight,
+               minHeight: centerMinHight,
                alignment: .center)
         .modifier(BackgroundColorModifier(bgColor: bgColor))
         .clipShape(RoundedRectangle(cornerRadius: 12))

@@ -24,7 +24,7 @@ public class TimerHelp {
             .publish(every: timeInterval, tolerance: 0.5, on: runloop, in: .common)
             .autoconnect()
             .sink { date in
-                print("计时器开始工作: \(date.toString_Time())")
+//                print("计时器开始工作: \(date.toString_Time())")
                 repeatTask()
             }
     }
@@ -34,14 +34,14 @@ public class TimerHelp {
     /// 可定制线程等
     static public func after(timeInterval: TimeInterval,
                              runloop: RunLoop = .main,
-                             repeatTask: @escaping ((Date) -> Void)) {
+                             repeatTask: @escaping (() -> Void)) {
         var cancel: AnyCancellable?
         cancel = Timer
             .publish(every: timeInterval, tolerance: 0.5, on: runloop, in: .common)
             .autoconnect()
             .sink { date in
-                print("计时器开始工作: \(date.toString_Time())")
-                repeatTask(date)
+//                print("计时器开始工作: \(date.toString_Time())")
+                repeatTask()
                 cancel?.cancel()
                 cancel = nil
             }

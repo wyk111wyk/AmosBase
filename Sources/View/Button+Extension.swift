@@ -66,7 +66,7 @@ public struct SimpleMiddleButton: View {
                 Spacer()
             }
         }
-    #if !os(watchOS)
+        #if os(iOS)
         .listRowSeparator(.hidden)
         #endif
     }
@@ -260,9 +260,12 @@ struct ButtonCircleBackground: ViewModifier {
 }
 
 #Preview("Navi") {
-    NavigationStack {
+    NavigationView {
         ButtonTestView()
             .buttonCircleNavi(role: .cancel)
             .buttonCircleNavi(role: .destructive)
     }
+#if canImport(UIKit)
+    .navigationViewStyle(.stack)
+    #endif
 }

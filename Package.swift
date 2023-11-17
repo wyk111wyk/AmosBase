@@ -6,10 +6,9 @@ import PackageDescription
 let package = Package(
     name: "AmosBase",
     platforms: [ // 本 Package 适用的平台
-            .iOS(.v16),
-            .macOS(.v13),
-            .tvOS(.v12),
-            .watchOS(.v9)
+            .iOS(.v15),
+            .macOS(.v12),
+            .watchOS(.v8)
     ],
     products: [
         // 产品定义包生成的可执行文件和库，并使其对其他包可见。

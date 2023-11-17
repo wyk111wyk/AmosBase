@@ -15,15 +15,30 @@ struct AlertTestView: View {
     @State private var selectedConfirmation: SimpleAlertType? = nil
     
     @State private var selectedToast: ToastType? = nil
-    @State private var simpleError = false
-    @State private var simpleLoading = false
-    @State private var simpleSuccess = false
+    @State private var simpleError: Bool? = false
+    @State private var simpleLoading: Bool? = false
+    @State private var simpleSuccess: Bool? = false
     
     init() {}
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             Form {
+                Section("转换 Toast") {
+                    Button("Loading -> Success") {
+                        selectedToast = .topLoading
+                        TimerHelp.after(timeInterval: 2) {
+                            selectedToast = .topSuccess
+                        }
+                    }
+                    Button("Loading -> Error") {
+                        selectedToast = .topLoading
+                        TimerHelp.after(timeInterval: 2) {
+                            selectedToast = .topError
+                        }
+                    }
+                }
+                
                 Section("Simple Toast") {
                     Button("Simple Error") {
                         simpleError = true
@@ -36,9 +51,23 @@ struct AlertTestView: View {
                     }
                 }
                 
-                Section("Toast") {
-                    ForEach(ToastType.allCases, id: \.self.rawValue) { tosat in
-                        Button("Toast - \(tosat.rawValue)") {
+                Section("Top Toasts") {
+                    ForEach(ToastType.topToasts(), id: \.self.rawValue) { tosat in
+                        Button(tosat.rawValue) {
+                            selectedToast = tosat
+                        }
+                    }
+                }
+                Section("Center Toasts") {
+                    ForEach(ToastType.centerToasts(), id: \.self.rawValue) { tosat in
+                        Button(tosat.rawValue) {
+                            selectedToast = tosat
+                        }
+                    }
+                }
+                Section("Bottom Toasts") {
+                    ForEach(ToastType.bottomToasts(), id: \.self.rawValue) { tosat in
+                        Button(tosat.rawValue) {
                             selectedToast = tosat
                         }
                     }
@@ -77,11 +106,14 @@ struct AlertTestView: View {
                 }
             }
         }
-        .simpleErrorToast(isPresenting: $simpleError, title: "发生了一个错误", subtitle: "请仔细检查网络连接")
-        .simpleSuccessToast(isPresenting: $simpleSuccess, title: "保存数据成功")
-        .simpleLoadingToast(isPresenting: $simpleLoading, title: "正在载入...")
-        .simpleToast(isPresenting: .isPresented($selectedToast)) {
-            return selectedToast?.toast()
+        #if canImport(UIKit)
+        .navigationViewStyle(.stack)
+        #endif
+        .simpleErrorToast(presentState: $simpleError, title: "发生了一个错误", subtitle: "请仔细检查网络连接")
+        .simpleSuccessToast(presentState: $simpleSuccess, title: "保存数据成功")
+        .simpleLoadingToast(presentState: $simpleLoading, title: "正在载入...")
+        .simpleToast(presentState: $selectedToast) {
+            selectedToast?.toast()
         }
     }
     
@@ -137,6 +169,18 @@ struct AlertTestView: View {
                       type: para.type,
                       title: rawValue,
                       subTitle: "I am content but not very long I am content but not very long I am content but not very long")
+        }
+        
+        static func topToasts() -> [Self] {
+            [.topSuccess, .topError, .topSystemImage, .topImage, .topLoading, .topRegular]
+        }
+        
+        static func centerToasts() -> [Self] {
+            [.centerSuccess, .centerError, .centerSystemImage, .centerImage, .centerLoading, .centerRegular]
+        }
+        
+        static func bottomToasts() -> [Self] {
+            [.bottomSuccess, .bottomError, .bottomSystemImage, .bottomImage, .bottomLoading, .bottomRegular]
         }
     }
 }

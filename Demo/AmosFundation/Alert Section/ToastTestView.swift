@@ -11,9 +11,9 @@ import Combine
 
 struct ToastTestView: View {
     @State private var selectedToast: ToastType? = nil
-    @State private var simpleError = false
-    @State private var simpleLoading = false
-    @State private var simpleSuccess = false
+    @State private var simpleError: Bool? = false
+    @State private var simpleLoading: Bool? = false
+    @State private var simpleSuccess: Bool? = false
     
     @State private var canceller: AnyCancellable?
     
@@ -27,15 +27,13 @@ struct ToastTestView: View {
             Section("转换 Toast") {
                 Button("Loading -> Success") {
                     selectedToast = .topLoading
-                    TimerHelp.after(timeInterval: 2) { date in
-                        print("计时器开始工作: \(date.toString_Time())")
+                    TimerHelp.after(timeInterval: 2) {
                         selectedToast = .topSuccess
                     }
                 }
                 Button("Loading -> Error") {
                     selectedToast = .topLoading
-                    TimerHelp.after(timeInterval: 2) { date in
-                        print("计时器开始工作: \(date.toString_Time())")
+                    TimerHelp.after(timeInterval: 2) {
                         selectedToast = .topError
                     }
                 }
@@ -76,12 +74,12 @@ struct ToastTestView: View {
             }
         }
         .navigationTitle(title)
-        .simpleToast(isPresenting: .isPresented($selectedToast)) {
+        .simpleToast(presentState: $selectedToast) {
             selectedToast?.toast()
         }
-        .simpleErrorToast(isPresenting: $simpleError, title: "发生了一个错误", subtitle: "请仔细检查网络连接")
-        .simpleSuccessToast(isPresenting: $simpleSuccess, title: "保存数据成功")
-        .simpleLoadingToast(isPresenting: $simpleLoading, title: "正在载入...")
+        .simpleErrorToast(presentState: $simpleError, title: "发生了一个错误", subtitle: "请仔细检查网络连接")
+        .simpleSuccessToast(presentState: $simpleSuccess, title: "保存数据成功")
+        .simpleLoadingToast(presentState: $simpleLoading, title: "正在载入...")
     }
     
     enum ToastType: String, CaseIterable {

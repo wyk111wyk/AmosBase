@@ -57,7 +57,58 @@ public extension Bool {
 
 // MARK: - Methods (RawRepresentable, RawValue: Equatable)
 
+public extension Optional {
+    func isBool() -> Bool {
+        if let item = self {
+            return item is Bool
+        }else {
+            return false
+        }
+    }
+    
+    func toBool() -> Bool? {
+        if self.isBool() {
+            return self as? Bool
+        }else {
+            return nil
+        }
+    }
+    
+    func isString() -> Bool {
+        if let item = self {
+            return item is String
+        }else {
+            return false
+        }
+    }
+    
+    func toString() -> String? {
+        if self.isString() {
+            return self as? String
+        }else {
+            return nil
+        }
+    }
+    
+    func isType<T: Equatable>(_ item: T) -> Bool {
+        if let item = self {
+            return item is T
+        }else {
+            return false
+        }
+    }
+    
+    func toType<T: Equatable>(_ item: T) -> T? {
+        if self.isType(item) {
+            return self as? T
+        }else {
+            return nil
+        }
+    }
+}
+
 public extension Optional where Wrapped: RawRepresentable, Wrapped.RawValue: Equatable {
+    
     // swiftlint:disable missing_swifterswift_prefix
 
     /// Returns a Boolean value indicating whether two values are equal.

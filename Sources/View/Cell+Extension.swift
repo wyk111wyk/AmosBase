@@ -95,7 +95,10 @@ public struct SimpleCell<V: View>: View {
 }
 
 #Preview("Cell") {
-    NavigationStack {
+    NavigationView {
         ButtonTestView()
     }
+#if canImport(UIKit)
+    .navigationViewStyle(.stack)
+    #endif
 }
