@@ -11,6 +11,12 @@
 import SwiftUI
 import Combine
 
+public enum LoadingState: String, Equatable {
+    case loading, quietLoading
+    case success
+    case error
+}
+
 #if os(iOS)
 private struct BackgroundTransparentView: UIViewRepresentable {
     func makeUIView(context _: Context) -> UIView {

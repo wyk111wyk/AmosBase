@@ -28,7 +28,7 @@ struct AlertTestView: View {
                     Button("Loading -> Success") {
                         selectedToast = .topLoading
                         TimerHelp.after(timeInterval: 2) {
-                            selectedToast = .topSuccess
+                            selectedToast = .centerSuccess
                         }
                     }
                     Button("Loading -> Error") {
