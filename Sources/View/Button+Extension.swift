@@ -79,12 +79,14 @@ extension View {
     ///
     /// 类型分为nil, cancel, destructive 三种，影响按钮行为和颜色
     ///
-    /// 可自定义图标颜色
+    /// 可自定义图标颜色，不设置role可自定义图标
     public func buttonCircleNavi(role: ButtonRole? = nil,
+                                 imageName: String? = nil,
                                  labelColor: Color? = nil,
                                  isPresent: Bool = true,
                                  callback: @escaping () -> Void = {}) -> some View {
         modifier(CircleButtonNavi(role: role,
+                                  imageName: imageName,
                                   labelColor: labelColor,
                                   isPresent: isPresent,
                                   callback: callback))
@@ -94,12 +96,14 @@ extension View {
     ///
     /// 类型分为nil, cancel, destructive 三种，影响按钮行为和颜色
     ///
-    /// 可自定义图标颜色
+    /// 可自定义图标颜色，不设置role可自定义图标
     public func buttonCirclePage(role: ButtonRole? = nil,
+                                 imageName: String? = nil,
                                  labelColor: Color? = nil,
                                  isPresent: Bool = true,
                                  callback: @escaping () -> Void = {}) -> some View {
         modifier(CircleButtonPage(role: role,
+                                  imageName: imageName,
                                   labelColor: labelColor,
                                   isPresent: isPresent,
                                   callback: callback))
@@ -117,6 +121,7 @@ struct CircleButton: View {
     let imageName: String
     
     init(role: ButtonRole? = nil,
+         imageName: String? = nil,
          labelColor: Color? = nil,
          callback: @escaping () -> Void = {}) {
         self.role = role
@@ -131,10 +136,10 @@ struct CircleButton: View {
         }else if role == .destructive {
             self.title = LocalizedStringKey("Confirm")
             self.imageName = "checkmark"
-            self.labelColor = .red
+            self.labelColor = labelColor
         }else {
             self.title = LocalizedStringKey("Confirm")
-            self.imageName = "checkmark"
+            self.imageName = imageName ?? "checkmark"
             self.labelColor = labelColor
         }
         
@@ -152,6 +157,7 @@ struct CircleButton: View {
 
 struct CircleButtonPage: ViewModifier {
     let role: ButtonRole?
+    let imageName: String?
     let labelColor: Color?
     let isPresent: Bool
     let callback: () -> Void
@@ -159,10 +165,12 @@ struct CircleButtonPage: ViewModifier {
     let alignment: Alignment
     
     init(role: ButtonRole? = nil,
+         imageName: String? = nil,
          labelColor: Color? = nil,
          isPresent: Bool = true,
          callback: @escaping () -> Void = {}) {
         self.role = role
+        self.imageName = imageName
         self.labelColor = labelColor
         self.isPresent = isPresent
         self.callback = callback
@@ -177,6 +185,7 @@ struct CircleButtonPage: ViewModifier {
         if isPresent {
             content.overlay(alignment: alignment) {
                 CircleButton(role: role,
+                             imageName: imageName,
                              labelColor: labelColor,
                              callback: callback)
                 .padding()
@@ -189,6 +198,7 @@ struct CircleButtonPage: ViewModifier {
 
 struct CircleButtonNavi: ViewModifier {
     let role: ButtonRole?
+    let imageName: String?
     let labelColor: Color?
     let isPresent: Bool
     let callback: () -> Void
@@ -196,10 +206,12 @@ struct CircleButtonNavi: ViewModifier {
     let placement: ToolbarItemPlacement
     
     init(role: ButtonRole? = nil,
+         imageName: String? = nil,
          labelColor: Color? = nil,
          isPresent: Bool = true,
          callback: @escaping () -> Void = {}) {
         self.role = role
+        self.imageName = imageName
         self.labelColor = labelColor
         self.isPresent = isPresent
         self.callback = callback
@@ -215,6 +227,7 @@ struct CircleButtonNavi: ViewModifier {
             content.toolbar {
                 ToolbarItem(placement: placement) {
                     CircleButton(role: role,
+                                 imageName: imageName,
                                  labelColor: labelColor,
                                  callback: callback)
                 }
