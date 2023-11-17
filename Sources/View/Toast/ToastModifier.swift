@@ -119,6 +119,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                         // 2. 在背景开启后，开启动画并呈现 Toast 视图
                         UIView.setAnimationsEnabled(true)
                         showToast = true
+                        playHaptic()
                     }
                     .onDisappear {
 //                        print("5.背景关闭，开启视图动画")
@@ -153,6 +154,9 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                     #if os(watchOS) || os(macOS)
                     showToast = true
                     #endif
+                    if showToast {
+                        playHaptic()
+                    }
                     
                     if let workItem {
                         // 对已经呈现的 Toast 进行迭代
@@ -186,9 +190,6 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
         }
         
 //        print("2.设置定时结束的任务")
-        
-        // 决定是否震动
-        playHaptic()
         
         // 结束Toast的任务
         let dismissToastTask = DispatchWorkItem {
