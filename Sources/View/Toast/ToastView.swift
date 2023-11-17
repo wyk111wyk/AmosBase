@@ -185,7 +185,6 @@ public struct ToastView: View{
                                 .lineLimit(nil)
                                 .multilineTextAlignment(.center)
                                 .foregroundStyle(.secondary)
-                                .disabled(true)
                                 .padding(.horizontal, 8)
                         }
                         .frame(maxHeight: 90)

@@ -70,23 +70,21 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
     func body(content: Content) -> some View {
         if isPresent {
             content.overlay(alignment: .center) {
-                ScrollView(.vertical) {
-                    SimplePlaceholder(
-                        systemImageName: systemImageName,
-                        imageName: imageName,
-                        title: title,
-                        subtitle: subtitle,
-                        content: contentText,
-                        themeColor: themeColor,
-                        imageColor: imageColor,
-                        titleColor: titleColor,
-                        subtitleColor: subtitleColor,
-                        contentColor: contentColor,
-                        imageLength: imageLength,
-                        offsetY: offsetY,
-                        maxWidth: maxWidth,
-                        buttonView: buttonView)
-                }
+                SimplePlaceholder(
+                    systemImageName: systemImageName,
+                    imageName: imageName,
+                    title: title,
+                    subtitle: subtitle,
+                    content: contentText,
+                    themeColor: themeColor,
+                    imageColor: imageColor,
+                    titleColor: titleColor,
+                    subtitleColor: subtitleColor,
+                    contentColor: contentColor,
+                    imageLength: imageLength,
+                    offsetY: offsetY,
+                    maxWidth: maxWidth,
+                    buttonView: buttonView)
             }
         }else {
             content
@@ -184,22 +182,22 @@ public struct SimplePlaceholder<V: View>: View {
                     .modifier(TapImageAnimation())
             }
             VStack(spacing: contentSpace/2) {
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(titleFont)
                     .foregroundStyle(titleColor)
                     .lineLimit(1)
                 if let subtitle {
-                    Text(subtitle)
+                    Text(LocalizedStringKey(subtitle))
                         .font(.headline)
                         .foregroundStyle(subtitleColor)
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 if let content {
-                    Text(content)
+                    Text(LocalizedStringKey(content))
                         .font(.footnote)
+                        .lineLimit(8)
                         .foregroundStyle(contentColor)
-                        .lineLimit(10)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
