@@ -155,6 +155,10 @@ struct CircleButton: View {
     }
     
     var body: some View {
+//        Button(role: role, action: callback) {
+//            Label(title, systemImage: imageName)
+//                .modifier(ButtonCircleBackground(labelColor))
+//        }
         Button(title,
                systemImage: imageName,
                role: role,
@@ -275,6 +279,10 @@ struct ButtonCircleBackground: ViewModifier {
         if #available(iOS 17.0, watchOS 10.0, macOS 14.0, *) {
             #if os(iOS)
             content
+//                .imageScale(.medium)
+//                .symbolVariant(.circle .fill)
+//                .foregroundStyle(.regularMaterial)
+//                .opacity(0.8)
                 .foregroundStyle(labelColor ?? Color.accentColor)
                 .buttonBorderShape(.circle)
                 .buttonStyle(.bordered)

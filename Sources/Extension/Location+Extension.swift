@@ -93,31 +93,14 @@ public extension CLLocationCoordinate2D {
         }
     }
     
-    /// 距离我所在的地点的距离
-    func meterFromMe() -> String {
-        meter(from: LocationHelper().manager.location?.coordinate)
-    }
-    
     #if !os(watchOS)
     /// 计算两点间的所有行车路线
     func routes(from coordinate: CLLocationCoordinate2D? = nil) async -> [MKRoute]? {
-        var fromCoordinate: CLLocationCoordinate2D?
-        
-        if coordinate == nil {
-            // 使用当前位置
-            fromCoordinate = LocationHelper().manager.location?.coordinate
-        }else {
-            // 使用传入位置
-            fromCoordinate = coordinate
-        }
-        
-        guard let fromCoordinate = fromCoordinate else {
-            return nil
-        }
+        guard let coordinate else { return nil }
         
         // 起点
         let start = MKMapItem(placemark: MKPlacemark(
-            coordinate: fromCoordinate,
+            coordinate: coordinate,
             addressDictionary: nil))
         // 目的地
         let destination = MKMapItem(placemark: MKPlacemark(

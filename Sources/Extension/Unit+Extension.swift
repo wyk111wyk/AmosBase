@@ -89,6 +89,14 @@ public extension Optional {
             return nil
         }
     }
+    
+//    func isType<T>(_ type: T.Type) -> Bool {
+//        if let item = self {
+//            return item is type
+//        }else {
+//            return false
+//        }
+//    }
 }
 
 public extension Optional where Wrapped: RawRepresentable, Wrapped.RawValue: Equatable {

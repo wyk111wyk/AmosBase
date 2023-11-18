@@ -142,7 +142,7 @@ public struct SimplePlaceholder<V: View>: View {
         self.content = content
         
         #if os(watchOS)
-        self.titleFont = .title2
+        self.titleFont = .system(size: 20, weight: .medium)
         self.imageLength = 50
         self.contentSpace = 8
         self.offsetY = 20
