@@ -79,7 +79,7 @@ struct AlertTestView: View {
                             selectedAlert = alert
                         }
                     }
-                    .simpleAlert(type: selectedAlert,
+                    .simpleAlert(type: selectedAlert ?? .singleConfirm,
                                  title: LocalizedStringKey(selectedAlert?.rawValue ?? "N/A"),
                                  message: nil,
                                  isPresented: .isPresented($selectedAlert)) {
@@ -95,7 +95,7 @@ struct AlertTestView: View {
                             selectedConfirmation = alert
                         }
                     }
-                    .simpleConfirmation(type: selectedConfirmation,
+                    .simpleConfirmation(type: selectedConfirmation ?? .singleConfirm,
                                         title: LocalizedStringKey(selectedConfirmation?.rawValue ?? "N/A"),
                                         message: nil,
                                         isPresented: .isPresented($selectedConfirmation)) {
@@ -190,10 +190,10 @@ public enum SimpleAlertType: String, CaseIterable {
 }
 
 extension View {
-    /// 简单UI组件 -  Alert提醒，有四种形式
+    /// 简单UI组件 -  Alert提醒，有四种形式，默认确认键取消
     ///
     /// 可自定义Title和Message，singleCancel, singleConfirm, ConfirmCancel, DestructiveCancel
-    public func simpleAlert(type: SimpleAlertType?,
+    public func simpleAlert(type: SimpleAlertType = .singleConfirm,
                             title: LocalizedStringKey?,
                             message: LocalizedStringKey? = nil,
                             isPresented: Binding<Bool>,
@@ -207,10 +207,10 @@ extension View {
                              cancelTap: cancelTap))
     }
     
-    /// 简单UI组件 -  Confirmation提醒，有四种形式
+    /// 简单UI组件 -  Confirmation提醒，有四种形式，默认确认键取消
     ///
     /// 可自定义Title和Message，singleCancel, singleConfirm, ConfirmCancel, DestructiveCancel
-    public func simpleConfirmation(type: SimpleAlertType?,
+    public func simpleConfirmation(type: SimpleAlertType = .singleConfirm,
                                    title: LocalizedStringKey?,
                                    message: LocalizedStringKey? = nil,
                                    isPresented: Binding<Bool>,
@@ -237,13 +237,13 @@ struct SimpleConfirmation: ViewModifier {
     
     init(title: LocalizedStringKey?,
          message: LocalizedStringKey?,
-         type: SimpleAlertType?,
+         type: SimpleAlertType,
          isPresented: Binding<Bool>,
          confirmTap: @escaping () -> Void,
          cancelTap: @escaping () -> Void) {
         self.title = title ?? "N/A"
         self.message = message
-        self.type = type ?? .singleCancel
+        self.type = type
         self._isPresented = isPresented
         self.confirmTap = confirmTap
         self.cancelTap = cancelTap
@@ -289,13 +289,13 @@ struct SimpleAlert: ViewModifier {
     
     init(title: LocalizedStringKey?,
          message: LocalizedStringKey?,
-         type: SimpleAlertType?,
+         type: SimpleAlertType,
          isPresented: Binding<Bool>,
          confirmTap: @escaping () -> Void,
          cancelTap: @escaping () -> Void) {
         self.title = title ?? "N/A"
         self.message = message
-        self.type = type ?? .singleCancel
+        self.type = type
         self._isPresented = isPresented
         self.confirmTap = confirmTap
         self.cancelTap = cancelTap

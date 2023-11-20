@@ -26,7 +26,7 @@ struct AlertView: View {
                     }
                 }
             }
-            .simpleAlert(type: selectedAlert,
+            .simpleAlert(type: selectedAlert ?? .singleConfirm,
                          title: LocalizedStringKey(selectedAlert?.rawValue ?? "N/A"),
                          message: "message",
                          isPresented: .isPresented($selectedAlert)) {
@@ -42,7 +42,7 @@ struct AlertView: View {
                     }
                 }
             }
-            .simpleConfirmation(type: selectedConfirmation,
+            .simpleConfirmation(type: selectedConfirmation ?? .singleConfirm,
                                 title: LocalizedStringKey(selectedConfirmation?.rawValue ?? "N/A"),
                                 message: "message",
                                 isPresented: .isPresented($selectedConfirmation)) {

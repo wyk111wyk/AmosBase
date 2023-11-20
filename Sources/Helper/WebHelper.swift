@@ -20,7 +20,7 @@ public struct SimpleFBUser: Identifiable {
     // 用户头像，一般是图片链接 必须要支持https
     let avatar: String
     
-    init(id: UUID = UUID(),
+    public init(id: UUID = UUID(),
          openid: String,
          nickName: String,
          avatar: String = "https://txc.qq.com/static/desktop/img/products/def-product-logo.png") {
