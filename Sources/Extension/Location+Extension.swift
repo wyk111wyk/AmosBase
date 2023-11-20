@@ -39,6 +39,30 @@ extension CLLocationCoordinate2D: Equatable {
     }
 }
 
+extension MKCoordinateRegion: Equatable {
+    public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
+        return (lhs.center.longitude == rhs.center.longitude) &&
+        (lhs.center.latitude == rhs.center.latitude) &&
+        (lhs.span.latitudeDelta == rhs.span.latitudeDelta) &&
+        (lhs.span.longitudeDelta == rhs.span.longitudeDelta)
+    }
+    public static func != (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
+        return (lhs.center.longitude != rhs.center.longitude) ||
+        (lhs.center.latitude != rhs.center.latitude) ||
+        (lhs.span.latitudeDelta != rhs.span.latitudeDelta) ||
+        (lhs.span.longitudeDelta != rhs.span.longitudeDelta)
+    }
+}
+
+extension MKCoordinateSpan: Equatable {
+    public static func ==(lhs: MKCoordinateSpan, rhs: MKCoordinateSpan) -> Bool {
+        lhs.latitudeDelta == rhs.latitudeDelta && lhs.longitudeDelta == rhs.longitudeDelta
+    }
+    public static func !=(lhs: MKCoordinateSpan, rhs: MKCoordinateSpan) -> Bool {
+        lhs.latitudeDelta != rhs.latitudeDelta || lhs.longitudeDelta != rhs.longitudeDelta
+    }
+}
+
 public extension CLLocationCoordinate2D {
     /// longitude 120, latitude 29
     func toAmapString() -> String {
