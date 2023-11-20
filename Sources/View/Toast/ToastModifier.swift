@@ -32,6 +32,24 @@ private struct BackgroundTransparentView: UIViewRepresentable {
         }
     }
 }
+
+
+fileprivate struct ClearBackground: ViewModifier {
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(watchOS 9.4, iOS 16.4, macOS 13.3, *) {
+            content
+//                .presentationBackground(.regularMaterial.opacity(0.3))
+                .presentationBackground(.black.opacity(0.07))
+//                .presentationBackground(.clear)
+                .presentationBackgroundInteraction(.enabled)
+                .allowsHitTesting(false)
+        }else {
+            content
+                .background(BackgroundTransparentView())
+        }
+    }
+}
 #endif
 
 @available(iOS 13, macOS 11, *)
@@ -240,23 +258,6 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
             default:
                 break
             }
-        }
-    }
-}
-
-fileprivate struct ClearBackground: ViewModifier {
-    @ViewBuilder
-    func body(content: Content) -> some View {
-        if #available(watchOS 9.4, iOS 16.4, macOS 13.3, *) {
-            content
-//                .presentationBackground(.regularMaterial.opacity(0.3))
-                .presentationBackground(.black.opacity(0.07))
-//                .presentationBackground(.clear)
-                .presentationBackgroundInteraction(.enabled)
-                .allowsHitTesting(false)
-        }else {
-            content
-                .background(BackgroundTransparentView())
         }
     }
 }
