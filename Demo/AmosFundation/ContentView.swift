@@ -97,7 +97,7 @@ struct ContentView: View {
         }
         .navigationSplitViewStyle(.balanced)
         .confirmationDialog("Map Share", isPresented: $showMapShare) {
-            MapShareHelper().navigationButtons()
+            SimpleMapShare().navigationButtons()
         }
     }
 }

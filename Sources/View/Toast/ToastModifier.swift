@@ -227,15 +227,15 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
             switch toastView.type {
             case .success:
                 #if os(iOS)
-                DeviceInfo.playHaptic(.success)
+                SimpleDevice.playHaptic(.success)
                 #elseif canImport(WatchKit)
-                DeviceInfo.playWatchHaptic(.success)
+                SimpleDevice.playWatchHaptic(.success)
                 #endif
             case .error:
                 #if os(iOS)
-                DeviceInfo.playHaptic(.error)
+                SimpleDevice.playHaptic(.error)
                 #elseif canImport(WatchKit)
-                DeviceInfo.playWatchHaptic(.failure)
+                SimpleDevice.playWatchHaptic(.failure)
                 #endif
             default:
                 break

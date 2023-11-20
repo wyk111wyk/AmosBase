@@ -27,13 +27,13 @@ struct AlertTestView: View {
                 Section("转换 Toast") {
                     Button("Loading -> Success") {
                         selectedToast = .topLoading
-                        TimerHelp.after(timeInterval: 2) {
+                        SimpleTimer.after(timeInterval: 2) {
                             selectedToast = .centerSuccess
                         }
                     }
                     Button("Loading -> Error") {
                         selectedToast = .topLoading
-                        TimerHelp.after(timeInterval: 2) {
+                        SimpleTimer.after(timeInterval: 2) {
                             selectedToast = .topError
                         }
                     }

@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-public class TimerHelp {
+public class SimpleTimer {
     public var canceller: AnyCancellable?
     public init(canceller: AnyCancellable? = nil) {
         self.canceller = canceller

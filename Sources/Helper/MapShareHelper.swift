@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public struct MapShareHelper {
+public struct SimpleMapShare {
     public enum MapShareMode {
         case navi, position
     }
@@ -198,7 +198,7 @@ public struct MapShareHelper {
     }
 }
 
-extension MapShareHelper {
+extension SimpleMapShare {
     public func navigationButtons(_ mapTypes: [MapShareType] = MapShareType.allCases) -> some View {
         
         @ViewBuilder

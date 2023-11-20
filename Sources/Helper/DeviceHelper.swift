@@ -20,7 +20,7 @@ import CoreTelephony
 import WatchKit
 #endif
 
-public class DeviceInfo: NSObject {
+public class SimpleDevice: NSObject {
     #if os(iOS)
     /// 设备进行震动 -  根据传入状态
     ///
@@ -87,7 +87,7 @@ public class DeviceInfo: NSObject {
 #endif
 }
 
-extension DeviceInfo {
+extension SimpleDevice {
     /// 获取设备型号
     ///
     /// iPhone / iPad / Airpods / Touch / Apple Watch / AirTag
@@ -122,7 +122,7 @@ extension DeviceInfo {
 }
 
 ///private
-extension DeviceInfo {
+extension SimpleDevice {
     ///获取应用名称
     private static func appName() -> String {
         if let name = Bundle.main.infoDictionary?["CFBundleName"] as? String {

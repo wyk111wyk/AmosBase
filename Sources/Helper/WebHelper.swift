@@ -11,7 +11,7 @@ import SwiftUI
 import WebKit
 
 // 针对兔小巢账户的结构体
-public struct FeedbackUser: Identifiable {
+public struct SimpleFBUser: Identifiable {
     public let id: UUID
     // 用户唯一标识，由接入方生成
     let openid: String
@@ -39,21 +39,21 @@ public struct SimpleWebView: View {
     
     // 兔小巢的link是 https://support.qq.com/product/{产品id}
     let url: URL
-    let account: FeedbackUser?
+    let account: SimpleFBUser?
     @State private var isLoading = false
     let isPushIn: Bool
     @State private var showErrorAlert = false
     
     public init(url: URL,
                 pushIn: Bool = false,
-                account: FeedbackUser? = nil) {
+                account: SimpleFBUser? = nil) {
         self.url = url
         self.isPushIn = pushIn
         self.account = account
     }
     
     public var body: some View {
-        WebViewVC(url: url, isloading: $isLoading,
+        SimpleWebViewVC(url: url, isloading: $isLoading,
                   showErrorAlert: $showErrorAlert,
                   account: account)
         .buttonCirclePage(role: .cancel,
@@ -65,7 +65,7 @@ public struct SimpleWebView: View {
     }
 }
 
-public struct WebViewVC: UIViewRepresentable {
+public struct SimpleWebViewVC: UIViewRepresentable {
     
     @Binding var isLoading: Bool
     @Binding var showErrorAlert: Bool
@@ -74,16 +74,16 @@ public struct WebViewVC: UIViewRepresentable {
     init(url: URL,
          isloading: Binding<Bool>,
          showErrorAlert: Binding<Bool>,
-         account: FeedbackUser?) {
+         account: SimpleFBUser?) {
         self._isLoading = isloading
         self._showErrorAlert = showErrorAlert
         
         var request: URLRequest = .init(url: url)
         
         if let account = account {
-            let clientInfo = DeviceInfo.getFullModel()
-            let clientVersion = DeviceInfo.getAppVersion()
-            let osVersion = DeviceInfo.getSystemName() + " " + DeviceInfo.getSystemVersion()
+            let clientInfo = SimpleDevice.getFullModel()
+            let clientVersion = SimpleDevice.getAppVersion()
+            let osVersion = SimpleDevice.getSystemName() + " " + SimpleDevice.getSystemVersion()
             
             // 接入兔小巢需要传入open_id, nickname, avatar, 如果少了其中任何一个，登录态的构建的都会失败，其他都是额外数据
             // 兔小巢只将 openid 作为用户身份的唯一标识，故在构造 openid 时需要考虑其唯一性
@@ -97,11 +97,11 @@ public struct WebViewVC: UIViewRepresentable {
         self.urlRequest = request
     }
     
-    public func makeCoordinator() -> WebCoordinator {
-        WebCoordinator(for: self)
+    public func makeCoordinator() -> SimpleWebCoordinator {
+        SimpleWebCoordinator(for: self)
     }
     
-    public func makeUIView(context: UIViewRepresentableContext<WebViewVC>) -> WKWebView {
+    public func makeUIView(context: UIViewRepresentableContext<SimpleWebViewVC>) -> WKWebView {
         let webview = WKWebView()
         webview.allowsBackForwardNavigationGestures = true
         webview.navigationDelegate = context.coordinator
@@ -111,16 +111,16 @@ public struct WebViewVC: UIViewRepresentable {
         return webview
     }
     
-    public func updateUIView(_ webview: WKWebView, context: UIViewRepresentableContext<WebViewVC>) {
+    public func updateUIView(_ webview: WKWebView, context: UIViewRepresentableContext<SimpleWebViewVC>) {
         //        webview.load(self.urlRequest)
         //        printDebug("刷新网页")
     }
 }
 
-public class WebCoordinator: NSObject, WKNavigationDelegate {
+public class SimpleWebCoordinator: NSObject, WKNavigationDelegate {
     
-    var parent: WebViewVC
-    init(for parent: WebViewVC) {
+    var parent: SimpleWebViewVC
+    init(for parent: SimpleWebViewVC) {
         self.parent = parent
     }
     
