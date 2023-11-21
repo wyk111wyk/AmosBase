@@ -84,22 +84,6 @@ public extension UIImage {
         
         return facePoseRequest.results
     }
-    
-    /// 获取图片的EXIF信息
-    ///
-    /// 一般是照片相关的信息
-    func exif() -> [String: String]? {
-        if let imageData = self.jpegData(compressionQuality: 1.0) {
-            let imageCFData = imageData as CFData
-            if let cgImage = CGImageSourceCreateWithData(imageCFData, nil),
-               let metaDict: NSDictionary = CGImageSourceCopyPropertiesAtIndex(cgImage, 0, nil) {
-                let exifDict: NSDictionary = metaDict.object(forKey: kCGImagePropertyExifDictionary) as! NSDictionary
-                mylog.log("图片exif:\(exifDict)")
-                return exifDict as? Dictionary<String, String>
-            }
-        }
-        return nil
-    }
 }
 
 // MARK: - 对图片进行裁切等操作

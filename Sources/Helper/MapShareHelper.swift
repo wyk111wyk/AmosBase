@@ -30,6 +30,21 @@ public struct SimpleMapShare {
                 return "腾讯地图"
             }
         }
+        
+        var isInstalled: Bool {
+            switch self {
+            case .appleMap:
+                UIApplication.shared.canOpenURL(URL(string:"maps://")!)
+            case .baiduMap:
+                UIApplication.shared.canOpenURL(URL(string:"baidumap://")!)
+            case .aMap:
+                UIApplication.shared.canOpenURL(URL(string:"iosamap://")!)
+            case .googleMap:
+                UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)
+            case .qqMap:
+                UIApplication.shared.canOpenURL(URL(string:"qqmap://")!)
+            }
+        }
     }
     
     let title: String
@@ -42,9 +57,10 @@ public struct SimpleMapShare {
     public init(mode: MapShareMode = .navi) {
         self.title = "AK23自助健身房"
         self.content = "24小时营业"
-        self.lat = 120.254904
-        self.long = 29.721462
+        self.lat = 29.721462
+        self.long = 120.254904
         self.address = "诸暨市暨阳街道滨江北路45-3号"
+//        self.address = ""
         self.mode = mode
     }
     
@@ -76,12 +92,14 @@ public struct SimpleMapShare {
                 URLQueryItem(name: "sll", value: "\(lat),\(long)")]
 //            }
         case .baiduMap:
-            // https://lbsyun.baidu.com/index.php?title=uri/api/ios
+            /* https://lbs.baidu.com/faq/api?title=webapi/uri/ios
+             */
             urlComponents.scheme = "baidumap"
             urlComponents.host = "map"
             if self.mode == .navi {
                 urlComponents.path = "/direction"
                 urlComponents.queryItems = [
+                    URLQueryItem(name: "origin", value: "我的位置"),
                     URLQueryItem(name: "destination", value: "\(lat),\(long)"),
                     URLQueryItem(name: "destination", value: title),
                     URLQueryItem(name: "coord_type", value: "wgs84"),
@@ -101,40 +119,40 @@ public struct SimpleMapShare {
                         URLQueryItem(name: "destination", value: title)]
                 }
             }
+            urlComponents.queryItems?.append(URLQueryItem(name: "src", value: "ios.akstudio.amosbase"))
         case .aMap:
-            // https://lbs.amap.com/api/amap-mobile/guide/ios/navi
             urlComponents.scheme = "iosamap"
             if self.mode == .navi {
+                // https://lbs.amap.com/api/amap-mobile/guide/ios/navi
                 urlComponents.host = "navi"
                 urlComponents.queryItems = [
-                    URLQueryItem(name: "sourceApplication", value: "AK23"),
                     URLQueryItem(name: "poiname", value: title),
                     URLQueryItem(name: "poiid", value: "BGVIS"),
                     URLQueryItem(name: "lat", value: "\(lat)"),
                     URLQueryItem(name: "lon", value: "\(long)"),
-                    URLQueryItem(name: "dev", value: "0"),
-                    URLQueryItem(name: "style", value: "4")]
+                    URLQueryItem(name: "dev", value: "0")]
             }else {
                 if address.isEmpty {
+                    // https://lbs.amap.com/api/amap-mobile/guide/ios/marker
                     urlComponents.host = "viewMap"
                     urlComponents.queryItems = [
-                        URLQueryItem(name: "sourceApplication", value: "AK23"),
                         URLQueryItem(name: "poiname", value: title),
                         URLQueryItem(name: "lat", value: "\(lat)"),
                         URLQueryItem(name: "lon", value: "\(long)")]
                 }else {
+                    // https://lbs.amap.com/api/amap-mobile/guide/ios/search
                     urlComponents.host = "poi"
                     urlComponents.queryItems = [
-                        URLQueryItem(name: "sourceApplication", value: "AK23"),
                         URLQueryItem(name: "name", value: title),
                         URLQueryItem(name: "lat", value: "\(lat)"),
                         URLQueryItem(name: "lon", value: "\(long)"),
-                        URLQueryItem(name: "dev", value: "0")]
+                        URLQueryItem(name: "dev", value: "1")]
                 }
             }
+            urlComponents.queryItems?.append(URLQueryItem(name: "sourceApplication", value: "ios.akstudio.amosbase"))
         case .googleMap:
             // https://developers.google.com/maps/documentation/urls/ios-urlscheme
-            urlComponents.scheme = "comgooglemaps"
+            urlComponents.scheme = "comgooglemaps-x-callback"
             if self.mode == .navi {
                 urlComponents.queryItems = [
                     URLQueryItem(name: "x-source", value: "AK23"),
@@ -214,6 +232,10 @@ extension SimpleMapShare {
                 }
             }
         }
+        
+//        let showTypes = mapTypes.filter { type in
+//            type.isInstalled
+//        }
         
         return ForEach(mapTypes) {
             buttonView($0)

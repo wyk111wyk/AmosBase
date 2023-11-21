@@ -39,9 +39,6 @@ struct ImageView: View {
                                 if let newImage = selectedImage?.asUIImage(),
                                    let avg = newImage.averageColor() {
                                     aveColor = Color(uiColor: avg)
-                                    if let exif = newImage.exif() {
-                                        self.exif = exif.description
-                                    }
                                 }
                                 #endif
                             }
@@ -56,7 +53,6 @@ struct ImageView: View {
                             .foregroundStyle(aveColor)
                     }
                 }
-                SimpleCell("图片Exif信息", content: exif)
 #if canImport(UIKit)
                 Button {
                     randomColor = Color.random()

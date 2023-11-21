@@ -15,6 +15,7 @@ struct ContentView: View {
     
     @State private var showToastPage = false
     @State private var showMapShare = false
+    @State private var showPositionShare = false
     
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
@@ -39,6 +40,17 @@ struct ContentView: View {
                         showMapShare.toggle()
                     } label: {
                         Label("Map Share - 导航按钮", systemImage: "map")
+                    }
+                    .confirmationDialog("Map Share", isPresented: $showMapShare) {
+                        SimpleMapShare(mode: .navi).navigationButtons()
+                    }
+                    Button {
+                        showPositionShare.toggle()
+                    } label: {
+                        Label("Map Share - 定位按钮", systemImage: "map")
+                    }
+                    .confirmationDialog("Map Share", isPresented: $showPositionShare) {
+                        SimpleMapShare(mode: .position).navigationButtons()
                     }
                     #endif
                     Button {
@@ -96,9 +108,6 @@ struct ContentView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
-        .confirmationDialog("Map Share", isPresented: $showMapShare) {
-            SimpleMapShare().navigationButtons()
-        }
     }
 }
 
