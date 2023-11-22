@@ -11,21 +11,24 @@ import MapKit
 import OSLog
 
 private let mylog = Logger(subsystem: "Location+Extension", category: "AmosBase")
+
 public extension CLPlacemark {
-    func address() -> String {
+    func toFullAddress() -> String {
         var address = ""
         address += self.administrativeArea ?? ""
         address += self.subAdministrativeArea ?? ""
         address += self.locality ?? ""
         address += self.subLocality ?? ""
         address += self.thoroughfare ?? ""
-        address += self.subThoroughfare ?? ""
-        address += self.name ?? ""
+//        address += self.subThoroughfare ?? ""
+        if self.name != self.thoroughfare {
+            address += self.name ?? ""
+        }
         mylog.log("AppleMap Address: \(address)")
         return address
     }
     
-    func city() -> String? {
+    func toCity() -> String? {
         self.locality
     }
 }
@@ -76,14 +79,14 @@ public extension CLLocationCoordinate2D {
     /// 将地点转换为地址
     ///
     /// 使用Apple Map的API
-    func address(locale: Locale = .current) async -> [CLPlacemark]  {
+    func toAddress(locale: Locale = .current) async -> CLPlacemark?  {
         let loction: CLLocation = CLLocation(latitude: self.latitude, longitude: self.longitude)
         let places = try? await CLGeocoder().reverseGeocodeLocation(loction, preferredLocale: locale)
         guard let places else {
-            return []
+            return nil
         }
         
-        return places
+        return places.first
     }
     
     /// 两个地点之间的距离 -  单位是 米

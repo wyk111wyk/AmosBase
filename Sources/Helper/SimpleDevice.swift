@@ -7,6 +7,10 @@
 
 import Foundation
 import SwiftUI
+#if os(iOS)
+import SystemConfiguration.CaptiveNetwork
+import CoreLocation
+#endif
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -64,17 +68,12 @@ public class SimpleDevice: NSObject {
         return UIDevice.current.model
     }
     
-    ///获取设备名称 如 XXX的iPhone 15 Pro
-    public static func getDeviceName() -> String {
-        return UIDevice.current.name
-    }
     
     class public override func description() -> String {
         var message = "系统版本: \(getSystemVersion())\n"
         message += "系统名称: \(getSystemName())\n"
         message += "设备类型: \(getModel())\n"
         message += "设备型号全称: \(getFullModel())\n"
-        message += "设备名称: \(getDeviceName())\n"
         message += "总磁盘: \(getDiskTotalSize())\n"
         message += "可用磁盘: \(getAvalibleDiskSize())\n"
         message += "当前设备IP: \(getDeviceIP())\n"
@@ -84,10 +83,47 @@ public class SimpleDevice: NSObject {
 //        print(message)
         return message
     }
+    
+    /*
+     在iOS 13之前，只要能够连接上WiFi就可以获取到WiFi信息。
+     在iOS 13之后，需要为应用授权获取WiFi信息的能力，还要授权获取位置，才能获取到WiFi信息。
+
+     为应用授权获取WiFi信息的能力 Targets -> Capabilities -> Access WiFi Information
+     
+     授权获取位置:
+     "NSLocationAlwaysUsageDescription"
+     "NSLocationAlwaysAndWhenInUseUsageDescription"
+     "NSLocationWhenInUseUsageDescription"
+     
+     {
+         BSSID = "a4:39:b3:c7:4a:10";
+         SSID = "Amos Studio";
+         SSIDDATA = {length = 11, bytes = 0x416d6f732053747564696f};
+     }
+     */
+    @MainActor
+    public static func wifiInfo() async -> NSDictionary? {
+        let location = SimpleLocation()
+        await location.requireAuthorization()
+        return fetchWifi()
+        
+        func fetchWifi() -> NSDictionary? {
+            if let interfaces = CNCopySupportedInterfaces() as NSArray? {
+                for interface in interfaces {
+                    if let interfaceInfo = CNCopyCurrentNetworkInfo(interface as! CFString) as NSDictionary? {
+                        print(interfaceInfo)
+                        return interfaceInfo
+                    }
+                }
+            }
+            return nil
+        }
+    }
 #endif
 }
 
 extension SimpleDevice {
+    
     /// 获取设备型号
     ///
     /// iPhone / iPad / Airpods / Touch / Apple Watch / AirTag
@@ -123,6 +159,7 @@ extension SimpleDevice {
 
 ///private
 extension SimpleDevice {
+    
     ///获取应用名称
     private static func appName() -> String {
         if let name = Bundle.main.infoDictionary?["CFBundleName"] as? String {

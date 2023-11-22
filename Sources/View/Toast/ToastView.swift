@@ -48,13 +48,15 @@ public struct ToastView: View{
     
     ///The subtitle of the alert (`Optional(String)`)
     public var subTitle: String? = nil
+    @Binding public var variableSubTitle: String?
     
     public init(displayMode: DisplayMode,
                 type: AlertType,
                 bgColor: Color? = nil,
                 title: String? = nil,
                 variableTitle: Binding<String?> = .constant(nil),
-                subTitle: String? = nil){
+                subTitle: String? = nil,
+                variableSubTitle: Binding<String?> = .constant(nil)){
         
         self.displayMode = displayMode
         self.type = type
@@ -62,6 +64,7 @@ public struct ToastView: View{
         self.title = title
         self._variableTitle = variableTitle
         self.subTitle = subTitle
+        self._variableSubTitle = variableSubTitle
     }
     
     #if os(watchOS)
@@ -102,26 +105,29 @@ public struct ToastView: View{
                 }
                 if title != nil || 
                     variableTitle != nil ||
-                    subTitle != nil {
+                    subTitle != nil ||
+                    variableSubTitle != nil {
                     VStack(alignment: .leading, spacing: bannerLabelSpace){
                         if let variableTitle {
                             Text(LocalizedStringKey(variableTitle))
                                 .font(Font.body.bold())
                                 .foregroundStyle(bgColor != nil ? .white : .primary)
-                                .multilineTextAlignment(.leading)
                         }else if let title {
                             Text(LocalizedStringKey(title))
                                 .font(Font.body.bold())
                                 .foregroundStyle(bgColor != nil ? .white : .primary)
-                                .multilineTextAlignment(.leading)
                         }
-                        if let subTitle {
+                        if let variableSubTitle {
+                            Text(LocalizedStringKey(variableSubTitle))
+                                .font(.footnote)
+                                .foregroundStyle(bgColor != nil ? .white : .secondary)
+                        }else if let subTitle {
                             Text(LocalizedStringKey(subTitle))
                                 .font(.footnote)
                                 .foregroundStyle(bgColor != nil ? .white : .secondary)
-                                .multilineTextAlignment(.leading)
                         }
                     }
+                    .multilineTextAlignment(.leading)
                 }
             }
             .padding(.horizontal, contentHorizontalPadding)
@@ -179,14 +185,14 @@ public struct ToastView: View{
             
             if title != nil || 
                 variableTitle != nil ||
-                subTitle != nil {
+                subTitle != nil ||
+                variableSubTitle != nil {
                 VStack(spacing: centerLabelSpace){
                     if let variableTitle {
                         Text(LocalizedStringKey(variableTitle))
                             .font(.headline)
                             .fontWeight(.medium)
                             .lineLimit(5)
-                            .multilineTextAlignment(.center)
                             .foregroundStyle(.primary)
                             .padding(.horizontal, 12)
                     }else if let title {
@@ -194,22 +200,30 @@ public struct ToastView: View{
                             .font(.headline)
                             .fontWeight(.medium)
                             .lineLimit(5)
-                            .multilineTextAlignment(.center)
                             .foregroundStyle(.primary)
                             .padding(.horizontal, 12)
                     }
-                    if let subTitle {
+                    if let variableSubTitle {
+                        ScrollView(.vertical) {
+                            Text(LocalizedStringKey(variableSubTitle))
+                                .font(.footnote)
+                                .lineLimit(nil)
+                                .foregroundStyle(.secondary)
+                                .padding(.horizontal, 8)
+                        }
+                        .frame(maxHeight: 90)
+                    }else if let subTitle {
                         ScrollView(.vertical) {
                             Text(LocalizedStringKey(subTitle))
                                 .font(.footnote)
                                 .lineLimit(nil)
-                                .multilineTextAlignment(.center)
                                 .foregroundStyle(.secondary)
                                 .padding(.horizontal, 8)
                         }
                         .frame(maxHeight: 90)
                     }
                 }
+                .multilineTextAlignment(.center)
             }
         }
         .padding()
