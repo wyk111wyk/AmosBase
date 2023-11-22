@@ -30,21 +30,6 @@ public struct SimpleMapShare {
                 return "腾讯地图"
             }
         }
-        
-        var isInstalled: Bool {
-            switch self {
-            case .appleMap:
-                UIApplication.shared.canOpenURL(URL(string:"maps://")!)
-            case .baiduMap:
-                UIApplication.shared.canOpenURL(URL(string:"baidumap://")!)
-            case .aMap:
-                UIApplication.shared.canOpenURL(URL(string:"iosamap://")!)
-            case .googleMap:
-                UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)
-            case .qqMap:
-                UIApplication.shared.canOpenURL(URL(string:"qqmap://")!)
-            }
-        }
     }
     
     let title: String
