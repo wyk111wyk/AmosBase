@@ -39,8 +39,7 @@ fileprivate struct ClearBackground: ViewModifier {
     func body(content: Content) -> some View {
         if #available(watchOS 9.4, iOS 16.4, macOS 13.3, *) {
             content
-//                .presentationBackground(.regularMaterial.opacity(0.3))
-                .presentationBackground(.black.opacity(0.07))
+                .presentationBackground(.black.opacity(0.1))
 //                .presentationBackground(.clear)
                 .presentationBackgroundInteraction(.enabled)
                 .allowsHitTesting(false)
@@ -125,7 +124,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
         content
         #if os(iOS)
             .fullScreenCover(isPresented: .constant(isBackgroundPresent)) {
-                Color.clear
+                EmptyView()
                     .modifier(ClearBackground())
                     .onTapGesture {
                         backgroundTap?()

@@ -43,7 +43,8 @@ public struct ToastView: View{
     public var bgColor: Color? = nil
     
     ///The title of the alert (`Optional(String)`)
-    public var title: String? = nil
+    public var title: String?
+    @Binding public var variableTitle: String?
     
     ///The subtitle of the alert (`Optional(String)`)
     public var subTitle: String? = nil
@@ -52,12 +53,14 @@ public struct ToastView: View{
                 type: AlertType,
                 bgColor: Color? = nil,
                 title: String? = nil,
+                variableTitle: Binding<String?> = .constant(nil),
                 subTitle: String? = nil){
         
         self.displayMode = displayMode
         self.type = type
         self.bgColor = bgColor
         self.title = title
+        self._variableTitle = variableTitle
         self.subTitle = subTitle
     }
     
@@ -97,9 +100,16 @@ public struct ToastView: View{
                 case .regular:
                     EmptyView()
                 }
-                if title != nil || subTitle != nil {
+                if title != nil || 
+                    variableTitle != nil ||
+                    subTitle != nil {
                     VStack(alignment: .leading, spacing: bannerLabelSpace){
-                        if let title {
+                        if let variableTitle {
+                            Text(LocalizedStringKey(variableTitle))
+                                .font(Font.body.bold())
+                                .foregroundStyle(bgColor != nil ? .white : .primary)
+                                .multilineTextAlignment(.leading)
+                        }else if let title {
                             Text(LocalizedStringKey(title))
                                 .font(Font.body.bold())
                                 .foregroundStyle(bgColor != nil ? .white : .primary)
@@ -167,9 +177,19 @@ public struct ToastView: View{
                 EmptyView()
             }
             
-            if title != nil || subTitle != nil {
+            if title != nil || 
+                variableTitle != nil ||
+                subTitle != nil {
                 VStack(spacing: centerLabelSpace){
-                    if let title {
+                    if let variableTitle {
+                        Text(LocalizedStringKey(variableTitle))
+                            .font(.headline)
+                            .fontWeight(.medium)
+                            .lineLimit(5)
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(.primary)
+                            .padding(.horizontal, 12)
+                    }else if let title {
                         Text(LocalizedStringKey(title))
                             .font(.headline)
                             .fontWeight(.medium)

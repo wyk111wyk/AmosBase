@@ -19,6 +19,8 @@ struct AlertTestView: View {
     @State private var simpleLoading: Bool? = false
     @State private var simpleSuccess: Bool? = false
     
+    @State private var toastTitle: String? = nil
+    
     init() {}
     
     var body: some View {
@@ -35,6 +37,20 @@ struct AlertTestView: View {
                         selectedToast = .topLoading
                         SimpleTimer.after(timeInterval: 2) {
                             selectedToast = .topError
+                        }
+                    }
+                    Button("Loading Title Change") {
+                        selectedToast = .topLoading
+                        
+                        SimpleTimer.after(timeInterval: 2) {
+                            toastTitle = "第一次改变文字"
+                            SimpleTimer.after(timeInterval: 2) {
+                                toastTitle = "第二次改变文字"
+                                SimpleTimer.after(timeInterval: 2) {
+                                    toastTitle = nil
+                                    selectedToast = .centerSuccess
+                                }
+                            }
                         }
                     }
                 }
@@ -113,7 +129,7 @@ struct AlertTestView: View {
         .simpleSuccessToast(presentState: $simpleSuccess, title: "保存数据成功")
         .simpleLoadingToast(presentState: $simpleLoading, title: "正在载入...")
         .simpleToast(presentState: $selectedToast) {
-            selectedToast?.toast()
+            selectedToast?.toast(variableTitle: $toastTitle)
         }
     }
     
@@ -164,10 +180,11 @@ struct AlertTestView: View {
             }
         }
         
-        func toast() -> ToastView {
+        func toast(variableTitle: Binding<String?> = .constant(nil)) -> ToastView {
             ToastView(displayMode: para.mode,
                       type: para.type,
                       title: rawValue,
+                      variableTitle: variableTitle,
                       subTitle: "I am content but not very long I am content but not very long I am content but not very long")
         }
         
