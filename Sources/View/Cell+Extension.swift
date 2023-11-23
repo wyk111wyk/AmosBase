@@ -58,12 +58,12 @@ public struct SimpleCell<V: View>: View {
                     .frame(width: imageSize, height: imageSize)
             }else if let systemImage = systemImage {
                 Image(systemName: systemImage)
-                    .foregroundColor(.accentColor)
                     .frame(width: imageSize, height: imageSize)
             }
             // Title 和 Content
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
+                    .foregroundColor(.primary)
                 Group {
                     if let content = content, !content.isEmpty,
                        let contentSystemImage = contentSystemImage, contentSystemImage.count > 0 {

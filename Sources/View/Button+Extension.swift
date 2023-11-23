@@ -14,13 +14,14 @@ struct ButtonTestView: View {
         List {
             SimpleCell("Title Title Title",
                        iconName: nil, 
-                       systemImage: "pencil.and.outline", 
+                       systemImage: "info.circle.fill",
                        contentSystemImage: "scribble",
                        content: "Content Content Content Content Content Content",
                        stateText: nil) {
                 Spacer()
                 Text("1234567")
-            }
+                    .foregroundStyle(.primary)
+            }.foregroundStyle(.red, .regularMaterial)
             SimpleCell("Title Title Title",
                        iconName: nil, 
                        systemImage: "pencil.and.outline",
