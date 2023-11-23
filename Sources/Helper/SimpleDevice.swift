@@ -101,23 +101,17 @@ public class SimpleDevice: NSObject {
          SSIDDATA = {length = 11, bytes = 0x416d6f732053747564696f};
      }
      */
-    @MainActor
-    public static func wifiInfo() async -> NSDictionary? {
-        let location = SimpleLocation()
-        await location.requireAuthorization()
-        return fetchWifi()
-        
-        func fetchWifi() -> NSDictionary? {
-            if let interfaces = CNCopySupportedInterfaces() as NSArray? {
-                for interface in interfaces {
-                    if let interfaceInfo = CNCopyCurrentNetworkInfo(interface as! CFString) as NSDictionary? {
-                        print(interfaceInfo)
-                        return interfaceInfo
-                    }
+    /// 获取正在连接的wifi的名称，必需要位置权限
+    public static func wifiInfo() -> String? {
+        if let interfaces = CNCopySupportedInterfaces() as NSArray? {
+            for interface in interfaces {
+                if let interfaceInfo = CNCopyCurrentNetworkInfo(interface as! CFString) as NSDictionary? {
+                    print(interfaceInfo)
+                    return interfaceInfo["SSID"] as? String
                 }
             }
-            return nil
         }
+        return nil
     }
 #endif
 }
