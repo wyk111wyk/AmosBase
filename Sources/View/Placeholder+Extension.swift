@@ -145,7 +145,7 @@ public struct SimplePlaceholder<V: View>: View {
         self.titleFont = .system(size: 20, weight: .medium)
         self.imageLength = 50
         self.contentSpace = 8
-        self.offsetY = 20
+        self.offsetY = 0
         self.maxWidth = 120
         #else
         self.titleFont = titleFont
