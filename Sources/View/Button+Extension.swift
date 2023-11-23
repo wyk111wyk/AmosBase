@@ -21,7 +21,7 @@ struct ButtonTestView: View {
                 Spacer()
                 Text("1234567")
                     .foregroundStyle(.primary)
-            }.foregroundStyle(.red, .regularMaterial)
+            }.foregroundStyle(.red, .green)
             SimpleCell("Title Title Title",
                        iconName: nil, 
                        systemImage: "pencil.and.outline",
