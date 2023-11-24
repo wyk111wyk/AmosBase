@@ -79,7 +79,7 @@ public extension CLLocationCoordinate2D {
     /// 将地点转换为地址
     ///
     /// 使用Apple Map的API
-    func toAddress(locale: Locale = .current) async -> CLPlacemark?  {
+    func toPlace(locale: Locale = .current) async -> CLPlacemark?  {
         let loction: CLLocation = CLLocation(latitude: self.latitude, longitude: self.longitude)
         let places = try? await CLGeocoder().reverseGeocodeLocation(loction, preferredLocale: locale)
         guard let places else {

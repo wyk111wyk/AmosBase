@@ -40,18 +40,7 @@ struct AlertTestView: View {
                         }
                     }
                     Button("Loading Title Change") {
-                        selectedToast = .topLoading
-                        
-                        SimpleTimer.after(timeInterval: 2) {
-                            toastTitle = "第一次改变文字"
-                            SimpleTimer.after(timeInterval: 2) {
-                                toastTitle = "第二次改变文字"
-                                SimpleTimer.after(timeInterval: 2) {
-                                    toastTitle = nil
-                                    selectedToast = .centerSuccess
-                                }
-                            }
-                        }
+                        loadingTest()
                     }
                 }
                 
@@ -121,6 +110,9 @@ struct AlertTestView: View {
                     }
                 }
             }
+            .refreshable {
+                loadingTest()
+            }
         }
         #if canImport(UIKit)
         .navigationViewStyle(.stack)
@@ -130,6 +122,21 @@ struct AlertTestView: View {
         .simpleLoadingToast(presentState: $simpleLoading, title: "正在载入...")
         .simpleToast(presentState: $selectedToast) {
             selectedToast?.toast(variableTitle: $toastTitle)
+        }
+    }
+    
+    func loadingTest() {
+        selectedToast = .topLoading
+        
+        SimpleTimer.after(timeInterval: 2) {
+            toastTitle = "第一次改变文字"
+            SimpleTimer.after(timeInterval: 2) {
+                toastTitle = "第二次改变文字"
+                SimpleTimer.after(timeInterval: 2) {
+                    toastTitle = nil
+                    selectedToast = .centerSuccess
+                }
+            }
         }
     }
     
