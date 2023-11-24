@@ -62,14 +62,14 @@ public struct SimpleCell<V: View>: View {
             }
             // Title 和 Content
             VStack(alignment: .leading, spacing: 5) {
-                Text(title)
+                Text(title.localized())
                     .foregroundColor(.primary)
                 Group {
                     if let content = content, !content.isEmpty,
                        let contentSystemImage = contentSystemImage, contentSystemImage.count > 0 {
-                        Text("\(Image(systemName: contentSystemImage))\(content)")
+                        Text("\(Image(systemName: contentSystemImage))\(content.localized())")
                     } else if let content = content, content.count > 0 {
-                        Text(content)
+                        Text(content.localized())
                     }
                 }
                 .foregroundColor(.secondary)
@@ -79,7 +79,7 @@ public struct SimpleCell<V: View>: View {
             Spacer(minLength: 0)
             Group {
                 if let stateText = stateText {
-                    Text(stateText)
+                    Text(stateText.localized())
                         .foregroundColor(.secondary)
                 }else {
                     stateView()
