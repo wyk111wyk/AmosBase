@@ -63,7 +63,7 @@ public struct SimpleMiddleButton: View {
                 if let systemImageName {
                     Image(systemName: systemImageName)
                 }
-                Text(title)
+                Text(title.localized())
                 Spacer()
             }
         }

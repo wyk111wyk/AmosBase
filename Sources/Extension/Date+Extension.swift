@@ -146,11 +146,12 @@ public extension Date {
 public extension Date {
     func add(second: Int = 0,
              minute: Int = 0,
+             hour: Int = 0,
              day: Int = 0,
              month: Int = 0,
              year: Int = 0) -> Date {
         let daySeconds = 60 * 60 * 24
-        let passed = TimeInterval(daySeconds * day + daySeconds * 30 * month + daySeconds * 365 * year + 60 * minute + second)
+        let passed = TimeInterval(60 * 60 * hour + daySeconds * day + daySeconds * 30 * month + daySeconds * 365 * year + 60 * minute + second)
         return self.addingTimeInterval(passed)
     }
     
