@@ -107,7 +107,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                     .animation(Animation.spring(), value: showToast)
             }
             .onChange(of: presentState, perform: { newState in
-                debugPrint("state改变:\(String(describing: newState))")
+//                debugPrint("state改变:\(String(describing: newState))")
                 
                 // View必须被设置
                 guard toast() != nil else {
@@ -124,7 +124,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                     isToastPresent = newState != nil
                 }
                 
-                debugPrint("是否开启Toast: \(isToastPresent.toString())")
+//                debugPrint("是否开启Toast: \(isToastPresent.toString())")
                 if isToastPresent {
 //                    debugPrint("开启Toast")
                     showToast = true
