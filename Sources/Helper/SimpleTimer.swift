@@ -29,7 +29,7 @@ public class SimpleTimer {
             }
     }
     
-    /// 在预定时间后执行任务
+    /// 在预定时间后执行任务（仅执行一次）
     ///
     /// 可定制线程等
     static public func after(timeInterval: TimeInterval,

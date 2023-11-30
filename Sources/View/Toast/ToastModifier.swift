@@ -89,16 +89,6 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
             }
         }
         
-        #if os(iOS)
-        if isPresent {
-//            print("1.开启Toast的背景")
-            // 1. 开启背景无动画
-            DispatchQueue.main.async {
-                UIView.setAnimationsEnabled(false)
-            }
-        }
-        #endif
-        
         return isPresent
     }
     
@@ -124,48 +114,14 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
     @ViewBuilder
     public func body(content: Content) -> some View {
         content
-        #if os(iOS)
-            .fullScreenCover(isPresented: .constant(isBackgroundPresent)) {
-                EmptyView()
-                    .modifier(ClearBackground())
-                    .onTapGesture {
-                        backgroundTap?()
-                        if tapBackgroundToDismiss {
-                            dismissToast()
-                        }
-                    }
-                    .overlay {
-                        main()
-                            .offset(y: offsetY)
-                            .animation(Animation.spring(), value: showToast)
-                    }
-                    .onAppear {
-//                        print("3.开启Toast视图")
-                        // 2. 在背景开启后，开启动画并呈现 Toast 视图
-                        DispatchQueue.main.async {
-                            UIView.setAnimationsEnabled(true)
-                            showToast = true
-                            playHaptic()
-                        }
-                    }
-                    .onDisappear {
-//                        print("5.背景关闭，开启视图动画")
-                        // 4. 背景消失后，重新开启视图动画
-                        DispatchQueue.main.async {
-                            UIView.setAnimationsEnabled(true)
-                        }
-                    }
-            }
-        #else
             .overlay {
                 main()
                     .offset(y: offsetY)
                     .animation(Animation.spring(), value: showToast)
             }
-        #endif
             .onChange(of: presentState, perform: { newState in
                 // View必须被设置
-                guard let _ = toast() else {
+                guard toast() != nil else {
                     dismissToast()
                     return
                 }
@@ -180,9 +136,8 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                 }
                 
                 if isToastPresent {
-                    #if os(watchOS) || os(macOS)
+//                    debugPrint("开启Toast")
                     showToast = true
-                    #endif
                     if showToast {
                         playHaptic()
                     }
@@ -207,9 +162,6 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
 //        print("4.Toast视图准备关闭，开始关闭背景")
         // 3. 在 toast 消失后关闭动画，再dismiss背景
         DispatchQueue.main.async {
-            #if os(iOS)
-            UIView.setAnimationsEnabled(false)
-            #endif
             presentState = nil
         }
     }
