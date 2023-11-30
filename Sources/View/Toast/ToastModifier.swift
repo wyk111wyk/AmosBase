@@ -40,7 +40,7 @@ fileprivate struct ClearBackground: ViewModifier {
         if #available(watchOS 9.4, iOS 16.4, macOS 13.3, *) {
             content
                 .presentationBackground(.black.opacity(0.1))
-//                .presentationBackground(.clear)
+            //                .presentationBackground(.clear)
                 .presentationBackgroundInteraction(.enabled)
                 .allowsHitTesting(false)
         }else {
@@ -54,7 +54,7 @@ fileprivate struct ClearBackground: ViewModifier {
 @available(iOS 13, macOS 11, *)
 public struct ToastModifier<Item: Equatable>: ViewModifier{
     
-//    @Binding var isPresenting: Bool
+    //    @Binding var isPresenting: Bool
     @Binding var presentState: Item?
     
     ///Duration time to display the alert
@@ -67,6 +67,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
     var offsetY: CGFloat = 0
     var transition: AnyTransition? = nil
     var withHaptic: Bool = true
+    var isDebug: Bool = false
     
     ///Init `AlertToast` View
     var toast: () -> ToastView?
@@ -86,6 +87,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                 .modifier(ToastTransition(mode: toast()?.displayMode,
                                           transition: transition))
                 .onTapGesture {
+                    if isDebug{ debugPrint("Toast onTap action") }
                     onTap?()
                     if tapToDismiss {
                         dismissToast()
@@ -93,6 +95,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                 }
                 .onDisappear {
                     // 即使迭代，仅在最后一个dismiss后回调
+                    if isDebug{ debugPrint("Toast completion action") }
                     completion?()
                 }
         }
@@ -107,7 +110,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                     .animation(Animation.spring(), value: showToast)
             }
             .onChange(of: presentState, perform: { newState in
-//                debugPrint("state改变:\(String(describing: newState))")
+                if isDebug{ debugPrint("Toast State改变:\(String(describing: newState))") }
                 
                 // View必须被设置
                 guard toast() != nil else {
@@ -124,12 +127,14 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                     isToastPresent = newState != nil
                 }
                 
-//                debugPrint("是否开启Toast: \(isToastPresent.toString())")
+                if isDebug{ debugPrint("Toast是否开启: \(isToastPresent.toString())") }
                 if isToastPresent {
-//                    debugPrint("开启Toast")
-                    showToast = true
-                    if showToast {
-                        playHaptic()
+                    DispatchQueue.main.async {
+                        showToast = true
+                        if showToast {
+                            if isDebug{ debugPrint("Toast开启 Haptic 震动") }
+                            playHaptic()
+                        }
                     }
                     
                     if let workItem {
@@ -149,8 +154,9 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
     }
     
     private func dismissBackground() {
-//        print("4.Toast视图准备关闭，开始关闭背景")
+        //        print("4.Toast视图准备关闭，开始关闭背景")
         // 3. 在 toast 消失后关闭动画，再dismiss背景
+        if isDebug{ debugPrint("Toast dismiss消失") }
         DispatchQueue.main.async {
             presentState = nil
         }
@@ -162,7 +168,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
             return
         }
         
-//        print("2.设置定时结束的任务")
+        //        print("2.设置定时结束的任务")
         
         // 结束Toast的任务
         let dismissToastTask = DispatchWorkItem {
@@ -193,17 +199,17 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
         if let toastView = toast(), withHaptic {
             switch toastView.type {
             case .success:
-                #if os(iOS)
+#if os(iOS)
                 SimpleDevice.playHaptic(.success)
-                #elseif canImport(WatchKit)
+#elseif canImport(WatchKit)
                 SimpleDevice.playWatchHaptic(.success)
-                #endif
+#endif
             case .error:
-                #if os(iOS)
+#if os(iOS)
                 SimpleDevice.playHaptic(.error)
-                #elseif canImport(WatchKit)
+#elseif canImport(WatchKit)
                 SimpleDevice.playWatchHaptic(.failure)
-                #endif
+#endif
             default:
                 break
             }
@@ -253,6 +259,7 @@ public extension View{
         offsetY: CGFloat = 0,
         transition: AnyTransition? = nil,
         withHaptic: Bool = true,
+        isDebug: Bool = false,
         @ViewBuilder toast: @escaping () -> ToastView?,
         onTap: (() -> ())? = nil,
         backgroundTap: (() -> ())? = nil,
@@ -265,6 +272,7 @@ public extension View{
                 offsetY: offsetY,
                 transition: transition,
                 withHaptic: withHaptic,
+                isDebug: isDebug,
                 toast: toast,
                 onTap: onTap,
                 backgroundTap: backgroundTap,
@@ -272,15 +280,16 @@ public extension View{
     
     /// 简单UI组件 - 顶部错误提示（可进一步定制）
     func simpleErrorToast<Item: Equatable>(presentState: Binding<Item?>,
-                          displayMode: ToastView.DisplayMode = .topToast,
-                          title: String? = nil,
-                          subtitle: String? = nil,
-                          labelColor: Color = .red,
-                          bgColor: Color? = .red,
-                          withHaptic: Bool = true,
-                          onTap: (() -> ())? = nil,
-                          backgroundTap: (() -> ())? = nil,
-                          completion: (() -> ())? = nil) -> some View{
+                                           displayMode: ToastView.DisplayMode = .topToast,
+                                           title: String? = nil,
+                                           subtitle: String? = nil,
+                                           labelColor: Color = .red,
+                                           bgColor: Color? = .red,
+                                           withHaptic: Bool = true,
+                                           isDebug: Bool = false,
+                                           onTap: (() -> ())? = nil,
+                                           backgroundTap: (() -> ())? = nil,
+                                           completion: (() -> ())? = nil) -> some View{
         let errorToast = ToastView(displayMode: displayMode,
                                    type: .error(labelColor),
                                    bgColor: bgColor,
@@ -288,6 +297,7 @@ public extension View{
                                    subTitle: subtitle)
         return modifier(ToastModifier(presentState: presentState,
                                       withHaptic: withHaptic,
+                                      isDebug: isDebug,
                                       toast: { errorToast },
                                       onTap: onTap,
                                       backgroundTap: backgroundTap,
@@ -296,15 +306,16 @@ public extension View{
     
     /// 简单UI组件 - 中央成功动画提示（可进一步定制）
     func simpleSuccessToast<Item: Equatable>(presentState: Binding<Item?>,
-                            displayMode: ToastView.DisplayMode = .centerToast,
-                            title: String? = nil,
-                            subtitle: String? = nil,
-                            labelColor: Color = .green,
-                            bgColor: Color? = nil,
-                            withHaptic: Bool = true,
-                            onTap: (() -> ())? = nil,
-                            backgroundTap: (() -> ())? = nil,
-                            completion: (() -> ())? = nil) -> some View{
+                                             displayMode: ToastView.DisplayMode = .centerToast,
+                                             title: String? = nil,
+                                             subtitle: String? = nil,
+                                             labelColor: Color = .green,
+                                             bgColor: Color? = nil,
+                                             withHaptic: Bool = true,
+                                             isDebug: Bool = false,
+                                             onTap: (() -> ())? = nil,
+                                             backgroundTap: (() -> ())? = nil,
+                                             completion: (() -> ())? = nil) -> some View{
         let errorToast = ToastView(displayMode: displayMode,
                                    type: .success(labelColor),
                                    bgColor: bgColor,
@@ -312,6 +323,7 @@ public extension View{
                                    subTitle: subtitle)
         return modifier(ToastModifier(presentState: presentState,
                                       withHaptic: withHaptic,
+                                      isDebug: isDebug,
                                       toast: { errorToast },
                                       onTap: onTap,
                                       backgroundTap: backgroundTap,
@@ -322,14 +334,15 @@ public extension View{
     ///
     /// 不会自动从屏幕消失，需要程序dismss或手动点击
     func simpleLoadingToast<Item: Equatable>(presentState: Binding<Item?>,
-                            displayMode: ToastView.DisplayMode = .centerToast,
-                            title: String? = nil,
-                            subtitle: String? = nil,
-                            withHaptic: Bool = true,
-                            tapToDismiss: Bool = true,
-                            onTap: (() -> ())? = nil,
-                            backgroundTap: (() -> ())? = nil,
-                            completion: (() -> ())? = nil) -> some View{
+                                             displayMode: ToastView.DisplayMode = .centerToast,
+                                             title: String? = nil,
+                                             subtitle: String? = nil,
+                                             withHaptic: Bool = true,
+                                             isDebug: Bool = false,
+                                             tapToDismiss: Bool = true,
+                                             onTap: (() -> ())? = nil,
+                                             backgroundTap: (() -> ())? = nil,
+                                             completion: (() -> ())? = nil) -> some View{
         let errorToast = ToastView(displayMode: displayMode,
                                    type: .loading,
                                    title: title,
@@ -337,6 +350,7 @@ public extension View{
         return modifier(ToastModifier(presentState: presentState,
                                       tapToDismiss: tapToDismiss,
                                       withHaptic: withHaptic,
+                                      isDebug: isDebug,
                                       toast: { errorToast },
                                       onTap: onTap,
                                       backgroundTap: backgroundTap,
