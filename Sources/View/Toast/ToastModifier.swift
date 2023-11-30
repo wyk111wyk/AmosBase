@@ -78,19 +78,6 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
     
     @State private var workItem: DispatchWorkItem?
     @State private var showToast = false
-    // 条件符合后首先开启背景，随后设置dismiss的任务
-    private var isBackgroundPresent: Bool {
-        var isPresent = false
-        if toast() != nil, let presentState {
-            if presentState is Bool {
-                isPresent = presentState as! Bool
-            }else {
-                isPresent = true
-            }
-        }
-        
-        return isPresent
-    }
     
     @ViewBuilder
     public func main() -> some View{
@@ -120,6 +107,8 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                     .animation(Animation.spring(), value: showToast)
             }
             .onChange(of: presentState, perform: { newState in
+                debugPrint("state改变:\(String(describing: newState))")
+                
                 // View必须被设置
                 guard toast() != nil else {
                     dismissToast()
@@ -135,6 +124,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                     isToastPresent = newState != nil
                 }
                 
+                debugPrint("是否开启Toast: \(isToastPresent.toString())")
                 if isToastPresent {
 //                    debugPrint("开启Toast")
                     showToast = true

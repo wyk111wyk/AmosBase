@@ -29,13 +29,13 @@ struct AlertTestView: View {
                 Section("转换 Toast") {
                     Button("Loading -> Success") {
                         selectedToast = .topLoading
-                        SimpleTimer.after(timeInterval: 2) {
+                        SimpleTimer().after(timeInterval: 2) {
                             selectedToast = .centerSuccess
                         }
                     }
                     Button("Loading -> Error") {
                         selectedToast = .topLoading
-                        SimpleTimer.after(timeInterval: 2) {
+                        SimpleTimer().after(timeInterval: 2) {
                             selectedToast = .topError
                         }
                     }
@@ -128,11 +128,11 @@ struct AlertTestView: View {
     func loadingTest() {
         selectedToast = .topLoading
         
-        SimpleTimer.after(timeInterval: 2) {
+        SimpleTimer().after(timeInterval: 2) {
             toastTitle = "第一次改变文字"
-            SimpleTimer.after(timeInterval: 2) {
+            SimpleTimer().after(timeInterval: 2) {
                 toastTitle = "第二次改变文字"
-                SimpleTimer.after(timeInterval: 2) {
+                SimpleTimer().after(timeInterval: 2) {
                     toastTitle = nil
                     selectedToast = .centerSuccess
                 }
