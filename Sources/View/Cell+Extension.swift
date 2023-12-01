@@ -87,10 +87,10 @@ public struct SimpleCell<V: View>: View {
             }
 //            .frame(maxWidth: stateWidth, alignment: .trailing)
 //            .padding(.leading, 8)
-            #if !os(watchOS)
-            .textSelection(.enabled)
-            #endif
         }
+#if !os(watchOS)
+.textSelection(.enabled)
+#endif
     }
 }
 

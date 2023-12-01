@@ -136,7 +136,6 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                             playHaptic()
                         }
                     }
-                    
                     if let workItem {
                         // 对已经呈现的 Toast 进行迭代
                         workItem.cancel()
