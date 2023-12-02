@@ -121,7 +121,7 @@ extension View {
 
 // MARK: - 基础的按钮组件
 
-struct CircleButton: View {
+public struct CircleButton: View {
     let role: ButtonRole?
     let labelColor: Color?
     let callback: () -> Void
@@ -129,7 +129,7 @@ struct CircleButton: View {
     let title: LocalizedStringKey
     let imageName: String
     
-    init(role: ButtonRole? = nil,
+    public init(role: ButtonRole? = nil,
          imageName: String? = nil,
          labelColor: Color? = nil,
          callback: @escaping () -> Void = {}) {
@@ -155,7 +155,7 @@ struct CircleButton: View {
         self.callback = callback
     }
     
-    var body: some View {
+    public var body: some View {
 //        Button(role: role, action: callback) {
 //            Label(title, systemImage: imageName)
 //                .modifier(ButtonCircleBackground(labelColor))
