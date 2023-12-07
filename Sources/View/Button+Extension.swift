@@ -7,36 +7,6 @@
 
 import SwiftUI
 
-struct ButtonTestView: View {
-    @State private var showAlert01 = false
-    
-    var body: some View {
-        List {
-            SimpleCell("Title Title Title",
-                       iconName: nil, 
-                       systemImage: "info.circle.fill",
-                       contentSystemImage: "scribble",
-                       content: "Content Content Content Content Content Content",
-                       stateText: nil) {
-                Spacer()
-                Text("1234567")
-                    .foregroundStyle(.primary)
-            }.foregroundStyle(.red, .green)
-            SimpleCell("Title Title Title",
-                       iconName: nil, 
-                       systemImage: "pencil.and.outline",
-                       content: "Content Content Content Content Content Content",
-                       stateText: "0987654")
-            Section {
-                SimpleMiddleButton("Middle button", role: .destructive) {}
-            }
-        }
-        #if !os(watchOS) && !os(macOS)
-        .listStyle(.insetGrouped)
-        #endif
-    }
-}
-
 /// 简单UI组件 -  文字居中的按钮
 ///
 /// 可定制按钮类型，文字颜色为app主要色
@@ -305,15 +275,4 @@ struct ButtonCircleBackground: ViewModifier {
                 }
         }
     }
-}
-
-#Preview("Navi") {
-    NavigationView {
-        ButtonTestView()
-            .buttonCircleNavi(role: .cancel)
-            .buttonCircleNavi(role: .destructive)
-    }
-#if canImport(UIKit)
-    .navigationViewStyle(.stack)
-    #endif
 }

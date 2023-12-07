@@ -7,12 +7,6 @@
 
 import Foundation
 
-public extension Locale {
-    static var zhLocale: Locale {
-        Locale(identifier: "zh_Hans")
-    }
-}
-
 fileprivate func displayDateFormat(format: String = "yyyy-MM-dd") -> DateFormatter {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = format
@@ -223,35 +217,18 @@ public extension Date {
         return date
     }
     
-    /// 将用时转换成自然描述 -  可选时区、形式、包含
-    ///
-    /// 例如：将80转换为1分钟20秒
-    static func durationDescribe(_ distance: TimeInterval,
-                                 locale: Locale = .current,
-                                 style: DateComponentsFormatter.UnitsStyle = .brief,
-                                 units: NSCalendar.Unit = [.hour, .minute]) -> String {
-        let formatter = DateComponentsFormatter()
-        var calendar = Calendar.current
-        calendar.locale = locale
-        formatter.calendar = calendar
-        formatter.unitsStyle = style
-        formatter.allowedUnits = units
-        return formatter.string(from: distance) ?? "N/A"
-    }
-    
-    /// 将两个时间的差转换成自然描述
-    ///
-    /// 例如：2天
-    func toString_Distance(to end: Date = Date(),
-                           unit: Bool = true,
+    /// 两个时间之差的自然语义描述
+    func toString_Relative(to date: Date = .now,
                            locale: Locale = .current,
-                           style: DateComponentsFormatter.UnitsStyle = .brief,
-                           units: NSCalendar.Unit = [.day]) -> String {
-        let gapDays = self.distance(to: end)
-        if unit {
-            return Date.durationDescribe(gapDays, locale: locale, style: style, units: units)
-        }else {
-            return "\(gapDays)"
-        }
+                           timeStyle: RelativeDateTimeFormatter.DateTimeStyle = .named,
+                           style: RelativeDateTimeFormatter.UnitsStyle = .abbreviated,
+                           context: Formatter.Context = .dynamic) -> String {
+        let formatterState = RelativeDateTimeFormatter()
+        formatterState.dateTimeStyle = timeStyle
+        formatterState.unitsStyle = style
+        formatterState.formattingContext = context
+        formatterState.locale = locale
+        let relativeDateString = formatterState.localizedString(for: self, relativeTo: date)
+        return relativeDateString
     }
 }

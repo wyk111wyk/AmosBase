@@ -7,6 +7,12 @@
 
 import Foundation
 
+public extension Bool {
+    func toString() -> String {
+        self ? "Yes" : "No"
+    }
+}
+
 public extension Int {
     /// 转换为文字
     ///

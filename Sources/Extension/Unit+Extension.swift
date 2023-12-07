@@ -8,30 +8,101 @@
 import Foundation
 import SwiftUI
 
-public extension Encodable {
-    /// 将对象转换为 Json 格式的文字
-    func toJson() -> String? {
-        // 创建一个 JSONEncoder 对象
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .sortedKeys
-
-        // 将对象编码成 JSON 格式的数据
-        if let jsonData = try? encoder.encode(self),
-           let jsonString = String(data: jsonData, encoding: .utf8) {
-            return jsonString
-        }else {
-            return nil
+public extension Locale {
+    
+    static var zhHans: Locale {
+        Locale(identifier: "zh_Hans")
+    }
+    
+    static var enUS: Locale {
+        Locale(identifier: "en_US")
+    }
+    
+    static var deDE: Locale {
+        Locale(identifier: "de_DE")
+    }
+    
+    @available(iOS 16, macOS 13, watchOS 9, *)
+    static func current(langCode: Locale.LanguageCode? = nil,
+                        region: Locale.Region? = nil) -> Locale {
+        var components = Locale.Components(locale: .current)
+        if let langCode {
+            components.languageComponents.languageCode = langCode
         }
+        if let region {
+            components.languageComponents.region = region
+        }
+        
+        let myLocale = Locale(components: components)
+        return myLocale
     }
 }
 
+public let secondsForDay: TimeInterval = 86400
+
 public extension BinaryFloatingPoint {
-    /// 对储存大小进行转换
+    /// 长度的换算 -  默认单位：米
     ///
-    /// 返回值为Measurement，可.value为值，.description为带单位
-    func convertStorage(from unitIn: UnitInformationStorage = .bytes,
-                        to unitOut: UnitInformationStorage = .kilobits) -> Measurement<Dimension> {
-        return self.convert(from: unitIn, to: unitOut)
+    /// 可自定义
+    func toLength(unit: UnitLength = .meters,
+                  outUnit: UnitLength? = nil,
+                  degit: Int = 1,
+                  style: Formatter.UnitStyle = .medium,
+                  locale: Locale = .current,
+                  withUnit: Bool = true) -> String {
+        self.toUnit(unit: unit, outUnit: outUnit, degit: degit, style: style, locale: locale, withUnit: withUnit)
+    }
+    
+    /// 数字储存的换算 -  默认输入单位：byte(b)
+    ///
+    /// 可自定义
+    func toStorage(unit: UnitInformationStorage = .bytes,
+                   outUnit: UnitInformationStorage? = nil,
+                   degit: Int = 1,
+                   style: Formatter.UnitStyle = .medium,
+                   locale: Locale = .current,
+                   withUnit: Bool = true) -> String {
+        self.toUnit(unit: unit, outUnit: outUnit, degit: degit, style: style, locale: locale, withUnit: withUnit)
+    }
+    
+    /// 速度的换算 -  默认单位：米/秒
+    ///
+    /// 可自定义
+    func toSpeed(unit: UnitSpeed = .metersPerSecond,
+                 outUnit: UnitSpeed? = nil,
+                 degit: Int = 1,
+                 style: Formatter.UnitStyle = .medium,
+                 locale: Locale = .current,
+                 withUnit: Bool = true) -> String {
+        self.toUnit(unit: unit, outUnit: outUnit, degit: degit, style: style, locale: locale, withUnit: withUnit)
+    }
+    
+    /// 温度的换算 -  默认单位：摄氏度
+    ///
+    /// 可自定义
+    func toTemperature(unit: UnitTemperature = .celsius,
+                       outUnit: UnitTemperature? = nil,
+                       degit: Int = 1,
+                       style: Formatter.UnitStyle = .medium,
+                       locale: Locale = .current,
+                       withUnit: Bool = true) -> String {
+        self.toUnit(unit: unit, outUnit: outUnit, degit: degit, style: style, locale: locale, withUnit: withUnit)
+    }
+    
+    /// 将用时转换成自然描述 -  可选时区、形式、包含
+    ///
+    /// 例如：将80秒转换为1分钟20秒（默认转换为小时+分钟）
+    func toDuration(units: NSCalendar.Unit = [.hour, .minute],
+                    style: DateComponentsFormatter.UnitsStyle = .brief,
+                    locale: Locale = .current) -> String {
+        let formatter = DateComponentsFormatter()
+        var calendar = Calendar.current
+        calendar.locale = locale
+        formatter.calendar = calendar
+        formatter.unitsStyle = style
+        formatter.allowedUnits = units
+        
+        return formatter.string(from: TimeInterval(self)) ?? "-"
     }
     
     /// 对单位进行转换 -  需要选择传入和输出的单位，并都要符合Dimension协议
@@ -45,8 +116,9 @@ public extension BinaryFloatingPoint {
     
     /// 将数字转换为单位值 -  可选单位类型、显示方式、是否有单位等
     ///
-    /// 例：将1001显示为37摄氏度
-    func toUnit(unit: Unit,
+    /// 例：将1001显示为37摄氏度 .providedUnit / .naturalScale
+    func toUnit(unit: Dimension,
+                outUnit: Dimension? = nil,
                 degit: Int = 0,
                 style: Formatter.UnitStyle = .medium,
                 option: MeasurementFormatter.UnitOptions = .naturalScale,
@@ -56,8 +128,15 @@ public extension BinaryFloatingPoint {
         formatter.locale = locale
         formatter.numberFormatter.maximumFractionDigits = degit
         formatter.unitStyle = style
-        formatter.unitOptions = option
-        let value = Measurement(value: Double(self), unit: unit)
+        if outUnit != nil {
+            formatter.unitOptions = .providedUnit
+        }else {
+            formatter.unitOptions = option
+        }
+        var value = Measurement(value: Double(self), unit: unit)
+        if let outUnit {
+            value = value.converted(to: outUnit)
+        }
         var result = formatter.string(from: value)
         if !withUnit {
             result = result.filter("0123456789.".contains)
@@ -66,107 +145,3 @@ public extension BinaryFloatingPoint {
     }
 }
 
-public extension Bool {
-    func toString() -> String {
-        self ? "Yes" : "No"
-    }
-}
-
-// MARK: - Methods (RawRepresentable, RawValue: Equatable)
-
-public extension Optional {
-    func isBool() -> Bool {
-        if let item = self {
-            return item is Bool
-        }else {
-            return false
-        }
-    }
-    
-    func toBool() -> Bool? {
-        if self.isBool() {
-            return self as? Bool
-        }else {
-            return nil
-        }
-    }
-    
-    func isString() -> Bool {
-        if let item = self {
-            return item is String
-        }else {
-            return false
-        }
-    }
-    
-    func toString() -> String? {
-        if self.isString() {
-            return self as? String
-        }else {
-            return nil
-        }
-    }
-    
-//    func isType<T>(_ type: T.Type) -> Bool {
-//        if let item = self {
-//            return item is type
-//        }else {
-//            return false
-//        }
-//    }
-}
-
-public extension Optional where Wrapped: RawRepresentable, Wrapped.RawValue: Equatable {
-    
-    // swiftlint:disable missing_swifterswift_prefix
-
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`,
-    /// `a == b` implies that `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    @inlinable static func == (lhs: Optional, rhs: Wrapped.RawValue?) -> Bool {
-        return lhs?.rawValue == rhs
-    }
-
-    /// Returns a Boolean value indicating whether two values are equal.
-    ///
-    /// Equality is the inverse of inequality. For any values `a` and `b`,
-    /// `a == b` implies that `a != b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    @inlinable static func == (lhs: Wrapped.RawValue?, rhs: Optional) -> Bool {
-        return lhs == rhs?.rawValue
-    }
-
-    /// Returns a Boolean value indicating whether two values are not equal.
-    ///
-    /// Inequality is the inverse of equality. For any values `a` and `b`,
-    /// `a != b` implies that `a == b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    @inlinable static func != (lhs: Optional, rhs: Wrapped.RawValue?) -> Bool {
-        return lhs?.rawValue != rhs
-    }
-
-    /// Returns a Boolean value indicating whether two values are not equal.
-    ///
-    /// Inequality is the inverse of equality. For any values `a` and `b`,
-    /// `a != b` implies that `a == b` is `false`.
-    ///
-    /// - Parameters:
-    ///   - lhs: A value to compare.
-    ///   - rhs: Another value to compare.
-    @inlinable static func != (lhs: Wrapped.RawValue?, rhs: Optional) -> Bool {
-        return lhs != rhs?.rawValue
-    }
-
-    // swiftlint:enable missing_swifterswift_prefix
-}

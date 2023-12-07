@@ -358,5 +358,5 @@ public extension View{
 }
 
 #Preview("Alert") {
-    AlertTestView()
+    DemoSimpleToast()
 }

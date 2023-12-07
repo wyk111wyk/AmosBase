@@ -9,6 +9,25 @@ import Foundation
 
 // MARK: - Methods
 
+public extension Dictionary where Value : Collection {
+    /// 计算字典的数组值的总个数
+    ///
+    /// 例如 字典A有三个Array值，那么就把所有的Array值的count加起来取和
+    func elementCount() -> Int {
+        var count = 0
+        for (_, value) in self {
+            count += value.count
+        }
+        return count
+    }
+    
+    func flatElements<T>() -> [T] {
+        lazy.compactMap { (_, value) in
+            value as? T
+        }
+    }
+}
+
 public extension Dictionary {
 
     /// SwifterSwift: 判断是否包含某个key。Check if key exists in dictionary.
