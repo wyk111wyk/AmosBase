@@ -22,8 +22,8 @@ public extension Dictionary where Value : Collection {
     }
     
     func flatElements<T>() -> [T] {
-        lazy.compactMap { (_, value) in
-            value as? T
+        self.flatMap { (_, value) in
+            value as! [T]
         }
     }
 }
