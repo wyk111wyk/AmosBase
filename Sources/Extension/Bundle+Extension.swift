@@ -7,13 +7,13 @@
 
 import Foundation
 
-extension Bundle {
+public extension Bundle {
     /// 从文件中转换资源 -  Bundle
     ///
     /// let file = Bundle.main.decode(url)
     ///
     /// 例： Bundle.main.decode("teams.json")
-    public func decode<T: Codable>(_ file: String) -> T {
+    func decode<T: Codable>(_ file: String) -> T {
         guard let url = self.url(forResource: file, withExtension: nil) else {
             fatalError("Failed to locate \(file) in bundle.")
         }
