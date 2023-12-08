@@ -26,6 +26,10 @@ public extension Array {
     mutating func prepend(_ newElement: Element) {
         insert(newElement, at: 0)
     }
+    
+    mutating func prepend(_ contents: [Element]) {
+        insert(contentsOf: contents, at: 0)
+    }
 
     /// SwifterSwift: 交换两个元素的位置。Safely swap values at given index positions.
     ///

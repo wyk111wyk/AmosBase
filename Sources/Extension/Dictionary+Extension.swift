@@ -22,7 +22,7 @@ public extension Dictionary where Value : Collection {
     }
     
     func flatElements<T>() -> [T] {
-        self.flatMap { (_, value) in
+        lazy.flatMap { (_, value) in
             value as! [T]
         }
     }
