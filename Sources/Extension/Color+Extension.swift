@@ -29,6 +29,17 @@ public extension Color {
     init(hex: String) {
         self.init(uiColor: SFColor(hexString: hex) ?? .white)
     }
+    
+    /// SwifterSwift: Darken a color.
+    func darken(by percentage: CGFloat = 0.2) -> Color {
+        Color(uiColor: SFColor(self).darken(by: percentage))
+    }
+    
+    /// SwifterSwift: Lighten a color.
+    func lighten(by percentage: CGFloat = 0.2) -> Color {
+        Color(uiColor: SFColor(self).lighten(by: percentage))
+    }
+    
     #else
     /// HEX颜色 - 使用hex创建颜色，可不带 # 符号
     ///
@@ -37,6 +48,16 @@ public extension Color {
     /// 透明度后缀 E6-90% D9-85% CC-80% BF-75% B3-70% A6-65% 99-60%
     init(hex: String) {
         self.init(nsColor: SFColor(hexString: hex) ?? .white)
+    }
+    
+    /// SwifterSwift: Darken a color.
+    func darken(by percentage: CGFloat = 0.2) -> Color {
+        Color(nsColor: SFColor(self).darken(by: percentage))
+    }
+    
+    /// SwifterSwift: Lighten a color.
+    func lighten(by percentage: CGFloat = 0.2) -> Color {
+        Color(nsColor: SFColor(self).lighten(by: percentage))
     }
     #endif
     
