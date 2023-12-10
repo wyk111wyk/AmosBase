@@ -35,7 +35,9 @@ struct DemoSimpleColor: View {
             
             Section("颜色处理") {
                 randomColorCell()
+                #if !os(watchOS)
                 ColorPicker("挑选颜色", selection: $pickColor)
+                #endif
             }
         }
         .navigationTitle(title)
