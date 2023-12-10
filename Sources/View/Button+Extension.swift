@@ -255,6 +255,7 @@ struct ButtonCircleBackground: ViewModifier {
 //                .foregroundStyle(.regularMaterial)
 //                .opacity(0.8)
                 .foregroundStyle(labelColor ?? Color.accentColor)
+                .fontWeight(.medium)
                 .buttonBorderShape(.circle)
                 .buttonStyle(.bordered)
             #elseif os(watchOS)

@@ -207,6 +207,15 @@ public extension Date {
 }
 
 public extension Date {
+    /// 计算两个日期之间的间隔时间 -  单位默认：天
+    ///
+    /// 结果是Int
+    func distance(end date: Date, component: Calendar.Component = .day) -> Int {
+        let dateComponents = Calendar.current.dateComponents([component], from: self, to: date)
+        let distance = dateComponents.value(for: component) ?? 0
+        return distance
+    }
+    
     /// 生成随机时间
     ///
     /// 需要传入开始时间和时长（秒数）

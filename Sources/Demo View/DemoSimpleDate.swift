@@ -22,6 +22,8 @@ public struct DemoSimpleDate: View {
                 SimpleCell(now.toString_ISO8601())
             }
             Section("语义描述") {
+                SimpleCell("天数差别", stateText: now.distance(end: now.add(day: 3)).toString())
+                SimpleCell("月数差别", stateText: now.distance(end: now.add(day: 3, month: 1), component: .month).toString())
                 SimpleCell("时间差别(数字)", stateText: now.toString_Relative(
                     to: .now.add(hour: 5, day: 12, month: 1),
                     locale: .zhHans,
