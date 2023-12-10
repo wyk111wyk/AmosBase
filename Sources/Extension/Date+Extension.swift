@@ -210,8 +210,9 @@ public extension Date {
     /// 计算两个日期之间的间隔时间 -  单位默认：天
     ///
     /// 结果是Int
-    func distance(end date: Date, component: Calendar.Component = .day) -> Int {
-        let dateComponents = Calendar.current.dateComponents([component], from: self, to: date)
+    func distance(start date: Date = Date().toStartOfDay(),
+                  component: Calendar.Component = .day) -> Int {
+        let dateComponents = Calendar.current.dateComponents([component], from: date, to: self)
         let distance = dateComponents.value(for: component) ?? 0
         return distance
     }
