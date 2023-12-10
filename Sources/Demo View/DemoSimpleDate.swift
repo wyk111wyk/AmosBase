@@ -19,11 +19,9 @@ public struct DemoSimpleDate: View {
     public var body: some View {
         Form {
             Section("当前时间") {
-                SimpleCell(now.toString_ISO8601())
+                Text(now, style: .date)
             }
             Section("语义描述") {
-                SimpleCell("天数差别", stateText: now.add(day: 3).distance().toString())
-                SimpleCell("月数差别", stateText: now.add(day: 3, month: 1).distance(component: .month).toString())
                 SimpleCell("时间差别(数字)", stateText: now.toString_Relative(
                     to: .now.add(hour: 5, day: 12, month: 1),
                     locale: .zhHans,
@@ -40,6 +38,12 @@ public struct DemoSimpleDate: View {
                     timeStyle: .named,
                     style: .full,
                     context: .listItem))
+            }
+            Section("时间对比") {
+                SimpleCell("是否经过10秒", stateText: now.hasPassed(second: 10).toString())
+                SimpleCell("是否不到10秒", stateText: now.notPassed(second: 10).toString())
+                SimpleCell("天数差别", stateText: now.add(day: 3).distance().toString())
+                SimpleCell("月数差别", stateText: now.add(day: 3, month: 1).distance(component: .month).toString())
             }
             Section("时间拆解") {
                 SimpleCell("获取年份", stateText: now.getYear().toString())

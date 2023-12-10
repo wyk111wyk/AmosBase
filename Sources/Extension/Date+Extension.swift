@@ -207,6 +207,30 @@ public extension Date {
 }
 
 public extension Date {
+    /// 判断：是否已经过了相应时间
+    ///
+    /// 例子：传入5分钟，判断当前时间是否大于传入时间后5分钟
+    func hasPassed(second: Int = 0,
+                   minute: Int = 0,
+                   hour: Int = 0,
+                   day: Int = 0,
+                   month: Int = 0,
+                   year: Int = 0) -> Bool {
+        self.add(second: second, minute: minute, hour: hour, day: day, month: month, year: year) < Date()
+    }
+    
+    /// 判断：是否还没有进过相应时间
+    ///
+    /// 例子：传入5分钟，判断当前时间是否未经过5分钟
+    func notPassed(second: Int = 0,
+                   minute: Int = 0,
+                   hour: Int = 0,
+                   day: Int = 0,
+                   month: Int = 0,
+                   year: Int = 0) -> Bool {
+        self.add(second: second, minute: minute, hour: hour, day: day, month: month, year: year) > Date()
+    }
+    
     /// 计算两个日期之间的间隔时间 -  单位默认：天
     ///
     /// 结果是Int

@@ -61,6 +61,10 @@ public extension Color {
     }
     #endif
     
+    var hexString: String {
+        SFColor(self).hexString
+    }
+    
     /// 随机颜色
     static func random() -> Color {
         var generator: RandomNumberGenerator = SystemRandomNumberGenerator()
