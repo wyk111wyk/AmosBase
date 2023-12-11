@@ -16,8 +16,8 @@ public extension View {
     ///
     /// 可自定义Title和Message，singleCancel, singleConfirm, ConfirmCancel, DestructiveCancel
     func simpleAlert(type: SimpleAlertType = .singleConfirm,
-                            title: LocalizedStringKey?,
-                            message: LocalizedStringKey? = nil,
+                            title: String?,
+                            message: String? = nil,
                             isPresented: Binding<Bool>,
                             confirmTap: @escaping () -> Void = {},
                             cancelTap: @escaping () -> Void = {}) -> some View {
@@ -33,8 +33,8 @@ public extension View {
     ///
     /// 可自定义Title和Message，singleCancel, singleConfirm, ConfirmCancel, DestructiveCancel
     func simpleConfirmation(type: SimpleAlertType = .singleConfirm,
-                                   title: LocalizedStringKey?,
-                                   message: LocalizedStringKey? = nil,
+                                   title: String?,
+                                   message: String? = nil,
                                    isPresented: Binding<Bool>,
                                    confirmTap: @escaping () -> Void = {},
                                    cancelTap: @escaping () -> Void = {}) -> some View {
@@ -49,16 +49,16 @@ public extension View {
 
 // MARK: - Confirmation
 struct SimpleConfirmation: ViewModifier {
-    let title: LocalizedStringKey
-    let message: LocalizedStringKey?
+    let title: String
+    let message: String?
     let type: SimpleAlertType
     @Binding var isPresented: Bool
     
     let confirmTap: () -> Void
     let cancelTap: () -> Void
     
-    init(title: LocalizedStringKey?,
-         message: LocalizedStringKey?,
+    init(title: String?,
+         message: String?,
          type: SimpleAlertType,
          isPresented: Binding<Bool>,
          confirmTap: @escaping () -> Void,
@@ -73,7 +73,7 @@ struct SimpleConfirmation: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .confirmationDialog(title,
+            .confirmationDialog(title.localized(),
                                 isPresented: $isPresented,
                                 titleVisibility: .visible) {
                 switch type {
@@ -93,7 +93,7 @@ struct SimpleConfirmation: ViewModifier {
                 }
             } message: {
                 if let message {
-                    Text(message)
+                    Text(message.localized())
                 }
             }
     }
@@ -101,16 +101,16 @@ struct SimpleConfirmation: ViewModifier {
 
 // MARK: - Alert
 struct SimpleAlert: ViewModifier {
-    let title: LocalizedStringKey
-    let message: LocalizedStringKey?
+    let title: String
+    let message: String?
     let type: SimpleAlertType
     @Binding var isPresented: Bool
     
     let confirmTap: () -> Void
     let cancelTap: () -> Void
     
-    init(title: LocalizedStringKey?,
-         message: LocalizedStringKey?,
+    init(title: String?,
+         message: String?,
          type: SimpleAlertType,
          isPresented: Binding<Bool>,
          confirmTap: @escaping () -> Void,
@@ -125,7 +125,7 @@ struct SimpleAlert: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .alert(title,
+            .alert(title.localized(),
                    isPresented: $isPresented) {
                 switch type {
                 case .singleCancel:
@@ -144,7 +144,7 @@ struct SimpleAlert: ViewModifier {
                 }
             } message: {
                 if let message {
-                    Text(message)
+                    Text(message.localized())
                 }
             }
     }
