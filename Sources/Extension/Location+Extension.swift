@@ -131,12 +131,16 @@ public extension CLLocationCoordinate2D {
     
     #if !os(watchOS)
     /// 计算两点间的所有行车路线
+    ///
+    /// 不传入起点坐标则默认当前坐标，无坐标则返回nil
     func routes(from coordinate: CLLocationCoordinate2D? = nil) async -> [MKRoute]? {
-        guard let coordinate else { return nil }
+        var currentCoordinate = CLLocationManager().location?.coordinate
+        if coordinate != nil { currentCoordinate = coordinate }
+        guard let currentCoordinate else { return nil }
         
         // 起点
         let start = MKMapItem(placemark: MKPlacemark(
-            coordinate: coordinate,
+            coordinate: currentCoordinate,
             addressDictionary: nil))
         // 目的地
         let destination = MKMapItem(placemark: MKPlacemark(
@@ -158,6 +162,8 @@ public extension CLLocationCoordinate2D {
     }
     
     /// 计算两点间的推荐行车路线（一条）
+    ///
+    /// 不传入起点坐标则默认当前坐标，无坐标则返回nil
     func route(from coordinate: CLLocationCoordinate2D? = nil) async -> MKRoute? {
         if let route = await self.routes(from: coordinate)?.first {
             return route

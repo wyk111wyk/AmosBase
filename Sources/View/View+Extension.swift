@@ -29,3 +29,49 @@ public extension Binding {
         )
     }
 }
+
+public extension View {
+    @ViewBuilder
+    func simpleTagBackground<S: ShapeStyle>(verticalPad: CGFloat = 5,
+                                            horizontalPad: CGFloat = 10,
+                                            contentColor: S = .white,
+                                            cornerRadius: CGFloat = 6,
+                                            bgStyle: S = .blue) -> some View {
+        self.modifier(TagBackground(verticalPad: verticalPad,
+                                    horizontalPad: horizontalPad,
+                                    contentColor: contentColor,
+                                    cornerRadius: cornerRadius,
+                                    bgStyle: bgStyle))
+    }
+}
+
+struct TagBackground<S>: ViewModifier where S: ShapeStyle {
+    let verticalPad: CGFloat
+    let horizontalPad: CGFloat
+    let contentColor: S
+    let cornerRadius: CGFloat
+    let bgStyle: S
+    
+    init(verticalPad: CGFloat, 
+         horizontalPad: CGFloat,
+         contentColor: S,
+         cornerRadius: CGFloat,
+         bgStyle: S) {
+        self.verticalPad = verticalPad
+        self.horizontalPad = horizontalPad
+        self.contentColor = contentColor
+        self.cornerRadius = cornerRadius
+        self.bgStyle = bgStyle
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .padding(.vertical, verticalPad)
+            .padding(.horizontal, horizontalPad)
+            .foregroundStyle(contentColor)
+            .background {
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .foregroundStyle(bgStyle)
+            }
+    }
+}

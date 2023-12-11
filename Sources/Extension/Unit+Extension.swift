@@ -38,8 +38,6 @@ public extension Locale {
     }
 }
 
-public let secondsForDay: TimeInterval = 86400
-
 public extension BinaryFloatingPoint {
     /// 长度的换算 -  默认单位：米
     ///

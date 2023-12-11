@@ -13,6 +13,8 @@ fileprivate func displayDateFormat(format: String = "yyyy-MM-dd") -> DateFormatt
     return dateFormatter
 }
 
+public let SecondsForDay: TimeInterval = 86400
+
 // MARK: - 获取时间的组成部分
 public extension Date {
     
