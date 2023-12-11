@@ -26,7 +26,7 @@ public struct DemoSimpleAlert: View {
                     }
                 }
                 .simpleAlert(type: selectedAlert ?? .singleConfirm,
-                             title: LocalizedStringKey(selectedAlert?.rawValue ?? "N/A"),
+                             title: selectedAlert?.rawValue ?? "Title",
                              message: nil,
                              isPresented: .isPresented($selectedAlert)) {
                     print("Confirm Tap")
@@ -42,7 +42,7 @@ public struct DemoSimpleAlert: View {
                     }
                 }
                 .simpleConfirmation(type: selectedConfirmation ?? .singleConfirm,
-                                    title: LocalizedStringKey(selectedConfirmation?.rawValue ?? "N/A"),
+                                    title: selectedConfirmation?.rawValue ?? "Title",
                                     message: nil,
                                     isPresented: .isPresented($selectedConfirmation)) {
                     print("Confirm Tap")
