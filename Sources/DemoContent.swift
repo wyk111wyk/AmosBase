@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-@available(iOS 16, macOS 13, watchOS 9, *)
+@available(iOS 16, macOS 13, watchOS 10, *)
 public struct DemoContent: View {
     @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
     @State private var selectedPage: Page?
@@ -146,7 +146,7 @@ struct Page: Identifiable, Equatable, Hashable {
     }
 }
 
-@available(iOS 16, macOS 13, watchOS 9, *)
+@available(iOS 16, macOS 13, watchOS 10, *)
 #Preview {
     DemoContent()
 }
