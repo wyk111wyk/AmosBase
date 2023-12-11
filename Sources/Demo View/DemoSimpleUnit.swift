@@ -71,15 +71,9 @@ public struct DemoSimpleUnit: View {
     }
 }
 
+@available(iOS 16, macOS 13, watchOS 9, *)
 #Preview {
-    if #available(iOS 16, macOS 13, watchOS 9, *) {
-        return NavigationView {
-            DemoSimpleUnit()
-        }
-        #if canImport(UIKit)
-        .navigationViewStyle(.stack)
-        #endif
-    } else {
-        return EmptyView()
+    NavigationStack {
+        DemoSimpleUnit()
     }
 }

@@ -8,7 +8,9 @@
 import SwiftUI
 
 public struct DemoSimpleButton: View {
+    @Environment(\.dismiss) private var dismissPage
     @State private var hasTest = false
+    @State private var showPlaceholder = false
     
     let title: String
     public init(_ title: String = "Button & Cell") {
@@ -17,6 +19,11 @@ public struct DemoSimpleButton: View {
     
     public var body: some View {
         Form {
+            Section("placeholder") {
+                NavigationLink("空页面占位符") {
+                    placeHolderView()
+                }
+            }
             Section("Cell") {
                 SimpleCell("Title")
                 SimpleCell("Title", content: "Content")
@@ -53,6 +60,25 @@ public struct DemoSimpleButton: View {
         .navigationTitle(title)
         .buttonCircleNavi(role: .cancel)
         .buttonCircleNavi(role: .destructive)
+    }
+    
+    private func placeHolderView() -> some View {
+        List {
+            Text("")
+            #if os(iOS)
+                .listRowSeparator(.hidden)
+            #endif
+        }
+        .listStyle(.plain)
+        .navigationTitle("Placeholder")
+        .simplePlaceholder(isPresent: true,
+                           systemImageName: "list.clipboard",
+                           title: "Title Title",
+                           subtitle: "Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle",
+                           content: "content content content content content content content content content content content content content content content content") {
+            Button("Button") { dismissPage() }
+                .buttonStyle(.borderedProminent)
+        }
     }
 }
 

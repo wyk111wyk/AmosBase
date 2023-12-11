@@ -66,6 +66,15 @@ extension MKCoordinateSpan: Equatable {
     }
 }
 
+public extension String {
+    /// 将地址转换为坐标
+    func toCoordinate(region: CLRegion? = nil,
+                      locale: Locale = .current) async -> CLLocationCoordinate2D? {
+        let place = try? await CLGeocoder().geocodeAddressString(self, in: region, preferredLocale: locale).first
+        return place?.location?.coordinate
+    }
+}
+
 public extension CLLocationCoordinate2D {
     /// longitude 120, latitude 29
     func toAmapString() -> String {
