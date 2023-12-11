@@ -31,18 +31,18 @@ public extension Binding {
 }
 
 public extension View {
-    @ViewBuilder
-    func simpleTagBackground<S: ShapeStyle>(verticalPad: CGFloat = 5,
-                                            horizontalPad: CGFloat = 10,
-                                            contentColor: S = .white,
-                                            cornerRadius: CGFloat = 6,
-                                            bgStyle: S = .blue) -> some View {
+    @ViewBuilder func simpleTagBackground<S: ShapeStyle>(verticalPad: CGFloat = 5,
+                                                         horizontalPad: CGFloat = 10,
+                                                         contentColor: S = .white,
+                                                         cornerRadius: CGFloat = 6,
+                                                         bgStyle: S = .blue) -> some View {
         self.modifier(TagBackground(verticalPad: verticalPad,
                                     horizontalPad: horizontalPad,
                                     contentColor: contentColor,
                                     cornerRadius: cornerRadius,
                                     bgStyle: bgStyle))
     }
+    
 }
 
 struct TagBackground<S>: ViewModifier where S: ShapeStyle {

@@ -102,7 +102,7 @@ public extension String {
     /// 转换为位置坐标 -  (lat,long) 高德格式
     ///
     /// lat = 120 long = 29
-    func toCoordinate() -> CLLocationCoordinate2D {
+    func toAmapCoordinate() -> CLLocationCoordinate2D {
         // 120.254781,29.721596
         let arr = self.components(separatedBy: ",")
         if arr.count == 2 {
