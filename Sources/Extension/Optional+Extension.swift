@@ -59,8 +59,28 @@ public extension Optional {
     }
 }
 
-public extension Optional where Wrapped: RawRepresentable, Wrapped.RawValue: Equatable {
+public extension Optional where Wrapped: Collection {
+    func isEmpty() -> Bool {
+        self?.isEmpty ?? true
+    }
     
+    func isNotEmpty() -> Bool {
+        self != nil && self?.count ?? 0 > 0
+    }
+}
+
+public extension Optional where Wrapped: StringProtocol {
+    func isEmpty() -> Bool {
+        self?.isEmpty ?? true
+    }
+    
+    func isNotEmpty() -> Bool {
+        self != nil && self?.count ?? 0 > 0
+    }
+}
+
+public extension Optional where Wrapped: RawRepresentable, Wrapped.RawValue: Equatable {
+
     // swiftlint:disable missing_swifterswift_prefix
 
     /// Returns a Boolean value indicating whether two values are equal.
