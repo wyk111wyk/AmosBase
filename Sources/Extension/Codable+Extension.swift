@@ -26,6 +26,7 @@ public extension Encodable {
     func encode() -> Data? {
         do {
             let encoder = JSONEncoder()
+            encoder.outputFormatting = .sortedKeys
             let encoded = try encoder.encode(self)
             return encoded
         } catch let DecodingError.dataCorrupted(context) {

@@ -34,6 +34,17 @@ public extension URL {
     var allQueryParameters: [URLQueryItem]? {
         URLComponents(url: self, resolvingAgainstBaseURL: false)?.queryItems
     }
+    
+    /// 获取AppGroup文件储存的路径 -  可在主应用、小程序之间共享
+    ///
+    /// pathComponent 表示需要添加的文件或文件夹
+    func appGroupFilePath(_ groupName: String, pathComponent: String?) -> URL? {
+        var path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupName)
+        if let pathComponent {
+            return path?.appendingPathComponent(pathComponent)
+        }
+        return path
+    }
 }
 
 // MARK: - Initializers

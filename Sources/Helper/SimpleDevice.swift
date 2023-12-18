@@ -76,9 +76,9 @@ public class SimpleDevice: NSObject {
         message += "设备型号全称: \(getFullModel())\n"
         message += "总磁盘: \(getDiskTotalSize())\n"
         message += "可用磁盘: \(getAvalibleDiskSize())\n"
-        message += "当前设备IP: \(getDeviceIP())\n"
-        message += "应用名称: \(getAppName())\n"
-        message += "应用版本: \(getAppVersion())"
+        message += "当前设备IP: \(getDeviceIP() ?? "")\n"
+        message += "应用名称: \(getAppName() ?? "")\n"
+        message += "应用版本: \(getAppVersion() ?? "")"
         
 //        print(message)
         return message
@@ -136,17 +136,17 @@ extension SimpleDevice {
     }
     
     /// 获取当前设备IP
-    public static func getDeviceIP() -> String {
+    public static func getDeviceIP() -> String? {
         return deviceIP()
     }
     
     /// 应用名称
-    public static func getAppName() -> String {
+    public static func getAppName() -> String? {
         appName()
     }
     
     /// 应用版本
-    public static func getAppVersion() -> String {
+    public static func getAppVersion() -> String? {
         appVersion()
     }
 }
@@ -155,32 +155,34 @@ extension SimpleDevice {
 extension SimpleDevice {
     
     ///获取应用名称
-    private static func appName() -> String {
+    private static func appName() -> String? {
         if let name = Bundle.main.infoDictionary?["CFBundleName"] as? String {
             return name
         }else {
-            return "N/A"
+            return nil
         }
     }
     
     ///获取应用的版本号
-    private static func appVersion() -> String {
+    private static func appVersion() -> String? {
         let infoDictionary = Bundle.main.infoDictionary
         var version = ""
         
-        if let shortVersion = infoDictionary?["CFBundleShortVersionString"] as? String {
-            version += shortVersion
+        guard let shortVersion = infoDictionary?["CFBundleShortVersionString"] as? String else {
+            return nil
         }
+        version += shortVersion
         
-        if let bundleVersion = infoDictionary?["CFBundleVersion"] as? String {
-            version += "(\(bundleVersion))"
+        guard let bundleVersion = infoDictionary?["CFBundleVersion"] as? String else {
+            return nil
         }
+        version += "(\(bundleVersion))"
         
         return version
     }
     
     /// 获取当前设备IP
-    private static func deviceIP() -> String {
+    private static func deviceIP() -> String? {
         var addresses = [String]()
         var ifaddr : UnsafeMutablePointer<ifaddrs>? = nil
         if getifaddrs(&ifaddr) == 0 {
@@ -205,7 +207,7 @@ extension SimpleDevice {
         if let ipStr = addresses.first {
             return ipStr
         } else {
-            return ""
+            return nil
         }
     }
     
