@@ -53,11 +53,27 @@ public struct SimpleWebView: View {
     }
     
     public var body: some View {
+        if isPushIn {
+            webView()
+        }else {
+            naviView()
+        }
+    }
+    
+    private func naviView() -> some View {
+        NavigationView {
+            webView()
+                .buttonCircleNavi(role: .cancel) { dismissPage() }
+        }
+        #if canImport(UIKit)
+        .navigationViewStyle(.stack)
+        #endif
+    }
+    
+    private func webView() -> some View {
         SimpleWebViewVC(url: url, isloading: $isLoading,
                   showErrorAlert: $showErrorAlert,
                   account: account)
-        .buttonCirclePage(role: .cancel,
-                          isPresent: !isPushIn) { dismissPage() }
         .simpleAlert(type: .confirmCancel,
                      title: "内容载入失败",
                      message: "请检查网络状况后稍后重试",
@@ -148,6 +164,6 @@ public class SimpleWebCoordinator: NSObject, WKNavigationDelegate {
 }
 
 #Preview {
-    SimpleWebView(url: URL(string: "https://www.baidu.com")!)
+    SimpleWebView(url: URL(string: "https://www.baidu.com")!, pushIn: false)
 }
 #endif

@@ -279,10 +279,10 @@ public extension String {
     ///
     /// 数量不足则返回字符本身
     func firstCharacters(count: Int = 1) -> String {
-        if self.count < count {
+        if self.count <= count-1 {
             return self
         }else {
-            let endIndex = self.index(self.startIndex, offsetBy: count)
+            let endIndex = self.index(self.startIndex, offsetBy: (count-1))
             let subString = String(self[...endIndex])
             return subString
         }
