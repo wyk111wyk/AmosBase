@@ -371,4 +371,8 @@ public extension LocalizedStringKey.StringInterpolation {
     mutating func appendInterpolation(_ value: LocalizedStringKey, color: Color?) {
         appendInterpolation(Text(value).bold().foregroundColor(color))
     }
+    
+    mutating func appendInterpolation(bold value: LocalizedStringKey, color: Color?){
+        appendInterpolation(Text(value).bold().foregroundColor(color))
+    }
 }
