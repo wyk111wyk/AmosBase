@@ -23,6 +23,26 @@ import VisionKit
 
 private let mylog = Logger(subsystem: "UIImage+Extension", category: "AmosBase")
 public extension Image {
+    init(packageResource name: String, ofType type: String) {
+        #if canImport(UIKit)
+        guard let path = Bundle.module.path(forResource: name, ofType: type),
+              let image = UIImage(contentsOfFile: path) else {
+            self.init(name)
+            return
+        }
+        self.init(uiImage: image)
+        #elseif canImport(AppKit)
+        guard let path = Bundle.module.path(forResource: name, ofType: type),
+              let image = NSImage(contentsOfFile: path) else {
+            self.init(name)
+            return
+        }
+        self.init(nsImage: image)
+        #else
+        self.init(name)
+        #endif
+    }
+    
     func imageModify(color: Color? = nil,
                      mode: ContentMode = .fit,
                      length: CGFloat? = nil) -> some View {
@@ -35,6 +55,7 @@ public extension Image {
 }
 
 public extension SFImage {
+    
     var width: Double {
         Double(self.size.width)
     }
@@ -93,6 +114,7 @@ public extension View {
 #if canImport(Vision) && canImport(UIKit)
 // MARK: - 图片检测文字或人脸
 public extension UIImage {
+    
     /// 识别图片内的文字 -  使用Vision框架
     ///
     /// 可自定义识别的语言

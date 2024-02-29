@@ -39,7 +39,7 @@ public extension URL {
     ///
     /// pathComponent 表示需要添加的文件或文件夹
     func appGroupFilePath(_ groupName: String, pathComponent: String?) -> URL? {
-        var path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupName)
+        let path = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupName)
         if let pathComponent {
             return path?.appendingPathComponent(pathComponent)
         }

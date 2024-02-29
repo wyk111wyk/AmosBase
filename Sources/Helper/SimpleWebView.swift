@@ -98,7 +98,7 @@ public struct SimpleWebViewVC: UIViewRepresentable {
         
         if let account = account {
             let clientInfo = SimpleDevice.getFullModel()
-            let clientVersion = SimpleDevice.getAppVersion()
+            let clientVersion = SimpleDevice.getAppVersion() ?? ""
             let osVersion = SimpleDevice.getSystemName() + " " + SimpleDevice.getSystemVersion()
             
             // 接入兔小巢需要传入open_id, nickname, avatar, 如果少了其中任何一个，登录态的构建的都会失败，其他都是额外数据

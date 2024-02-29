@@ -16,6 +16,7 @@ public struct DemoContent: View {
     @State private var showMapShare = false
     @State private var showPositionShare = false
     
+    @State private var selectedIndex: Int? = nil
     public init() {}
     
     public var body: some View {
@@ -32,6 +33,15 @@ public struct DemoContent: View {
                     } label: {
                         Label("Toast - Sheet页面", systemImage: "bell")
                     }
+#if os(iOS)
+                    Button {
+                        selectedIndex = 0
+                    } label: {
+                        Label("Image - 图片查看", systemImage: "photo.on.rectangle.angled")
+                    }
+                    .simpleImageViewer(selectedIndex: $selectedIndex,
+                                       allPhotos: ImageStoreModel.examples())
+#endif
                 }
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
