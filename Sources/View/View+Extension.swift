@@ -33,11 +33,13 @@ public extension Binding {
 public extension View {
     @ViewBuilder func simpleTagBackground<S: ShapeStyle>(verticalPad: CGFloat = 5,
                                                          horizontalPad: CGFloat = 10,
+                                                         contentFont: Font = .caption,
                                                          contentColor: S = .white,
                                                          cornerRadius: CGFloat = 6,
                                                          bgStyle: S = .blue) -> some View {
         self.modifier(TagBackground(verticalPad: verticalPad,
                                     horizontalPad: horizontalPad,
+                                    contentFont: contentFont,
                                     contentColor: contentColor,
                                     cornerRadius: cornerRadius,
                                     bgStyle: bgStyle))
@@ -45,12 +47,14 @@ public extension View {
     
     @ViewBuilder func simpleTagBorder<S: ShapeStyle>(verticalPad: CGFloat = 2,
                                                      horizontalPad: CGFloat = 6,
+                                                     contentFont: Font = .caption,
                                                      contentColor: S = .blue,
                                                      cornerRadius: CGFloat = 4,
                                                      borderStyle: S = .blue,
                                                      lineWidth: CGFloat = 1) -> some View {
         self.modifier(TagBorder(verticalPad: verticalPad,
                                 horizontalPad: horizontalPad,
+                                contentFont: contentFont,
                                 contentColor: contentColor,
                                 cornerRadius: cornerRadius,
                                 borderStyle: borderStyle,
@@ -61,6 +65,7 @@ public extension View {
 struct TagBorder<S>: ViewModifier where S: ShapeStyle {
     let verticalPad: CGFloat
     let horizontalPad: CGFloat
+    let contentFont: Font
     let contentColor: S
     let cornerRadius: CGFloat
     let borderStyle: S
@@ -68,12 +73,14 @@ struct TagBorder<S>: ViewModifier where S: ShapeStyle {
     
     init(verticalPad: CGFloat,
          horizontalPad: CGFloat,
+         contentFont: Font,
          contentColor: S,
          cornerRadius: CGFloat,
          borderStyle: S,
          lineWidth: CGFloat) {
         self.verticalPad = verticalPad
         self.horizontalPad = horizontalPad
+        self.contentFont = contentFont
         self.contentColor = contentColor
         self.cornerRadius = cornerRadius
         self.borderStyle = borderStyle
@@ -82,6 +89,7 @@ struct TagBorder<S>: ViewModifier where S: ShapeStyle {
     
     func body(content: Content) -> some View {
         content
+            .font(contentFont)
             .padding(.vertical, verticalPad)
             .padding(.horizontal, horizontalPad)
             .foregroundStyle(contentColor)
@@ -95,17 +103,20 @@ struct TagBorder<S>: ViewModifier where S: ShapeStyle {
 struct TagBackground<S>: ViewModifier where S: ShapeStyle {
     let verticalPad: CGFloat
     let horizontalPad: CGFloat
+    let contentFont: Font
     let contentColor: S
     let cornerRadius: CGFloat
     let bgStyle: S
     
     init(verticalPad: CGFloat, 
          horizontalPad: CGFloat,
+         contentFont: Font,
          contentColor: S,
          cornerRadius: CGFloat,
          bgStyle: S) {
         self.verticalPad = verticalPad
         self.horizontalPad = horizontalPad
+        self.contentFont = contentFont
         self.contentColor = contentColor
         self.cornerRadius = cornerRadius
         self.bgStyle = bgStyle
@@ -113,6 +124,7 @@ struct TagBackground<S>: ViewModifier where S: ShapeStyle {
     
     func body(content: Content) -> some View {
         content
+            .font(contentFont)
             .padding(.vertical, verticalPad)
             .padding(.horizontal, horizontalPad)
             .foregroundStyle(contentColor)
