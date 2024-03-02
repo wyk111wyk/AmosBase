@@ -43,6 +43,53 @@ public extension View {
                                     bgStyle: bgStyle))
     }
     
+    @ViewBuilder func simpleTagBorder<S: ShapeStyle>(verticalPad: CGFloat = 2,
+                                                     horizontalPad: CGFloat = 6,
+                                                     contentColor: S = .blue,
+                                                     cornerRadius: CGFloat = 4,
+                                                     borderStyle: S = .blue,
+                                                     lineWidth: CGFloat = 1) -> some View {
+        self.modifier(TagBorder(verticalPad: verticalPad,
+                                horizontalPad: horizontalPad,
+                                contentColor: contentColor,
+                                cornerRadius: cornerRadius,
+                                borderStyle: borderStyle,
+                                lineWidth: lineWidth))
+    }
+}
+
+struct TagBorder<S>: ViewModifier where S: ShapeStyle {
+    let verticalPad: CGFloat
+    let horizontalPad: CGFloat
+    let contentColor: S
+    let cornerRadius: CGFloat
+    let borderStyle: S
+    let lineWidth: CGFloat
+    
+    init(verticalPad: CGFloat,
+         horizontalPad: CGFloat,
+         contentColor: S,
+         cornerRadius: CGFloat,
+         borderStyle: S,
+         lineWidth: CGFloat) {
+        self.verticalPad = verticalPad
+        self.horizontalPad = horizontalPad
+        self.contentColor = contentColor
+        self.cornerRadius = cornerRadius
+        self.borderStyle = borderStyle
+        self.lineWidth = lineWidth
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .padding(.vertical, verticalPad)
+            .padding(.horizontal, horizontalPad)
+            .foregroundStyle(contentColor)
+            .background {
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(borderStyle, lineWidth: lineWidth)
+            }
+    }
 }
 
 struct TagBackground<S>: ViewModifier where S: ShapeStyle {

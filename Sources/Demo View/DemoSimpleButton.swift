@@ -29,6 +29,10 @@ public struct DemoSimpleButton: View {
                     Text("Tag")
                         .simpleTagBackground()
                 }
+                SimpleCell("Title") {
+                    Text("Tag")
+                        .simpleTagBorder()
+                }
                 SimpleCell("Title", content: "Content")
                 SimpleCell("Title", contentSystemImage: "person.wave.2.fill", content: "Content")
                 SimpleCell("获取年份", stateText: "2023")
