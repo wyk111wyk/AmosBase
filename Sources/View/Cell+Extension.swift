@@ -13,6 +13,7 @@ import SwiftUI
 /// 使用自定义的State内容，需要添加Spacer()
 public struct SimpleCell<V: View>: View {
     let title: String
+    let titleColor: Color?
     let iconName: String?
     let systemImage: String?
     
@@ -27,6 +28,7 @@ public struct SimpleCell<V: View>: View {
     let stateWidth: CGFloat
     
     public init(_ title: String,
+                titleColor: Color? = nil,
                 iconName: String? = nil,
                 systemImage: String? = nil,
                 imageSize: Double = 22,
@@ -37,6 +39,7 @@ public struct SimpleCell<V: View>: View {
                 stateWidth: CGFloat = 100,
                 @ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
         self.title = title
+        self.titleColor = titleColor
         self.contentSystemImage = contentSystemImage
         self.content = content
         self.iconName = iconName
@@ -63,7 +66,7 @@ public struct SimpleCell<V: View>: View {
             // Title 和 Content
             VStack(alignment: .leading, spacing: 5) {
                 Text(title.localized())
-                    .foregroundColor(.primary)
+                    .foregroundColor(titleColor ?? .primary)
                 Group {
                     if let content = content, !content.isEmpty,
                        let contentSystemImage = contentSystemImage, contentSystemImage.count > 0 {
