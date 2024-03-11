@@ -77,6 +77,10 @@ public struct DemoContent: View {
                     }
                     #endif
                 }
+                
+                SimpleCommonAbout(txcId: "123", userId: "123", nickName: "Amos", avatarUrl: "123", appStoreId: "123") {
+                    Text("About - 常规关于")
+                }
             }
             .navigationTitle("Amos基础库")
             .sheet(isPresented: $showToastPage) {

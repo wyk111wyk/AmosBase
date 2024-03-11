@@ -68,9 +68,7 @@ public extension Dictionary {
             .WritingOptions()
         return try? JSONSerialization.data(withJSONObject: self, options: options)
     }
-    #endif
-
-    #if canImport(Foundation)
+    
     /// SwifterSwift: 将字典转换为JSON String。JSON String from dictionary.
     ///
     ///        dict.jsonString() -> "{"testKey":"testValue","testArrayKey":[1,2,3,4,5]}"

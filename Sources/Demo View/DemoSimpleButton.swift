@@ -38,7 +38,7 @@ public struct DemoSimpleButton: View {
                 SimpleCell("获取年份", stateText: "2023")
                 SimpleCell("获取年份"){
                     Toggle("", isOn: $hasTest) }
-                SimpleCell("Title", iconName: "LAL_r")
+                SimpleCell("Title", bundleImageName: "LAL_r", bundleImageType: "png")
                 SimpleCell("Title", systemImage: "person.wave.2.fill")
                 SimpleCell("Title",
                            systemImage: "person.wave.2.fill",
@@ -46,11 +46,12 @@ public struct DemoSimpleButton: View {
                            stateText: "State Text")
                 SimpleCell("Title",
                            systemImage: "person.wave.2.fill",
-                           content: "Content Content Content Content Content") {
+                           content: "Cont Cont Cont Content Content") {
                     Toggle("", isOn: $hasTest) }
                 SimpleCell("Title Title Title Title Title Title Title Title",
                            systemImage: "person.wave.2.fill",
-                           content: "Content Content Content Content Content Content Content Content Content Content"
+                           content: "Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont ",
+                           fullContent: true
                 )
                 SimpleCell("Title Title Title Title Title Title Title Title",
                            systemImage: "person.wave.2.fill",

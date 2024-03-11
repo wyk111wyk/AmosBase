@@ -77,4 +77,14 @@ public extension Data {
             return nil
         }
     }
+    
+#if canImport(Foundation)
+    func jsonToObject<T>(prettify: Bool = false) -> T? {
+        guard let jsonData = try? JSONSerialization.jsonObject(with: self) as? T else {
+            return nil
+        }
+        return jsonData
+    }
+#endif
 }
+

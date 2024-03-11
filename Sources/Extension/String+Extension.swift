@@ -115,18 +115,18 @@ public extension String {
     }
     
 #if os(iOS) || os(macOS)
-/// SwifterSwift: Copy string to global pasteboard.
-///
-///        "SomeText".copyToPasteboard() // copies "SomeText" to pasteboard
-///
-func copyToPasteboard() {
-    #if os(iOS)
-    UIPasteboard.general.string = self
-    #elseif os(macOS)
-    NSPasteboard.general.clearContents()
-    NSPasteboard.general.setString(self, forType: .string)
-    #endif
-}
+    /// SwifterSwift: Copy string to global pasteboard.
+    ///
+    ///        "SomeText".copyToPasteboard() // copies "SomeText" to pasteboard
+    ///
+    func copyToPasteboard() {
+        #if os(iOS)
+        UIPasteboard.general.string = self
+        #elseif os(macOS)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(self, forType: .string)
+        #endif
+    }
 #endif
     
 #if canImport(Foundation)

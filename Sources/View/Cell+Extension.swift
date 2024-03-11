@@ -12,13 +12,20 @@ import SwiftUI
 ///
 /// 使用自定义的State内容，需要添加Spacer()
 public struct SimpleCell<V: View>: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
     let title: String
     let titleColor: Color?
     let iconName: String?
     let systemImage: String?
+    let bundleImageName: String?
+    let bundleImageNameDark: String?
+    let bundleImageType: String?
     
     let contentSystemImage: String?
     let content: String?
+    /// 过度属性：true 将会导致没有任何的StateView
+    let fullContent: Bool
     
     let imageSize: Double
     let contentSpace: Double
@@ -31,9 +38,13 @@ public struct SimpleCell<V: View>: View {
                 titleColor: Color? = nil,
                 iconName: String? = nil,
                 systemImage: String? = nil,
+                bundleImageName: String? = nil,
+                bundleImageNameDark: String? = nil,
+                bundleImageType: String? = nil,
                 imageSize: Double = 22,
                 contentSystemImage: String? = nil,
                 content: String? = nil,
+                fullContent: Bool = false,
                 contentSpace: Double = 12,
                 stateText: String? = nil,
                 stateWidth: CGFloat = 100,
@@ -42,14 +53,20 @@ public struct SimpleCell<V: View>: View {
         self.titleColor = titleColor
         self.contentSystemImage = contentSystemImage
         self.content = content
+        self.fullContent = fullContent
         self.iconName = iconName
         self.systemImage = systemImage
+        self.bundleImageName = bundleImageName
+        self.bundleImageNameDark = bundleImageNameDark
+        self.bundleImageType = bundleImageType
+        
         self.imageSize = imageSize
         self.contentSpace = contentSpace
         self.stateText = stateText
         self.stateWidth = stateWidth
         self.stateView = stateView
     }
+    
     
     public var body: some View {
         HStack(alignment: .center, spacing: contentSpace) {
@@ -62,6 +79,25 @@ public struct SimpleCell<V: View>: View {
             }else if let systemImage = systemImage {
                 Image(systemName: systemImage)
                     .frame(width: imageSize, height: imageSize)
+            }else if let bundleImageName, let bundleImageType {
+                if let bundleImageNameDark {
+                    if colorScheme == .dark {
+                        Image(packageResource: bundleImageNameDark, ofType: bundleImageType)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: imageSize, height: imageSize)
+                    }else {
+                        Image(packageResource: bundleImageName, ofType: bundleImageType)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: imageSize, height: imageSize)
+                    }
+                }else {
+                    Image(packageResource: bundleImageName, ofType: bundleImageType)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: imageSize, height: imageSize)
+                }
             }
             // Title 和 Content
             VStack(alignment: .leading, spacing: 5) {
@@ -79,17 +115,17 @@ public struct SimpleCell<V: View>: View {
                 .font(.caption)
             }
             
-            Spacer(minLength: 0)
-            Group {
-                if let stateText = stateText {
-                    Text(stateText.localized())
-                        .foregroundColor(.secondary)
-                }else {
-                    stateView()
+            if !fullContent {
+                Spacer(minLength: 0)
+                Group {
+                    if let stateText = stateText {
+                        Text(stateText.localized())
+                            .foregroundColor(.secondary)
+                    }else {
+                        stateView()
+                    }
                 }
             }
-//            .frame(maxWidth: stateWidth, alignment: .trailing)
-//            .padding(.leading, 8)
         }
 #if !os(watchOS)
 .textSelection(.enabled)
