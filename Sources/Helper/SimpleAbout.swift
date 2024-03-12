@@ -10,8 +10,9 @@ import SwiftUI
 
 public struct SimpleCommonAbout<V: View>: View {
     @Environment(\.openURL) private var openURL
-    
+#if !os(watchOS) && !os(macOS)
     @State private var account: SimpleFBUser? = nil
+#endif
     
     let introWebLink = "https://www.amosstudio.com.cn/"
     let feedbackLink: String?
@@ -52,28 +53,30 @@ public struct SimpleCommonAbout<V: View>: View {
     
     public var body: some View {
         Section {
-#if !os(macOS)
+            #if !os(watchOS) && !os(macOS)
             Link(destination: URL(string: UIApplication.openSettingsURLString)!, label: {
                 SimpleCell("系统设置", systemImage: "gear")
             }).buttonStyle(.borderless)
-#endif
+            #endif
             
             if let url = URL(string: feedbackLink) {
                 Button {
-#if targetEnvironment(macCatalyst)
+                    #if targetEnvironment(macCatalyst)
                     openURL(url)
-#else
+                    #else
                     startFeedback()
-#endif
+                    #endif
                 } label: {
                     SimpleCell("用户反馈",
                                systemImage: "rectangle.3.group.bubble",
                                content: "用来交流与建议的论坛")
                 }
                 .buttonStyle(.borderless)
+                #if !os(watchOS) && !os(macOS)
                 .sheet(item: $account) { account in
                     SimpleWebView(url: url, account: account)
                 }
+                #endif
             }
             
             if let url = URL(string: appStoreLink) {
@@ -121,11 +124,13 @@ public struct SimpleCommonAbout<V: View>: View {
     }
     
     private func startFeedback() {
+        #if !os(watchOS) && !os(macOS)
         if let userId, let nickName, let avatarUrl {
             account = .init(openid: userId,
                             nickName: nickName,
                             avatar: avatarUrl)
         }
+        #endif
     }
 }
 

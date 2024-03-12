@@ -151,6 +151,29 @@ public extension Date {
         return self.addingTimeInterval(passed)
     }
     
+    enum Period {
+        case day
+        case week
+        case month
+        case quarter
+        case year
+    }
+    
+    func toStart(of period: Period) -> Date {
+        switch period {
+        case .day:
+            return self.toStartOfDay()
+        case .week:
+            return self.toStartOfWeek()
+        case .month:
+            return self.toStartOfMonth()
+        case .quarter:
+            return self.toStartOfQuarter()
+        case .year:
+            return self.toStartOfYear()
+        }
+    }
+    
     /// 获取当天的开始时刻
     func toStartOfDay() -> Date {
         Calendar.current.startOfDay(for: self)
