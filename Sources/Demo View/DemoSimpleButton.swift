@@ -11,6 +11,7 @@ public struct DemoSimpleButton: View {
     @Environment(\.dismiss) private var dismissPage
     @State private var hasTest = false
     @State private var showPlaceholder = false
+    @State private var input = ""
     
     let title: String
     public init(_ title: String = "Button & Cell") {
@@ -31,7 +32,8 @@ public struct DemoSimpleButton: View {
                 }
                 SimpleCell("Title") {
                     Text("Tag")
-                        .simpleTagBorder()
+                        .simpleTagBorder(themeColor: .green,
+                                         bgColor: .red)
                 }
                 SimpleCell("Title", content: "Content")
                 SimpleCell("Title", contentSystemImage: "person.wave.2.fill", content: "Content")
@@ -58,6 +60,15 @@ public struct DemoSimpleButton: View {
                            content: "Content Content Content Content Content Content Content Content Content Content",
                            stateText: "State Text State Text State Text State Text"
                 )
+            }
+            if #available(iOS 16, *) {
+#if !os(watchOS)
+                Section("TextField") {
+                    SimpleTextField($input, tintColor: .blue)
+                }
+#endif
+            } else {
+                // Fallback on earlier versions
             }
             Section("Button") {
                 SimpleMiddleButton("Middle button", role: .none) {}
