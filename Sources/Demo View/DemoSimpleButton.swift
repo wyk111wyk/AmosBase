@@ -61,19 +61,19 @@ public struct DemoSimpleButton: View {
                            stateText: "State Text State Text State Text State Text"
                 )
             }
-            if #available(iOS 16, *) {
+            if #available(iOS 16, macOS 13, *) {
 #if !os(watchOS)
                 Section("TextField") {
                     SimpleTextField($input, tintColor: .blue)
                 }
 #endif
+                Section("Button") {
+                    SimpleMiddleButton("Middle button", role: .none) {}
+                    SimpleMiddleButton("Middle button", role: .destructive) {}
+                    SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
+                }
             } else {
                 // Fallback on earlier versions
-            }
-            Section("Button") {
-                SimpleMiddleButton("Middle button", role: .none) {}
-                SimpleMiddleButton("Middle button", role: .destructive) {}
-                SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
             }
         }
         .navigationTitle(title)
