@@ -26,22 +26,16 @@ public struct DemoSimpleButton: View {
                 }
             }
             Section("Cell") {
-                SimpleCell("Title") {
-                    Text("Tag")
-                        .simpleTagBackground()
+                SimpleCell("Title", bundleImageName: "LAL_r",
+                           bundleImageType: "png", content: "Content") {
+                    HStack {
+                        Text("Tag")
+                            .simpleTagBorder(themeColor: .green,
+                                             bgColor: .red)
+                        Text("Tag")
+                            .simpleTagBackground()
+                    }
                 }
-                SimpleCell("Title") {
-                    Text("Tag")
-                        .simpleTagBorder(themeColor: .green,
-                                         bgColor: .red)
-                }
-                SimpleCell("Title", content: "Content")
-                SimpleCell("Title", contentSystemImage: "person.wave.2.fill", content: "Content")
-                SimpleCell("获取年份", stateText: "2023")
-                SimpleCell("获取年份"){
-                    Toggle("", isOn: $hasTest) }
-                SimpleCell("Title", bundleImageName: "LAL_r", bundleImageType: "png")
-                SimpleCell("Title", systemImage: "person.wave.2.fill")
                 SimpleCell("Title",
                            systemImage: "person.wave.2.fill",
                            content: "Content Content Content Content",
@@ -62,16 +56,16 @@ public struct DemoSimpleButton: View {
                 )
             }
             if #available(iOS 16, macOS 13, *) {
-#if !os(watchOS)
-                Section("TextField") {
-                    SimpleTextField($input, tintColor: .blue)
-                }
-#endif
                 Section("Button") {
                     SimpleMiddleButton("Middle button", role: .none) {}
                     SimpleMiddleButton("Middle button", role: .destructive) {}
                     SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
                 }
+#if !os(watchOS)
+                Section("TextField") {
+                    SimpleTextField($input, tintColor: .blue)
+                }
+#endif
             } else {
                 // Fallback on earlier versions
             }
