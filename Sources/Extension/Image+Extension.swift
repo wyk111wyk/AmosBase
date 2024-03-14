@@ -68,10 +68,45 @@ public extension SFImage {
     var fileSize: Double {
         Double(self.pngData()?.count ?? 0)
     }
+    
+    func copyImageToClipboard() {
+        UIPasteboard.general.image = self
+    }
 #else
     var fileSize: Double {
         Double(self.tiffRepresentation?.count ?? 0)
     }
+    
+    func copyImageToClipboard() {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.writeObjects([self])
+    }
+
+    func saveImage() {
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [.png, .jpeg, .bmp, .heic, .heif]
+        panel.canCreateDirectories = true
+        panel.isExtensionHidden = false
+        panel.title = "保存图片"
+        panel.message = "选择保存图片的位置"
+        
+        panel.begin { response in
+            if response == .OK, let url = panel.url {
+                // 在这里保存图片到用户选择的路径
+                guard let data = self.tiffRepresentation,
+                      let bitmapImage = NSBitmapImageRep(data: data),
+                      let imageData = bitmapImage.representation(using: .png, properties: [:]) else { return }
+
+                do {
+                    try imageData.write(to: url)
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
+    }
+
 #endif
 }
 
