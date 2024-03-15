@@ -80,7 +80,7 @@ struct SimpleConfirmation: ViewModifier {
                 case .singleCancel:
                     Button("Cancel", role: .cancel, action: cancelTap)
 #if !os(watchOS)
-    .keyboardShortcut(.escape)
+    .keyboardShortcut(.escape, modifiers: .command)
 #endif
                 case .singleConfirm:
                     Button("Confirm", role: .cancel) {
@@ -88,25 +88,25 @@ struct SimpleConfirmation: ViewModifier {
                         confirmTap()
                     }
 #if !os(watchOS)
-    .keyboardShortcut(.return)
+    .keyboardShortcut(.return, modifiers: .command)
 #endif
                 case .confirmCancel:
                     Button("Confirm", role: .none, action: confirmTap)
 #if !os(watchOS)
-    .keyboardShortcut(.return)
+    .keyboardShortcut(.return, modifiers: .command)
 #endif
                     Button("Cancel", role: .cancel, action: cancelTap)
 #if !os(watchOS)
-    .keyboardShortcut(.escape)
+    .keyboardShortcut(.escape, modifiers: .command)
 #endif
                 case .destructiveCancel:
                     Button("Confirm", role: .destructive, action: confirmTap)
 #if !os(watchOS)
-    .keyboardShortcut(.return)
+    .keyboardShortcut(.return, modifiers: .command)
 #endif
                     Button("Cancel", role: .cancel, action: cancelTap)
 #if !os(watchOS)
-    .keyboardShortcut(.escape)
+    .keyboardShortcut(.escape, modifiers: .command)
 #endif
                 }
             } message: {
@@ -149,7 +149,7 @@ struct SimpleAlert: ViewModifier {
                 case .singleCancel:
                     Button("Cancel", role: .cancel, action: cancelTap)
                     #if !os(watchOS)
-                        .keyboardShortcut(.escape)
+                        .keyboardShortcut(.escape, modifiers: .command)
                     #endif
                 case .singleConfirm:
                     Button("Confirm", role: .cancel) {
@@ -157,25 +157,25 @@ struct SimpleAlert: ViewModifier {
                         confirmTap()
                     }
 #if !os(watchOS)
-    .keyboardShortcut(.return)
+    .keyboardShortcut(.return, modifiers: .command)
 #endif
                 case .confirmCancel:
                     Button("Confirm", role: .none, action: confirmTap)
 #if !os(watchOS)
-    .keyboardShortcut(.return)
+    .keyboardShortcut(.return, modifiers: .command)
 #endif
                     Button("Cancel", role: .cancel, action: cancelTap)
 #if !os(watchOS)
-    .keyboardShortcut(.escape)
+    .keyboardShortcut(.escape, modifiers: .command)
 #endif
                 case .destructiveCancel:
                     Button("Confirm", role: .destructive, action: confirmTap)
 #if !os(watchOS)
-    .keyboardShortcut(.return)
+    .keyboardShortcut(.return, modifiers: .command)
 #endif
                     Button("Cancel", role: .cancel, action: cancelTap)
 #if !os(watchOS)
-    .keyboardShortcut(.escape)
+    .keyboardShortcut(.escape, modifiers: .command)
 #endif
                 }
             } message: {

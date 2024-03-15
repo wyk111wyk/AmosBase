@@ -478,7 +478,7 @@ struct ButtonShortkey: ViewModifier {
     func body(content: Content) -> some View {
         if role == .cancel {
             content
-                .keyboardShortcut(.escape)
+                .keyboardShortcut(.escape, modifiers: .command)
         }else if let key, let modifiers {
             content
                 .keyboardShortcut(key, modifiers: modifiers)
