@@ -75,7 +75,14 @@ public extension String {
     }
 }
 
+extension CLLocationCoordinate2D: Identifiable {
+    public var id: String {
+        self.toAmapString()
+    }
+}
+
 public extension CLLocationCoordinate2D {
+
     /// longitude 120, latitude 29
     func toAmapString() -> String {
         if self.longitude == 0 && self.latitude == 0 {
@@ -85,9 +92,22 @@ public extension CLLocationCoordinate2D {
         }
     }
     
-    /// 将地点转换为地址
+    /// 判断是否是国内的坐标
+    /// 国内坐标转换为火星坐标
+    func toChinaLocation() -> CLLocationCoordinate2D {
+        if WSCoordinate.isLocationOutOfChina(self) {
+            return self
+        }else {
+            debugPrint("该坐标为国内坐标：\(self.toAmapString())")
+            let newLocation = WSCoordinate.transformFromWGSToGCJ(self)
+            debugPrint("转换后的新坐标：\(newLocation.toAmapString())")
+            return newLocation
+        }
+    }
+    
+    /// 将地点转换为地址（国内会有300米左右误差）
     ///
-    /// 使用Apple Map的API
+    /// 可以设置locale来改变地址的显示方式（使用Apple Map的API）
     func toPlace(locale: Locale = .current) async -> CLPlacemark?  {
         let loction: CLLocation = CLLocation(latitude: self.latitude, longitude: self.longitude)
         let places = try? await CLGeocoder().reverseGeocodeLocation(loction, preferredLocale: locale)

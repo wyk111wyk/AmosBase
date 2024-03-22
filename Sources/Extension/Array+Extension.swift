@@ -96,6 +96,23 @@ public extension Array {
 // MARK: - Methods (Equatable)
 
 public extension Array where Element: Equatable {
+    /// SwifterSwift: 删除数组中的空值。
+    ///
+    /// - Returns: self after removing all instances of item.
+    @discardableResult
+    mutating func removeEmpty() -> [Element] {
+        removeAll(where: {
+            if let text = $0 as? String {
+                return text.isEmpty
+            }else if let array = $0 as? Array {
+                return array.isEmpty
+            }else {
+                return false
+            }
+        })
+        return self
+    }
+    
     /// SwifterSwift: 删除数组中的某个元素。Remove all instances of an item from array.
     ///
     ///        [1, 2, 2, 3, 4, 5].removeAll(2) -> [1, 3, 4, 5]

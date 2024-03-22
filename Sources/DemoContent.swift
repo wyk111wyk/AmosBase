@@ -65,7 +65,7 @@ public struct DemoContent: View {
                         Label("Map Share - 导航按钮", systemImage: "map")
                     }
                     .confirmationDialog("Map Share", isPresented: $showMapShare) {
-                        SimpleMapShare(mode: .navi).navigationButtons()
+                        SimpleNavigation(mode: .navi).navigationButtons()
                     }
                     Button {
                         showPositionShare.toggle()
@@ -73,7 +73,7 @@ public struct DemoContent: View {
                         Label("Map Share - 定位按钮", systemImage: "map")
                     }
                     .confirmationDialog("Map Share", isPresented: $showPositionShare) {
-                        SimpleMapShare(mode: .position).navigationButtons()
+                        SimpleNavigation(mode: .position).navigationButtons()
                     }
                     #endif
                 }

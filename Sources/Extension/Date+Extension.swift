@@ -232,6 +232,14 @@ public extension Date {
 }
 
 public extension Date {
+    /// 判断：是否是同一个时间段
+    ///
+    /// 例子：根据传入 component 不同，可以判断是否是同一天、同一个小时、同一个月
+    func isSameDate(with date: Date, component: Calendar.Component = .day) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(self, equalTo: date, toGranularity: component)
+    }
+    
     /// 判断：是否已经过了相应时间
     ///
     /// 例子：传入5分钟，判断当前时间是否大于传入时间后5分钟

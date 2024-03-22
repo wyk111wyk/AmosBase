@@ -6,21 +6,20 @@
 //
 
 import SwiftUI
-//import AsyncLocationKit
+import MapKit
 import CoreLocation
 
 public struct DemoSimpleDevice: View {
+    @Environment(\.dismiss) private var dismissPage
+    
     let title: String
+    @ObservedObject var location = SimpleLocationHelper()
     public init(_ title: String = "Device Info") {
         self.title = title
     }
     
     @State private var wifiName: String?
-    
-//    @State private var coordinate: CLLocationCoordinate2D?
-//    @State private var address: String?
-//    @State private var isLoadingLocation = false
-//    let asyncLocationManager = AsyncLocationManager(desiredAccuracy: .nearestTenMetersAccuracy)
+    @State private var mapLocation: CLLocationCoordinate2D? = nil
     
     public var body: some View {
         Form {
@@ -41,27 +40,35 @@ public struct DemoSimpleDevice: View {
             #if !os(macOS)
             Section("位置信息") {
                 SimpleCell("Wifi名称", stateText: wifiName)
-//                SimpleCell("当前地址") {
-//                    if isLoadingLocation {
-//                        ProgressView()
-//                    }else if let address {
-//                        Text(address)
-//                            .font(.callout)
-//                            .foregroundColor(.secondary)
-//                    }
-//                }
-//                SimpleCell("经纬度") {
-//                    if isLoadingLocation {
-//                        ProgressView()
-//                    }else {
-//                        VStack(alignment: .trailing) {
-//                            Text("Lat: \(coordinate?.latitude ?? 0)")
-//                            Text("Lon: \(coordinate?.longitude ?? 0)")
-//                        }
-//                        .foregroundStyle(.secondary)
-//                        .font(.callout)
-//                    }
-//                }
+                SimpleCell("当前地址") {
+                    if let place = location.currentPlace {
+                        Text(place.toFullAddress())
+                            .font(.callout)
+                            .foregroundColor(.secondary)
+                    }else {
+                        ProgressView()
+                    }
+                }
+                Button {
+                    mapLocation = location.currentLocation
+                } label: {
+                    SimpleCell("经纬度") {
+                        if let coordinate = location.currentLocation {
+                            VStack(alignment: .trailing) {
+                                Text("Lat: \(coordinate.latitude)")
+                                Text("Lon: \(coordinate.longitude)")
+                            }
+                            .foregroundStyle(.secondary)
+                            .font(.callout)
+                        }else {
+                            ProgressView()
+                        }
+                    }
+                }
+                .disabled(location.currentLocation == nil)
+            }
+            .sheet(item: $mapLocation) { location in
+                mapContentPage(location)
             }
             #endif
             
@@ -134,33 +141,16 @@ public struct DemoSimpleDevice: View {
             #endif
         }
         .navigationTitle(title)
-//        .task {
-//            #if !os(macOS)
-//            let status = await asyncLocationManager.requestPermission(with: .whenInUsage)
-//            if status == .authorizedAlways || status == .authorizedWhenInUse {
-//                print("地点权限：\(status)")
-//                #if !os(watchOS)
-//                self.wifiName = SimpleDevice.wifiInfo()
-//                #endif
-//                isLoadingLocation = true
-//                if let result = try? await asyncLocationManager.requestLocation(),
-//                   case let .didUpdateLocations(locations) = result,
-//                   let location = locations.first {
-//                    print("请求地点：\(result)")
-//                    self.coordinate = location.coordinate
-//                    
-//                    if let place = await location.coordinate.toPlace(locale: .zhHans) {
-//                        isLoadingLocation = false
-//                        self.address = place.toFullAddress()
-//                    }else {
-//                        isLoadingLocation = false
-//                    }
-//                }else {
-//                    isLoadingLocation = false
-//                }
-//            }
-//            #endif
-//        }
+    }
+    
+    private func mapContentPage(_ location: CLLocationCoordinate2D) -> some View {
+        Map(coordinateRegion: .constant(.init(center: location, span: .init(latitudeDelta: 0.01, longitudeDelta: 0.01))), showsUserLocation: true,
+            annotationItems: [location]) {
+            MapMarker(coordinate: $0)
+        }
+            .buttonCirclePage(role: .cancel) {
+                dismissPage()
+            }
     }
 }
 

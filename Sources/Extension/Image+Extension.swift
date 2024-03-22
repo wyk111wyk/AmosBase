@@ -43,6 +43,14 @@ public extension Image {
         #endif
     }
     
+    init(sfImage: SFImage) {
+        #if canImport(UIKit)
+        self.init(uiImage: sfImage)
+        #else
+        self.init(nsImage: sfImage)
+        #endif
+    }
+    
     func imageModify(color: Color? = nil,
                      mode: ContentMode = .fit,
                      length: CGFloat? = nil) -> some View {
@@ -64,25 +72,53 @@ public extension SFImage {
         Double(self.size.height)
     }
     
+    // 文件尺寸
+    var fileSize: Double {
 #if canImport(UIKit)
-    var fileSize: Double {
         Double(self.pngData()?.count ?? 0)
-    }
-    
-    func copyImageToClipboard() {
-        UIPasteboard.general.image = self
-    }
-#else
-    var fileSize: Double {
+#elseif os(macOS)
         Double(self.tiffRepresentation?.count ?? 0)
+#endif
     }
     
+    // 转换为Data
+    func pngImageData() -> Data? {
+#if canImport(UIKit)
+        self.pngData()
+#elseif os(macOS)
+        guard let tiffRepresentation = self.tiffRepresentation,
+              let bitmapImage = NSBitmapImageRep(data: tiffRepresentation) else {
+            return nil
+        }
+        return bitmapImage.representation(using: .png, properties: [:])
+#endif
+    }
+
+    func jpegData(quality: CGFloat = 0.9) -> Data? {
+#if canImport(UIKit)
+        self.jpegData(compressionQuality: quality)
+#elseif os(macOS)
+        guard let tiffRepresentation = self.tiffRepresentation,
+              let bitmapImage = NSBitmapImageRep(data: tiffRepresentation) else {
+            return nil
+        }
+        return bitmapImage.representation(using: .jpeg, properties: [.compressionFactor: quality])
+#endif
+    }
+
+    // 复制到剪贴板
     func copyImageToClipboard() {
+#if os(iOS)
+        UIPasteboard.general.image = self
+#elseif os(macOS)
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.writeObjects([self])
+#endif
     }
-
+    
+#if os(macOS)
+    // 保存到硬盘
     func saveImage() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.png, .jpeg, .bmp, .heic, .heif]
