@@ -24,6 +24,7 @@ public class SimpleCloudHelper {
     let contain: CKContainer
     let privateDatabase: CKDatabase
     let publicDatabase: CKDatabase
+    let cacheHelper = try? SimpleCache()
     
     public init(identifier: String) {
         self.identifier = identifier
@@ -33,7 +34,7 @@ public class SimpleCloudHelper {
     }
     
     private func cloudPredicate(idKey: String?,
-                               predicate: NSPredicate?) -> NSPredicate {
+                                predicate: NSPredicate?) -> NSPredicate {
         if let predicate {
             return predicate
         }else if let idKey {
@@ -47,7 +48,7 @@ public class SimpleCloudHelper {
     public func fetchCloudData(type: DatabaseType = .privateType,
                                record: String,
                                idKey: String?,
-                               predicate: NSPredicate?,
+                               predicate: NSPredicate? = nil,
                                resultsLimit: Int = CKQueryOperation.maximumResults) async throws -> [(CKRecord.ID, Result<CKRecord, any Error>)] {
         let dataPredicate = cloudPredicate(idKey: idKey, predicate: predicate)
         let query = CKQuery(recordType: record, predicate: dataPredicate)
@@ -61,7 +62,11 @@ public class SimpleCloudHelper {
     public func fetchSingleImage(type: DatabaseType = .privateType,
                                  record: String = "ImageRecord",
                                  idKey: String?,
-                                 predicate: NSPredicate?) async throws -> SFImage? {
+                                 predicate: NSPredicate? = nil) async throws -> SFImage? {
+        if let idKey, cacheHelper?.exists(forKey: idKey) == true {
+            return try cacheHelper?.loadImage(forKey: idKey)
+        }
+        
         let allImage = try await fetchCloudImages(type: type,
                                                   record: record,
                                                   idKey: idKey,
@@ -74,7 +79,7 @@ public class SimpleCloudHelper {
     public func fetchCloudImages(type: DatabaseType = .privateType,
                                  record: String = "ImageRecord",
                                  idKey: String?,
-                                 predicate: NSPredicate?,
+                                 predicate: NSPredicate? = nil,
                                  resultsLimit: Int = CKQueryOperation.maximumResults) async throws -> [SFImage] {
         let allResults = try await fetchCloudData(type: type, record: record, idKey: idKey, predicate: predicate)
         var allImage: [SFImage] = []
@@ -100,7 +105,9 @@ public class SimpleCloudHelper {
     /// 将图片保存到云端
     public func saveImageToCloudKit(image: SFImage,
                                     idKey: String,
+                                    attributes: [String: String] = [:],
                                     type: DatabaseType = .privateType,
+                                    withCache: Bool = true,
                                     record: String = "ImageRecord") async throws -> CKRecord? {
         // 1. 将UIImage转换为Data
         guard let imageData = image.jpegData(quality: 0.9) else {
@@ -120,16 +127,24 @@ public class SimpleCloudHelper {
         let record = CKRecord(recordType: record)
         record["image"] = asset
         record["idKey"] = idKey
+        for key in attributes.keys {
+            record[key] = attributes[key]
+        }
         
         let dataBase: CKDatabase = type == .privateType ? privateDatabase : publicDatabase
-        return try await dataBase.save(record)
+        let savedRecord = try await dataBase.save(record)
+        if withCache {
+            try cacheHelper?.save(image: image, forKey: idKey)
+        }
+        
+        return savedRecord
     }
     
     /// 删除云端数据
     public func deleteCloudData(type: DatabaseType = .privateType,
                                 record: String = "ImageRecord",
                                 idKey: String?,
-                                predicate: NSPredicate?) async throws {
+                                predicate: NSPredicate? = nil) async throws {
         let dataBase: CKDatabase = type == .privateType ? privateDatabase : publicDatabase
         
         let results = try await fetchCloudData(type: type, record: record, idKey: idKey, predicate: predicate)
