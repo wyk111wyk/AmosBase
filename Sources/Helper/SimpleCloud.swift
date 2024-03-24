@@ -24,10 +24,14 @@ public class SimpleCloudHelper {
     let contain: CKContainer
     let privateDatabase: CKDatabase
     let publicDatabase: CKDatabase
-    let cacheHelper = try? SimpleCache()
     
-    public init(identifier: String) {
+    let cacheHelper = try? SimpleCache()
+    let withCache: Bool
+    
+    public init(identifier: String, 
+                withCache: Bool = true) {
         self.identifier = identifier
+        self.withCache = withCache
         self.contain = CKContainer(identifier: identifier)
         self.privateDatabase = contain.privateCloudDatabase
         self.publicDatabase = contain.publicCloudDatabase
@@ -72,6 +76,10 @@ public class SimpleCloudHelper {
                                                   idKey: idKey,
                                                   predicate: predicate,
                                                   resultsLimit: 1)
+        
+        if let idKey, let image = allImage.first, withCache {
+            try cacheHelper?.save(image: image, forKey: idKey)
+        }
         return allImage.first
     }
     
@@ -107,7 +115,6 @@ public class SimpleCloudHelper {
                                     idKey: String,
                                     attributes: [String: String] = [:],
                                     type: DatabaseType = .privateType,
-                                    withCache: Bool = true,
                                     record: String = "ImageRecord") async throws -> CKRecord? {
         // 1. 将UIImage转换为Data
         guard let imageData = image.jpegData(quality: 0.9) else {
