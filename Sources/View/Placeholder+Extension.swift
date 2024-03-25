@@ -98,6 +98,7 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
 ///
 /// 可添加自定义的 Button 或者其他 View
 public struct SimplePlaceholder<V: View>: View {
+    
     let systemImageName: String?
     let imageName: String?
     let title: String
@@ -204,7 +205,15 @@ public struct SimplePlaceholder<V: View>: View {
             buttonView()
         }
         .frame(maxWidth: maxWidth)
-        .offset(x: 0, y: offsetY)
+        .offset(x: 0, y: isLandscape ? 0 : offsetY)
+    }
+    
+    var isLandscape: Bool {
+        #if os(iOS)
+        UIDevice.current.orientation.isLandscape
+        #else
+        return false
+        #endif
     }
 }
 
