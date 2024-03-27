@@ -111,12 +111,14 @@ public struct DemoContent: View {
                 case 4:
                     DemoSimpleDevice(selectedPage.title)
                 case 5:
-                    DemoSimpleCollection(selectedPage.title)
+                    DemoSimplePlaceholder()
                 case 6:
-                    DemoSimpleDate()
+                    DemoSimpleCollection(selectedPage.title)
                 case 7:
-                    DemoSimpleColor()
+                    DemoSimpleDate()
                 case 8:
+                    DemoSimpleColor()
+                case 9:
                     DemoSimpleUnit()
                 default:
                     Text(selectedPage.title)
@@ -148,14 +150,15 @@ struct Page: Identifiable, Equatable, Hashable {
     static func elementSection() -> [Self] {
         [.init(id: 2, title: "Button & Cell - 按钮表格"),
          .init(id: 3, title: "Web Page - 网页"),
-         .init(id: 4, title: "Device Info - 设备信息")]
+         .init(id: 4, title: "Device Info - 设备信息"),
+         .init(id: 5, title: "PlaceHolder - 占位符")]
     }
     
     static func dataSection() -> [Self] {
-        [.init(id: 5, title: "Collection"),
-         .init(id: 6, title: "Date - 日期"),
-         .init(id: 7, title: "Image - 图片"),
-         .init(id: 8, title: "Units - 单位")
+        [.init(id: 6, title: "Collection"),
+         .init(id: 7, title: "Date - 日期"),
+         .init(id: 8, title: "Image - 图片"),
+         .init(id: 9, title: "Units - 单位")
         ]
     }
 }
