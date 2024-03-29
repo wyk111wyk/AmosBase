@@ -102,6 +102,17 @@ public extension Array where Element: Identifiable {
         removeAll(where: { $0.id == item.id })
         return self
     }
+    
+    /// 根据 Id 替换数组中的值。
+    @discardableResult
+    mutating func replace(_ item: Element) -> [Element] {
+        if let index = self.firstIndex(where: {
+            $0.id == item.id
+        }) {
+            self[index] = item
+        }
+        return self
+    }
 }
 
 // MARK: - Methods (Equatable)
