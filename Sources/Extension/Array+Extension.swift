@@ -93,6 +93,17 @@ public extension Array {
     #endif
 }
 
+public extension Array where Element: Identifiable {
+    /// SwifterSwift: 根据Id删除数组中的值。
+    ///
+    /// - Returns: self after removing all instances of item.
+    @discardableResult
+    mutating func removeById(_ item: Element) -> [Element] {
+        removeAll(where: { $0.id == item.id })
+        return self
+    }
+}
+
 // MARK: - Methods (Equatable)
 
 public extension Array where Element: Equatable {

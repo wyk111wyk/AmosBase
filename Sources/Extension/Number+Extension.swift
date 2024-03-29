@@ -24,10 +24,22 @@ public extension Int {
             return String(self)
         }
     }
+    
+    /// 转换为 Int16
+    var int16: Int16 {
+        Int16(self)
+    }
 }
 
 extension Int: Identifiable {
     public var id: Int { self }
+}
+
+extension Int16 {
+    /// 转换为 Int
+    var int: Int {
+        Int(self)
+    }
 }
 
 public extension Double {

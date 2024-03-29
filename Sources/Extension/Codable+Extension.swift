@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 public extension Encodable {
     /// 将对象转换为 Json 格式的文字
@@ -52,7 +53,7 @@ public extension Encodable {
 }
 
 public extension Data {
-    func decode<T: Codable>() -> T? {
+    func decode<T: Codable>(type: T.Type) -> T? {
         do {
             let decoder = JSONDecoder()
             let decoded = try decoder.decode(T.self, from: self)
@@ -88,3 +89,8 @@ public extension Data {
 #endif
 }
 
+extension NSManagedObject {
+    var entityName: String {
+        String(describing: type(of: self))
+    }
+}

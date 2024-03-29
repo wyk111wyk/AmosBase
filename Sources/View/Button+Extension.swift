@@ -179,6 +179,7 @@ public struct CircleButton: View {
     
     let title: LocalizedStringKey
     let imageName: String
+    let isLoading: Bool
     
     #if !os(watchOS)
     let key: KeyEquivalent?
@@ -186,6 +187,7 @@ public struct CircleButton: View {
     public init(role: ButtonRole? = nil,
                 imageName: String? = nil,
                 labelColor: Color? = nil,
+                isLoading: Bool = false,
                 key: KeyEquivalent? = nil,
                 modifiers: EventModifiers? = nil,
                 callback: @escaping () -> Void = {}) {
@@ -208,16 +210,13 @@ public struct CircleButton: View {
             self.labelColor = labelColor
         }
         
+        self.isLoading = isLoading
         self.key = key
         self.modifiers = modifiers
         self.callback = callback
     }
     
     public var body: some View {
-        //        Button(role: role, action: callback) {
-        //            Label(title, systemImage: imageName)
-        //                .modifier(ButtonCircleBackground(labelColor))
-        //        }
         Button(title,
                systemImage: imageName,
                role: role,
@@ -231,6 +230,7 @@ public struct CircleButton: View {
     public init(role: ButtonRole? = nil,
                 imageName: String? = nil,
                 labelColor: Color? = nil,
+                isLoading: Bool = false,
                 callback: @escaping () -> Void = {}) {
         self.role = role
         if role == .cancel {
@@ -251,14 +251,11 @@ public struct CircleButton: View {
             self.labelColor = labelColor
         }
         
+        self.isLoading = isLoading
         self.callback = callback
     }
     
     public var body: some View {
-        //        Button(role: role, action: callback) {
-        //            Label(title, systemImage: imageName)
-        //                .modifier(ButtonCircleBackground(labelColor))
-        //        }
         Button(title,
                systemImage: imageName,
                role: role,
@@ -374,6 +371,7 @@ struct CircleButtonNavi: ViewModifier {
     let labelColor: Color?
     let isDisable: Bool
     let isPresent: Bool
+    let isLoading: Bool
     let placement: ToolbarItemPlacement
     
     let callback: () -> Void
@@ -386,6 +384,7 @@ struct CircleButtonNavi: ViewModifier {
          labelColor: Color? = nil,
          isDisable: Bool = false,
          isPresent: Bool = true,
+         isLoading: Bool = false,
          key: KeyEquivalent? = nil,
          modifiers: EventModifiers? = nil,
          placement: ToolbarItemPlacement? = nil,
@@ -395,6 +394,7 @@ struct CircleButtonNavi: ViewModifier {
         self.labelColor = labelColor
         self.isDisable = isDisable
         self.isPresent = isPresent
+        self.isLoading = isLoading
         self.callback = callback
         self.key = key
         self.modifiers = modifiers
@@ -432,6 +432,7 @@ struct CircleButtonNavi: ViewModifier {
          labelColor: Color? = nil,
          isDisable: Bool = false,
          isPresent: Bool = true,
+         isLoading: Bool = false,
          placement: ToolbarItemPlacement? = nil,
          callback: @escaping () -> Void = {}) {
         self.role = role
@@ -439,6 +440,7 @@ struct CircleButtonNavi: ViewModifier {
         self.labelColor = labelColor
         self.isDisable = isDisable
         self.isPresent = isPresent
+        self.isLoading = isLoading
         self.callback = callback
         if let placement {
             self.placement = placement
@@ -500,10 +502,6 @@ struct ButtonCircleBackground: ViewModifier {
         if #available(iOS 17.0, watchOS 10.0, macOS 14.0, *) {
 #if os(iOS)
             content
-            //                .imageScale(.medium)
-            //                .symbolVariant(.circle .fill)
-            //                .foregroundStyle(.regularMaterial)
-            //                .opacity(0.8)
                 .foregroundStyle(labelColor ?? Color.accentColor)
                 .fontWeight(.medium)
                 .buttonBorderShape(.circle)
