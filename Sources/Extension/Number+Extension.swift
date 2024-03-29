@@ -35,7 +35,7 @@ extension Int: Identifiable {
     public var id: Int { self }
 }
 
-extension Int16 {
+public extension Int16 {
     /// 转换为 Int
     var int: Int {
         Int(self)

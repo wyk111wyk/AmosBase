@@ -89,7 +89,7 @@ public extension Data {
 #endif
 }
 
-extension NSManagedObject {
+public extension NSManagedObject {
     var entityName: String {
         String(describing: type(of: self))
     }
