@@ -160,6 +160,7 @@ struct TagBackground<S>: ViewModifier where S: ShapeStyle {
 #if !os(watchOS)
 @available(iOS 16, macOS 13, watchOS 9, *)
 public struct SimpleTextField<Menus: View>: View {
+    @State private var isTargeted: Bool = false
     @Binding var inputText: String
     let prompt: String
     let startLine: Int
@@ -196,6 +197,9 @@ public struct SimpleTextField<Menus: View>: View {
         .textFieldStyle(.plain)
         .tint(tintColor)
         .padding(.bottom, 28)
+        .onDrop(of: ["public.text"], isTargeted: $isTargeted, perform: { providers in
+            return true
+        })
         .overlay(alignment: .bottomTrailing) {
             Menu {
                 moreMenus()

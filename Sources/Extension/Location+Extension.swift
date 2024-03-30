@@ -15,6 +15,7 @@ private let mylog = Logger(subsystem: "Location+Extension", category: "AmosBase"
 public extension CLPlacemark {
     func toFullAddress() -> String {
         var address = ""
+        address += self.country ?? ""
         address += self.administrativeArea ?? ""
         address += self.subAdministrativeArea ?? ""
         address += self.locality ?? ""
@@ -26,6 +27,10 @@ public extension CLPlacemark {
         }
         mylog.log("AppleMap Address: \(address)")
         return address
+    }
+    
+    func toProvince() -> String? {
+        self.administrativeArea
     }
     
     func toCity() -> String? {
