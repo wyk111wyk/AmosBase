@@ -84,6 +84,7 @@ public struct SimpleCell<V: View>: View {
                 }else if let systemImage = systemImage {
                     Image(systemName: systemImage)
                         .frame(width: imageSize, height: imageSize)
+                        .foregroundColor(titleColor ?? .primary)
                 }else if let bundleImageName, let bundleImageType {
                     if let bundleImageNameDark {
                         if colorScheme == .dark {

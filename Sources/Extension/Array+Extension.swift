@@ -113,11 +113,25 @@ public extension Array where Element: Identifiable {
         }
         return self
     }
+    
+    /// 判断数组是否包含某个值（Identifiable）
+    func contain(_ item: Element) -> Bool {
+        self.contains {
+            $0.id == item.id
+        }
+    }
 }
 
 // MARK: - Methods (Equatable)
 
 public extension Array where Element: Equatable {
+    /// 判断数组是否包含某个值（Equatable）
+    func contain(_ item: Element) -> Bool {
+        self.contains {
+            $0 == item
+        }
+    }
+    
     /// SwifterSwift: 删除数组中的空值。
     ///
     /// - Returns: self after removing all instances of item.
