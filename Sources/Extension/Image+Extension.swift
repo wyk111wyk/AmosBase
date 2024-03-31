@@ -93,7 +93,7 @@ public extension SFImage {
     // 转换为可使用的临时路径
     func tempPath(_ name: String? = nil) -> URL? {
         let tempDirectory = FileManager.default.temporaryDirectory
-        let tempFileURL = tempDirectory.appendingPathComponent(name ?? UUID().uuidString)
+        let tempFileURL = tempDirectory.appendingPathComponent("\(name ?? UUID().uuidString).png")
         
         guard let imageData = self.pngImageData() else {
             return nil

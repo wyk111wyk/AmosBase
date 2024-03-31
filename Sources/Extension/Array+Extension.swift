@@ -114,6 +114,13 @@ public extension Array where Element: Identifiable {
         return self
     }
     
+    /// 根基 Id 取出第一个符合的 index
+    func indexById(_ item: Element) -> Int? {
+        self.firstIndex(where: {
+            $0.id == item.id
+        })
+    }
+    
     /// 判断数组是否包含某个值（Identifiable）
     func contain(_ item: Element) -> Bool {
         self.contains {
