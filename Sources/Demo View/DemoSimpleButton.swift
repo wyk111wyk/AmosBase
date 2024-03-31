@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-public struct DemoSimpleButton: View {
+public struct DemoSimpleButton<V: View>: View {
     @State private var hasTest = false
     @State private var input = ""
     
-    let title: String
-    public init(_ title: String = "Button & Cell") {
-        self.title = title
+    @ViewBuilder let stateView: () -> V
+    public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
+        self.stateView = stateView
     }
     
     public var body: some View {
@@ -29,10 +29,14 @@ public struct DemoSimpleButton: View {
                             .simpleTagBackground()
                     }
                 }
-                SimpleCell("Title",
-                           systemImage: "person.wave.2.fill",
-                           content: "Content Content Content Content",
-                           stateText: "State Text")
+                NavigationLink {
+                    stateView()
+                } label: {
+                    SimpleCell("Title",
+                               systemImage: "person.wave.2.fill",
+                               content: "Content Content Content Content",
+                               stateText: "State Text")
+                }
                 SimpleCell("Title",
                            systemImage: "person.wave.2.fill",
                            content: "Cont Cont Cont Content Content") {
@@ -63,7 +67,7 @@ public struct DemoSimpleButton: View {
                 // Fallback on earlier versions
             }
         }
-        .navigationTitle(title)
+        .navigationTitle("按钮")
         .buttonCircleNavi(role: .destructive)
     }
 }

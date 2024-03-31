@@ -7,11 +7,7 @@
 
 import SwiftUI
 
-struct DemoSimplePlaceholder<V: View>: View {
-    @ViewBuilder let stateView: () -> V
-    public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
-        self.stateView = stateView
-    }
+struct DemoSimplePlaceholder: View {
     
     var body: some View {
         List {
@@ -27,8 +23,8 @@ struct DemoSimplePlaceholder<V: View>: View {
                            title: "Title Title",
                            subtitle: "Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle",
                            content: "content content content content content content content content content content content content content content content content") {
-            NavigationLink("Button") {
-                stateView()
+            Button("Button") {
+                
             }.buttonStyle(.borderedProminent)
         }
     }

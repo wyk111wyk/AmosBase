@@ -102,7 +102,7 @@ public struct DemoContent<V: View>: View {
                 case 1:
                     DemoSimpleAlert()
                 case 2:
-                    DemoSimpleButton()
+                    DemoSimpleButton(stateView: stateView)
                 case 3:
                     #if !os(macOS) && !os(watchOS)
                     SimpleWebView(url: URL(string: "https://www.baidu.com")!,
@@ -115,7 +115,7 @@ public struct DemoContent<V: View>: View {
                 case 4:
                     DemoSimpleDevice(selectedPage.title)
                 case 5:
-                    DemoSimplePlaceholder(stateView: stateView)
+                    DemoSimplePlaceholder()
                 case 6:
                     DemoSimpleCollection(selectedPage.title)
                 case 7:
