@@ -8,7 +8,7 @@
 import SwiftUI
 
 @available(iOS 16, macOS 13, watchOS 10, *)
-public struct DemoContent: View {
+public struct DemoContent<V: View>: View {
     @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
     @State private var selectedPage: Page?
     
@@ -17,7 +17,11 @@ public struct DemoContent: View {
     @State private var showPositionShare = false
     
     @State private var selectedIndex: Int? = nil
-    public init() {}
+    
+    @ViewBuilder let stateView: () -> V
+    public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
+        self.stateView = stateView
+    }
     
     public var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
@@ -111,7 +115,7 @@ public struct DemoContent: View {
                 case 4:
                     DemoSimpleDevice(selectedPage.title)
                 case 5:
-                    DemoSimplePlaceholder()
+                    DemoSimplePlaceholder(stateView: stateView)
                 case 6:
                     DemoSimpleCollection(selectedPage.title)
                 case 7:
