@@ -64,12 +64,48 @@ public extension Image {
 
 public extension SFImage {
     
+    convenience init?(packageResource name: String, ofType type: String) {
+        #if canImport(UIKit)
+        guard let path = Bundle.module.path(forResource: name, ofType: type) else {
+            self.init(named: name + "." + type)
+            return
+        }
+        self.init(contentsOfFile: path)
+        #elseif canImport(AppKit)
+        guard let path = Bundle.module.path(forResource: name, ofType: type) else {
+            self.init(named: name + "." + type)
+            return
+        }
+        self.init(contentsOfFile: path)
+        #else
+        self.init(contentsOfFile: path)
+        #endif
+    }
+    
     var width: Double {
         Double(self.size.width)
     }
     
     var height: Double {
         Double(self.size.height)
+    }
+    
+    // 转换为可使用的临时路径
+    func tempPath(_ name: String? = nil) -> URL? {
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let tempFileURL = tempDirectory.appendingPathComponent(name ?? UUID().uuidString)
+        
+        guard let imageData = self.pngImageData() else {
+            return nil
+        }
+        
+        do {
+            try imageData.write(to: tempFileURL)
+            return tempFileURL
+        } catch {
+            debugPrint("无法写入临时文件: \(error)")
+            return nil
+        }
     }
     
     // 文件尺寸

@@ -19,9 +19,9 @@ public struct ImageDetailView: View {
     @State var dragOffset: CGSize = CGSize.zero
     @State var dragOffsetPredicted: CGSize = CGSize.zero
     
-    public init(image: Image,
+    public init(image: SFImage,
                 caption: String? = nil) {
-        self.image = image
+        self.image = .init(sfImage: image)
         self.imageOpt = nil
         self.caption = caption
     }
