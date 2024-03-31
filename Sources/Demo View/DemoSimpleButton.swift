@@ -10,6 +10,7 @@ import SwiftUI
 public struct DemoSimpleButton<V: View>: View {
     @State private var hasTest = false
     @State private var input = ""
+    @State private var showPage = false
     
     @ViewBuilder let stateView: () -> V
     public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
@@ -29,14 +30,10 @@ public struct DemoSimpleButton<V: View>: View {
                             .simpleTagBackground()
                     }
                 }
-                NavigationLink {
-                    stateView()
-                } label: {
-                    SimpleCell("Title",
-                               systemImage: "person.wave.2.fill",
-                               content: "Content Content Content Content",
-                               stateText: "State Text")
-                }
+                SimpleCell("Title",
+                           systemImage: "person.wave.2.fill",
+                           content: "Content Content Content Content",
+                           stateText: "State Text")
                 SimpleCell("Title",
                            systemImage: "person.wave.2.fill",
                            content: "Cont Cont Cont Content Content") {
@@ -54,7 +51,10 @@ public struct DemoSimpleButton<V: View>: View {
             }
             if #available(iOS 16, macOS 13, *) {
                 Section("Button") {
-                    SimpleMiddleButton("Middle button", role: .none) {}
+                    SimpleMiddleButton("Middle button", role: .none) {showPage = true}
+                        .fullScreenCover(isPresented: $showPage, content: {
+                            stateView()
+                        })
                     SimpleMiddleButton("Middle button", role: .destructive) {}
                     SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
                 }
