@@ -30,6 +30,7 @@ public struct DemoSimpleButton<V: View>: View {
                             .simpleTagBackground()
                     }
                 }
+                           .simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
                 SimpleCell("Title",
                            systemImage: "person.wave.2.fill",
                            content: "Content Content Content Content",
@@ -51,10 +52,12 @@ public struct DemoSimpleButton<V: View>: View {
             }
             if #available(iOS 16, macOS 13, *) {
                 Section("Button") {
+                    #if os(iOS) || targetEnvironment(macCatalyst)
                     SimpleMiddleButton("Middle button", role: .none) {showPage = true}
                         .fullScreenCover(isPresented: $showPage, content: {
                             stateView()
                         })
+                    #endif
                     SimpleMiddleButton("Middle button", role: .destructive) {}
                     SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
                 }

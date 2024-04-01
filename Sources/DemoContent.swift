@@ -16,7 +16,7 @@ public struct DemoContent<V: View>: View {
     @State private var showMapShare = false
     @State private var showPositionShare = false
     
-    @State private var selectedIndex: Int? = nil
+    @State private var selectedPhotoIndex: Int? = nil
     
     @ViewBuilder let stateView: () -> V
     public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
@@ -39,11 +39,11 @@ public struct DemoContent<V: View>: View {
                     }
 #if os(iOS)
                     Button {
-                        selectedIndex = 0
+                        selectedPhotoIndex = 0
                     } label: {
                         Label("Image - 图片查看", systemImage: "photo.on.rectangle.angled")
                     }
-                    .simpleImageViewer(selectedIndex: $selectedIndex,
+                    .simpleImageViewer(selectedIndex: $selectedPhotoIndex,
                                        allPhotos: ImageStoreModel.examples())
 #endif
                 }
@@ -130,6 +130,9 @@ public struct DemoContent<V: View>: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
+        .onAppear {
+            selectedPage = Page.alertSection().first
+        }
     }
 }
 
