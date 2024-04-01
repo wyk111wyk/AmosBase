@@ -13,6 +13,7 @@ import CoreLocation
  NSLocationWhenInUseUsageDescription    应用请求使用时或始终授权。
  NSLocationAlwaysAndWhenInUseUsageDescription    应用请求始终授权。
  NSLocationTemporaryUsageDescriptionDictionary    当您想要临时扩展授权级别的精度时使用
+ # 在 Mac 中，需要在 xx.entitlements 中添加 com.apple.security.personal-information.location 权限
  
  2. 使用需要 @ObservedObject var location = SimpleLocationHelper()
  */
@@ -26,7 +27,7 @@ public class SimpleLocationHelper: NSObject, ObservableObject {
     public override init() {
         super.init()
         manager.delegate = self
-        if manager.authorizationStatus == .notDetermined {
+        if manager.authorizationStatus.rawValue < 3 {
             manager.requestWhenInUseAuthorization()
         }else {
             startLocation()
