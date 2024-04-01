@@ -82,13 +82,12 @@ public struct SimpleNavigation {
             urlComponents.scheme = "baidumap"
             urlComponents.host = "map"
             if self.mode == .navi {
-                urlComponents.path = "/direction"
+                urlComponents.path = "/navi"
                 urlComponents.queryItems = [
-                    URLQueryItem(name: "origin", value: "我的位置"),
-                    URLQueryItem(name: "destination", value: "\(lat),\(long)"),
-                    URLQueryItem(name: "destination", value: title),
+                    URLQueryItem(name: "location", value: "\(lat),\(long)"),
+                    URLQueryItem(name: "query", value: title),
                     URLQueryItem(name: "coord_type", value: "wgs84"),
-                    URLQueryItem(name: "mode", value: "driving")]
+                    URLQueryItem(name: "type", value: "TIME")]
             }else {
                 if address.isEmpty {
                     urlComponents.path = "/marker"
