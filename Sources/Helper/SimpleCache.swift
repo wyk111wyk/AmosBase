@@ -51,9 +51,12 @@ public class SimpleCache {
     public let options: Options
     public let folderUrl: URL
     public let fileManager: FileManager = .default
+    public let isDebuging: Bool
     
-    public init(options: Options = .init()) throws {
+    public init(options: Options = .init(),
+                isDebuging: Bool) throws {
         self.options = options
+        self.isDebuging = isDebuging
 
         var url: URL
         if let directoryUrl = options.directoryUrl {
@@ -70,9 +73,18 @@ public class SimpleCache {
         self.folderUrl = url
             .appendingPathComponent(options.folder, isDirectory: true)
 
+        if isDebuging {
+            debugPrint("初始化Cache")
+            debugPrint("Cache Path：\(url)")
+            debugPrint("Folder Path：\(folderUrl)")
+        }
+        
         do {
             try createDirectoryIfNeeded(folderUrl: folderUrl)
             try applyAttributesIfAny(folderUrl: folderUrl)
+            if isDebuging {
+                debugPrint("初始化Cache成功")
+            }
         }catch {
             debugPrint("初始化Cache错误：")
             debugPrint(error)

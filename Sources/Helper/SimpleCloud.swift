@@ -25,13 +25,17 @@ public class SimpleCloudHelper {
     let privateDatabase: CKDatabase
     let publicDatabase: CKDatabase
     
-    let cacheHelper = try? SimpleCache()
+    let cacheHelper: SimpleCache?
     let withCache: Bool
+    let isDebuging: Bool
     
     public init(identifier: String, 
-                withCache: Bool = true) {
+                withCache: Bool = true,
+                isDebuging: Bool = false) {
         self.identifier = identifier
         self.withCache = withCache
+        self.isDebuging = isDebuging
+        self.cacheHelper = try? SimpleCache(isDebuging: isDebuging)
         self.contain = CKContainer(identifier: identifier)
         self.privateDatabase = contain.privateCloudDatabase
         self.publicDatabase = contain.publicCloudDatabase
@@ -68,6 +72,7 @@ public class SimpleCloudHelper {
                                  idKey: String?,
                                  predicate: NSPredicate? = nil) async throws -> SFImage? {
         if let idKey, cacheHelper?.exists(forKey: idKey) == true {
+            if isDebuging { debugPrint("在Cache中获取图片: \(idKey)") }
             return try cacheHelper?.loadImage(forKey: idKey)
         }
         
@@ -140,6 +145,9 @@ public class SimpleCloudHelper {
         
         let dataBase: CKDatabase = type == .privateType ? privateDatabase : publicDatabase
         let savedRecord = try await dataBase.save(record)
+        if isDebuging {
+            debugPrint("成功在iCloud储存: \(idKey)")
+        }
         if withCache {
             try cacheHelper?.save(image: image, forKey: idKey)
         }
