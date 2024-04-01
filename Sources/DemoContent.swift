@@ -9,6 +9,8 @@ import SwiftUI
 
 @available(iOS 16, macOS 13, watchOS 10, *)
 public struct DemoContent<V: View>: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    
     @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
     @State private var selectedPage: Page?
     
@@ -131,7 +133,9 @@ public struct DemoContent<V: View>: View {
         }
         .navigationSplitViewStyle(.balanced)
         .onAppear {
-            selectedPage = Page.alertSection().first
+            if horizontalSizeClass == .regular {
+                selectedPage = Page.alertSection().first
+            }
         }
     }
 }
