@@ -86,7 +86,7 @@ public struct SimpleNavigation {
                 urlComponents.queryItems = [
                     URLQueryItem(name: "location", value: "\(lat),\(long)"),
                     URLQueryItem(name: "query", value: title),
-                    URLQueryItem(name: "coord_type", value: "wgs84"),
+                    URLQueryItem(name: "coord_type", value: "gcj02"),
                     URLQueryItem(name: "type", value: "TIME")]
             }else {
                 if address.isEmpty {
@@ -94,7 +94,7 @@ public struct SimpleNavigation {
                     urlComponents.queryItems = [
                         URLQueryItem(name: "location", value: "\(lat),\(long)"),
                         URLQueryItem(name: "title", value: title),
-                        URLQueryItem(name: "coord_type", value: "wgs84"),
+                        URLQueryItem(name: "coord_type", value: "gcj02"),
                         URLQueryItem(name: "content", value: content)]
                 }else {
                     urlComponents.path = "/geocoder"
