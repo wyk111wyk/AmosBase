@@ -19,8 +19,8 @@ import CoreLocation
 
 public class SimpleLocationHelper: NSObject, ObservableObject {
     let manager: CLLocationManager = CLLocationManager()
-    @Published var currentLocation: CLLocationCoordinate2D? = nil
-    @Published var currentPlace: CLPlacemark? = nil
+    @Published public var currentLocation: CLLocationCoordinate2D? = nil
+    @Published public var currentPlace: CLPlacemark? = nil
     
     @discardableResult
     public override init() {
