@@ -85,7 +85,7 @@ public struct DemoContent<V: View>: View {
                 }
                 
                 SimpleCommonAbout(txcId: "123", userId: "123", nickName: "Amos", avatarUrl: "123", appStoreId: "123") {
-                    Text("About - 常规关于")
+                    Text("About - 关于")
                 }
             }
             .navigationTitle("Amos基础库")
@@ -159,14 +159,14 @@ struct Page: Identifiable, Equatable, Hashable {
     }
     
     static func elementSection() -> [Self] {
-        [.init(id: 2, title: "Button & Cell - 按钮表格"),
-         .init(id: 3, title: "Web Page - 网页"),
-         .init(id: 4, title: "Device Info - 设备信息"),
+        [.init(id: 2, title: "Button - 按钮表格"),
+         .init(id: 3, title: "Web - 网页"),
+         .init(id: 4, title: "Device - 设备信息"),
          .init(id: 5, title: "PlaceHolder - 占位符")]
     }
     
     static func dataSection() -> [Self] {
-        [.init(id: 6, title: "Collection"),
+        [.init(id: 6, title: "Collection - 集合"),
          .init(id: 7, title: "Date - 日期"),
          .init(id: 8, title: "Image - 图片"),
          .init(id: 9, title: "Units - 单位")
