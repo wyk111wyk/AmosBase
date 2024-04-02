@@ -73,6 +73,44 @@ public struct SimpleMiddleButton: View {
     }
 }
 
+public struct SimpleConfirmButton<V: View>: View {
+    let title: String?
+    let systemImage: String?
+    let role: ButtonRole?
+    
+    @ViewBuilder var labelView: () -> V
+    let tapAction: () -> Void
+    
+    init(
+        title: String? = "Confirm",
+        systemImage: String? = nil,
+        role: ButtonRole? = nil,
+        labelView: @escaping () -> V = { EmptyView() },
+        tapAction: @escaping () -> Void
+    ) {
+        self.title = title
+        self.systemImage = systemImage
+        self.role = role
+        self.labelView = labelView
+        self.tapAction = tapAction
+    }
+    
+    public var body: some View {
+        Button(role: role, action: tapAction, label: {
+            if title != nil || systemImage != nil {
+                if let systemImage {
+                    Image(systemName: systemImage)
+                }
+                if let title {
+                    Text(title.localized())
+                }
+            }else {
+                labelView()
+            }
+        })
+    }
+}
+
 // MARK: - Button相关的UI修饰
 extension View {
     #if os(watchOS)

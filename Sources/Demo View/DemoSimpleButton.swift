@@ -8,8 +8,10 @@
 import SwiftUI
 
 public struct DemoSimpleButton<V: View>: View {
-    @State private var hasTest = false
+    @State private var hasTest = true
     @State private var input = ""
+    
+    @State private var confirmShowPage = false
     @State private var showPage = false
     
     @ViewBuilder let stateView: () -> V
@@ -53,10 +55,10 @@ public struct DemoSimpleButton<V: View>: View {
             if #available(iOS 16, macOS 13, *) {
                 Section("Button") {
                     #if os(iOS) || targetEnvironment(macCatalyst)
-                    SimpleMiddleButton("Middle button", role: .none) {showPage = true}
-                        .fullScreenCover(isPresented: $showPage, content: {
-                            stateView()
-                        })
+                    SimpleMiddleButton("Middle button", role: .none) {
+                        if hasTest { confirmShowPage = true }}
+                        .fullScreenCover(isPresented: $showPage, content: { stateView() })
+                        .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
                     #endif
                     SimpleMiddleButton("Middle button", role: .destructive) {}
                     SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}

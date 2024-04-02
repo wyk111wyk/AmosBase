@@ -99,6 +99,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
                     buttonView()
                 }
             }
+        #if !os(watchOS)
             .contextMenu {
                 if hasContextMenu {
                     buttonView()
@@ -107,6 +108,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
                     if hasDelete { deleteButton() }
                 }
             }
+        #endif
     }
     
     func deleteButton() -> some View {
