@@ -122,7 +122,7 @@ public extension Array where Element: Identifiable {
     }
     
     /// 判断数组是否包含某个值（Identifiable）
-    func contain(_ item: Element) -> Bool {
+    func containById(_ item: Element) -> Bool {
         self.contains {
             $0.id == item.id
         }

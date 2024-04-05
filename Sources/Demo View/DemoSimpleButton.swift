@@ -8,72 +8,144 @@
 import SwiftUI
 
 public struct DemoSimpleButton<V: View>: View {
-    @State private var hasTest = true
+    @State private var isTapDismiss = true
     @State private var input = ""
     
     @State private var confirmShowPage = false
     @State private var showPage = false
     
+    let allPickerContent = DemoPickerModel.allContent
+    @State private var singleValue: DemoPickerModel
+    @State private var mutipleValue: Set<DemoPickerModel>
+    
     @ViewBuilder let stateView: () -> V
     public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
         self.stateView = stateView
+        
+        singleValue = allPickerContent.randomElement()!
+        mutipleValue = [allPickerContent.randomElement()!]
     }
     
     public var body: some View {
         Form {
-            Section("Cell") {
-                SimpleCell("Title", bundleImageName: "LAL_r",
-                           bundleImageType: "png", content: "Content") {
-                    HStack {
-                        Text("Tag")
-                            .simpleTagBorder(themeColor: .green,
-                                             bgColor: .red)
-                        Text("Tag")
-                            .simpleTagBackground()
-                    }
-                }
-                           .simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
-                SimpleCell("Title",
-                           systemImage: "person.wave.2.fill",
-                           content: "Content Content Content Content",
-                           stateText: "State Text")
-                SimpleCell("Title",
-                           systemImage: "person.wave.2.fill",
-                           content: "Cont Cont Cont Content Content") {
-                    Toggle("", isOn: $hasTest) }
-                SimpleCell("Title Title Title Title Title Title Title Title",
-                           systemImage: "person.wave.2.fill",
-                           content: "Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont ",
-                           fullContent: true
-                )
-                SimpleCell("Title Title Title Title Title Title Title Title",
-                           systemImage: "person.wave.2.fill",
-                           content: "Content Content Content Content Content Content Content Content Content Content",
-                           stateText: "State Text State Text State Text State Text"
-                )
-            }
-            if #available(iOS 16, macOS 13, *) {
-                Section("Button") {
-                    #if os(iOS) || targetEnvironment(macCatalyst)
-                    SimpleMiddleButton("Middle button", role: .none) {
-                        if hasTest { confirmShowPage = true }}
-                        .fullScreenCover(isPresented: $showPage, content: { stateView() })
-                        .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
-                    #endif
-                    SimpleMiddleButton("Middle button", role: .destructive) {}
-                    SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
-                }
-#if !os(watchOS)
-                Section("TextField") {
-                    SimpleTextField($input, tintColor: .blue)
-                }
-#endif
-            } else {
-                // Fallback on earlier versions
-            }
+            cellSection()
+            pickerSection()
+            buttonSection()
         }
         .navigationTitle("按钮")
         .buttonCircleNavi(role: .destructive)
+    }
+    
+    private func cellSection() -> some View {
+        Section("Cell") {
+            SimpleCell("Swipe Test", bundleImageName: "LAL_r",
+                       bundleImageType: "png", content: "Content") {
+                HStack {
+                    Text("Tag")
+                        .simpleTagBorder(themeColor: .green,
+                                         bgColor: .red)
+                    Text("Tag")
+                        .simpleTagBackground()
+                }
+            }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
+            SimpleCell("Title Title Title Title Title Title Title Title Title Title",
+                       systemImage: "person.wave.2.fill",
+                       content: "Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont",
+                       fullContent: true
+            )
+            SimpleCell("Title Title Title Title Title Title",
+                       systemImage: "person.wave.2.fill",
+                       content: "Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont",
+                       stateText: "State Text State Text State Text State Text"
+            )
+        }
+    }
+    
+    @ViewBuilder
+    private func buttonSection() -> some View {
+        if #available(iOS 16, macOS 13, *) {
+            Section("Button") {
+                #if os(iOS) || targetEnvironment(macCatalyst)
+                SimpleMiddleButton("Middle button", role: .none) {
+                    confirmShowPage = true }
+                    .fullScreenCover(isPresented: $showPage, content: { stateView() })
+                    .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
+                #endif
+                SimpleMiddleButton("Middle button", role: .destructive) {}
+                SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
+            }
+            #if !os(watchOS)
+            Section("TextField") {
+                SimpleTextField($input, tintColor: .blue)
+            }
+            #endif
+        }
+    }
+    
+    private func pickerSection() -> some View {
+        Section {
+            NavigationLink {
+                SimplePicker(
+                    title: "单选",
+                    dismissAfterTap: isTapDismiss,
+                    allValue: allPickerContent,
+                    selectValues: [singleValue]
+                ) { newValue in
+                    singleValue = newValue
+                }
+            } label: {
+                SimpleCell("Single Picker",
+                           systemImage: "person.wave.2.fill",
+                           content: "Content Content Content",
+                           stateText: singleValue.title)
+            }
+            NavigationLink {
+                SimplePicker(
+                    title: "多选",
+                    maxSelectCount: nil,
+                    allValue: allPickerContent,
+                    selectValues: mutipleValue, 
+                    multipleSaveAction:  { newSelects in
+                        mutipleValue = newSelects
+                    })
+            } label: {
+                SimpleCell("Mutile Picker",
+                           systemImage: "person.wave.2.fill",
+                           content: "Select count: \(mutipleValue.count)") {
+                    Text(mutipleValue.map { $0.title }.joined(separator: ", ")).multilineTextAlignment(.leading)
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        } header: {
+            HStack {
+                Text("Picker")
+                Spacer()
+                Toggle("单选点击退出", isOn: $isTapDismiss)
+                    .labelStyle(font: .footnote)
+            }
+        }
+    }
+}
+
+extension DemoSimpleButton {
+    struct DemoPickerModel: PickerValueModel {
+        let id: UUID
+        var title: String
+        var iconName: String?
+        var systemImage: String?
+        var contentSystemImage: String?
+        var content: String?
+        
+        static var allContent: [Self] {
+            return (1..<20).map {
+                DemoPickerModel(
+                    id: UUID(),
+                    title: "标题部分 \($0)",
+                    systemImage: "person.crop.circle",
+                    content: "我是详细说明内容 \($0)"
+                )}
+        }
     }
 }
 
