@@ -10,26 +10,26 @@ import AVFoundation
 
 public struct SimpleAudioHelper {
     let audioPlayer: AVAudioPlayer?
-    init(_ filePath: URL) {
+    public init(_ filePath: URL) {
         self.audioPlayer = try? AVAudioPlayer(contentsOf: filePath)
     }
     
-    func playSound() {
+    public func playSound() {
         // 准备播放
         audioPlayer?.prepareToPlay()
         // 播放
         audioPlayer?.play()
     }
     
-    func pause() {
+    public func pause() {
         audioPlayer?.pause()
     }
     
-    func stop() {
+    public func stop() {
         audioPlayer?.stop()
     }
     
-    func continuePlay(_ time: TimeInterval?) {
+    public func continuePlay(_ time: TimeInterval?) {
         if let time {
             audioPlayer?.play(atTime: time)
         }else {
@@ -37,11 +37,11 @@ public struct SimpleAudioHelper {
         }
     }
     
-    func isPlaying() -> Bool {
+    public func isPlaying() -> Bool {
         audioPlayer?.isPlaying ?? false
     }
     
-    static func playSoundFromBundle(sound: String, type: String) {
+    public static func playSoundFromBundle(sound: String, type: String) {
         if let path = Bundle.main.path(forResource: sound, ofType: type) {
             SimpleAudioHelper(URL(fileURLWithPath: path)).playSound()
         }

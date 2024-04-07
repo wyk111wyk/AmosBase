@@ -30,7 +30,7 @@ public class SimpleFileHelper {
     }
     
     /// 获取（创建）文件夹路径URL
-    func folderPath(_ folderName: String? = "audioFile", isCreate: Bool = true) -> URL? {
+    public func folderPath(_ folderName: String? = "audioFile", isCreate: Bool = true) -> URL? {
         // 获取文档目录路径
         guard let documentsDirectory = file.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return nil
@@ -54,7 +54,7 @@ public class SimpleFileHelper {
     }
 
     /// 获取（创建）某个文件的路径 URL
-    func filePath(
+    public func filePath(
         _ fileName: String,
         folderName: String? = "audioFile",
         suffix: String? = "wav"
@@ -79,7 +79,7 @@ public class SimpleFileHelper {
     }
 
     /// 获取文件夹内所有文件的URL路径
-    func fetchFileURL(_ folderPath: URL) -> [URL] {
+    public func fetchFileURL(_ folderPath: URL) -> [URL] {
         do {
             let fileURLs = try file.contentsOfDirectory(at: folderPath, includingPropertiesForKeys: nil)
             return fileURLs
@@ -90,7 +90,7 @@ public class SimpleFileHelper {
     }
     
     /// 获取文件夹内所有的文件
-    func fetchFiles(_ folderPath: URL) -> [FileInfo] {
+    public func fetchFiles(_ folderPath: URL) -> [FileInfo] {
         do {
             var filesInfo: [FileInfo] = []
             for fileURL in fetchFileURL(folderPath) {
@@ -111,7 +111,7 @@ public class SimpleFileHelper {
     
     /// 删除指定路径的文件
     @discardableResult
-    func deleteFile(_ filePath: URL) -> Bool {
+    public func deleteFile(_ filePath: URL) -> Bool {
         do {
             try file.removeItem(at: filePath)
             return true
@@ -123,7 +123,7 @@ public class SimpleFileHelper {
     
     /// 重命名文件
     @discardableResult
-    func renameFile(_ filePath: URL) -> Bool {
+    public func renameFile(_ filePath: URL) -> Bool {
         do {
             let fileName = filePath.deletingPathExtension().lastPathComponent
             let suffix = filePath.pathExtension
