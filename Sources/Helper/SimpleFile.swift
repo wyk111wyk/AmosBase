@@ -15,10 +15,10 @@ public class SimpleFileHelper {
     
     public struct FileInfo: Identifiable {
         public var id: UUID
-        var name: String
-        var suffix: String
-        var size: Double
-        var path: URL
+        public var name: String
+        public var suffix: String
+        public var size: Double
+        public var path: URL
         
         public init(id: UUID = UUID(), name: String, suffix: String, size: Double, path: URL) {
             self.id = id
