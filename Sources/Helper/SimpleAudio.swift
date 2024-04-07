@@ -9,7 +9,7 @@ import Foundation
 import AVFoundation
 
 public struct SimpleAudioHelper {
-    let audioPlayer: AVAudioPlayer?
+    public let audioPlayer: AVAudioPlayer?
     public init(_ filePath: URL) {
         self.audioPlayer = try? AVAudioPlayer(contentsOf: filePath)
     }
