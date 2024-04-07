@@ -10,6 +10,7 @@ import SwiftUI
 public struct DemoSimpleButton<V: View>: View {
     @State private var isTapDismiss = true
     @State private var input = ""
+    @State private var showInput = false
     
     @State private var confirmShowPage = false
     @State private var showPage = false
@@ -76,8 +77,16 @@ public struct DemoSimpleButton<V: View>: View {
             }
             #if !os(watchOS)
             Section("TextField") {
-                SimpleTextField($input, tintColor: .blue)
+                Button { showInput = true } label: {
+                    SimpleCell("输入短文字", systemImage: "rectangle.and.pencil.and.ellipsis.rtl")
+                }
+                SimpleTextField($input)
             }
+            .sheet(isPresented: $showInput, content: {
+                SimpleTextInputView(input, title: "输入短文字") { newText in
+                    input = newText
+                }.presentationDetents([.fraction(0.3)])
+            })
             #endif
         }
     }
