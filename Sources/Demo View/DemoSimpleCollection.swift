@@ -22,6 +22,15 @@ public struct DemoSimpleCollection: View {
     "删除元素3和4",
     "数组元素去重"]
     
+    @State private var modelArr: [DemoModel] = DemoModel.example
+    let modelTitles = [
+    "根据ID删除第二个值",
+    "将第二个值改为‘Hello‘",
+    "检测第二个值的Index",
+    "是否包含第二个值"]
+    @State private var secondIndex: Int?
+    @State private var isContainSecond: Bool?
+    
     let baseDic: [String: [Int]] = ["a":[1,2,3], "b":[3,4,5], "c":[5,6,7]]
     @State private var answerDic: [Int: String] = [:]
     let dicTitles = [
@@ -40,6 +49,22 @@ public struct DemoSimpleCollection: View {
                     }
                 }
             }
+            Section("根据ID管理数组：\(modelArr.map{$0.name})") {
+                ForEach(0..<modelTitles.count, id: \.self) { index in
+                    Button {
+                        modelAction(index)
+                    } label: {
+                        SimpleCell(modelTitles[index]) {
+                            if index == 2, let secondIndex {
+                                Text(secondIndex.toString())
+                            }else if index == 3, let isContainSecond {
+                                Text(isContainSecond.toString())
+                            }
+                        }
+                    }
+                }
+            }
+            
             Section("基础字典: \(baseDic.description)") {
                 ForEach(0..<dicTitles.count, id: \.self) { index in
                     Button {
@@ -81,6 +106,25 @@ public struct DemoSimpleCollection: View {
         answerArr += [index: newArray]
     }
     
+    private func modelAction(_ index: Int) {
+        var newArray: [DemoModel] = modelArr
+        var second = newArray[1]
+        switch index {
+        case 0:
+            newArray.removeById(second)
+        case 1:
+            second.name = "Hello"
+            newArray.replace(second)
+        case 2:
+            secondIndex = newArray.indexById(second)
+        case 3:
+            isContainSecond = newArray.containById(second)
+        default: break
+        }
+        
+        modelArr = newArray
+    }
+    
     private func dicAction(_ index: Int) {
         var answer: String = ""
         switch index {
@@ -92,6 +136,26 @@ public struct DemoSimpleCollection: View {
         default: break
         }
         answerDic += [index: answer]
+    }
+}
+
+extension DemoSimpleCollection {
+    struct DemoModel: Identifiable {
+        let id: UUID
+        var name: String
+        
+        init(id: UUID = UUID(), name: String) {
+            self.id = id
+            self.name = name
+        }
+        
+        static var example: [DemoModel] {
+            (1...10).map { DemoModel(name: $0.toString()) }
+        }
+    }
+    
+    private var modelId: UUID {
+        modelArr[2].id
     }
 }
 

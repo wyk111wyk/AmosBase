@@ -104,7 +104,7 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
         endLine: Int = 12,
         tintColor: Color = .accentColor,
         style: S = .plain,
-        isFocused: Bool = true,
+        isFocused: Bool = false,
         canClear: Bool = true,
         @ViewBuilder moreMenus: @escaping () -> Menus = { EmptyView() }
     ) {
