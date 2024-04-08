@@ -8,8 +8,12 @@
 import Foundation
 
 public extension Bool {
-    func toString() -> String {
+    var toString: String {
         self ? "Yes" : "No"
+    }
+    
+    var toInt: Int {
+        self ? 1 : 0
     }
 }
 
@@ -25,9 +29,31 @@ public extension Int {
         }
     }
     
+    var toBool: Bool? {
+        if self == 0 {
+            return false
+        }else if self == 1 {
+            return true
+        }else {
+            return nil
+        }
+    }
+    
     /// 转换为 Int16
-    var int16: Int16 {
+    var toInt16: Int16 {
         Int16(self)
+    }
+    
+    var toInt32: Int32 {
+        Int32(self)
+    }
+    
+    var toInt64: Int64 {
+        Int64(self)
+    }
+    
+    var toDouble: Double {
+        Double(self)
     }
 }
 
@@ -37,12 +63,30 @@ extension Int: Identifiable {
 
 public extension Int16 {
     /// 转换为 Int
-    var int: Int {
+    var toInt: Int {
+        Int(self)
+    }
+}
+
+public extension Int32 {
+    /// 转换为 Int
+    var toInt: Int {
+        Int(self)
+    }
+}
+
+public extension Int64 {
+    /// 转换为 Int
+    var toInt: Int {
         Int(self)
     }
 }
 
 public extension Double {
+    var toInt: Int {
+        Int(self)
+    }
+    
     /// 转换为文字
     ///
     /// 默认不带小数点，最多8位
