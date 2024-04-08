@@ -8,7 +8,7 @@
 import Foundation
 
 public extension Bool {
-    var toString: String {
+    func toString() -> String {
         self ? "Yes" : "No"
     }
     
