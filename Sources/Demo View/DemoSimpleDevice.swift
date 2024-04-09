@@ -155,10 +155,7 @@ public struct DemoSimpleDevice: View {
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         DemoSimpleDevice()
     }
-#if canImport(UIKit)
-    .navigationViewStyle(.stack)
-    #endif
 }

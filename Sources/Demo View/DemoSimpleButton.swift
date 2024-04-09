@@ -28,13 +28,15 @@ public struct DemoSimpleButton<V: View>: View {
     }
     
     public var body: some View {
-        Form {
-            cellSection()
-            pickerSection()
-            buttonSection()
+        NavigationStack {
+            Form {
+                cellSection()
+                pickerSection()
+                buttonSection()
+            }
+            .navigationTitle("按钮")
+            .buttonCircleNavi(role: .destructive)
         }
-        .navigationTitle("按钮")
-        .buttonCircleNavi(role: .destructive)
     }
     
     private func cellSection() -> some View {
@@ -137,32 +139,8 @@ public struct DemoSimpleButton<V: View>: View {
     }
 }
 
-extension DemoSimpleButton {
-    struct DemoPickerModel: PickerValueModel {
-        let id: UUID
-        var title: String
-        var iconName: String?
-        var systemImage: String?
-        var contentSystemImage: String?
-        var content: String?
-        
-        static var allContent: [Self] {
-            return (1..<20).map {
-                DemoPickerModel(
-                    id: UUID(),
-                    title: "标题部分 \($0)",
-                    systemImage: "person.crop.circle",
-                    content: "我是详细说明内容 \($0)"
-                )}
-        }
-    }
-}
-
 #Preview("Navi") {
-    NavigationView {
+    NavigationStack {
         DemoSimpleButton()
     }
-#if canImport(UIKit)
-    .navigationViewStyle(.stack)
-    #endif
 }

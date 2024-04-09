@@ -77,10 +77,7 @@ public struct DemoSimpleDate: View {
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         DemoSimpleDate()
     }
-#if canImport(UIKit)
-    .navigationViewStyle(.stack)
-#endif
 }

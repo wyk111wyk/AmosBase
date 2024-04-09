@@ -56,10 +56,7 @@ public struct DemoSimpleAlert: View {
 }
 
 #Preview("Alert") {
-    NavigationView {
+    NavigationStack {
         DemoSimpleAlert()
     }
-    #if canImport(UIKit)
-    .navigationViewStyle(.stack)
-    #endif
 }

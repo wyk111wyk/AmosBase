@@ -15,7 +15,6 @@ public protocol PickerValueModel: Identifiable, Hashable {
     var content: String? { get }
 }
 
-//@available(iOS 16, macOS 13, watchOS 9, *)
 public struct SimplePicker<Value: PickerValueModel>: View {
     @Environment(\.dismiss) private var dismissPage
     // Picker属性
@@ -31,6 +30,8 @@ public struct SimplePicker<Value: PickerValueModel>: View {
     // 保存值的回调（并不直接保存结果）
     let singleSaveAction: (Value) -> Void
     let multipleSaveAction: (Set<Value>) -> Void
+    
+    @State private var searchKey = ""
     
     public init(title: String,
                 maxSelectCount: Int? = 1,
@@ -60,12 +61,19 @@ public struct SimplePicker<Value: PickerValueModel>: View {
         if isPushin {
             contentView()
         }else {
-            NavigationView {
+            NavigationStack {
                 contentView()
             }
-            #if canImport(UIKit)
-            .navigationViewStyle(.stack)
-            #endif
+        }
+    }
+    
+    private var filterValue: [Value] {
+        guard searchKey.isNotEmpty else {
+            return allValue
+        }
+        
+        return allValue.filter { value in
+            value.title.contains(searchKey)
         }
     }
     
@@ -100,7 +108,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
     
     private func contentView() -> some View {
         Form {
-            ForEach(allValue) { value in
+            ForEach(filterValue) { value in
                 Button {
                     select(value)
                 } label: {
@@ -124,6 +132,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
             }
         }
         .navigationTitle(title)
+        .searchable(text: $searchKey)
         .buttonCircleNavi(role: .cancel, isPresent: !isPushin) {dismissPage()}
         .buttonCircleNavi(role: .destructive, isPresent: !dismissAfterTap) {
             if let first = selectValues.first {
@@ -135,6 +144,13 @@ public struct SimplePicker<Value: PickerValueModel>: View {
     }
 }
 
-//#Preview {
-//    SimplePicker()
-//}
+#Preview {
+    let allPickerContent = DemoPickerModel.allContent
+    return NavigationStack {
+        SimplePicker(
+            title: "Picker",
+            allValue: allPickerContent,
+            selectValues: [allPickerContent.randomElement()!]
+        )
+    }
+}

@@ -81,6 +81,9 @@ public struct DemoSimpleCollection: View {
             ToolbarItem(placement: .confirmationAction) {
                 Button {
                     answerDic.removeAll()
+                    modelArr = DemoModel.example
+                    secondIndex = nil
+                    isContainSecond = nil
                 } label: {
                     Image(systemName: "arrow.clockwise")
                 }
@@ -160,10 +163,7 @@ extension DemoSimpleCollection {
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         DemoSimpleCollection()
     }
-#if canImport(UIKit)
-    .navigationViewStyle(.stack)
-    #endif
 }

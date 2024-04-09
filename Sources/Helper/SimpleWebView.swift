@@ -61,13 +61,10 @@ public struct SimpleWebView: View {
     }
     
     private func naviView() -> some View {
-        NavigationView {
+        NavigationStack {
             webView()
                 .buttonCircleNavi(role: .cancel) { dismissPage() }
         }
-        #if canImport(UIKit)
-        .navigationViewStyle(.stack)
-        #endif
     }
     
     private func webView() -> some View {

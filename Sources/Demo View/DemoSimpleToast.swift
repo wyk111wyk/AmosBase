@@ -172,10 +172,7 @@ public struct DemoSimpleToast: View {
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         DemoSimpleToast()
     }
-#if canImport(UIKit)
-    .navigationViewStyle(.stack)
-#endif
 }

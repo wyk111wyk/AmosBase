@@ -228,15 +228,12 @@ struct TapImageAnimation: ViewModifier {
 }
 
 #Preview("Placeholder") {
-    NavigationView {
+    NavigationStack {
         VStack {
             Text("")
         }
         .navigationTitle("Navi Title")
     }
-#if canImport(UIKit)
-    .navigationViewStyle(.stack)
-    #endif
     .simplePlaceholder(isPresent: true,
                        systemImageName: "list.clipboard",
                        title: "Title Title",

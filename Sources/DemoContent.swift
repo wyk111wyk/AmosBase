@@ -63,8 +63,8 @@ public struct DemoContent<V: View>: View {
                         }
                     }
                 }
+#if os(iOS)
                 Section("Navi - 导航") {
-                    #if os(iOS)
                     Button {
                         showMapShare.toggle()
                     } label: {
@@ -81,8 +81,8 @@ public struct DemoContent<V: View>: View {
                     .confirmationDialog("Map Share", isPresented: $showPositionShare) {
                         SimpleNavigation(mode: .position).navigationButtons()
                     }
-                    #endif
                 }
+#endif
                 
                 SimpleCommonAbout(txcId: "123", userId: "123", nickName: "Amos", avatarUrl: "123", appStoreId: "123") {
                     Text("About - 关于")

@@ -42,7 +42,7 @@ public struct SimpleTextInputView: View {
     }
     
     public var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 SimpleTextField(
                     $inputText,
@@ -71,9 +71,6 @@ public struct SimpleTextInputView: View {
             .navigationBarTitleDisplayMode(.inline)
             #endif
         }
-#if canImport(UIKit)
-.navigationViewStyle(.stack)
-#endif
     }
 }
 
