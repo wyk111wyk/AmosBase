@@ -34,6 +34,9 @@ public struct DemoSimpleButton<V: View>: View {
                 pickerSection()
                 buttonSection()
             }
+            .navigationDestination(isPresented: $showPage, destination: {
+                stateView()
+            })
             .navigationTitle("按钮")
             .buttonCircleNavi(role: .destructive)
         }
@@ -71,7 +74,7 @@ public struct DemoSimpleButton<V: View>: View {
                 #if os(iOS) || targetEnvironment(macCatalyst)
                 SimpleMiddleButton("Middle button", role: .none) {
                     confirmShowPage = true }
-                    .fullScreenCover(isPresented: $showPage, content: { stateView() })
+//                    .fullScreenCover(isPresented: $showPage, content: { stateView() })
                     .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
                 #endif
                 SimpleMiddleButton("Middle button", role: .destructive) {}
