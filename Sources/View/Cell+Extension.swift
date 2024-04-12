@@ -17,7 +17,9 @@ public struct SimpleCell<V: View>: View {
     let isDisplay: Bool // 是否展示
     
     let title: String
-    let titleColor: Color?
+    let titleFont: Font
+    let titleColor: Color
+    
     let iconName: String?
     let systemImage: String?
     let bundleImageName: String?
@@ -27,6 +29,8 @@ public struct SimpleCell<V: View>: View {
     let contentSystemImage: String?
     let content: String?
     let contentLine: Int?
+    let contentFont: Font
+    let contentColor: Color
     /// 过度属性：true 将会导致没有任何的StateView
     let fullContent: Bool
     
@@ -38,7 +42,8 @@ public struct SimpleCell<V: View>: View {
     let stateWidth: CGFloat
     
     public init(_ title: String,
-                titleColor: Color? = nil,
+                titleFont: Font = .body,
+                titleColor: Color = .primary,
                 iconName: String? = nil,
                 systemImage: String? = nil,
                 bundleImageName: String? = nil,
@@ -48,6 +53,8 @@ public struct SimpleCell<V: View>: View {
                 contentSystemImage: String? = nil,
                 content: String? = nil,
                 contentLine: Int? = nil,
+                contentFont: Font = .caption,
+                contentColor: Color = .secondary,
                 isDisplay: Bool = true,
                 fullContent: Bool = false,
                 contentSpace: Double = 12,
@@ -56,10 +63,13 @@ public struct SimpleCell<V: View>: View {
                 @ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
         self.isDisplay = isDisplay
         self.title = title
+        self.titleFont = titleFont
         self.titleColor = titleColor
         self.contentSystemImage = contentSystemImage
         self.content = content
         self.contentLine = contentLine
+        self.contentFont = contentFont
+        self.contentColor = contentColor
         self.fullContent = fullContent
         self.iconName = iconName
         self.systemImage = systemImage
@@ -87,7 +97,7 @@ public struct SimpleCell<V: View>: View {
                 }else if let systemImage = systemImage {
                     Image(systemName: systemImage)
                         .frame(width: imageSize, height: imageSize)
-                        .foregroundColor(titleColor ?? .primary)
+                        .foregroundColor(titleColor)
                 }else if let bundleImageName, let bundleImageType {
                     if let bundleImageNameDark {
                         if colorScheme == .dark {
@@ -111,7 +121,8 @@ public struct SimpleCell<V: View>: View {
                 // Title 和 Content
                 VStack(alignment: .leading, spacing: 5) {
                     Text(title.localized())
-                        .foregroundColor(titleColor ?? .primary)
+                        .font(titleFont)
+                        .foregroundColor(titleColor)
                     Group {
                         if let content = content, !content.isEmpty,
                            let contentSystemImage = contentSystemImage, contentSystemImage.count > 0 {
@@ -120,8 +131,8 @@ public struct SimpleCell<V: View>: View {
                             Text(content.localized())
                         }
                     }
-                    .foregroundColor(.secondary)
-                    .font(.caption)
+                    .foregroundColor(contentColor)
+                    .font(contentFont)
                     .lineLimit(contentLine)
                 }
                 

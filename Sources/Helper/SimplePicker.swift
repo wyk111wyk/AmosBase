@@ -21,6 +21,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
     let title: String
     let maxSelectCount: Int
     let themeColor: Color
+    let showFullContent: Bool
     let dismissAfterTap: Bool // 点击就退出
     let isPushin: Bool // 是否使用费Link进入
     // 选择范围
@@ -36,6 +37,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
     public init(title: String,
                 maxSelectCount: Int? = 1,
                 themeColor: Color = .green,
+                showFullContent: Bool = true,
                 dismissAfterTap: Bool = false,
                 isPushin: Bool = true,
                 allValue: [Value],
@@ -49,6 +51,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
             self.maxSelectCount = allValue.count
         }
         self.themeColor = themeColor
+        self.showFullContent = showFullContent
         self.dismissAfterTap = dismissAfterTap
         self.isPushin = isPushin
         self.allValue = allValue
@@ -118,7 +121,9 @@ public struct SimplePicker<Value: PickerValueModel>: View {
                         iconName: value.iconName,
                         systemImage: value.systemImage,
                         contentSystemImage: value.contentSystemImage,
-                        content: value.content
+                        content: value.content,
+                        contentColor: hasSelected(value) ? .primary : .secondary,
+                        fullContent: showFullContent
                     ) {
                         if hasSelected(value) {
                             Image(systemName: "checkmark.circle.fill")
