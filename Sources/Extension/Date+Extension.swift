@@ -232,6 +232,27 @@ public extension Date {
 }
 
 public extension Date {
+    /// 根据传入的值生成一个日期（日期默认当前值 / 时间默认 0:00）
+    static func getDate(
+        year: Int? = nil,
+        month: Int? = nil,
+        day: Int? = nil,
+        hour: Int = 0,
+        minute: Int = 0
+    ) -> Date {
+        let now = Date()
+        let components = DateComponents(year: year ?? now.getYear(),
+                                        month: month ?? now.getMonth(),
+                                        day: day ?? now.getDay(),
+                                        hour: hour,
+                                        minute: minute)
+        if let date = Calendar.current.date(from: components) {
+            return date
+        } else {
+            return now
+        }
+    }
+    
     /// 判断：是否是同一个时间段
     ///
     /// 例子：根据传入 component 不同，可以判断是否是同一天、同一个小时、同一个月
