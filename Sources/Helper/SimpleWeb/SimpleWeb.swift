@@ -18,7 +18,7 @@ public struct SimpleWebView: View {
     @StateObject private var model = SimpleWebModel()
     
     // 兔小巢的link是 https://support.qq.com/product/{产品id}
-    let url: URL
+    @Binding var url: URL
     let account: SimpleFBUser?
     let isPushIn: Bool
     let showReloadButton: Bool
@@ -26,11 +26,11 @@ public struct SimpleWebView: View {
     @State private var isLoading = false
     @State private var showErrorAlert = false
     
-    public init(url: URL,
+    public init(url: Binding<URL>,
                 pushIn: Bool = false,
                 showReloadButton: Bool = true,
                 account: SimpleFBUser? = nil) {
-        self.url = url
+        self._url = url
         self.isPushIn = pushIn
         self.showReloadButton = showReloadButton
         self.account = account
@@ -159,6 +159,7 @@ public class SimpleWebCoordinator: NSObject, WKNavigationDelegate {
 }
 
 #Preview {
-    SimpleWebView(url: URL(string: "https://www.baidu.com")!, pushIn: false)
+    SimpleWebView(url: .constant(URL(string: "https://www.baidu.com")!),
+                  pushIn: false)
 }
 #endif
