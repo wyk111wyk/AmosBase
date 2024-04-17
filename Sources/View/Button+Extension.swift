@@ -124,6 +124,7 @@ extension View {
                                  labelColor: Color? = nil,
                                  isDisable: Bool = false,
                                  isPresent: Bool = true,
+                                 isLoading: Bool = false,
                                  placement: ToolbarItemPlacement? = nil,
                                  callback: @escaping () -> Void = {}) -> some View {
         modifier(CircleButtonNavi(role: role,
@@ -131,6 +132,7 @@ extension View {
                                   labelColor: labelColor,
                                   isDisable: isDisable,
                                   isPresent: isPresent,
+                                  isLoading: isLoading,
                                   placement: placement,
                                   callback: callback))
     }
@@ -145,6 +147,7 @@ extension View {
                                  labelColor: Color? = nil,
                                  isDisable: Bool = false,
                                  isPresent: Bool = true,
+                                 isLoading: Bool = false,
                                  alignment: Alignment? = nil,
                                  callback: @escaping () -> Void = {}) -> some View {
         modifier(CircleButtonPage(role: role,
@@ -152,6 +155,7 @@ extension View {
                                   labelColor: labelColor,
                                   isDisable: isDisable,
                                   isPresent: isPresent,
+                                  isLoading: isLoading,
                                   alignment: alignment,
                                   callback: callback))
     }
@@ -166,6 +170,7 @@ extension View {
                                  labelColor: Color? = nil,
                                  isDisable: Bool = false,
                                  isPresent: Bool = true,
+                                 isLoading: Bool = false,
                                  key: KeyEquivalent? = nil,
                                  modifiers: EventModifiers? = nil,
                                  placement: ToolbarItemPlacement? = nil,
@@ -175,6 +180,7 @@ extension View {
                                   labelColor: labelColor,
                                   isDisable: isDisable,
                                   isPresent: isPresent,
+                                  isLoading: isLoading,
                                   key: key,
                                   modifiers: modifiers,
                                   placement: placement,
@@ -191,6 +197,7 @@ extension View {
                                  labelColor: Color? = nil,
                                  isDisable: Bool = false,
                                  isPresent: Bool = true,
+                                 isLoading: Bool = false,
                                  key: KeyEquivalent? = nil,
                                  modifiers: EventModifiers? = nil,
                                  alignment: Alignment? = nil,
@@ -200,6 +207,7 @@ extension View {
                                   labelColor: labelColor,
                                   isDisable: isDisable,
                                   isPresent: isPresent,
+                                  isLoading: isLoading,
                                   key: key,
                                   modifiers: modifiers,
                                   alignment: alignment,
@@ -255,14 +263,23 @@ public struct CircleButton: View {
     }
     
     public var body: some View {
-        Button(title,
-               systemImage: imageName,
-               role: role,
-               action: callback)
-        .modifier(ButtonCircleBackground(labelColor))
-        .modifier(ButtonShortkey(role: role,
-                                 key: key,
-                                 modifiers: modifiers))
+        if isLoading {
+            Button {} label: {
+                ProgressView()
+                    .tint(labelColor)
+            }
+//            .modifier(ButtonCircleBackground(labelColor))
+            .disabled(true)
+        }else {
+            Button(title,
+                   systemImage: imageName,
+                   role: role,
+                   action: callback)
+            .modifier(ButtonCircleBackground(labelColor))
+            .modifier(ButtonShortkey(role: role,
+                                     key: key,
+                                     modifiers: modifiers))
+        }
     }
     #else
     public init(role: ButtonRole? = nil,
@@ -309,6 +326,7 @@ struct CircleButtonPage: ViewModifier {
     let labelColor: Color?
     let isDisable: Bool
     let isPresent: Bool
+    let isLoading: Bool
     
     let alignment: Alignment
     
@@ -322,6 +340,7 @@ struct CircleButtonPage: ViewModifier {
          labelColor: Color? = nil,
          isDisable: Bool = false,
          isPresent: Bool = true,
+         isLoading: Bool = false,
          key: KeyEquivalent? = nil,
          modifiers: EventModifiers? = nil,
          alignment: Alignment? = nil,
@@ -331,6 +350,7 @@ struct CircleButtonPage: ViewModifier {
         self.labelColor = labelColor
         self.isDisable = isDisable
         self.isPresent = isPresent
+        self.isLoading = isLoading
         self.callback = callback
         self.key = key
         self.modifiers = modifiers
@@ -351,6 +371,7 @@ struct CircleButtonPage: ViewModifier {
                 CircleButton(role: role,
                              imageName: imageName,
                              labelColor: labelColor,
+                             isLoading: isLoading,
                              key: key,
                              modifiers: modifiers,
                              callback: callback)
@@ -367,6 +388,7 @@ struct CircleButtonPage: ViewModifier {
          labelColor: Color? = nil,
          isDisable: Bool = false,
          isPresent: Bool = true,
+         isLoading: Bool = false,
          alignment: Alignment? = nil,
          callback: @escaping () -> Void = {}) {
         self.role = role
@@ -374,6 +396,7 @@ struct CircleButtonPage: ViewModifier {
         self.labelColor = labelColor
         self.isDisable = isDisable
         self.isPresent = isPresent
+        self.isLoading = isLoading
         self.callback = callback
         if let alignment {
             self.alignment = alignment
@@ -392,6 +415,7 @@ struct CircleButtonPage: ViewModifier {
                 CircleButton(role: role,
                              imageName: imageName,
                              labelColor: labelColor,
+                             isLoading: isLoading,
                              callback: callback)
                 .disabled(isDisable)
                 .padding()
@@ -454,6 +478,7 @@ struct CircleButtonNavi: ViewModifier {
                     CircleButton(role: role,
                                  imageName: imageName,
                                  labelColor: labelColor,
+                                 isLoading: isLoading,
                                  key: key,
                                  modifiers: modifiers,
                                  callback: callback)
@@ -498,6 +523,7 @@ struct CircleButtonNavi: ViewModifier {
                     CircleButton(role: role,
                                  imageName: imageName,
                                  labelColor: labelColor,
+                                 isLoading: isLoading,
                                  callback: callback)
                     .disabled(isDisable)
                 }
