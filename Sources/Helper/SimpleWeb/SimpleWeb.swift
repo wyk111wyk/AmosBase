@@ -24,7 +24,7 @@ public struct SimpleWebView: View {
     let showReloadButton: Bool
     
     @State private var isLoading = false
-    @State private var showErrorAlert = false
+    @State private var showErrorAlert: Bool? = false
     
     public init(url: URL,
                 pushIn: Bool = false,
@@ -62,10 +62,7 @@ public struct SimpleWebView: View {
 //            debugPrint("URL改变：\(new.absoluteString)")
             model.loadRequest(.init(url: new))
         }
-        .simpleAlert(type: .confirmCancel,
-                     title: "内容载入失败",
-                     message: "请检查网络状况后稍后重试",
-                     isPresented: $showErrorAlert)
+        .simpleErrorToast(presentState: $showErrorAlert, title: "内容载入失败")
         .buttonCircleNavi(imageName: "arrow.triangle.2.circlepath",
                           isLoading: isLoading) {
             model.reload()
@@ -75,13 +72,13 @@ public struct SimpleWebView: View {
 
 public struct SimpleWebViewVC: UIViewRepresentable {
     @Binding var isLoading: Bool
-    @Binding var showErrorAlert: Bool
+    @Binding var showErrorAlert: Bool?
     @State private var urlRequest: URLRequest
     @ObservedObject var model: SimpleWebModel
     
     init(url: URL,
          isloading: Binding<Bool>,
-         showErrorAlert: Binding<Bool>,
+         showErrorAlert: Binding<Bool?>,
          account: SimpleFBUser?,
          model: SimpleWebModel) {
         self._isLoading = isloading
@@ -154,8 +151,10 @@ public class SimpleWebCoordinator: NSObject, WKNavigationDelegate {
     
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         print("3.加载网页失败，失败原因:\n\(error)")
+        if (error as NSError).code != NSURLErrorCancelled {
+            parent.showErrorAlert = true
+        }
         parent.isLoading = false
-        parent.showErrorAlert = true
     }
 }
 
