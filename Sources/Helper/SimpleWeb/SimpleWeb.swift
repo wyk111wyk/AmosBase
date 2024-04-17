@@ -30,7 +30,7 @@ public struct SimpleWebView: View {
                 pushIn: Bool = false,
                 showReloadButton: Bool = true,
                 account: SimpleFBUser? = nil) {
-        self._url = url
+        self.url = url
         self.isPushIn = pushIn
         self.showReloadButton = showReloadButton
         self.account = account
@@ -160,7 +160,7 @@ public class SimpleWebCoordinator: NSObject, WKNavigationDelegate {
 }
 
 #Preview {
-    SimpleWebView(url: .constant(URL(string: "https://www.baidu.com")!),
+    SimpleWebView(url: URL(string: "https://www.baidu.com")!,
                   pushIn: false)
 }
 #endif
