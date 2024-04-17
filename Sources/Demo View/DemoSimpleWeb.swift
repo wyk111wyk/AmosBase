@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if !os(watchOS) && !os(macOS)
 public struct DemoSimpleWeb: View {
     enum PageType {
         case hupu, nba
@@ -48,3 +49,4 @@ extension DemoSimpleWeb {
 #Preview {
     DemoSimpleWeb()
 }
+#endif
