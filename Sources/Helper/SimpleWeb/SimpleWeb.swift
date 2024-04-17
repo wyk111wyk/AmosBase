@@ -18,7 +18,7 @@ public struct SimpleWebView: View {
     @StateObject private var model = SimpleWebModel()
     
     // 兔小巢的link是 https://support.qq.com/product/{产品id}
-    var url: URL
+    let url: URL
     let account: SimpleFBUser?
     let isPushIn: Bool
     let showReloadButton: Bool
@@ -57,6 +57,11 @@ public struct SimpleWebView: View {
                         showErrorAlert: $showErrorAlert,
                         account: account,
                         model: model)
+        .ignoresSafeArea()
+        .onChange(of: url) { new in
+//            debugPrint("URL改变：\(new.absoluteString)")
+            model.loadRequest(.init(url: new))
+        }
         .simpleAlert(type: .confirmCancel,
                      title: "内容载入失败",
                      message: "请检查网络状况后稍后重试",
@@ -65,17 +70,13 @@ public struct SimpleWebView: View {
                           isLoading: isLoading) {
             model.reload()
         }
-                          .onChange(of: url) { _ in
-                              debugPrint("URL改变：\(url.absoluteString)")
-                              model.reload()
-                          }
     }
 }
 
 public struct SimpleWebViewVC: UIViewRepresentable {
     @Binding var isLoading: Bool
     @Binding var showErrorAlert: Bool
-    let urlRequest: URLRequest
+    @State private var urlRequest: URLRequest
     @ObservedObject var model: SimpleWebModel
     
     init(url: URL,
@@ -86,7 +87,6 @@ public struct SimpleWebViewVC: UIViewRepresentable {
         self._isLoading = isloading
         self._showErrorAlert = showErrorAlert
         self.model = model
-        
         var request: URLRequest = .init(url: url)
         
         if let account = account {
@@ -120,8 +120,8 @@ public struct SimpleWebViewVC: UIViewRepresentable {
     }
     
     public func updateUIView(_ webview: WKWebView, context: UIViewRepresentableContext<SimpleWebViewVC>) {
-//        webview.load(self.urlRequest)
-        //        printDebug("刷新网页")
+//        debugPrint("页面进行刷新")
+//        webview.load(.init(url: url))
     }
 }
 
@@ -145,8 +145,8 @@ public class SimpleWebCoordinator: NSObject, WKNavigationDelegate {
     
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         webView.evaluateJavaScript("document.title") { (response, error) in
-            if let title = response as? String {
-                debugPrint("2.网页加载完毕: \(title)")
+            if let _ = response as? String {
+//                debugPrint("2.网页加载完毕: \(title)")
             }
         }
         parent.isLoading = false

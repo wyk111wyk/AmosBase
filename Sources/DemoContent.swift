@@ -107,10 +107,7 @@ public struct DemoContent<V: View>: View {
                     DemoSimpleButton(stateView: stateView)
                 case 3:
                     #if !os(macOS) && !os(watchOS)
-                    SimpleWebView(url: URL(string: "https://www.baidu.com")!,
-                                  pushIn: true)
-                    .navigationTitle(selectedPage.title)
-                    .navigationBarTitleDisplayMode(.inline)
+                    DemoSimpleWeb()
                     #else
                     Text(selectedPage.title)
                     #endif

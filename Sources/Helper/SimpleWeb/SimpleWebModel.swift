@@ -12,6 +12,10 @@ import WebKit
 public class SimpleWebModel: ObservableObject {
     var webView: WKWebView = WKWebView()
     
+    init() {
+        self.webView = WKWebView()
+    }
+    
     // 刷新页面的方法
     func reload() {
         webView.reload()
