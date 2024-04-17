@@ -18,7 +18,7 @@ public struct SimpleWebView: View {
     @StateObject private var model = SimpleWebModel()
     
     // 兔小巢的link是 https://support.qq.com/product/{产品id}
-    @Binding var url: URL
+    var url: URL
     let account: SimpleFBUser?
     let isPushIn: Bool
     let showReloadButton: Bool
@@ -26,7 +26,7 @@ public struct SimpleWebView: View {
     @State private var isLoading = false
     @State private var showErrorAlert = false
     
-    public init(url: Binding<URL>,
+    public init(url: URL,
                 pushIn: Bool = false,
                 showReloadButton: Bool = true,
                 account: SimpleFBUser? = nil) {
@@ -66,6 +66,7 @@ public struct SimpleWebView: View {
             model.reload()
         }
                           .onChange(of: url) { _ in
+                              debugPrint("URL改变：\(url.absoluteString)")
                               model.reload()
                           }
     }
