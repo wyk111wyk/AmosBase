@@ -19,9 +19,23 @@ import AppKit
 public typealias SFColor = NSColor
 #endif
 
+extension Color: Identifiable {
+    public var id: String {
+        self.hexString
+    }
+}
+
 public extension Color {
+    /// 简化了RGB的颜色生成，可以直接使用 rgb(102,151,243)
+    init(r: Double, g: Double, b: Double) {
+        self.init(red: r/255, green: g/255, blue: b/255)
+    }
+    
     #if canImport(UIKit)
-    /// HEX颜色 - 使用hex创建颜色，可不带 # 符号
+    init(sfColor: SFColor) {
+        self.init(sfColor)
+    }
+    /// HEX颜色 - 使用hex创建颜色，带不带 # 符号都可以
     ///
     /// 常见颜色：黑 000000 白 FFFFFF 淡灰 D3D3D3
     ///
@@ -41,6 +55,10 @@ public extension Color {
     }
     
     #else
+    init(sfColor: SFColor) {
+        self.init(nsColor: sfColor)
+    }
+    
     /// HEX颜色 - 使用hex创建颜色，可不带 # 符号
     ///
     /// 常见颜色：黑 000000 白 FFFFFF 淡灰 D3D3D3
@@ -61,6 +79,12 @@ public extension Color {
     }
     #endif
     
+    /// 混合颜色
+    func blend(to color: Color) -> Color {
+        let blendColor = SFColor.blend(SFColor(self), with: SFColor(color))
+        return Color.init(sfColor: blendColor)
+    }
+    
     var hexString: String {
         SFColor(self).hexString
     }
@@ -76,6 +100,17 @@ public extension Color {
         let green = Double.random(in: 0..<1, using: &generator)
         let blue = Double.random(in: 0..<1, using: &generator)
         return Color(red: red, green: green, blue: blue)
+    }
+    
+    /**
+     Determines if the color object is dark or light.
+
+     It is useful when you need to know whether you should display the text in black or white.
+
+     - returns: A boolean value to know whether the color is light. If true the color is light, dark otherwise.
+     */
+    func isLight() -> Bool {
+        SFColor(self).isLight()
     }
 }
 
@@ -170,6 +205,43 @@ public extension SFColor {
     /// SwifterSwift: Alpha of Color (read-only).
     var alpha: CGFloat {
         return cgColor.alpha
+    }
+    
+    /**
+     Determines if the color object is dark or light.
+
+     It is useful when you need to know whether you should display the text in black or white.
+
+     - returns: A boolean value to know whether the color is light. If true the color is light, dark otherwise.
+     */
+    func isLight() -> Bool {
+      let components = toRGBAComponents()
+      let brightness = ((components.r * 299.0) + (components.g * 587.0) + (components.b * 114.0)) / 1000.0
+
+      return brightness >= 0.5
+    }
+    
+    /**
+     Returns the RGBA (red, green, blue, alpha) components.
+
+     - returns: The RGBA components as a tuple (r, g, b, a).
+     */
+    func toRGBAComponents() -> (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
+      var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+
+      #if os(iOS) || os(tvOS) || os(watchOS)
+        getRed(&r, green: &g, blue: &b, alpha: &a)
+
+        return (r, g, b, a)
+      #elseif os(macOS)
+        guard let rgbaColor = self.usingColorSpace(.deviceRGB) else {
+          fatalError("Could not convert color to RGBA.")
+        }
+
+        rgbaColor.getRed(&r, green: &g, blue: &b, alpha: &a)
+
+        return (r, g, b, a)
+      #endif
     }
 }
 

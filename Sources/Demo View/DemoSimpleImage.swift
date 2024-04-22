@@ -8,10 +8,9 @@
 import SwiftUI
 import PhotosUI
 
-@available(iOS 16, macOS 13, watchOS 9, *)
-public struct DemoSimpleColor: View {
+public struct DemoSimpleImage: View {
     let title: String
-    public init(_ title: String = "Color & Image") {
+    public init(_ title: String = "Image 图片") {
         self.title = title
     }
     
@@ -24,12 +23,10 @@ public struct DemoSimpleColor: View {
     @State private var scanText: String? = nil
     @State private var faceCount: Int? = nil
     
+    @State private var selectedPhotoIndex: Int? = nil
+    
     @State private var aveColor: Color?
     @State private var randomColor: Color?
-    
-    @State private var pickColor: Color = .red
-    @State private var isLighten = false
-    @State private var isDarken = false
     
     public var body: some View {
         Form {
@@ -66,17 +63,16 @@ public struct DemoSimpleColor: View {
                     if let faceCount { Text(faceCount.toString()) }
                 }
             }
-            #endif
-            
-            Section("颜色处理") {
-                randomColorCell()
-                #if !os(watchOS)
-                ColorPicker("挑选颜色", selection: $pickColor)
-                #endif
-                SimpleCell("HEX", stateText: pickColor.hexString)
-                darkenSection()
-                lightenSection()
+            Section {
+                Button {
+                    selectedPhotoIndex = 0
+                } label: {
+                    Label("Image - 图片查看", systemImage: "photo.on.rectangle.angled")
+                }
+                .simpleImageViewer(selectedIndex: $selectedPhotoIndex,
+                                   allPhotos: ImageStoreModel.examples())
             }
+            #endif
         }
         .navigationTitle(title)
     }
@@ -85,49 +81,10 @@ public struct DemoSimpleColor: View {
         Circle().frame(width: 30)
             .foregroundStyle(color)
     }
-    
-    @ViewBuilder
-    private func darkenSection() -> some View {
-        Toggle("颜色变暗", isOn: $isDarken)
-        if isDarken {
-            SimpleCell("变暗60%") { circleView(pickColor.darken(by: 0.6)) }
-            SimpleCell("变暗50%") { circleView(pickColor.darken(by: 0.5)) }
-            SimpleCell("变暗40%") { circleView(pickColor.darken(by: 0.4)) }
-            SimpleCell("变暗30%") { circleView(pickColor.darken(by: 0.3)) }
-            SimpleCell("变暗20%") { circleView(pickColor.darken(by: 0.2)) }
-            SimpleCell("变暗10%") { circleView(pickColor.darken(by: 0.1)) }
-        }
-    }
-    
-    @ViewBuilder
-    private func lightenSection() -> some View {
-        Toggle("颜色变淡", isOn: $isLighten)
-        if isLighten {
-            SimpleCell("变淡10%") { circleView(pickColor.lighten(by: 0.1)) }
-            SimpleCell("变淡20%") { circleView(pickColor.lighten(by: 0.2)) }
-            SimpleCell("变淡30%") { circleView(pickColor.lighten(by: 0.3)) }
-            SimpleCell("变淡40%") { circleView(pickColor.lighten(by: 0.4)) }
-            SimpleCell("变淡50%") { circleView(pickColor.lighten(by: 0.5)) }
-            SimpleCell("变淡60%") { circleView(pickColor.lighten(by: 0.6)) }
-        }
-    }
-    
-    @ViewBuilder
-    private func randomColorCell() -> some View {
-        #if canImport(UIKit)
-        Button {
-            randomColor = Color.random()
-        } label: {
-            SimpleCell("随机颜色") {
-                if let randomColor { circleView(randomColor) }
-            }
-        }
-        #endif
-    }
 }
 
 @available(iOS 16, macOS 13, watchOS 9, *)
-extension DemoSimpleColor {
+extension DemoSimpleImage {
     @ViewBuilder
     private func imagePicker() -> some View {
         if let selectedImage {
@@ -183,9 +140,8 @@ extension DemoSimpleColor {
     }
 }
 
-@available(iOS 16, macOS 13, watchOS 9, *)
-#Preview("Color") {
+#Preview("Image") {
     NavigationStack {
-        DemoSimpleColor()
+        DemoSimpleImage()
     }
 }

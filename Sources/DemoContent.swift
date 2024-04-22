@@ -18,8 +18,6 @@ public struct DemoContent<V: View>: View {
     @State private var showMapShare = false
     @State private var showPositionShare = false
     
-    @State private var selectedPhotoIndex: Int? = nil
-    
     @ViewBuilder let stateView: () -> V
     public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
         self.stateView = stateView
@@ -39,15 +37,6 @@ public struct DemoContent<V: View>: View {
                     } label: {
                         Label("Toast - Sheet页面", systemImage: "bell")
                     }
-#if os(iOS)
-                    Button {
-                        selectedPhotoIndex = 0
-                    } label: {
-                        Label("Image - 图片查看", systemImage: "photo.on.rectangle.angled")
-                    }
-                    .simpleImageViewer(selectedIndex: $selectedPhotoIndex,
-                                       allPhotos: ImageStoreModel.examples())
-#endif
                 }
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
@@ -120,8 +109,10 @@ public struct DemoContent<V: View>: View {
                 case 7:
                     DemoSimpleDate()
                 case 8:
-                    DemoSimpleColor()
+                    DemoSimpleImage()
                 case 9:
+                    DemoSimpleColor()
+                case 10:
                     DemoSimpleUnit()
                 default:
                     Text(selectedPage.title)
@@ -166,7 +157,8 @@ struct Page: Identifiable, Equatable, Hashable {
         [.init(id: 6, title: "Collection - 集合"),
          .init(id: 7, title: "Date - 日期"),
          .init(id: 8, title: "Image - 图片"),
-         .init(id: 9, title: "Units - 单位")
+         .init(id: 9, title: "Color - 颜色"),
+         .init(id: 10, title: "Units - 单位")
         ]
     }
 }
