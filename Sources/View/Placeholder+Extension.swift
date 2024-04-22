@@ -15,9 +15,10 @@ public extension View {
     /// 可添加自定义的 Button 或者其他 View
     func simplePlaceholder<V: View>(
         isPresent: Bool,
+        type: SimplePlaceholderType? = nil,
         systemImageName: String? = nil,
         imageName: String? = nil,
-        imageLength: CGFloat = 90,
+        imageLength: CGFloat = 120,
         title: String,
         subtitle: String? = nil,
         content: String? = nil,
@@ -26,10 +27,11 @@ public extension View {
         titleColor: Color = .primary,
         subtitleColor: Color = .gray,
         contentColor: Color = .secondary,
-        offsetY: CGFloat = -30,
+        offsetY: CGFloat = 0,
         maxWidth: CGFloat = 250,
         @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }) -> some View {
             modifier(SimplePlaceholderModify(isPresent: isPresent,
+                                             type: type,
                                              systemImageName: systemImageName,
                                              imageName: imageName,
                                              imageLength: imageLength,
@@ -49,10 +51,11 @@ public extension View {
 
 struct SimplePlaceholderModify<V: View>: ViewModifier {
     let isPresent: Bool
-    
+    let type: SimplePlaceholderType?
+        
     var systemImageName: String? = nil
     var imageName: String? = nil
-    var imageLength: CGFloat = 90
+    var imageLength: CGFloat = 120
     var title: String
     var subtitle: String? = nil
     var contentText: String? = nil
@@ -71,6 +74,7 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
         if isPresent {
             content.overlay(alignment: .center) {
                 SimplePlaceholder(
+                    type: type,
                     systemImageName: systemImageName,
                     imageName: imageName,
                     title: title,
@@ -92,13 +96,26 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
     }
 }
 
+public enum SimplePlaceholderType {
+    case listEmpty, favorEmpty
+    
+    var image: Image {
+        switch self {
+        case .listEmpty:
+            return .init(packageResource: "empty", ofType: "png")
+        case .favorEmpty:
+            return .init(packageResource: "star", ofType: "png")
+        }
+    }
+}
+
 /// 简单UI组件 -  定制化的占位符
 ///
 /// 设置 themeColor 后替代所有颜色
 ///
 /// 可添加自定义的 Button 或者其他 View
 public struct SimplePlaceholder<V: View>: View {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    let type: SimplePlaceholderType?
     
     let systemImageName: String?
     let imageName: String?
@@ -121,7 +138,8 @@ public struct SimplePlaceholder<V: View>: View {
     
     @State private var isAnimate = false
     
-    public init(systemImageName: String? = nil,
+    public init(type: SimplePlaceholderType? = nil,
+                systemImageName: String? = nil,
                 imageName: String? = nil,
                 title: String,
                 subtitle: String? = nil,
@@ -131,12 +149,13 @@ public struct SimplePlaceholder<V: View>: View {
                 titleColor: Color = .primary,
                 subtitleColor: Color = .gray,
                 contentColor: Color = .secondary,
-                imageLength: CGFloat = 90,
+                imageLength: CGFloat = 120,
                 titleFont: Font = .title,
                 contentSpace: CGFloat = 15,
                 offsetY: CGFloat = -30,
                 maxWidth: CGFloat = 250,
                 @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }) {
+        self.type = type
         self.systemImageName = systemImageName
         self.imageName = imageName
         self.title = title
@@ -174,7 +193,11 @@ public struct SimplePlaceholder<V: View>: View {
     
     public var body: some View {
         VStack(spacing: contentSpace) {
-            if let systemImageName {
+            if let type {
+                type.image
+                    .imageModify(length: imageLength)
+                    .modifier(TapImageAnimation())
+            }else if let systemImageName {
                 Image(systemName: systemImageName)
                     .imageModify(color: imageColor, length: imageLength)
                     .modifier(TapImageAnimation())
@@ -206,7 +229,7 @@ public struct SimplePlaceholder<V: View>: View {
             buttonView()
         }
         .frame(maxWidth: maxWidth)
-        .offset(x: 0, y: horizontalSizeClass == .regular ? 0 : offsetY)
+        .offset(x: 0, y: offsetY)
     }
 }
 
@@ -235,6 +258,7 @@ struct TapImageAnimation: ViewModifier {
         .navigationTitle("Navi Title")
     }
     .simplePlaceholder(isPresent: true,
+                       type: .favorEmpty,
                        systemImageName: "list.clipboard",
                        title: "Title Title",
                        subtitle: "Subtitle Subtitle Subtitle",
