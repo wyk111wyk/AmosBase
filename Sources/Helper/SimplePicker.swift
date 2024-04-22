@@ -123,7 +123,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
                         contentSystemImage: value.contentSystemImage,
                         content: value.content,
                         contentColor: hasSelected(value) ? .primary : .secondary,
-                        fullContent: showFullContent
+                        fullContent: !showFullContent
                     ) {
                         if hasSelected(value) {
                             Image(systemName: "checkmark.circle.fill")
