@@ -28,5 +28,12 @@ public extension Binding {
             set: { if !$0 { value.wrappedValue = nil } }
         )
     }
+    
+    static func isOptionalPresented<V>(_ value: Binding<V?>) -> Binding<Bool?> {
+        Binding<Bool?>(
+            get: { value.wrappedValue != nil },
+            set: { if $0 == false || $0 == nil { value.wrappedValue = nil } }
+        )
+    }
 }
         
