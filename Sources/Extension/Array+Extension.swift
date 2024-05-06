@@ -94,6 +94,18 @@ public extension Array {
 }
 
 public extension Array where Element: Identifiable {
+    /// 添加或者更新一个元素
+    @discardableResult
+    mutating func addOrReplace(_ item: Element) -> [Element] {
+        if self.containById(item) {
+            self.replace(item)
+        }else {
+            self.append(item)
+        }
+        
+        return self
+    }
+    
     /// SwifterSwift: 根据Id删除数组中的值。
     ///
     /// - Returns: self after removing all instances of item.
@@ -106,9 +118,7 @@ public extension Array where Element: Identifiable {
     /// 根据 Id 替换数组中的值。
     @discardableResult
     mutating func replace(_ item: Element) -> [Element] {
-        if let index = self.firstIndex(where: {
-            $0.id == item.id
-        }) {
+        if let index = self.indexById(item) {
             self[index] = item
         }
         return self
