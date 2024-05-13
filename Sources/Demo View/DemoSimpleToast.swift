@@ -46,7 +46,11 @@ public struct DemoSimpleToast: View {
                     simpleError = true
                 }
                 Button("Simple Loading") {
-                    simpleLoading = true
+                    if simpleLoading == true {
+                        simpleLoading = nil
+                    }else {
+                        simpleLoading = true
+                    }
                 }
                 Button("Simple Success") {
                     simpleSuccess = true
@@ -80,9 +84,9 @@ public struct DemoSimpleToast: View {
             loadingTest()
         }
         .simpleErrorToast(presentState: $simpleError, title: "发生了一个错误", subtitle: "请仔细检查网络连接")
-        .simpleSuccessToast(presentState: $simpleSuccess, title: "保存数据成功")
-        .simpleLoadingToast(presentState: $simpleLoading, title: "正在载入...")
-        .simpleToast(presentState: $selectedToast) {
+        .simpleSuccessToast(presentState: $simpleSuccess, title: "保存数据成功", isDebug: true)
+        .simpleLoadingToast(presentState: $simpleLoading, title: "正在载入...", isDebug: true)
+        .simpleToast(presentState: $selectedToast, isDebug: true) {
             selectedToast?.toast(variableTitle: $toastTitle)
         }
     }

@@ -142,6 +142,8 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
                         self.workItem = nil
                     }
                     onAppearAction()
+                }else {
+                    dismissToast()
                 }
             })
     }
