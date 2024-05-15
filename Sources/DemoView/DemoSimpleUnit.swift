@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 public struct DemoSimpleUnit: View {
     
     let title: String
@@ -20,6 +19,7 @@ public struct DemoSimpleUnit: View {
     @State private var speed: Double = 170
     @State private var temperature: Double = 18.7
     @State private var duration: Double = 22000
+    @State private var disDate: Date = Date().add(minute: 33, hour: 2)
     
     public var body: some View {
         Form {
@@ -56,6 +56,7 @@ public struct DemoSimpleUnit: View {
                 SimpleCell(duration.toDuration(style: .abbreviated))
                 SimpleCell(duration.toDuration(locale: .zhHans))
                 SimpleCell(duration.toDuration(style: .spellOut, locale: .zhHans))
+                SimpleCell(disDate.toString_Relative(locale: .zhHans, timeStyle: .numeric))
             }
         }
         .navigationTitle(title)
@@ -71,7 +72,6 @@ public struct DemoSimpleUnit: View {
     }
 }
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 #Preview {
     NavigationStack {
         DemoSimpleUnit()

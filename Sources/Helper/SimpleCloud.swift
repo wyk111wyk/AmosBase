@@ -66,7 +66,7 @@ public class SimpleCloudHelper {
         return result.matchResults
     }
     
-    // 获取符合条件的一张图片
+    /// 获取符合条件的一张图片
     public func fetchSingleImage(type: DatabaseType = .privateType,
                                  record: String = "ImageRecord",
                                  idKey: String?,
