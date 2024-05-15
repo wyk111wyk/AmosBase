@@ -25,6 +25,7 @@ public struct DemoSimpleUpload: View {
     @State private var isLoading = false
     @State private var allImageList: [GithubRepoFileListModel] = []
     @State private var deleteImage: GithubRepoFileListModel?
+    @State private var error: Error?
     
     let picBed: SimplePicBed
     init(gitToken: String = "") {
@@ -68,6 +69,7 @@ public struct DemoSimpleUpload: View {
 //                selectedImage = defaultImage
             }
         }
+        .simpleErrorToast(presentState: .isOptionalPresented($error), title: error?.localizedDescription ?? "发生错误")
     }
     
     @ViewBuilder
@@ -155,8 +157,12 @@ public struct DemoSimpleUpload: View {
     private func deleteFile(_ gitImage: GithubRepoFileListModel) {
         Task {
             isLoading = true
-            if await picBed.deleteFile(for: gitImage) {
-                allImageList.removeById(gitImage)
+            do {
+                if try await picBed.deleteFile(for: gitImage) {
+                    allImageList.removeById(gitImage)
+                }
+            }catch {
+                self.error = error
             }
             isLoading = false
         }
@@ -171,19 +177,27 @@ extension DemoSimpleUpload {
         
         Task {
             isLoading = true
-            let content = imageData.base64EncodedString()
-            await picBed.uploadFile(
-                content: content,
-                name: timeStampName,
-                type: "jpeg"
-            )
+            do {
+                let content = imageData.base64EncodedString()
+                try await picBed.uploadFile(
+                    content: content,
+                    name: timeStampName,
+                    type: "jpeg"
+                )
+            }catch {
+                self.error = error
+            }
             isLoading = false
         }
     }
     
     private func fetchImageList() async {
         isLoading = true
-        allImageList = await picBed.fetchFileList()
+        do {
+            allImageList = try await picBed.fetchFileList()
+        }catch {
+            self.error = error
+        }
         isLoading = false
     }
 }

@@ -13,15 +13,13 @@ public class SimplePicBed: GithubAPI {
     let branch = "main"
     let defaultPath = "AmosBase/"
     
-    var error: Error?
-    
     public init(gitToken: String) {
         let authentication = TokenGithubAuth(token: gitToken)
         super.init(authentication: authentication)
     }
     
     /// 获取 Path 内的所有文件
-    public func fetchFileList(path: String? = nil) async -> [GithubRepoFileListModel] {
+    public func fetchFileList(path: String? = nil) async throws -> [GithubRepoFileListModel] {
         let filePath: String = if let path { path } else { defaultPath }
         let fetchPath = "/repos/\(owner)/\(repo)/contents/\(filePath)"
         
@@ -29,15 +27,14 @@ public class SimplePicBed: GithubAPI {
             let fileList: [GithubRepoFileListModel]? = try await self.gh_get(path: fetchPath)
             return fileList ?? []
         }catch {
-            debugPrint("读取所有文件失败: \(error)")
-            self.error = error
-            return []
+            debugPrint("读取所有文件失败: \(error.localizedDescription)")
+            throw error
         }
     }
     
     /// 从服务器删除一个文件
     @discardableResult
-    public func deleteFile(for gitImage: GithubRepoFileListModel) async -> Bool {
+    public func deleteFile(for gitImage: GithubRepoFileListModel) async throws -> Bool {
         let detetePath = "/repos/\(owner)/\(repo)/contents/\(gitImage.path)"
         let bodyJson: [String: String] = [
             "message": "Deleted by AmosBase",
@@ -48,9 +45,8 @@ public class SimplePicBed: GithubAPI {
         do {
             return try await self.delete(path: detetePath, body: bodyJson.jsonData())
         }catch {
-            debugPrint("删除一个文件\(gitImage.name)失败: \(error)")
-            self.error = error
-            return false
+            debugPrint("删除一个文件\(gitImage.name)失败: \(error.localizedDescription)")
+            throw error
         }
     }
     
@@ -64,7 +60,7 @@ public class SimplePicBed: GithubAPI {
         name: String,
         type: String = "png",
         path: String? = nil
-    ) async -> URL? {
+    ) async throws -> URL? {
         let filePath: String = if let path { path } else { defaultPath }
         let finalPath = "/repos/\(owner)/\(repo)/contents/\(filePath)\(name).\(type)"
         let bodyJson: [String: String] = [
@@ -85,9 +81,8 @@ public class SimplePicBed: GithubAPI {
                 return nil
             }
         }catch {
-            debugPrint("上传文件失败: \(error)")
-            self.error = error
-            return nil
+            debugPrint("上传文件失败: \(error.localizedDescription)")
+            throw error
         }
     }
 }

@@ -11,12 +11,6 @@ public class GithubAPI {
     var authentication: GithubAuth?
     var session: URLSession
     
-    var defaultHeaders = [
-        "Accept" : "application/vnd.github.v3+json",
-        RequestHeaderFields.acceptEncoding.rawValue : "gzip",
-        "Content-Type" : "application/json; charset=utf-8"
-    ]
-    
     public init(authentication: GithubAuth? = nil) {
         self.authentication = authentication
         self.session = URLSession(configuration: URLSessionConfiguration.default)
@@ -65,7 +59,7 @@ extension GithubAPI {
                            let model = data?.decode(type: T.self) {
                             contionuation.resume(returning: model)
                         }else {
-                            let error = SimpleError.customError(msg: "错误码：\(statusCode)")
+                            let error = GithubError.error(from: statusCode)
                             contionuation.resume(throwing: error)
                         }
                     }
@@ -120,7 +114,7 @@ extension GithubAPI {
                         if statusCode == 200 || statusCode == 201 {
                             contionuation.resume(returning: data)
                         }else {
-                            let error = SimpleError.customError(msg: "错误码：\(statusCode)")
+                            let error = GithubError.error(from: statusCode)
                             contionuation.resume(throwing: error)
                         }
                     }
@@ -170,7 +164,7 @@ extension GithubAPI {
                         if statusCode == 200 {
                             contionuation.resume(returning: true)
                         }else {
-                            let error = SimpleError.customError(msg: "错误码：\(statusCode)")
+                            let error = GithubError.error(from: statusCode)
                             contionuation.resume(throwing: error)
                         }
                     }else {
@@ -198,41 +192,5 @@ extension GithubAPI {
         } else {
             callbackQueue.async { completion(nil, nil, buildRequest.error) }
         }
-    }
-}
-
-extension GithubAPI {
-    public static var decoder: JSONDecoder {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .custom({ (decoder) -> Date in
-            let container = try decoder.singleValueContainer()
-            let dateStr = try container.decode(String.self)
-            
-            let formatter = DateFormatter()
-            formatter.calendar = Calendar(identifier: .iso8601)
-            formatter.locale = Locale(identifier: "en_US_POSIX")
-            formatter.timeZone = TimeZone(secondsFromGMT: 0)
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
-            if let date = formatter.date(from: dateStr) {
-                return date
-            }
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXXXX"
-            if let date = formatter.date(from: dateStr) {
-                return date
-            }
-            throw DecodingError.typeMismatch(Date.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Could not decode date"))
-        })
-        return decoder
-    }
-    
-    public static var encoder: JSONEncoder {
-        let encoder = JSONEncoder()
-        let formatter = DateFormatter()
-        formatter.calendar = Calendar(identifier: .iso8601)
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXXXXX"
-        encoder.dateEncodingStrategy = .formatted(formatter)
-        return encoder
     }
 }
