@@ -7,7 +7,6 @@
 
 import Foundation
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 public class SimpleFileHelper {
     let file = FileManager.default
     

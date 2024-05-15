@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 public struct DemoSimpleUnit: View {
     
     let title: String
@@ -71,7 +70,6 @@ public struct DemoSimpleUnit: View {
     }
 }
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 #Preview {
     NavigationStack {
         DemoSimpleUnit()

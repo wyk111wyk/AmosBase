@@ -14,11 +14,12 @@ public struct DemoSimpleImage: View {
         self.title = title
     }
     
-    @State private var selectedImage: Image?
-    #if os(iOS)
-    @State private var selectedUIImage: UIImage?
-    #endif
     @State private var selectedItem: PhotosPickerItem?
+    @State private var selectedImage: SFImage?
+    var defaultImage: SFImage {
+        SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
+    }
+    
     @State private var showPhotoPicker = false
     @State private var scanText: String? = nil
     @State private var faceCount: Int? = nil
@@ -42,15 +43,15 @@ public struct DemoSimpleImage: View {
                     Text("缩放图片（宽300）")
                 }
                 SimpleCell("图片尺寸") {
-                    if let selectedUIImage {
+                    if let selectedImage {
                         VStack {
-                            Text("宽：\(selectedUIImage.width.toString())")
-                            Text("长：\(selectedUIImage.height.toString())")
+                            Text("宽：\(selectedImage.width.toString())")
+                            Text("长：\(selectedImage.height.toString())")
                         }
                     }
                 }
                 SimpleCell("图片大小") {
-                    if let size = selectedUIImage?.fileSize {
+                    if let size = selectedImage?.fileSize {
                         Text(size.toStorage())
                     }
                 }
@@ -75,6 +76,12 @@ public struct DemoSimpleImage: View {
             #endif
         }
         .navigationTitle(title)
+        .task {
+            if selectedImage == nil {
+                selectedImage = defaultImage
+                await analyzeImage()
+            }
+        }
     }
     
     private func circleView(_ color: Color) -> some View {
@@ -83,60 +90,48 @@ public struct DemoSimpleImage: View {
     }
 }
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 extension DemoSimpleImage {
     @ViewBuilder
     private func imagePicker() -> some View {
         if let selectedImage {
-            selectedImage.imageModify()
+            Image(sfImage: selectedImage).imageModify()
         }
         PhotosPicker("挑选图片", selection: $selectedItem, matching: .images)
+            #if os(iOS)
             .onChange(of: selectedItem) { newItem in
                 if let newItem {
                     Task {
-                        selectedImage = try? await newItem.loadTransferable(type: Image.self)
-                        #if os(iOS)
+                        selectedImage = try? await newItem.loadTransferable(type: SFImage.self)
                         await analyzeImage()
-                        #endif
                     }
                 }
             }
-#if os(iOS)
-            .onChange(of: selectedUIImage) { newUIImage in
-                if let newUIImage {
-                    Task {
-                        // 分析图片的主题颜色
-                        if let avg = newUIImage.averageColor() {
-                            aveColor = Color(uiColor: avg)
-                        }
-                        // 分析图片中的文字
-                        scanText = await newUIImage.scanForText()
-                        // 识别图中的脸孔
-//                        faceCount = newUIImage.detectFace()?.count
-                    }
-                }
-            }
-#endif
-    }
-    
-    @MainActor
-    private func analyzeImage() async {
-#if os(iOS)
-        if let newImage = selectedImage?.asUIImage() {
-            selectedUIImage = newImage
-        }
-#endif
+        #endif
     }
     
     @MainActor
     private func adjustImageSize() async {
-    #if os(iOS)
-        if let selectedUIImage {
-            let newImage = selectedUIImage.adjustSizeToSmall(width: 300)
-            self.selectedUIImage = newImage
-            selectedImage = Image(uiImage: newImage)
+        #if os(iOS)
+        if let selectedImage {
+            let newImage = selectedImage.adjustSizeToSmall(width: 300)
+            self.selectedImage = newImage
         }
-    #endif
+        #endif
+    }
+    
+    private func analyzeImage() async {
+        #if os(iOS)
+        if let selectedImage {
+            // 分析图片的主题颜色
+            if let avg = selectedImage.averageColor() {
+                aveColor = Color(uiColor: avg)
+            }
+            // 分析图片中的文字
+            scanText = await selectedImage.scanForText()
+            // 识别图中的脸孔
+            faceCount = selectedImage.detectFace()?.count
+        }
+        #endif
     }
 }
 

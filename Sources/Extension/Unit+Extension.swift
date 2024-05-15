@@ -23,7 +23,6 @@ public extension Locale {
     }
     
     /// 当前系统设置的Locale（可设置显示的语言和区域）
-    @available(iOS 16, macOS 13, watchOS 9, *)
     static func current(langCode: Locale.LanguageCode? = nil,
                         region: Locale.Region? = nil) -> Locale {
         var components = Locale.Components(locale: .current)
