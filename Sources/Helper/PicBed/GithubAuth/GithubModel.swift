@@ -19,4 +19,8 @@ public struct GithubRepoFileListModel: Codable, Identifiable {
     let size: Double // 3605504
     let type: String // file
     let download_url: String // "https://raw.githubusercontent.com/wyk111wyk/PicBed/main/PicGo/202405141424217.jpeg"
+    
+    var imageUrl: URL? {
+        URL(string: download_url)
+    }
 }

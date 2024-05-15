@@ -60,7 +60,7 @@ public class SimplePicBed: GithubAPI {
         name: String,
         type: String = "png",
         path: String? = nil
-    ) async throws -> URL? {
+    ) async throws -> GithubRepoFileListModel? {
         let filePath: String = if let path { path } else { defaultPath }
         let finalPath = "/repos/\(owner)/\(repo)/contents/\(filePath)\(name).\(type)"
         let bodyJson: [String: String] = [
@@ -74,12 +74,8 @@ public class SimplePicBed: GithubAPI {
                 path: finalPath,
                 body: bodyJson.jsonData()
             )
-            if let model = responseData?.decode(type: GithubRepoFileAddModel.self) {
-                debugPrint(model.content)
-                return URL(string: model.content.download_url)
-            }else {
-                return nil
-            }
+            
+            return responseData?.decode(type: GithubRepoFileAddModel.self)?.content
         }catch {
             debugPrint("上传文件失败: \(error.localizedDescription)")
             throw error

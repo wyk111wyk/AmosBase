@@ -179,11 +179,13 @@ extension DemoSimpleUpload {
             isLoading = true
             do {
                 let content = imageData.base64EncodedString()
-                try await picBed.uploadFile(
+                if let updated = try await picBed.uploadFile(
                     content: content,
                     name: timeStampName,
                     type: "jpeg"
-                )
+                ) {
+                    allImageList.addOrReplace(updated)
+                }
             }catch {
                 self.error = error
             }
