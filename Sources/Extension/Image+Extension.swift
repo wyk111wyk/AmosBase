@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import OSLog
+import UniformTypeIdentifiers
 #if canImport(UIKit)
 import UIKit
 public typealias SFImage = UIImage
@@ -61,6 +62,48 @@ public extension Image {
             .frame(maxWidth: length ?? .infinity, maxHeight: length ?? .infinity, alignment: .center)
     }
 }
+
+#if canImport(UIKit)
+extension SFImage: Transferable {
+    public static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(contentType: .png) { layer in
+            guard let data = layer.pngImageData() else {
+                throw SimpleError.customError(msg: "将UIImage转换为Data失败:png")
+            }
+            return data
+        } importing: { data in
+            guard let image = SFImage(data: data) else {
+                throw SimpleError.customError(msg: "将UIImage转换为Data失败:png")
+            }
+            return image
+        }
+        
+        DataRepresentation(contentType: .image) { layer in
+            guard let data = layer.pngImageData() else {
+                throw SimpleError.customError(msg: "将UIImage转换为Data失败:image")
+            }
+            return data
+        } importing: { data in
+            guard let image = SFImage(data: data) else {
+                throw SimpleError.customError(msg: "将UIImage转换为Data失败:image")
+            }
+            return image
+        }
+        
+        DataRepresentation(contentType: .jpeg) { layer in
+            guard let data = layer.jpegData() else {
+                throw SimpleError.customError(msg: "将UIImage转换为Data失败:jpeg")
+            }
+            return data
+        } importing: { data in
+            guard let image = SFImage(data: data) else {
+                throw SimpleError.customError(msg: "将UIImage转换为Data失败:jpeg")
+            }
+            return image
+        }
+    }
+}
+#endif
 
 public extension SFImage {
     
@@ -269,6 +312,7 @@ public extension UIImage {
                                     on: CIImage(image: self)!,
                                     orientation: orientation)
         
+        mylog.info("面孔识别：\(facePoseRequest)")
         return facePoseRequest.results
     }
 }

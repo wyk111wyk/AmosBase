@@ -18,8 +18,11 @@ public struct DemoContent<V: View>: View {
     @State private var showMapShare = false
     @State private var showPositionShare = false
     
+    let githubToken: String
     @ViewBuilder let stateView: () -> V
-    public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
+    public init(githubToken: String = "",
+                @ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
+        self.githubToken = githubToken
         self.stateView = stateView
     }
     
@@ -114,6 +117,8 @@ public struct DemoContent<V: View>: View {
                     DemoSimpleColor()
                 case 10:
                     DemoSimpleUnit()
+                case 11:
+                    DemoSimpleUpload(githubToken: githubToken)
                 default:
                     Text(selectedPage.title)
                 }
@@ -158,12 +163,12 @@ struct Page: Identifiable, Equatable, Hashable {
          .init(id: 7, title: "Date - 日期"),
          .init(id: 8, title: "Image - 图片"),
          .init(id: 9, title: "Color - 颜色"),
-         .init(id: 10, title: "Units - 单位")
+         .init(id: 10, title: "Units - 单位"),
+         .init(id: 11, title: "Upload - 图床")
         ]
     }
 }
 
-@available(iOS 16, macOS 13, watchOS 10, *)
 #Preview {
     DemoContent()
 }

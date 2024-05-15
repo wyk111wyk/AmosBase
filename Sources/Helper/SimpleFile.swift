@@ -7,13 +7,12 @@
 
 import Foundation
 
-@available(iOS 16, macOS 13, watchOS 9, *)
 public class SimpleFileHelper {
     let file = FileManager.default
     
     public init() {}
     
-    public struct FileInfo: Identifiable {
+    public struct SimpleFileInfo: Identifiable {
         public var id: UUID
         public var name: String
         public var suffix: String
@@ -29,8 +28,11 @@ public class SimpleFileHelper {
         }
     }
     
-    /// 获取（创建）文件夹路径URL
-    public func folderPath(_ folderName: String? = "audioFile", isCreate: Bool = true) -> URL? {
+    /// 获取文件夹路径URL（可选没有则创建）
+    public func folderPath(
+        _ folderName: String? = "audioFile",
+        isCreate: Bool = true
+    ) -> URL? {
         // 获取文档目录路径
         guard let documentsDirectory = file.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return nil
@@ -57,7 +59,7 @@ public class SimpleFileHelper {
     public func filePath(
         _ fileName: String,
         folderName: String? = "audioFile",
-        suffix: String? = "wav"
+        type: String? = "wav"
     ) -> URL? {
         // 获取文档目录路径
         guard let folderPath = folderPath(folderName) else {
@@ -66,7 +68,7 @@ public class SimpleFileHelper {
         
         // 构建最终的文件路径
         let fullFileName: String =
-        if let suffix { "\(fileName).\(suffix)" }
+        if let type { "\(fileName).\(type)" }
         else { fileName }
         
         let finalFilePath = folderPath.appendingPathComponent(fullFileName)
@@ -90,16 +92,16 @@ public class SimpleFileHelper {
     }
     
     /// 获取文件夹内所有的文件
-    public func fetchFiles(_ folderPath: URL) -> [FileInfo] {
+    public func fetchFiles(_ folderPath: URL) -> [SimpleFileInfo] {
         do {
-            var filesInfo: [FileInfo] = []
+            var filesInfo: [SimpleFileInfo] = []
             for fileURL in fetchFileURL(folderPath) {
                 let attributes = try file.attributesOfItem(atPath: fileURL.path())
                 let fileSize = attributes[FileAttributeKey.size] as? UInt64 ?? 0
-                let fileInfo = FileInfo(name: fileURL.deletingPathExtension().lastPathComponent,
-                                        suffix: fileURL.pathExtension,
-                                        size: Double(fileSize),
-                                        path: fileURL)
+                let fileInfo = SimpleFileInfo(name: fileURL.deletingPathExtension().lastPathComponent,
+                                              suffix: fileURL.pathExtension,
+                                              size: Double(fileSize),
+                                              path: fileURL)
                 filesInfo.append(fileInfo)
             }
             return filesInfo
