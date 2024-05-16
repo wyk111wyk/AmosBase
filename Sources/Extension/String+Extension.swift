@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import CoreLocation
+import CommonCrypto
 
 #if canImport(UIKit)
 import UIKit
@@ -183,6 +184,16 @@ public extension String {
         // https://github.com/Reza-Rg/Base64-Swift-Extension/blob/master/Base64.swift
         let plainData = data(using: .utf8)
         return plainData?.base64EncodedString()
+    }
+    
+    /// 进行 sha256 的编码
+    func sha256() -> String {
+        let data = Data(self.utf8)
+        var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        data.withUnsafeBytes {
+            _ = CC_SHA256($0.baseAddress, CC_LONG(data.count), &hash)
+        }
+        return hash.map { String(format: "%02hhx", $0) }.joined()
     }
 #endif
 }

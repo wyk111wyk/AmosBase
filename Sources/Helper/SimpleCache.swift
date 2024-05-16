@@ -91,6 +91,14 @@ public class SimpleCache {
         }
     }
     
+    func newKey(_ key: String) -> String {
+        var newKey = key
+        if URL(string: key) != nil {
+            newKey = key.sha256()
+        }
+        return newKey
+    }
+    
     // MARK: - 常用的方法
     func createDirectoryIfNeeded(folderUrl: URL) throws {
         var isDirectory = ObjCBool(true)
@@ -106,7 +114,8 @@ public class SimpleCache {
     }
 
     public func exists(forKey key: String) -> Bool {
-        return fileManager.fileExists(atPath: fileUrl(forKey: key).path)
+        let newKey = newKey(key)
+        return fileManager.fileExists(atPath: fileUrl(forKey: newKey).path)
     }
 
     public func removeAll() throws {
@@ -116,8 +125,9 @@ public class SimpleCache {
     }
 
     public func remove(forKey key: String) throws {
-        cache.removeObject(forKey: key as NSString)
-        try fileManager.removeItem(at: fileUrl(forKey: key))
+        let newKey = newKey(key)
+        cache.removeObject(forKey: newKey as NSString)
+        try fileManager.removeItem(at: fileUrl(forKey: newKey))
     }
 
     public func fileUrl(forKey key: String) -> URL {
@@ -146,10 +156,11 @@ extension SimpleCache {
     }
     
     func commonSave(object: AnyObject, forKey key: String, toData: () throws -> Data) throws {
+        let newKey = newKey(key)
         let data = try toData()
-        cache.setObject(object, forKey: key as NSString)
+        cache.setObject(object, forKey: newKey as NSString)
         try fileManager
-            .createFile(atPath: fileUrl(forKey: key).path, contents: data, attributes: nil)
+            .createFile(atPath: fileUrl(forKey: newKey).path, contents: data, attributes: nil)
             .trueOrThrow(StorageError.createFile)
     }
 
@@ -157,21 +168,22 @@ extension SimpleCache {
                        withExpiry expiry: Expiry,
                        fromDate date: @escaping (() -> Date) = { Date() },
                        fromData: (Data) throws -> T) throws -> T {
+        let newKey = newKey(key)
         switch expiry {
         case .never:
             break
         case .maxAge(let maxAge):
-            guard try verify(maxAge: maxAge, forKey: key, fromDate: date) else {
+            guard try verify(maxAge: maxAge, forKey: newKey, fromDate: date) else {
                 throw StorageError.expired(maxAge: maxAge)
             }
         }
         
-        if let object = cache.object(forKey: key as NSString) as? T {
+        if let object = cache.object(forKey: newKey as NSString) as? T {
             return object
         } else {
-            let data = try Data(contentsOf: fileUrl(forKey: key))
+            let data = try Data(contentsOf: fileUrl(forKey: newKey))
             let object = try fromData(data)
-            cache.setObject(object as AnyObject, forKey: key as NSString)
+            cache.setObject(object as AnyObject, forKey: newKey as NSString)
             return object
         }
     }
@@ -197,7 +209,8 @@ extension SimpleCache {
     
     func loadImage(forKey key: String, withExpiry expiry: Expiry = .never) throws -> SFImage {
         return try commonLoad(forKey: key, withExpiry: expiry, fromData: { data in
-            return try unwrapOrThrow(Utils.image(data: data), StorageError.decodeData)
+            let image = try unwrapOrThrow(Utils.image(data: data), StorageError.decodeData)
+            return image
         })
     }
     
@@ -279,13 +292,14 @@ extension SimpleCache {
     }
     
     func file(forKey key: String) throws -> File {
-        let fileUrl = self.fileUrl(forKey: key)
+        let newKey = newKey(key)
+        let fileUrl = self.fileUrl(forKey: newKey)
         let attributes = try fileManager.attributesOfItem(atPath: fileUrl.path)
         let modificationDate: Date? = attributes[.modificationDate] as? Date
         let size: UInt64? = attributes[.size] as? UInt64
 
         return File(
-            name: key,
+            name: newKey,
             url: fileUrl,
             modificationDate: modificationDate,
             size: size
