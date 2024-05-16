@@ -13,14 +13,14 @@ public struct GithubRepoFileAddModel: Codable {
 
 public struct GithubRepoFileListModel: Codable, Identifiable {
     public var id: String { sha }
-    let name: String // 202405141424217.jpeg
-    let path: String // PicGo/202405141424217.jpeg
-    let sha: String // 6147762f0739589b2696ba45cb002c2aa1c4b790
-    let size: Double // 3605504
-    let type: String // file
-    let download_url: String // "https://raw.githubusercontent.com/wyk111wyk/PicBed/main/PicGo/202405141424217.jpeg"
+    public let name: String // 202405141424217.jpeg
+    public let path: String // PicGo/202405141424217.jpeg
+    public let sha: String // 6147762f0739589b2696ba45cb002c2aa1c4b790
+    public let size: Double // 3605504
+    public let type: String // file
+    public let download_url: String // "https://raw.githubusercontent.com/wyk111wyk/PicBed/main/PicGo/202405141424217.jpeg"
     
-    var imageUrl: URL? {
+    public var imageUrl: URL? {
         URL(string: download_url)
     }
 }
