@@ -278,6 +278,13 @@ public extension View{
                 onTap: onTap,
                 backgroundTap: backgroundTap,
                 completion: completion))}
+    /// 简单UI组件 - 顶部错误提示（使用 Error）
+    func simpleErrorToast(error: Binding<Error?>,
+                          displayMode: ToastView.DisplayMode = .topToast) -> some View {
+        self.simpleErrorToast(presentState: .isOptionalPresented(error),
+                              displayMode: displayMode,
+                              title: error.wrappedValue?.localizedDescription ?? "发生错误")
+    }
     
     /// 简单UI组件 - 顶部错误提示（可进一步定制）
     func simpleErrorToast<Item: Equatable>(presentState: Binding<Item?>,

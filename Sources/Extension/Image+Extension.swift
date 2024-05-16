@@ -91,7 +91,7 @@ extension SFImage: Transferable {
         }
         
         DataRepresentation(contentType: .jpeg) { layer in
-            guard let data = layer.jpegData() else {
+            guard let data = layer.jpegImageData() else {
                 throw SimpleError.customError(msg: "将UIImage转换为Data失败:jpeg")
             }
             return data
@@ -104,6 +104,36 @@ extension SFImage: Transferable {
     }
 }
 #endif
+
+public extension SFImage {
+    static var placeHolder: SFImage {
+        SFImage(packageResource: "photoProcess", ofType: "png")!
+    }
+    
+    static var emptyImage: SFImage {
+        SFImage(packageResource: "empty", ofType: "png")!
+    }
+    
+    static var starImage: SFImage {
+        SFImage(packageResource: "star", ofType: "png")!
+    }
+    
+    static var logoBlack: SFImage {
+        SFImage(packageResource: "AmosLogoB", ofType: "png")!
+    }
+    
+    static var logoWhite: SFImage {
+        SFImage(packageResource: "AmosLogoW", ofType: "png")!
+    }
+    
+    static var lady01Image: SFImage {
+        SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
+    }
+    
+    static var lady02Image: SFImage {
+        SFImage(packageResource: "IMG_5153", ofType: "jpeg")!
+    }
+}
 
 public extension SFImage {
     
@@ -153,76 +183,60 @@ public extension SFImage {
     
     // 文件尺寸
     var fileSize: Double {
-#if canImport(UIKit)
+        #if canImport(UIKit)
         Double(self.pngData()?.count ?? 0)
-#elseif os(macOS)
+        #elseif os(macOS)
         Double(self.tiffRepresentation?.count ?? 0)
-#endif
+        #endif
     }
     
-    // 转换为Data
+    /// 转换为pngData
     func pngImageData() -> Data? {
-#if canImport(UIKit)
+        #if canImport(UIKit)
         self.pngData()
-#elseif os(macOS)
+        #elseif os(macOS)
         guard let tiffRepresentation = self.tiffRepresentation,
               let bitmapImage = NSBitmapImageRep(data: tiffRepresentation) else {
             return nil
         }
         return bitmapImage.representation(using: .png, properties: [:])
-#endif
+        #endif
     }
 
-    func jpegData(quality: CGFloat = 0.9) -> Data? {
-#if canImport(UIKit)
+    /// 转换为jpegData
+    func jpegImageData(quality: CGFloat = 0.9) -> Data? {
+        #if canImport(UIKit)
         self.jpegData(compressionQuality: quality)
-#elseif os(macOS)
+        #elseif os(macOS)
         guard let tiffRepresentation = self.tiffRepresentation,
               let bitmapImage = NSBitmapImageRep(data: tiffRepresentation) else {
             return nil
         }
         return bitmapImage.representation(using: .jpeg, properties: [.compressionFactor: quality])
-#endif
+        #endif
     }
 
-    // 复制到剪贴板
+    /// 复制图片到剪贴板
     func copyImageToClipboard() {
-#if os(iOS)
+        #if os(iOS)
         UIPasteboard.general.image = self
-#elseif os(macOS)
+        #elseif os(macOS)
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.writeObjects([self])
-#endif
+        #endif
     }
     
-#if os(macOS)
-    // 保存到硬盘
-    func saveImage() {
-        let panel = NSSavePanel()
-        panel.allowedContentTypes = [.png, .jpeg, .bmp, .heic, .heif]
-        panel.canCreateDirectories = true
-        panel.isExtensionHidden = false
-        panel.title = "保存图片"
-        panel.message = "选择保存图片的位置"
-        
-        panel.begin { response in
-            if response == .OK, let url = panel.url {
-                // 在这里保存图片到用户选择的路径
-                guard let data = self.tiffRepresentation,
-                      let bitmapImage = NSBitmapImageRep(data: data),
-                      let imageData = bitmapImage.representation(using: .png, properties: [:]) else { return }
-
-                do {
-                    try imageData.write(to: url)
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-        }
+    /// 改变图片尺寸 -  不改变比例
+    ///
+    /// 可自定义宽度，默认300px
+    func adjustSize(width: CGFloat = 300) -> SFImage {
+        #if canImport(UIKit)
+        return adjustSizeToSmall(width: width)
+        #elseif os(macOS)
+        return scaled(width: width)
+        #endif
     }
-
-#endif
 }
 
 #if os(iOS)
@@ -261,8 +275,31 @@ public extension View {
 }
 #endif
 
+#if canImport(UIKit)
+// MARK: - 对图片进行裁切等操作
+public extension UIImage {
+    /// 改变图片尺寸 -  不改变比例
+    ///
+    /// 可自定义宽度，默认300px
+    func adjustSizeToSmall(width: CGFloat = 300) -> UIImage {
+        func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
+            let scale = newWidth / image.size.width
+            let newHeight = image.size.height * scale
+            UIGraphicsBeginImageContext(CGSize(width:newWidth, height: newHeight))
+            image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return newImage!
+        }
+        let newImage = resizeImage(image: self, newWidth: width)
+        return newImage
+    }
+}
+#endif
+
 #if canImport(Vision) && canImport(UIKit)
-// MARK: - 图片检测文字或人脸
+// MARK: - 使用 Vision 功能进行图片检测文字或人脸
 public extension UIImage {
     
     /// 识别图片内的文字 -  使用Vision框架
@@ -314,27 +351,6 @@ public extension UIImage {
         
         mylog.info("面孔识别：\(facePoseRequest)")
         return facePoseRequest.results
-    }
-}
-
-// MARK: - 对图片进行裁切等操作
-public extension UIImage {
-    /// 改变图片尺寸 -  不改变比例
-    ///
-    /// 可自定义宽度，默认300px
-    func adjustSizeToSmall(width: CGFloat = 300) -> UIImage {
-        func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
-            let scale = newWidth / image.size.width
-            let newHeight = image.size.height * scale
-            UIGraphicsBeginImageContext(CGSize(width:newWidth, height: newHeight))
-            image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
-            let newImage = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            
-            return newImage!
-        }
-        let newImage = resizeImage(image: self, newWidth: width)
-        return newImage
     }
     
     /// 根据位置裁切图片
@@ -507,25 +523,21 @@ public extension NSImage {
     ///
     /// - Parameter maxSize: maximum size
     /// - Returns: scaled NSImage
-    func scaled(toMaxSize maxSize: NSSize) -> NSImage {
-        let imageWidth = size.width
-        let imageHeight = size.height
-
-        guard imageHeight > 0 else { return self }
-
-        // Get ratio (landscape or portrait)
-        let ratio: CGFloat
-        if imageWidth > imageHeight {
-            // Landscape
-            ratio = maxSize.width / imageWidth
-        } else {
-            // Portrait
-            ratio = maxSize.height / imageHeight
-        }
-
+    func scaled(width: CGFloat = 300) -> NSImage {
+        let originalSize = self.size
+                
+        // Calculate the aspect ratio
+        let aspectRatio = originalSize.height / originalSize.width
+        
+        // Calculate the new size that maintains the aspect ratio
+        let targetHeight = width * aspectRatio
+        let scaledSize = NSSize(width: width, height: targetHeight)
+        
+        let imageWidth = originalSize.width
+        let imageHeight = originalSize.height
         // Calculate new size based on the ratio
-        let newWidth = imageWidth * ratio
-        let newHeight = imageHeight * ratio
+        let newWidth = imageWidth * aspectRatio
+        let newHeight = imageHeight * aspectRatio
 
         // Create a new NSSize object with the newly calculated size
         let newSize = NSSize(width: newWidth.rounded(.down), height: newHeight.rounded(.down))
@@ -534,6 +546,12 @@ public extension NSImage {
         var imageRect = CGRect(origin: .zero, size: size)
         guard let imageRef = cgImage(forProposedRect: &imageRect, context: nil, hints: nil) else { return self }
 
+        // GPT 提供的方法
+//        let newImage = NSImage(size: scaledSize)
+//        newImage.lockFocus()
+//        self.draw(in: NSRect(origin: .zero, size: scaledSize), from: NSRect(origin: .zero, size: originalSize), operation: .copy, fraction: 1.0)
+//        newImage.unlockFocus()
+        
         return NSImage(cgImage: imageRef, size: newSize)
     }
 
@@ -552,6 +570,31 @@ public extension NSImage {
 
         guard let imageData = imageRep.representation(using: type, properties: [.compressionFactor: compressionFactor]) else { return }
         try? imageData.write(to: url)
+    }
+    
+    /// 保存到硬盘
+    func saveImage() {
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [.png, .jpeg, .bmp, .heic, .heif]
+        panel.canCreateDirectories = true
+        panel.isExtensionHidden = false
+        panel.title = "保存图片"
+        panel.message = "选择保存图片的位置"
+        
+        panel.begin { response in
+            if response == .OK, let url = panel.url {
+                // 在这里保存图片到用户选择的路径
+                guard let data = self.tiffRepresentation,
+                      let bitmapImage = NSBitmapImageRep(data: data),
+                      let imageData = bitmapImage.representation(using: .png, properties: [:]) else { return }
+
+                do {
+                    try imageData.write(to: url)
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+        }
     }
 }
 #endif

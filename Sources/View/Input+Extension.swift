@@ -8,7 +8,6 @@
 import SwiftUI
 
 #if !os(watchOS)
-@available(iOS 16, macOS 13, *)
 public struct SimpleTextInputView: View {
     @Environment(\.dismiss) private var dismissPage
     @State var inputText: String
@@ -74,12 +73,10 @@ public struct SimpleTextInputView: View {
     }
 }
 
-@available(iOS 16, macOS 13, *)
 #Preview(body: {
     SimpleTextInputView("输入短文字", title: "输入短文字"){_ in}
 })
 
-@available(iOS 16, macOS 13, *)
 public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
     @Binding var inputText: String
     @FocusState private var focused: Bool
@@ -130,9 +127,7 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
         .focused($focused)
         .tint(tintColor)
         .padding(.bottom, 28)
-        .onDrop(of: ["public.text"], isTargeted: nil, perform: { providers in
-            return true
-        })
+        .onDropText() { text in inputText = text }
         .overlay(alignment: .bottomTrailing) {
             Menu {
                 moreMenus()

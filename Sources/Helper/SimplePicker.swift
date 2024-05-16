@@ -26,6 +26,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
     let isPushin: Bool // 是否使用费Link进入
     // 选择范围
     let allValue: [Value]
+    let disabledValues: [Value]
     // 已选的值
     @State private var selectValues: Set<Value>
     // 保存值的回调（并不直接保存结果）
@@ -41,6 +42,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
                 dismissAfterTap: Bool = false,
                 isPushin: Bool = true,
                 allValue: [Value],
+                disabledValues: [Value] = [],
                 selectValues: Set<Value>,
                 singleSaveAction: @escaping (Value) -> Void = {_ in},
                 multipleSaveAction: @escaping (Set<Value>) -> Void = {_ in}) {
@@ -55,6 +57,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
         self.dismissAfterTap = dismissAfterTap
         self.isPushin = isPushin
         self.allValue = allValue
+        self.disabledValues = disabledValues
         self._selectValues = State(initialValue: selectValues)
         self.singleSaveAction = singleSaveAction
         self.multipleSaveAction = multipleSaveAction
@@ -81,6 +84,10 @@ public struct SimplePicker<Value: PickerValueModel>: View {
     }
     
     private func select(_ value: Value) {
+        guard !isDisabled(value) else {
+            return
+        }
+        
         if hasSelected(value) {
             // 取消选择
             selectValues.remove(value)
@@ -109,31 +116,41 @@ public struct SimplePicker<Value: PickerValueModel>: View {
         selectValues.contains(value)
     }
     
+    private func isDisabled(_ value: Value) -> Bool {
+        disabledValues.contains(value)
+    }
+    
     private func contentView() -> some View {
         Form {
-            ForEach(filterValue) { value in
-                Button {
-                    select(value)
-                } label: {
-                    SimpleCell(
-                        value.title,
-                        titleColor: hasSelected(value) ? .primary : .secondary,
-                        iconName: value.iconName,
-                        systemImage: value.systemImage,
-                        contentSystemImage: value.contentSystemImage,
-                        content: value.content,
-                        contentColor: hasSelected(value) ? .primary : .secondary,
-                        fullContent: !showFullContent
-                    ) {
-                        if hasSelected(value) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .imageScale(.large)
-                                .foregroundStyle(themeColor)
+            Section {
+                ForEach(filterValue) { value in
+                    Button {
+                        select(value)
+                    } label: {
+                        SimpleCell(
+                            value.title,
+                            titleColor: hasSelected(value) ? .primary : .secondary,
+                            iconName: value.iconName,
+                            systemImage: isDisabled(value) ? "xmark.circle" : value.systemImage,
+                            contentSystemImage: value.contentSystemImage,
+                            content: value.content,
+                            contentColor: hasSelected(value) ? .primary : .secondary,
+                            fullContent: !showFullContent
+                        ) {
+                            if hasSelected(value) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .imageScale(.large)
+                                    .foregroundStyle(themeColor)
+                            }
                         }
+                        .contentShape(Rectangle())
                     }
-                    .contentShape(Rectangle())
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
+            } header: {
+                if maxSelectCount > 1 {
+                    Text("已选：\(selectValues.count) / \(maxSelectCount)")
+                }
             }
         }
         .navigationTitle(title)
@@ -154,7 +171,9 @@ public struct SimplePicker<Value: PickerValueModel>: View {
     return NavigationStack {
         SimplePicker(
             title: "Picker",
+            maxSelectCount: 1,
             allValue: allPickerContent,
+            disabledValues: [allPickerContent.randomElement()!],
             selectValues: [allPickerContent.randomElement()!]
         )
     }

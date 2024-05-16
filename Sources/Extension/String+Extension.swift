@@ -114,7 +114,6 @@ public extension String {
         }
     }
     
-#if os(iOS) || os(macOS)
     /// SwifterSwift: Copy string to global pasteboard.
     ///
     ///        "SomeText".copyToPasteboard() // copies "SomeText" to pasteboard
@@ -125,9 +124,9 @@ public extension String {
         #elseif os(macOS)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(self, forType: .string)
+        #else
         #endif
     }
-#endif
     
 #if canImport(Foundation)
     /// SwifterSwift: Returns a localized string, with an optional comment for translators.

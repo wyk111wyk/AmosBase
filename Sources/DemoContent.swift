@@ -159,12 +159,12 @@ struct Page: Identifiable, Equatable, Hashable {
     }
     
     static func dataSection() -> [Self] {
-        [.init(id: 6, title: "Collection - 集合"),
+        [.init(id: 11, title: "Upload - 图床"),
+         .init(id: 6, title: "Collection - 集合"),
          .init(id: 7, title: "Date - 日期"),
          .init(id: 8, title: "Image - 图片"),
          .init(id: 9, title: "Color - 颜色"),
-         .init(id: 10, title: "Units - 单位"),
-         .init(id: 11, title: "Upload - 图床")
+         .init(id: 10, title: "Units - 单位")
         ]
     }
 }

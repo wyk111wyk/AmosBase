@@ -122,7 +122,7 @@ public class SimpleCloudHelper {
                                     type: DatabaseType = .privateType,
                                     record: String = "ImageRecord") async throws -> CKRecord? {
         // 1. 将UIImage转换为Data
-        guard let imageData = image.jpegData(quality: 0.9) else {
+        guard let imageData = image.jpegImageData(quality: 0.9) else {
             return nil
         }
         

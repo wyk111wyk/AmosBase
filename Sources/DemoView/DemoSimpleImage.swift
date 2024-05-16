@@ -19,6 +19,9 @@ public struct DemoSimpleImage: View {
     var defaultImage: SFImage {
         SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
     }
+    var placeHolder: SFImage {
+        SFImage(packageResource: "photoProcess", ofType: "png")!
+    }
     
     @State private var showPhotoPicker = false
     @State private var scanText: String? = nil
@@ -48,6 +51,7 @@ public struct DemoSimpleImage: View {
                             Text("宽：\(selectedImage.width.toString())")
                             Text("长：\(selectedImage.height.toString())")
                         }
+                        .font(.callout)
                     }
                 }
                 SimpleCell("图片大小") {
@@ -92,10 +96,24 @@ public struct DemoSimpleImage: View {
 
 extension DemoSimpleImage {
     @ViewBuilder
-    private func imagePicker() -> some View {
+    private func photoView() -> some View {
         if let selectedImage {
-            Image(sfImage: selectedImage).imageModify()
+            Image(sfImage: selectedImage)
+                .imageModify()
+        }else {
+            Image(sfImage: placeHolder)
+                .imageModify()
         }
+    }
+    
+    @ViewBuilder
+    private func imagePicker() -> some View {
+        photoView()
+            #if !os(watchOS)
+            .onDropImage { image in
+                selectedImage = image
+            }
+            #endif
         PhotosPicker("挑选图片", selection: $selectedItem, matching: .images)
             #if os(iOS)
             .onChange(of: selectedItem) { newItem in
