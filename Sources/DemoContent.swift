@@ -76,9 +76,7 @@ public struct DemoContent<V: View>: View {
                 }
 #endif
                 
-                SimpleCommonAbout(txcId: "123", userId: "123", nickName: "Amos", avatarUrl: "123", appStoreId: "123") {
-                    Text("About - 关于")
-                }
+                SimpleCommonAbout(txcId: "123", userId: "123", nickName: "Amos", avatarUrl: "123", appStoreId: "123", headerView: {Text("About - 关于")})
             }
             .navigationTitle("Amos基础库")
             .sheet(isPresented: $showToastPage) {

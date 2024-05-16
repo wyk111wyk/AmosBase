@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public struct SimpleCommonAbout<V: View>: View {
+public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     @Environment(\.openURL) private var openURL
 #if !os(watchOS) && !os(macOS)
     @State private var account: SimpleFBUser? = nil
@@ -23,7 +23,8 @@ public struct SimpleCommonAbout<V: View>: View {
     let appStoreLink: String?
     
     let showAppVersion: Bool
-    let headerView: () -> V
+    let headerView: () -> Header
+    let footerView: () -> Footer
     
     public init(txcId: String?,
          userId: String?,
@@ -31,7 +32,8 @@ public struct SimpleCommonAbout<V: View>: View {
          avatarUrl: String?,
          appStoreId: String?,
          showAppVersion: Bool = true,
-         @ViewBuilder headerView: @escaping () -> V = {EmptyView()}) {
+         @ViewBuilder headerView: @escaping () -> Header = {EmptyView()},
+         @ViewBuilder footerView: @escaping () -> Footer = {EmptyView()}) {
         if let txcId {
             feedbackLink = "https://support.qq.com/product/\(txcId)"
         }else {
@@ -49,6 +51,7 @@ public struct SimpleCommonAbout<V: View>: View {
         
         self.showAppVersion = showAppVersion
         self.headerView = headerView
+        self.footerView = footerView
     }
     
     public var body: some View {
@@ -105,21 +108,24 @@ public struct SimpleCommonAbout<V: View>: View {
         } header: {
             headerView()
         } footer: {
-            if showAppVersion {
-                HStack {
-                    Spacer()
-                    VStack(spacing: 4) {
-                        if let appName = SimpleDevice.getAppName() {
-                            Text(appName)
+            VStack {
+                if showAppVersion {
+                    HStack {
+                        Spacer()
+                        VStack(spacing: 4) {
+                            if let appName = SimpleDevice.getAppName() {
+                                Text(appName)
+                            }
+                            if let version = SimpleDevice.getAppVersion() {
+                                Text(version)
+                            }
                         }
-                        if let version = SimpleDevice.getAppVersion() {
-                            Text(version)
-                        }
+                        Spacer()
                     }
-                    Spacer()
                 }
-                .padding(.top, 12)
+                footerView()
             }
+            .padding(.top)
         }
     }
     
