@@ -10,7 +10,7 @@ import Foundation
 public class SimpleWeb {
     let cacheHelper: SimpleCache?
     
-    init() {
+    public init() {
         cacheHelper = try? SimpleCache(isDebuging: false)
     }
     
