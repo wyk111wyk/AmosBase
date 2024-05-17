@@ -530,8 +530,8 @@ public extension NSImage {
         let aspectRatio = originalSize.height / originalSize.width
         
         // Calculate the new size that maintains the aspect ratio
-        let targetHeight = width * aspectRatio
-        let scaledSize = NSSize(width: width, height: targetHeight)
+//        let targetHeight = width * aspectRatio
+//        let scaledSize = NSSize(width: width, height: targetHeight)
         
         let imageWidth = originalSize.width
         let imageHeight = originalSize.height

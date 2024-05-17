@@ -144,8 +144,11 @@ public struct DemoSimpleDevice: View {
     }
     
     private func mapContentPage(_ location: CLLocationCoordinate2D) -> some View {
-        Map(coordinateRegion: .constant(.init(center: location, span: .init(latitudeDelta: 0.01, longitudeDelta: 0.01))), showsUserLocation: true,
-            annotationItems: [location]) {
+        Map(
+            coordinateRegion: .constant(.init(center: location, span: .init(latitudeDelta: 0.01, longitudeDelta: 0.01))),
+            showsUserLocation: true,
+            annotationItems: [location]
+        ) {
             MapMarker(coordinate: $0)
         }
             .buttonCirclePage(role: .cancel) {

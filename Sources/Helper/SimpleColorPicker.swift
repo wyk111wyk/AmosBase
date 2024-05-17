@@ -77,40 +77,51 @@ public struct SimpleColorPicker: View {
 
 extension SimpleColorPicker {
     private func smallDisplay() -> some View {
-        HStack {
-            Text("浅色背景")
+        VStack(spacing: 12) {
+            RoundedRectangle(cornerRadius: 10)
                 .foregroundStyle(selectedColor)
-                .font(.body)
-                .bold()
-                .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.white)
-                }
-            Text("深色背景")
-                .foregroundStyle(selectedColor)
-                .font(.body)
-                .bold()
-                .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(.black)
-                }
-            Text("颜色展示")
-                .foregroundStyle(selectedColor.textColor)
-                .font(.body)
-                .bold()
-                .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundStyle(selectedColor)
-                }
+                .frame(height: 20)
+                .padding(.horizontal, 6)
+            HStack {
+                Text("浅色背景")
+                    .foregroundStyle(selectedColor)
+                    .font(.body)
+                    .bold()
+                    .padding()
+                    .background {
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(.white)
+                    }
+                Text("深色背景")
+                    .foregroundStyle(selectedColor)
+                    .font(.body)
+                    .bold()
+                    .padding()
+                    .background {
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(.black)
+                    }
+                Text("颜色展示")
+                    .foregroundStyle(selectedColor.textColor)
+                    .font(.body)
+                    .bold()
+                    .padding()
+                    .background {
+                        RoundedRectangle(cornerRadius: 8)
+                            .foregroundStyle(selectedColor)
+                    }
+            }
         }
         .padding(.horizontal)
         .padding(.vertical, 12)
         .background {
+            #if os(watchOS)
+            RoundedRectangle(cornerRadius: 8)
+                .foregroundStyle(.white)
+            #else
             RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(.thickMaterial)
+            #endif
         }
         .padding(.horizontal)
         .shadow(radius: 10)
@@ -120,7 +131,11 @@ extension SimpleColorPicker {
     }
     
     private func bigDisplay() -> some View {
-        VStack {
+        VStack(spacing: 12) {
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundStyle(selectedColor)
+                .frame(height: 20)
+                .padding(.horizontal, 6)
             HStack {
                 Spacer()
                 Text("我是在浅色背景下的文字显示")
@@ -164,8 +179,13 @@ extension SimpleColorPicker {
         .padding(.horizontal)
         .padding(.vertical, 12)
         .background {
+            #if os(watchOS)
+            RoundedRectangle(cornerRadius: 8)
+                .foregroundStyle(.white)
+            #else
             RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(.thickMaterial)
+            #endif
         }
         .padding(.horizontal)
         .shadow(radius: 10)
@@ -189,7 +209,9 @@ extension SimpleColorPicker {
                         }
                     }
             }
+            #if !os(watchOS)
             ColorPicker("自定义", selection: $selectedColor, supportsOpacity: true)
+            #endif
             Button {
                 selectedColor = .random()
             } label: {

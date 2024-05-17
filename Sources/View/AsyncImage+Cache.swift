@@ -148,8 +148,7 @@ private extension AsyncImage {
 private extension CachedAsyncImage {
     private func remoteImage(from request: URLRequest, session: URLSession) async throws -> (Image, URLSessionTaskMetrics) {
         let (data, _, metrics) = try await session.data(for: request)
-        if metrics.redirectCount > 0, 
-           let lastResponse = metrics.transactionMetrics.last?.response {
+        if metrics.redirectCount > 0 {
             if let idKey = request.url?.absoluteString {
                 try cacheHelper?.save(object: data, forKey: idKey)
             }
