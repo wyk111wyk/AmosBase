@@ -124,6 +124,9 @@ extension SimpleColorPicker {
             #endif
         }
         .padding(.horizontal)
+        #if os(macOS) || targetEnvironment(macCatalyst)
+        .padding(.bottom, 15)
+        #endif
         .shadow(radius: 10)
         .onTapGesture {
             type.toggle()
@@ -188,6 +191,9 @@ extension SimpleColorPicker {
             #endif
         }
         .padding(.horizontal)
+        #if os(macOS) || targetEnvironment(macCatalyst)
+        .padding(.bottom, 15)
+        #endif
         .shadow(radius: 10)
         .onTapGesture {
             type.toggle()
