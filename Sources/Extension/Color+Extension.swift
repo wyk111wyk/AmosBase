@@ -40,8 +40,10 @@ public extension Color {
     /// 常见颜色：黑 000000 白 FFFFFF 淡灰 D3D3D3
     ///
     /// 透明度后缀 E6-90% D9-85% CC-80% BF-75% B3-70% A6-65% 99-60%
-    init(hex: String) {
-        self.init(uiColor: SFColor(hexString: hex) ?? .white)
+    init?(hex: String) {
+        if let sfcolor = SFColor(hexString: hex) {
+            self.init(uiColor: sfcolor)
+        } else { return nil }
     }
     
     /// SwifterSwift: Darken a color.
@@ -64,8 +66,10 @@ public extension Color {
     /// 常见颜色：黑 000000 白 FFFFFF 淡灰 D3D3D3
     ///
     /// 透明度后缀 E6-90% D9-85% CC-80% BF-75% B3-70% A6-65% 99-60%
-    init(hex: String) {
-        self.init(nsColor: SFColor(hexString: hex) ?? .white)
+    init?(hex: String) {
+        if let sfcolor = SFColor(hexString: hex) {
+            self.init(nsColor: sfcolor)
+        } else { return nil }
     }
     
     /// SwifterSwift: Darken a color.
@@ -102,6 +106,14 @@ public extension Color {
         return Color(red: red, green: green, blue: blue)
     }
     
+    static func randomLight() -> Color {
+        return Color(sfColor: SFColor.randomLight)
+    }
+    
+    static func randomDark() -> Color {
+        return Color(sfColor: SFColor.randomDark)
+    }
+    
     /**
      Determines if the color object is dark or light.
 
@@ -111,6 +123,11 @@ public extension Color {
      */
     func isLight() -> Bool {
         SFColor(self).isLight()
+    }
+    
+    /// 在该色背景是应该显示的文字颜色（黑或者白）
+    var textColor: Color {
+        self.isLight() ? .black : .white
     }
 }
 
@@ -190,6 +207,24 @@ public extension SFColor {
         let green = Int.random(in: 0...255)
         let blue = Int.random(in: 0...255)
         return SFColor(red: red, green: green, blue: blue)!
+    }
+    
+    // Method to generate a random light color
+    static var randomLight: SFColor {
+        var color: SFColor
+        repeat {
+            color = .random
+        } while !color.isLight()
+        return color
+    }
+
+    // Method to generate a random dark color
+    static var randomDark: SFColor {
+        var color: SFColor
+        repeat {
+            color = .random
+        } while color.isLight()
+        return color
     }
     
     /// SwifterSwift: Hexadecimal value string (read-only).

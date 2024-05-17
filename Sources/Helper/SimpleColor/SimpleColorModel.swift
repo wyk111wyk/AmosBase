@@ -21,7 +21,7 @@ public struct SimpleColorModel: Identifiable {
 }
 
 extension SimpleColorModel {
-    static var allColor: [SimpleColorModel] {
+    static var allSwiftUI: [SimpleColorModel] {
         [SimpleColorModel(name: ".primary", color: Color.primary),
          SimpleColorModel(name: ".secondary", color: Color.secondary),
          SimpleColorModel(name: ".black", color: Color.black),

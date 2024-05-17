@@ -125,7 +125,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                 }
                 footerView()
             }
-            .padding(.top)
+            .padding(.vertical, 8)
         }
     }
     

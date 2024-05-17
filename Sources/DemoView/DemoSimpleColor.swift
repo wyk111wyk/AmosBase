@@ -40,8 +40,8 @@ public struct DemoSimpleColor: View {
                 darkenSection()
                 lightenSection()
             }
-            Section("系统颜色") {
-                systemColor(SimpleColorModel.allColor)
+            Section("SwiftUI 系统颜色") {
+                systemColor(SimpleColorModel.allSwiftUI)
             }
             Section("自定义颜色") {
                 systemColor(SimpleColorModel.allGray)

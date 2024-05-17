@@ -41,12 +41,21 @@ public class SimpleCloudHelper {
         self.publicDatabase = contain.publicCloudDatabase
     }
     
+    func newKey(_ key: String) -> String {
+        var newKey = key
+        if URL(string: key) != nil {
+            newKey = key.sha256()
+        }
+        return newKey
+    }
+    
     private func cloudPredicate(idKey: String?,
                                 predicate: NSPredicate?) -> NSPredicate {
         if let predicate {
             return predicate
         }else if let idKey {
-            return NSPredicate(format: "idKey == %@", idKey)
+            let newKey = newKey(idKey)
+            return NSPredicate(format: "idKey == %@", newKey)
         }else {
             return NSPredicate(value: true)
         }
@@ -127,8 +136,9 @@ public class SimpleCloudHelper {
         }
         
         // 2. 将Data写入临时文件
+        let newKey = newKey(idKey)
         let tempDir = NSTemporaryDirectory()
-        let tempFile = tempDir.appendingFormat("/\(idKey).jpg")
+        let tempFile = tempDir.appendingFormat("/\(newKey).jpg")
         let fileURL = URL(fileURLWithPath: tempFile)
         try? imageData.write(to: fileURL)
         
@@ -138,7 +148,7 @@ public class SimpleCloudHelper {
         // 4. 创建CKRecord并上传
         let record = CKRecord(recordType: record)
         record["image"] = asset
-        record["idKey"] = idKey
+        record["idKey"] = newKey
         for key in attributes.keys {
             record[key] = attributes[key]
         }
@@ -146,10 +156,10 @@ public class SimpleCloudHelper {
         let dataBase: CKDatabase = type == .privateType ? privateDatabase : publicDatabase
         let savedRecord = try await dataBase.save(record)
         if isDebuging {
-            debugPrint("成功在iCloud储存: \(idKey)")
+            debugPrint("成功在iCloud储存: \(newKey)")
         }
         if withCache {
-            try cacheHelper?.save(image: image, forKey: idKey)
+            try cacheHelper?.save(image: image, forKey: newKey)
         }
         
         return savedRecord
@@ -168,6 +178,9 @@ public class SimpleCloudHelper {
         }
         for recordId in allRecordIds {
             try await dataBase.deleteRecord(withID: recordId)
+        }
+        if withCache, let idKey {
+            try cacheHelper?.remove(forKey: idKey)
         }
     }
 }
