@@ -85,6 +85,7 @@ extension SimpleColorPicker {
             HStack {
                 Text("浅色背景")
                     .foregroundStyle(selectedColor)
+                    .lineLimit(1)
                     .font(.body)
                     .bold()
                     .padding()
@@ -94,6 +95,7 @@ extension SimpleColorPicker {
                     }
                 Text("深色背景")
                     .foregroundStyle(selectedColor)
+                    .lineLimit(1)
                     .font(.body)
                     .bold()
                     .padding()
@@ -103,12 +105,14 @@ extension SimpleColorPicker {
                     }
                 Text("颜色展示")
                     .foregroundStyle(selectedColor.textColor)
+                    .lineLimit(1)
                     .font(.body)
                     .bold()
                     .padding()
                     .background {
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundStyle(selectedColor)
+                            .shadow(radius: 10)
                     }
             }
         }
@@ -127,7 +131,6 @@ extension SimpleColorPicker {
         #if os(macOS) || targetEnvironment(macCatalyst)
         .padding(.bottom, 15)
         #endif
-        .shadow(radius: 10)
         .onTapGesture {
             type.toggle()
         }
@@ -143,6 +146,7 @@ extension SimpleColorPicker {
                 Spacer()
                 Text("我是在浅色背景下的文字显示")
                     .foregroundStyle(selectedColor)
+                    .lineLimit(1)
                     .font(.body)
                     .bold()
                 Spacer()
@@ -156,6 +160,7 @@ extension SimpleColorPicker {
                 Spacer()
                 Text("我是在深色背景下的文字显示")
                     .foregroundStyle(selectedColor)
+                    .lineLimit(1)
                     .font(.body)
                     .bold()
                 Spacer()
@@ -169,6 +174,7 @@ extension SimpleColorPicker {
                 Spacer()
                 Text("我是该色做背景时的纯色显示")
                     .foregroundStyle(selectedColor.textColor)
+                    .lineLimit(1)
                     .font(.body)
                     .bold()
                 Spacer()
@@ -188,13 +194,13 @@ extension SimpleColorPicker {
             #else
             RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(.thickMaterial)
+                .shadow(radius: 10)
             #endif
         }
         .padding(.horizontal)
         #if os(macOS) || targetEnvironment(macCatalyst)
         .padding(.bottom, 15)
         #endif
-        .shadow(radius: 10)
         .onTapGesture {
             type.toggle()
         }
