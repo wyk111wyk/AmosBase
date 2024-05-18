@@ -34,7 +34,7 @@ public class SimpleLocationHelper: NSObject, ObservableObject {
         }
     }
     
-    func startLocation() {
+    public func startLocation() {
         #if os(macOS)
         if manager.authorizationStatus == .authorizedAlways {
             manager.requestLocation()
