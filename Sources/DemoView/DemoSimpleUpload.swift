@@ -9,6 +9,9 @@ import SwiftUI
 import PhotosUI
 
 public struct DemoSimpleUpload: View {
+    @AppStorage("gitToken") private var gitToken: String = ""
+    @State private var showGithubKey = false
+    
     @State private var selectedItem: PhotosPickerItem?
     @State private var selectedImage: SFImage? {
         didSet {
@@ -30,9 +33,8 @@ public struct DemoSimpleUpload: View {
     @State private var error: Error?
     @State private var copyContent: String?
     
-    let picBed: SimplePicBed
-    init(gitToken: String = "") {
-        picBed = SimplePicBed(gitToken: gitToken)
+    var picBed: SimplePicBed {
+        SimplePicBed(gitToken: gitToken)
     }
     
     var finalPath: String {
@@ -64,6 +66,7 @@ public struct DemoSimpleUpload: View {
                     Text("图片信息")
                 }
                 Section {
+                    tokenSection()
                     Button {
                         imageUpload()
                     } label: {
@@ -73,7 +76,7 @@ public struct DemoSimpleUpload: View {
                             }
                         }
                     }
-                    .disabled(isLoading || selectedImage == nil)
+                    .disabled(isLoading || selectedImage == nil || gitToken.isEmpty)
                     TextField("自定义路径", text: $uploadPath, prompt: Text("自定义路径（默认AmosBase/）"))
                 } header: {
                     Text("上传图床")
@@ -84,6 +87,25 @@ public struct DemoSimpleUpload: View {
         }
         .simpleErrorToast(error: $error)
         .simpleSuccessToast(presentState: .isOptionalPresented($copyContent), displayMode: .topToast, title: "复制图片URL", subtitle: copyContent ?? "无法读取链接")
+    }
+    
+    @ViewBuilder
+    private func tokenSection() -> some View {
+        if gitToken.isEmpty || showGithubKey {
+            TextField("Github密钥", text: $gitToken, axis: .vertical)
+                .lineLimit(nil)
+                .scrollDismissesKeyboard(.automatic)
+                .onSubmit { showGithubKey = false }
+        }else {
+            Button {
+                showGithubKey = true
+            } label: {
+                HStack {
+                    Text("Github密钥")
+                    Text(gitToken.lastCharacters())
+                }
+            }
+        }
     }
     
     @ViewBuilder

@@ -18,11 +18,8 @@ public struct DemoContent<V: View>: View {
     @State private var showMapShare = false
     @State private var showPositionShare = false
     
-    let gitToken: String
     @ViewBuilder let stateView: () -> V
-    public init(gitToken: String = "",
-                @ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
-        self.gitToken = gitToken
+    public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
         self.stateView = stateView
     }
     
@@ -116,7 +113,7 @@ public struct DemoContent<V: View>: View {
                 case 10:
                     DemoSimpleUnit()
                 case 11:
-                    DemoSimpleUpload(gitToken: gitToken)
+                    DemoSimpleUpload()
                 default:
                     Text(selectedPage.title)
                 }
