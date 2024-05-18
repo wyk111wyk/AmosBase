@@ -22,6 +22,7 @@ public class SimpleLocationHelper: NSObject, ObservableObject {
     let manager: CLLocationManager = CLLocationManager()
     @Published public var currentLocation: CLLocationCoordinate2D? = nil
     @Published public var currentPlace: CLPlacemark? = nil
+    @Published public var isLoading: Bool = false
     
     @discardableResult
     public override init() {
@@ -35,6 +36,7 @@ public class SimpleLocationHelper: NSObject, ObservableObject {
     }
     
     public func startLocation() {
+        isLoading = true
         #if os(macOS)
         if manager.authorizationStatus == .authorizedAlways {
             manager.requestLocation()
@@ -67,10 +69,12 @@ extension SimpleLocationHelper: CLLocationManagerDelegate {
                 }
             }
         }
+        isLoading = false
     }
     
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         debugPrint("定位失败:\(error.localizedDescription)")
+        isLoading = false
     }
 }
 
