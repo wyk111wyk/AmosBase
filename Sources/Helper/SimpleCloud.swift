@@ -43,7 +43,7 @@ public class SimpleCloudHelper {
     
     func newKey(_ key: String) -> String {
         var newKey = key
-        if URL(string: key) != nil {
+        if key.hasPrefix("http") {
             newKey = key.sha256()
         }
         return newKey
