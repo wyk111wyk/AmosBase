@@ -10,62 +10,88 @@ import SwiftUI
 #if !os(watchOS)
 public struct SimpleTextInputView: View {
     @Environment(\.dismiss) private var dismissPage
-    @State var inputText: String
+    @State var title: String
+    @State var content: String
     
-    let title: String
-    let prompt: String
+    let titlePrompt: String
+    let contentPrompt: String
     let startLine: Int
     let endLine: Int
     let tintColor: Color
-    let canClear: Bool
-    let saveAction: (String) -> Void
+    let showTitle: Bool
+    let showContent: Bool
+    
+    public typealias inputResult = (title: String, content: String)
+    let saveAction: (inputResult) -> Void
     
     public init(
-        _ inputText: String,
-        title: String,
-        prompt: String = "请输入文本",
-        startLine: Int = 1,
-        endLine: Int = 5,
+        title: String = "",
+        content: String = "",
+        titlePrompt: String = "请输入标题",
+        contentPrompt: String = "请输入文本",
+        showTitle: Bool = true,
+        showContent: Bool = true,
+        startLine: Int = 4,
+        endLine: Int = 6,
         tintColor: Color = .accentColor,
-        canClear: Bool = true,
-        saveAction: @escaping (String) -> Void
+        saveAction: @escaping (inputResult) -> Void
     ) {
-        self._inputText = State(initialValue: inputText)
-        self.title = title
-        self.prompt = prompt
+        self._title = State(initialValue: title)
+        self._content = State(initialValue: content)
+        self.titlePrompt = titlePrompt
+        self.contentPrompt = contentPrompt
         self.startLine = startLine
         self.endLine = endLine
         self.tintColor = tintColor
-        self.canClear = canClear
+        self.showTitle = showTitle
+        self.showContent = showContent
         self.saveAction = saveAction
     }
     
     public var body: some View {
         NavigationStack {
-            VStack {
-                SimpleTextField(
-                    $inputText,
-                    prompt: prompt,
-                    startLine: startLine,
-                    endLine: endLine,
-                    tintColor: tintColor,
-                    canClear: canClear
-                )
-                .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(style: .init(lineWidth: 1))
-                        .foregroundStyle(.secondary)
+            ScrollView(.vertical) {
+                VStack {
+                    if showTitle {
+                        SimpleTextField(
+                            $title,
+                            prompt: titlePrompt,
+                            startLine: 1,
+                            endLine: 1,
+                            tintColor: tintColor
+                        )
+                        .padding()
+                        .background {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(style: .init(lineWidth: 1))
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.horizontal)
+                    }
+                    if showContent {
+                        SimpleTextField(
+                            $content,
+                            prompt: contentPrompt,
+                            startLine: startLine,
+                            endLine: endLine,
+                            tintColor: tintColor
+                        )
+                        .padding()
+                        .background {
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(style: .init(lineWidth: 1))
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.horizontal)
+                    }
                 }
-                .padding()
-                Spacer()
+                .padding(.vertical)
             }
             .buttonCircleNavi(role: .cancel) {dismissPage()}
             .buttonCircleNavi(role: .destructive) {
-                saveAction(inputText)
+                saveAction((title: title, content: content))
                 dismissPage()
             }
-            .navigationTitle(title)
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
@@ -74,7 +100,12 @@ public struct SimpleTextInputView: View {
 }
 
 #Preview(body: {
-    SimpleTextInputView("输入短文字", title: "输入短文字"){_ in}
+    SimpleTextInputView(
+        title: "输入标题",
+        content: "输入短文字",
+        showTitle: true,
+        showContent: true
+    ){_ in}
 })
 
 public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
@@ -114,7 +145,7 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
     }
     
     public var body: some View {
-        TextField("请输入文本",
+        TextField("",
                   text: $inputText,
                   prompt: Text(prompt),
                   axis: .vertical)
@@ -126,34 +157,51 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
         .textFieldStyle(.plain)
         .focused($focused)
         .tint(tintColor)
-        .padding(.bottom, 28)
+        .padding(.bottom, endLine > 1 ? 28 : 0)
         .onDropText() { text in inputText = text }
-        .overlay(alignment: .bottomTrailing) {
-            Menu {
-                moreMenus()
-            } label: {
-                HStack(spacing: 4) {
-                    Text("\(inputText.count) 字")
-                        .font(.footnote)
-                    if !inputText.isEmpty {
+        .overlay(alignment: .trailing) {
+            if endLine == 1 {
+                if canClear {
+                    Menu {
+                        moreMenus()
+                    } label: {
                         Image(systemName: "xmark.circle.fill")
-                            .imageScale(.small)
-                            .opacity(0.9)
+                            .foregroundStyle(.secondary)
+                            .opacity(0.5)
+                    } primaryAction: {
+                        inputText = ""
                     }
+                    .buttonStyle(.plain)
                 }
-                .foregroundColor(.white)
-                .padding(.vertical, 2.6)
-                .padding(.horizontal, 6)
-                .background {
-                    RoundedRectangle(cornerRadius: 15)
-                        .foregroundColor(.secondary)
-                        .opacity(0.5)
-                }
-            } primaryAction: {
-                inputText = ""
             }
-            .buttonStyle(.plain)
-            .disabled(!canClear)
+        }
+        .overlay(alignment: .bottomTrailing) {
+            if endLine > 1 && canClear {
+                Menu {
+                    moreMenus()
+                } label: {
+                    HStack(spacing: 4) {
+                        Text("\(inputText.count) 字")
+                            .font(.footnote)
+                        if !inputText.isEmpty {
+                            Image(systemName: "xmark.circle.fill")
+                                .imageScale(.small)
+                                .opacity(0.9)
+                        }
+                    }
+                    .foregroundColor(.white)
+                    .padding(.vertical, 2.6)
+                    .padding(.horizontal, 6)
+                    .background {
+                        RoundedRectangle(cornerRadius: 15)
+                            .foregroundStyle(.secondary)
+                            .opacity(0.5)
+                    }
+                } primaryAction: {
+                    inputText = ""
+                }
+                .buttonStyle(.plain)
+            }
         }
         .onAppear {
             focused = isFocused

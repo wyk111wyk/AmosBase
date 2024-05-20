@@ -69,31 +69,28 @@ public struct DemoSimpleButton<V: View>: View {
     
     @ViewBuilder
     private func buttonSection() -> some View {
-        if #available(iOS 16, macOS 13, *) {
-            Section("Button") {
-                #if os(iOS) || targetEnvironment(macCatalyst)
-                SimpleMiddleButton("Middle button", role: .none) {
-                    confirmShowPage = true }
-//                    .fullScreenCover(isPresented: $showPage, content: { stateView() })
-                    .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
-                #endif
-                SimpleMiddleButton("Middle button", role: .destructive) {}
-                SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
-            }
-            #if !os(watchOS)
-            Section("TextField") {
-                Button { showInput = true } label: {
-                    SimpleCell("输入短文字", systemImage: "rectangle.and.pencil.and.ellipsis.rtl")
-                }
-                SimpleTextField($input)
-            }
-            .sheet(isPresented: $showInput, content: {
-                SimpleTextInputView(input, title: "输入短文字") { newText in
-                    input = newText
-                }.presentationDetents([.fraction(0.3)])
-            })
+        Section("Button") {
+            #if os(iOS) || targetEnvironment(macCatalyst)
+            SimpleMiddleButton("Middle button", role: .none) {
+                confirmShowPage = true }
+                .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
             #endif
+            SimpleMiddleButton("Middle button", role: .destructive) {}
+            SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
         }
+        #if !os(watchOS)
+        Section("TextField") {
+            Button { showInput = true } label: {
+                SimpleCell("输入短文字", systemImage: "rectangle.and.pencil.and.ellipsis.rtl")
+            }
+            SimpleTextField($input)
+        }
+        .sheet(isPresented: $showInput, content: {
+            SimpleTextInputView(title: input, showContent: false) { result in
+                input = result.title
+            }.presentationDetents([.fraction(0.3)])
+        })
+        #endif
     }
     
     private func pickerSection() -> some View {
