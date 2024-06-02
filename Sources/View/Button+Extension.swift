@@ -10,7 +10,6 @@ import SwiftUI
 /// 简单UI组件 -  文字居中的按钮
 ///
 /// 可定制按钮类型，文字颜色为app主要色
-@available(iOS 16, macOS 13, *)
 public struct SimpleMiddleButton: View {
     let title: String
     let systemImageName: String?
@@ -81,7 +80,7 @@ public struct SimpleConfirmButton<V: View>: View {
     @ViewBuilder var labelView: () -> V
     let tapAction: () -> Void
     
-    init(
+    public init(
         title: String? = "Confirm",
         systemImage: String? = nil,
         role: ButtonRole? = nil,
@@ -110,6 +109,61 @@ public struct SimpleConfirmButton<V: View>: View {
         })
     }
 }
+
+public struct SimpleTriggerButton<V: View>: View {
+    let title: String?
+    let systemImage: String?
+    
+    @ViewBuilder var labelView: () -> V
+    @Binding var isPresented: Bool
+    
+    public init(
+        title: String? = "Trigger",
+        systemImage: String? = nil,
+        isPresented: Binding<Bool>,
+        labelView: @escaping () -> V = { EmptyView() }
+    ) {
+        self.title = title
+        self.systemImage = systemImage
+        self._isPresented = isPresented
+        self.labelView = labelView
+    }
+    
+    public var body: some View {
+        Button(action: {
+            isPresented = true
+        }, label: {
+            if title != nil || systemImage != nil {
+                if let systemImage {
+                    Image(systemName: systemImage)
+                }
+                if let title {
+                    Text(title.localized())
+                }
+            }else {
+                labelView()
+            }
+        })
+    }
+}
+
+#Preview("Button", body: {
+    NavigationStack {
+        Form {
+            Section {
+                SimpleMiddleButton("Middle Button") {}
+            }
+            Section {
+                SimpleTriggerButton(isPresented: .constant(false))
+            }
+            Section {
+                SimpleConfirmButton {}
+            }
+        }
+        .buttonCircleNavi(role: .cancel)
+        .buttonCircleNavi(role: .destructive)
+    }
+})
 
 // MARK: - Button相关的UI修饰
 extension View {
