@@ -34,7 +34,7 @@ public struct SimpleTextInputView: View {
         startLine: Int = 4,
         endLine: Int = 6,
         tintColor: Color = .accentColor,
-        saveAction: @escaping (inputResult) -> Void
+        saveAction: @escaping (inputResult) -> Void = {_ in}
     ) {
         self._title = State(initialValue: title)
         self._content = State(initialValue: content)

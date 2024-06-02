@@ -20,33 +20,17 @@ public struct DemoSimpleUpload: View {
     }
     @State private var showImage: SFImage?
     @State private var timeStampName: String = ""
-    @State private var uploadPath: String = ""
+    @State private var uploadPath: PicBedPath = .base
     @State private var isCrop = true
     @State private var newWidth: Int = 500
     @State private var ratio: CGFloat = 0.9
     @State private var size: String = ""
     
     @State private var isLoading = false
-    @State private var allImageList: [GithubRepoFileListModel] = []
-    
-    @State private var deleteImage: GithubRepoFileListModel?
     @State private var error: Error?
-    @State private var copyContent: String?
     
     var picBed: SimplePicBed {
         SimplePicBed(gitToken: gitToken)
-    }
-    
-    var finalPath: String {
-        if uploadPath.isEmpty {
-            return "AmosBase/"
-        }else {
-            if uploadPath.hasSuffix("/") {
-                return uploadPath
-            }else {
-                return uploadPath + "/"
-            }
-        }
     }
     
     public var body: some View {
@@ -77,16 +61,29 @@ public struct DemoSimpleUpload: View {
                         }
                     }
                     .disabled(isLoading || selectedImage == nil || gitToken.isEmpty)
-                    TextField("自定义路径", text: $uploadPath, prompt: Text("自定义路径（默认AmosBase/）"))
+                    Picker("图床路径", selection: $uploadPath) {
+                        ForEach(PicBedPath.allCases, id: \.self) { path in
+                            Text(path.title).tag(path)
+                        }
+                    }
                 } header: {
                     Text("上传图床")
                 }
-                imageListSection()
+                NavigationLink {
+                    SimplePicList(
+                        gitToken: gitToken,
+                        autoLoad: true,
+                        dismissAfterTap: false,
+                        copyAfterTap: true,
+                        uploadPath: uploadPath
+                    )
+                } label: {
+                    SimpleCell("浏览所有图片")
+                }
             }
             .navigationTitle("上传图床")
         }
         .simpleErrorToast(error: $error)
-        .simpleSuccessToast(presentState: .isOptionalPresented($copyContent), displayMode: .topToast, title: "复制图片URL", subtitle: copyContent ?? "无法读取链接")
     }
     
     @ViewBuilder
@@ -177,59 +174,6 @@ public struct DemoSimpleUpload: View {
             }
         }
     }
-    
-    @ViewBuilder
-    private func imageListSection() -> some View {
-        Section {
-            ForEach(allImageList) { gitImage in
-                Button {
-                    gitImage.download_url.copyToPasteboard()
-                    copyContent = gitImage.download_url
-                } label: {
-                    SimpleCell(gitImage.name, content: gitImage.size.toStorage()) {
-                        if let imageUrl = URL(string: gitImage.download_url) {
-                            CachedAsyncImage(url: imageUrl) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(maxWidth: 100, maxHeight: 100)
-                        }
-                    }
-                }
-                .simpleSwipe(deleteAction: {
-                    deleteImage = gitImage
-                })
-            }
-        } header: {
-            HStack {
-                Text("图床图片：\(allImageList.count)张 ~\(finalPath)")
-                Spacer()
-                Button {
-                    Task {
-                        await fetchImageList()
-                    }
-                } label: {
-                    if isLoading {
-                        ProgressView()
-                    }else {
-                        Image(systemName: "arrow.circlepath")
-                    }
-                }
-            }
-        }
-        .confirmationDialog("删除图片", isPresented: .isPresented($deleteImage), titleVisibility: .visible) {
-            if let deleteImage {
-                Button(role: .destructive) {
-                    deleteFile(deleteImage)
-                } label: {
-                    Text("删除\(deleteImage.name)")
-                }
-            }
-        }
-    }
 }
 
 extension DemoSimpleUpload {
@@ -270,40 +214,15 @@ extension DemoSimpleUpload {
             isLoading = true
             do {
                 let content = imageData.base64EncodedString()
-                if let updated = try await picBed.uploadFile(
+                if let _ = try await picBed.uploadFile(
                     content: content,
                     name: timeStampName,
                     type: "jpeg",
-                    path: finalPath
+                    path: uploadPath.path
                 ) {
-                    allImageList.addOrReplace(updated)
                     selectedItem = nil
                     selectedImage = nil
                     showImage = nil
-                }
-            }catch {
-                self.error = error
-            }
-            isLoading = false
-        }
-    }
-    
-    private func fetchImageList() async {
-        isLoading = true
-        do {
-            allImageList = try await picBed.fetchFileList(path: finalPath)
-        }catch {
-            self.error = error
-        }
-        isLoading = false
-    }
-    
-    private func deleteFile(_ gitImage: GithubRepoFileListModel) {
-        Task {
-            isLoading = true
-            do {
-                if try await picBed.deleteFile(for: gitImage) {
-                    allImageList.removeById(gitImage)
                 }
             }catch {
                 self.error = error
