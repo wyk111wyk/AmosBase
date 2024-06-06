@@ -147,7 +147,7 @@ struct Page: Identifiable, Equatable, Hashable {
     }
     
     static func elementSection() -> [Self] {
-        [.init(id: 2, title: "Button - 按钮表格"),
+        [.init(id: 2, title: "UI - 页面元素"),
          .init(id: 3, title: "Web - 网页"),
          .init(id: 4, title: "Device - 设备信息"),
          .init(id: 5, title: "PlaceHolder - 占位符")]

@@ -10,6 +10,7 @@ import SwiftUI
 #if !os(watchOS)
 public struct SimpleTextInputView: View {
     @Environment(\.dismiss) private var dismissPage
+    
     @State var title: String
     @State var content: String
     
@@ -58,7 +59,8 @@ public struct SimpleTextInputView: View {
                             prompt: titlePrompt,
                             startLine: 1,
                             endLine: 1,
-                            tintColor: tintColor
+                            tintColor: tintColor,
+                            isFocused: showTitle && !showContent
                         )
                         .padding()
                         .background {
@@ -74,7 +76,8 @@ public struct SimpleTextInputView: View {
                             prompt: contentPrompt,
                             startLine: startLine,
                             endLine: endLine,
-                            tintColor: tintColor
+                            tintColor: tintColor,
+                            isFocused: !showTitle && showContent
                         )
                         .padding()
                         .background {
@@ -99,14 +102,14 @@ public struct SimpleTextInputView: View {
     }
 }
 
-#Preview(body: {
+#Preview("Input"){
     SimpleTextInputView(
         title: "输入标题",
         content: "输入短文字",
         showTitle: true,
         showContent: true
     ){_ in}
-})
+}
 
 public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
     @Binding var inputText: String

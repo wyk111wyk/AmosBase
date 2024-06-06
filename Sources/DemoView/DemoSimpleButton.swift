@@ -19,6 +19,8 @@ public struct DemoSimpleButton<V: View>: View {
     @State private var singleValue: DemoPickerModel
     @State private var mutipleValue: Set<DemoPickerModel>
     
+    @State private var selectedTag: SimpleTagViewItem?
+    
     @ViewBuilder let stateView: () -> V
     public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
         self.stateView = stateView
@@ -33,11 +35,12 @@ public struct DemoSimpleButton<V: View>: View {
                 cellSection()
                 pickerSection()
                 buttonSection()
+                tagSection()
             }
             .navigationDestination(isPresented: $showPage, destination: {
                 stateView()
             })
-            .navigationTitle("按钮")
+            .navigationTitle("UI元素")
             .buttonCircleNavi(role: .destructive)
         }
     }
@@ -134,6 +137,29 @@ public struct DemoSimpleButton<V: View>: View {
                 Spacer()
                 Toggle("单选点击退出", isOn: $isTapDismiss)
                     .labelStyle(font: .footnote)
+            }
+        }
+    }
+    
+    private func tagSection() -> some View {
+        Section {
+            SimpleTagsView(tags: [
+                .init(title: "Tag1", icon: "person.wave.2.fill"),
+                .init(title: "Tag2", icon: "person.wave.2.fill"),
+                .init(title: "Tag3", icon: "person.wave.2.fill"),
+                .init(title: "Tag4", icon: "person.wave.2.fill"),
+                .init(title: "Tag5", icon: "person.wave.2.fill"),
+                .init(title: "Tag6", icon: "person.wave.2.fill")
+            ]) { tag in
+                selectedTag = tag
+            }
+        } header: {
+            HStack {
+                Text("Tags")
+                Spacer()
+                if let selectedTag {
+                    Text(selectedTag.title)
+                }
             }
         }
     }
