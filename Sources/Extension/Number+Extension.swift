@@ -21,7 +21,9 @@ public extension Int {
     /// 转换为文字
     ///
     /// 可自定义是否带逗号
-    func toString(withComma: Bool = false) -> String {
+    func toString(
+        withComma: Bool = false
+    ) -> String {
         if withComma {
             return "\(self)"
         }else {

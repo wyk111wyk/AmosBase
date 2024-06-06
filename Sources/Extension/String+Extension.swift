@@ -93,11 +93,21 @@ public extension String {
         return self
     }
     
-    /// 前后添加同样的文字 -  默认双引号
+    /// 前后添加同样的字符 -  默认双引号
     ///
-    /// 可自定义添加文字
+    /// 可自定义添加字符
     func addMarks(for mark: String = "\"") -> String {
         mark + self + mark
+    }
+    
+    /// 前面添加字符
+    func addPrefix(_ prefix: String) -> String {
+        prefix + self
+    }
+    
+    /// 后面添加字符
+    func addSubfix(_ subfix: String) -> String {
+        self + subfix
     }
     
     /// 转换为位置坐标 -  (lat,long) 高德格式
