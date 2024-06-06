@@ -25,15 +25,23 @@ public struct SimpleTagViewItem {
 }
 
 public struct SimpleTagsView: View {
+    public enum TagType {
+        case list, vstack
+    }
+    
     @State var tags: [SimpleTagViewItem]
-    @State private var totalHeight = CGFloat.zero       // << variant for ScrollView/List //    = CGFloat.infinity   // << variant for VStack
+    @State private var totalHeight: CGFloat
     let tagAction: (SimpleTagViewItem) -> Void
     
     public init(tags: [SimpleTagViewItem],
-                totalHeight: Double = CGFloat.zero,
+                type: TagType = .list,
                 tagAction: @escaping (SimpleTagViewItem) -> Void = {_ in}) {
         self.tags = tags
-        self.totalHeight = totalHeight
+        if type == .list {
+            self._totalHeight = State(initialValue: CGFloat.zero)
+        }else {
+            self._totalHeight = State(initialValue: CGFloat.infinity)
+        }
         self.tagAction = tagAction
     }
     
@@ -43,8 +51,8 @@ public struct SimpleTagsView: View {
                 self.generateContent(in: geometry)
             }
         }
-        .frame(height: totalHeight)// << variant for ScrollView/List
-        //.frame(maxHeight: totalHeight) // << variant for VStack
+        .frame(height: totalHeight)
+        .listRowInsets(.init(top: 8, leading: 10, bottom: 8, trailing: 10))
     }
 
     private func generateContent(in g: GeometryProxy) -> some View {
@@ -105,25 +113,29 @@ public struct SimpleTagsView: View {
 }
 
 #Preview("TagView") {
-    NavigationStack {
+    let example: [SimpleTagViewItem] = [
+        .init(title: "simple", icon: "rectangle.portrait.and.arrow.right"),
+        .init(title: "tag"),
+        .init(title: "view", icon: "pencil.slash"),
+        .init(title: "with"),
+        .init(title: "Go"),
+        .init(title: "simple"),
+        .init(title: "tag"),
+        .init(title: "view"),
+        .init(title: "with"),
+        .init(title: "Go"),
+        .init(title: "simple"),
+        .init(title: "tag"),
+        .init(title: "view"),
+        .init(title: "with"),
+        .init(title: "Go")
+    ]
+    return NavigationStack {
+        SimpleTagsView(tags: example, type: .vstack)
+            .padding()
+            .background(content: {Color.gray})
         Form {
-            SimpleTagsView(tags: [
-                .init(title: "simple", icon: "rectangle.portrait.and.arrow.right"),
-                .init(title: "tag"),
-                .init(title: "view", icon: "pencil.slash"),
-                .init(title: "with"),
-                .init(title: "Go"),
-                .init(title: "simple"),
-                .init(title: "tag"),
-                .init(title: "view"),
-                .init(title: "with"),
-                .init(title: "Go"),
-                .init(title: "simple"),
-                .init(title: "tag"),
-                .init(title: "view"),
-                .init(title: "with"),
-                .init(title: "Go")
-            ])
+            SimpleTagsView(tags: example)
         }
     }
 }
