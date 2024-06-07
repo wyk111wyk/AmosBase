@@ -8,10 +8,12 @@
 import SwiftUI
 
 public extension Toggle {
+    /// 仅图形
     func confirmStyle(iconColor: Color = .green) -> some View {
         self.toggleStyle(ConfirmToggleStyle(iconColor: iconColor))
     }
     
+    /// 图形和标题
     func labelStyle(
         font: Font = .body,
         selectLabelColor: Color = .primary,
@@ -83,7 +85,6 @@ struct LabelToggleStyle: ToggleStyle {
                     .foregroundColor(configuration.isOn ? selectLabelColor : deselectLabelColor)
             }
             .font(font)
-            .padding(.horizontal)
         }
         .buttonStyle(.plain)
     }

@@ -84,6 +84,37 @@ public extension Int64 {
     }
 }
 
+public extension CGFloat {
+    var toInt: Int {
+        Int(self)
+    }
+    
+    /// 转换为文字
+    ///
+    /// 默认不带小数点，最多8位
+    func toString(digit: Int = 0) -> String {
+        if digit == 0 {
+            return String(format: "%.0f", self)
+        } else if digit == 1 {
+            return String(format: "%.1f", self)
+        } else if digit == 2 {
+            return String(format: "%.2f", self)
+        } else if digit == 3 {
+            return String(format: "%.3f", self)
+        } else if digit == 4 {
+            return String(format: "%.4f", self)
+        } else if digit == 5 {
+            return String(format: "%.5f", self)
+        } else if digit == 6 {
+            return String(format: "%.6f", self)
+        } else if digit == 7 {
+            return String(format: "%.7f", self)
+        } else {
+            return String(format: "%.8f", self)
+        }
+    }
+}
+
 public extension Double {
     var toInt: Int {
         Int(self)

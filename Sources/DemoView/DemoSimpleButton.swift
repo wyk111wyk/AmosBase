@@ -21,6 +21,8 @@ public struct DemoSimpleButton<V: View>: View {
     
     @State private var selectedTag: SimpleTagViewItem?
     
+    @State private var sliderValue: CGFloat = 20
+    
     @ViewBuilder let stateView: () -> V
     public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
         self.stateView = stateView
@@ -36,6 +38,7 @@ public struct DemoSimpleButton<V: View>: View {
                 pickerSection()
                 buttonSection()
                 tagSection()
+                sliderSection()
             }
             .navigationDestination(isPresented: $showPage, destination: {
                 stateView()
@@ -160,6 +163,18 @@ public struct DemoSimpleButton<V: View>: View {
                 if let selectedTag {
                     Text(selectedTag.title)
                 }
+            }
+        }
+    }
+    
+    private func sliderSection() -> some View {
+        Section {
+            SimpleSlider(value: $sliderValue, range: 0...150)
+        } header: {
+            HStack {
+                Text("Slider")
+                Spacer()
+                Text("\(sliderValue.toString(digit: 1))")
             }
         }
     }
