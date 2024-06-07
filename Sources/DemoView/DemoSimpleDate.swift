@@ -19,9 +19,15 @@ public struct DemoSimpleDate: View {
     public var body: some View {
         Form {
             Section("当前时间") {
+                #if os(watchOS)
+                SimpleCell("时间") {
+                    Text(theDate, style: .date)
+                }
+                #else
                 DatePicker(selection: $theDate) {
                     Text("选择时间")
                 }
+                #endif
             }
             Section("语义描述 - .toString_Relative") {
                 SimpleCell("时间差别(数字)", content: "1月12天5小时 - numeric", stateText: theDate.toString_Relative(
