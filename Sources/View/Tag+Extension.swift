@@ -31,11 +31,11 @@ public struct SimpleTagConfig {
     public init(
         verticalPad: CGFloat = 4,
         horizontalPad: CGFloat = 8,
+        cornerRadius: CGFloat = 5,
+        lineWidth: CGFloat = 1,
         contentFont: Font = .caption,
         contentColor: Color = .blue,
-        cornerRadius: CGFloat = 5,
         borderColor: Color = .blue,
-        lineWidth: CGFloat = 1,
         bgColor: Color? = nil
     ) {
         self.verticalPad = verticalPad
@@ -51,39 +51,37 @@ public struct SimpleTagConfig {
     public static func border(
         verticalPad: CGFloat = 2,
         horizontalPad: CGFloat = 6,
+        cornerRadius: CGFloat = 4,
+        lineWidth: CGFloat = 1,
         contentFont: Font = .caption,
         contentColor: Color = .blue,
-        cornerRadius: CGFloat = 4,
-        borderColor: Color = .blue,
-        lineWidth: CGFloat = 1,
+        borderColor: Color? = nil,
         bgColor: Color? = nil
     ) -> Self {
         .init(verticalPad: verticalPad,
               horizontalPad: horizontalPad,
+              cornerRadius: cornerRadius, 
+              lineWidth: lineWidth,
               contentFont: contentFont,
               contentColor: contentColor,
-              cornerRadius: cornerRadius,
-              borderColor: borderColor,
-              lineWidth: lineWidth,
+              borderColor: borderColor ?? contentColor,
               bgColor: bgColor)
     }
     
     public static func full(
         verticalPad: CGFloat = 5,
         horizontalPad: CGFloat = 10,
+        cornerRadius: CGFloat = 6,
         contentFont: Font = .caption,
         contentColor: Color = .white,
-        cornerRadius: CGFloat = 6,
-        lineWidth: CGFloat = 1,
         bgColor: Color = .blue
     ) -> Self {
         .init(verticalPad: verticalPad,
               horizontalPad: horizontalPad,
+              cornerRadius: cornerRadius,
               contentFont: contentFont,
               contentColor: contentColor,
-              cornerRadius: cornerRadius,
               borderColor: bgColor,
-              lineWidth: lineWidth,
               bgColor: bgColor)
     }
 }
