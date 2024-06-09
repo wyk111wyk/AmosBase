@@ -8,123 +8,112 @@
 import SwiftUI
 
 public extension View {
-    @ViewBuilder func simpleTagBackground<S: ShapeStyle>(verticalPad: CGFloat = 5,
-                                                         horizontalPad: CGFloat = 10,
-                                                         contentFont: Font = .caption,
-                                                         contentColor: S = .white,
-                                                         cornerRadius: CGFloat = 6,
-                                                         bgStyle: S = .blue) -> some View {
-        self.modifier(TagBackground(verticalPad: verticalPad,
-                                    horizontalPad: horizontalPad,
-                                    contentFont: contentFont,
-                                    contentColor: contentColor,
-                                    cornerRadius: cornerRadius,
-                                    bgStyle: bgStyle))
+    @ViewBuilder func simpleTagBackground(_ config: SimpleTagConfig = .full()) -> some View {
+        self.modifier(TagBorder(config: config))
     }
     
-    @ViewBuilder func simpleTagBorder<S: ShapeStyle>(verticalPad: CGFloat = 2,
-                                                     horizontalPad: CGFloat = 6,
-                                                     contentFont: Font = .caption,
-                                                     themeColor: S? = nil,
-                                                     contentColor: S = .blue,
-                                                     cornerRadius: CGFloat = 4,
-                                                     borderStyle: S = .blue,
-                                                     lineWidth: CGFloat = 1,
-                                                     bgColor: S? = nil) -> some View {
-        self.modifier(TagBorder(verticalPad: verticalPad,
-                                horizontalPad: horizontalPad,
-                                contentFont: contentFont,
-                                themeColor: themeColor,
-                                contentColor: contentColor,
-                                cornerRadius: cornerRadius,
-                                borderStyle: borderStyle,
-                                lineWidth: lineWidth,
-                                bgColor: bgColor))
+    @ViewBuilder func simpleTagBorder(_ config: SimpleTagConfig = .border()) -> some View {
+        self.modifier(TagBorder(config: config))
     }
 }
 
-struct TagBorder<S>: ViewModifier where S: ShapeStyle {
+public struct SimpleTagConfig {
+    // 边距
     let verticalPad: CGFloat
     let horizontalPad: CGFloat
+    // 内容
     let contentFont: Font
-    let themeColor: S?
-    let contentColor: S
+    let contentColor: Color
+    // 外观
     let cornerRadius: CGFloat
-    let borderStyle: S
+    let borderColor: Color
+    let bgColor: Color?
+    // Tag
     let lineWidth: CGFloat
-    let bgColor: S?
     
-    init(verticalPad: CGFloat,
-         horizontalPad: CGFloat,
-         contentFont: Font,
-         themeColor: S? = nil,
-         contentColor: S,
-         cornerRadius: CGFloat,
-         borderStyle: S,
-         lineWidth: CGFloat,
-         bgColor: S? = nil) {
+    public init(
+        verticalPad: CGFloat = 4,
+        horizontalPad: CGFloat = 8,
+        contentFont: Font = .caption,
+        contentColor: Color = .blue,
+        cornerRadius: CGFloat = 5,
+        borderColor: Color = .blue,
+        lineWidth: CGFloat = 1,
+        bgColor: Color? = nil
+    ) {
         self.verticalPad = verticalPad
         self.horizontalPad = horizontalPad
         self.contentFont = contentFont
-        self.themeColor = themeColor
         self.contentColor = contentColor
         self.cornerRadius = cornerRadius
-        self.borderStyle = borderStyle
+        self.borderColor = borderColor
         self.lineWidth = lineWidth
         self.bgColor = bgColor
     }
     
-    func body(content: Content) -> some View {
-        content
-            .font(contentFont)
-            .padding(.vertical, verticalPad)
-            .padding(.horizontal, horizontalPad)
-            .foregroundStyle(themeColor != nil ? themeColor! : contentColor)
-            .background {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(themeColor != nil ? themeColor! : borderStyle,
-                            lineWidth: lineWidth)
-            }
-            .background {
-                if let bgColor {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .foregroundStyle(bgColor)
-                }
-            }
+    public static func border(
+        verticalPad: CGFloat = 2,
+        horizontalPad: CGFloat = 6,
+        contentFont: Font = .caption,
+        contentColor: Color = .blue,
+        cornerRadius: CGFloat = 4,
+        borderColor: Color = .blue,
+        lineWidth: CGFloat = 1,
+        bgColor: Color? = nil
+    ) -> Self {
+        .init(verticalPad: verticalPad,
+              horizontalPad: horizontalPad,
+              contentFont: contentFont,
+              contentColor: contentColor,
+              cornerRadius: cornerRadius,
+              borderColor: borderColor,
+              lineWidth: lineWidth,
+              bgColor: bgColor)
+    }
+    
+    public static func full(
+        verticalPad: CGFloat = 5,
+        horizontalPad: CGFloat = 10,
+        contentFont: Font = .caption,
+        contentColor: Color = .white,
+        cornerRadius: CGFloat = 6,
+        lineWidth: CGFloat = 1,
+        bgColor: Color = .blue
+    ) -> Self {
+        .init(verticalPad: verticalPad,
+              horizontalPad: horizontalPad,
+              contentFont: contentFont,
+              contentColor: contentColor,
+              cornerRadius: cornerRadius,
+              borderColor: bgColor,
+              lineWidth: lineWidth,
+              bgColor: bgColor)
     }
 }
 
-struct TagBackground<S>: ViewModifier where S: ShapeStyle {
-    let verticalPad: CGFloat
-    let horizontalPad: CGFloat
-    let contentFont: Font
-    let contentColor: S
-    let cornerRadius: CGFloat
-    let bgStyle: S
+struct TagBorder: ViewModifier {
+    let config: SimpleTagConfig
     
-    init(verticalPad: CGFloat,
-         horizontalPad: CGFloat,
-         contentFont: Font,
-         contentColor: S,
-         cornerRadius: CGFloat,
-         bgStyle: S) {
-        self.verticalPad = verticalPad
-        self.horizontalPad = horizontalPad
-        self.contentFont = contentFont
-        self.contentColor = contentColor
-        self.cornerRadius = cornerRadius
-        self.bgStyle = bgStyle
+    init(config: SimpleTagConfig) {
+        self.config = config
     }
     
     func body(content: Content) -> some View {
         content
-            .font(contentFont)
-            .padding(.vertical, verticalPad)
-            .padding(.horizontal, horizontalPad)
-            .foregroundStyle(contentColor)
+            .font(config.contentFont)
+            .padding(.vertical, config.verticalPad)
+            .padding(.horizontal, config.horizontalPad)
+            .foregroundStyle(config.contentColor)
             .background {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .foregroundStyle(bgStyle)
+                RoundedRectangle(cornerRadius: config.cornerRadius)
+                    .stroke(config.borderColor,
+                            lineWidth: config.lineWidth)
+            }
+            .background {
+                if let bgColor = config.bgColor {
+                    RoundedRectangle(cornerRadius: config.cornerRadius)
+                        .foregroundStyle(bgColor)
+                }
             }
     }
 }

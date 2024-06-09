@@ -22,6 +22,7 @@ public struct DemoSimpleButton<V: View>: View {
     @State private var selectedTag: SimpleTagViewItem?
     
     @State private var sliderValue: CGFloat = 20
+    @State private var starValue: Int = 2
     
     @ViewBuilder let stateView: () -> V
     public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
@@ -39,6 +40,7 @@ public struct DemoSimpleButton<V: View>: View {
                 buttonSection()
                 tagSection()
                 sliderSection()
+                textFieldSection()
             }
             .navigationDestination(isPresented: $showPage, destination: {
                 stateView()
@@ -54,8 +56,7 @@ public struct DemoSimpleButton<V: View>: View {
                        bundleImageType: "png", content: "Content") {
                 HStack {
                     Text("Tag")
-                        .simpleTagBorder(themeColor: .green,
-                                         bgColor: .red)
+                        .simpleTagBorder()
                     Text("Tag")
                         .simpleTagBackground()
                 }
@@ -84,6 +85,10 @@ public struct DemoSimpleButton<V: View>: View {
             SimpleMiddleButton("Middle button", role: .destructive) {}
             SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
         }
+    }
+    
+    @ViewBuilder
+    private func textFieldSection() -> some View {
         #if !os(watchOS)
         Section("TextField") {
             Button { showInput = true } label: {
@@ -170,6 +175,9 @@ public struct DemoSimpleButton<V: View>: View {
     private func sliderSection() -> some View {
         Section {
             SimpleSlider(value: $sliderValue, range: 0...150)
+            SimpleStarSlider(currentRating: $starValue,
+                             systemIcon: "externaldrive.fill",
+                             state: starValue.toString())
         } header: {
             HStack {
                 Text("Slider")

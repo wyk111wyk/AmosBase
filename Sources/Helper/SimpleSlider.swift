@@ -169,13 +169,92 @@ public struct SimpleSlider: View {
     }
 }
 
+public struct SimpleStarSlider: View {
+    /// 范围：1 - 5
+    @Binding var currentRating: Int
+    
+    let systemIcon: String?
+    let title: String?
+    let state: String?
+    let tagConfig: SimpleTagConfig
+    public init(
+        currentRating: Binding<Int>,
+        systemIcon: String? = nil,
+        title: String? = nil,
+        state: String? = nil,
+        tagConfig: SimpleTagConfig = .border()
+    ) {
+        self._currentRating = currentRating
+        self.systemIcon = systemIcon
+        self.title = title
+        self.state = state
+        self.tagConfig = tagConfig
+    }
+    
+    public var body: some View {
+        HStack(spacing: 8) {
+            HStack(spacing: 4) {
+                if let systemIcon {
+                    Image(systemName: systemIcon)
+                }
+                if let title {
+                    Text(title)
+                        .foregroundStyle(.secondary)
+                        .font(.callout)
+                }
+            }
+            
+            if systemIcon != nil || title != nil {
+                RoundedRectangle(cornerRadius: 1)
+                    .frame(width: 1, height:  16)
+                    .foregroundStyle(.secondary)
+                    .opacity(0.4)
+            }
+            
+            HStack(spacing: 12) {
+                ForEach(1...5) { rate in
+                    starButton(rate: rate,
+                               isSelected: rate <= currentRating)
+                }
+            }
+            Spacer()
+            
+            if let state {
+                Text(state)
+                    .simpleTagBorder(tagConfig)
+            }
+        }
+    }
+    
+    private func starButton(rate: Int, isSelected: Bool) -> some View {
+        Button {
+            withAnimation {
+                currentRating = rate
+            }
+        } label: {
+            Image(systemName: "star.fill")
+                .resizable()
+                .frame(width: 24, height: 24)
+                .foregroundStyle(isSelected ? .yellow : .secondary)
+                .opacity(isSelected ? 1 : 0.3)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 #Preview {
-    VStack {
+    VStack(spacing: 20) {
         SimpleSlider(value: .constant(90),
                      range: 20...170)
         SimpleSlider(value: .constant(90),
                      range: 20...170,
                      textType: .value)
+        SimpleStarSlider(
+            currentRating: .constant(2),
+            systemIcon: "moon.stars.fill",
+            title: "经验",
+            state: "Nice"
+        )
     }
         .padding()
 }
