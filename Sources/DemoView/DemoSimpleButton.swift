@@ -56,9 +56,9 @@ public struct DemoSimpleButton<V: View>: View {
                        bundleImageType: "png", content: "Content") {
                 HStack {
                     Text("Tag")
-                        .simpleTagBorder()
+                        .simpleTag(.full())
                     Text("Tag")
-                        .simpleTagBackground()
+                        .simpleTag(.border())
                 }
             }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
             SimpleCell("Title Title Title Title Title Title Title Title Title Title",

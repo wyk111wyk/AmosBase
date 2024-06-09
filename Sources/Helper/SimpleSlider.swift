@@ -221,7 +221,7 @@ public struct SimpleStarSlider: View {
             
             if let state {
                 Text(state)
-                    .simpleTagBorder(tagConfig)
+                    .simpleTag(tagConfig)
             }
         }
     }

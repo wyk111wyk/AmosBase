@@ -96,7 +96,7 @@ public struct SimpleTagsView: View {
             }
             Text(tag.title)
         }
-            .simpleTagBackground(.full(bgColor: tag.color))
+            .simpleTag(.full(bgColor: tag.color))
             .lineLimit(1)
             .frame(height: 22)
     }

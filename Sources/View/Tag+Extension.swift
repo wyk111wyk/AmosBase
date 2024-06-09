@@ -8,11 +8,8 @@
 import SwiftUI
 
 public extension View {
-    @ViewBuilder func simpleTagBackground(_ config: SimpleTagConfig = .full()) -> some View {
-        self.modifier(TagBorder(config: config))
-    }
-    
-    @ViewBuilder func simpleTagBorder(_ config: SimpleTagConfig = .border()) -> some View {
+    /// 将视图转换为 Tag 的显示形式
+    @ViewBuilder func simpleTag(_ config: SimpleTagConfig = .full()) -> some View {
         self.modifier(TagBorder(config: config))
     }
 }
