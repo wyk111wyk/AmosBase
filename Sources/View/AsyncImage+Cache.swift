@@ -18,6 +18,8 @@ public struct CachedAsyncImage<Content>: View where Content: View {
     
     private let content: (AsyncImagePhase) -> Content
     
+    private let successLoaded: (SFImage) -> Void
+    
     private let cacheHelper: SimpleCache?
     
     public var body: some View {
@@ -25,39 +27,86 @@ public struct CachedAsyncImage<Content>: View where Content: View {
             .task(id: urlRequest) { await load() }
     }
     
-    public init(url: URL?, urlCache: URLCache = .shared,  scale: CGFloat = 1) where Content == Image {
+    public init(
+        url: URL?,
+        urlCache: URLCache = .shared,
+        scale: CGFloat = 1,
+        successLoaded: @escaping (SFImage) -> Void = {_ in}
+    ) where Content == Image {
         let urlRequest = url == nil ? nil : URLRequest(url: url!)
-        self.init(urlRequest: urlRequest, urlCache: urlCache, scale: scale)
+        self.init(urlRequest: urlRequest, urlCache: urlCache, scale: scale, successLoaded: successLoaded)
     }
     
-    public init(urlRequest: URLRequest?, urlCache: URLCache = .shared,  scale: CGFloat = 1) where Content == Image {
-        self.init(urlRequest: urlRequest, urlCache: urlCache, scale: scale) { phase in
-#if os(macOS)
-            phase.image ?? Image(nsImage: .init())
-#else
-            phase.image ?? Image(uiImage: .init())
-#endif
-        }
+    public init(
+        urlRequest: URLRequest?,
+        urlCache: URLCache = .shared,
+        scale: CGFloat = 1,
+        successLoaded: @escaping (SFImage) -> Void = {_ in}
+    ) where Content == Image {
+        self.init(urlRequest: urlRequest, urlCache: urlCache, scale: scale, content: { phase in
+            phase.image ?? Image(sfImage: .init())
+        }, successLoaded: successLoaded)
     }
     
-    public init<I, P>(url: URL?, urlCache: URLCache = .shared,  scale: CGFloat = 1, @ViewBuilder content: @escaping (Image) -> I, @ViewBuilder placeholder: @escaping () -> P) where Content == _ConditionalContent<I, P>, I : View, P : View {
+    public init<I, P>(
+        url: URL?,
+        urlCache: URLCache = .shared,
+        scale: CGFloat = 1,
+        @ViewBuilder content: @escaping (Image) -> I,
+        @ViewBuilder placeholder: @escaping () -> P,
+        successLoaded: @escaping (SFImage) -> Void = {_ in}
+    ) where Content == _ConditionalContent<I, P>, I : View, P : View {
         let urlRequest = url == nil ? nil : URLRequest(url: url!)
-        self.init(urlRequest: urlRequest, urlCache: urlCache, scale: scale, content: content, placeholder: placeholder)
+        self.init(
+            urlRequest: urlRequest,
+            urlCache: urlCache,
+            scale: scale,
+            content: content,
+            placeholder: placeholder,
+            successLoaded: successLoaded
+        )
     }
     
-    public init<I, P>(urlRequest: URLRequest?, urlCache: URLCache = .shared,  scale: CGFloat = 1, @ViewBuilder content: @escaping (Image) -> I, @ViewBuilder placeholder: @escaping () -> P) where Content == _ConditionalContent<I, P>, I : View, P : View {
-        self.init(urlRequest: urlRequest, urlCache: urlCache, scale: scale) { phase in
-            if let image = phase.image {
-                content(image)
-            } else {
-                placeholder()
-            }
-        }
+    public init<I, P>(
+        urlRequest: URLRequest?,
+        urlCache: URLCache = .shared,
+        scale: CGFloat = 1,
+        @ViewBuilder content: @escaping (Image) -> I,
+        @ViewBuilder placeholder: @escaping () -> P,
+        successLoaded: @escaping (SFImage) -> Void = {_ in}
+    ) where Content == _ConditionalContent<I, P>, I : View, P : View {
+        self.init(
+            urlRequest: urlRequest,
+            urlCache: urlCache,
+            scale: scale,
+            content: { phase in
+                if let image = phase.image {
+                    content(image)
+                } else {
+                    placeholder()
+                }
+            },
+            successLoaded: successLoaded
+        )
     }
     
-    public init(url: URL?, urlCache: URLCache = .shared, scale: CGFloat = 1, transaction: Transaction = Transaction(), @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
+    public init(
+        url: URL?,
+        urlCache: URLCache = .shared,
+        scale: CGFloat = 1,
+        transaction: Transaction = Transaction(),
+        @ViewBuilder content: @escaping (AsyncImagePhase) -> Content,
+        successLoaded: @escaping (SFImage) -> Void = {_ in}
+    ) {
         let urlRequest = url == nil ? nil : URLRequest(url: url!)
-        self.init(urlRequest: urlRequest, urlCache: urlCache, scale: scale, transaction: transaction, content: content)
+        self.init(
+            urlRequest: urlRequest,
+            urlCache: urlCache,
+            scale: scale,
+            transaction: transaction,
+            content: content,
+            successLoaded: successLoaded
+        )
     }
     
     /// Loads and displays a modifiable image from the specified URL in phases.
@@ -95,7 +144,14 @@ public struct CachedAsyncImage<Content>: View where Content: View {
     ///   - transaction: The transaction to use when the phase changes.
     ///   - content: A closure that takes the load phase as an input, and
     ///     returns the view to display for the specified phase.
-    public init(urlRequest: URLRequest?, urlCache: URLCache = .shared, scale: CGFloat = 1, transaction: Transaction = Transaction(), @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
+    public init(
+        urlRequest: URLRequest?,
+        urlCache: URLCache = .shared,
+        scale: CGFloat = 1,
+        transaction: Transaction = Transaction(),
+        @ViewBuilder content: @escaping (AsyncImagePhase) -> Content,
+        successLoaded: @escaping (SFImage) -> Void = {_ in}
+    ) {
         let configuration = URLSessionConfiguration.default
         configuration.urlCache = urlCache
         self.urlRequest = urlRequest
@@ -105,8 +161,10 @@ public struct CachedAsyncImage<Content>: View where Content: View {
         self.content = content
         self.cacheHelper = try? SimpleCache(isDebuging: false)
         self._phase = State(wrappedValue: .empty)
+        self.successLoaded = successLoaded
         do {
-            if let urlRequest = urlRequest, let image = try cachedImage(from: urlRequest, cache: urlCache) {
+            if let urlRequest = urlRequest, 
+               let image = try cachedImage(from: urlRequest, cache: urlCache) {
                 self._phase = State(wrappedValue: .success(image))
             }
         } catch {
@@ -146,7 +204,10 @@ private extension AsyncImage {
 
 // MARK: - Helpers
 private extension CachedAsyncImage {
-    private func remoteImage(from request: URLRequest, session: URLSession) async throws -> (Image, URLSessionTaskMetrics) {
+    private func remoteImage(
+        from request: URLRequest,
+        session: URLSession
+    ) async throws -> (Image, URLSessionTaskMetrics) {
         let (data, _, metrics) = try await session.data(for: request)
         if metrics.redirectCount > 0 {
             if let idKey = request.url?.absoluteString {
@@ -156,9 +217,13 @@ private extension CachedAsyncImage {
         return (try image(from: data), metrics)
     }
     
-    private func cachedImage(from request: URLRequest, cache: URLCache) throws -> Image? {
+    private func cachedImage(
+        from request: URLRequest,
+        cache: URLCache
+    ) throws -> Image? {
         if let idKey = request.url?.absoluteString,
            let cacheImage = try? cacheHelper?.loadImage(forKey: idKey) {
+            self.successLoaded(cacheImage)
             return Image(sfImage: cacheImage)
         }
         
@@ -166,20 +231,14 @@ private extension CachedAsyncImage {
         return try image(from: cachedResponse.data)
     }
     
+    // 将 Data 转换为 Image
     private func image(from data: Data) throws -> Image {
-#if os(macOS)
-        if let nsImage = NSImage(data: data) {
-            return Image(nsImage: nsImage)
+        if let sfImage = SFImage(data: data) {
+            self.successLoaded(sfImage)
+            return Image(sfImage: sfImage)
         } else {
             throw AsyncImage<Content>.LoadingError()
         }
-#else
-        if let uiImage = UIImage(data: data, scale: scale) {
-            return Image(uiImage: uiImage)
-        } else {
-            throw AsyncImage<Content>.LoadingError()
-        }
-#endif
     }
 }
 
@@ -189,7 +248,11 @@ private class URLSessionTaskController: NSObject, URLSessionTaskDelegate {
     
     var metrics: URLSessionTaskMetrics?
     
-    func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didFinishCollecting metrics: URLSessionTaskMetrics
+    ) {
         self.metrics = metrics
     }
 }

@@ -14,6 +14,9 @@ public struct SimplePicList: View {
     @State private var allImageList: [GithubRepoFileListModel] = []
     @State private var deleteImage: GithubRepoFileListModel?
     
+    @State private var selectedIndex: Int? = nil
+    @State private var allImage: [ImageStoreModel] = []
+    
     @State private var error: Error?
     @State private var copyContent: String?
     
@@ -66,6 +69,10 @@ public struct SimplePicList: View {
         }
         .simpleErrorToast(error: $error)
         .simpleSuccessToast(presentState: .isOptionalPresented($copyContent), displayMode: .topToast, title: "复制图片URL", subtitle: copyContent ?? "无法读取链接")
+        #if os(iOS)
+        .simpleImageViewer(selectedIndex: $selectedIndex,
+                           allPhotos: allImage)
+        #endif
     }
     
     @ViewBuilder
@@ -82,12 +89,22 @@ public struct SimplePicList: View {
                         dismissPage()
                     }
                 } label: {
-                    SimpleCell(gitImage.name, content: gitImage.size.toStorage()) {
+                    SimpleCell(
+                        gitImage.name,
+                        content: gitImage.size.toStorage()
+                    ) {
                         if let imageUrl = URL(string: gitImage.download_url) {
                             CachedAsyncImage(url: imageUrl) { image in
                                 image
                                     .resizable()
                                     .scaledToFit()
+                                    .onTapGesture {
+                                        if let index = allImage.firstIndex(where: {
+                                            $0.id == gitImage.id
+                                        }) {
+                                            selectedIndex = index
+                                        }
+                                    }
                             } placeholder: {
                                 ProgressView()
                             }
@@ -140,7 +157,24 @@ public struct SimplePicList: View {
         
         isLoading = true
         do {
+            allImage.removeAll()
             allImageList = try await picBed.fetchFileList(path: uploadPath.path)
+            if allImageList.isNotEmpty {
+                for gitImage in allImageList {
+                    if let sfImage = try await SimpleWeb().loadImage(from: gitImage.download_url) {
+                        if !allImage.contains(where: {
+                            $0.id == gitImage.id
+                        }) {
+                            allImage.append(
+                                .init(
+                                    id: gitImage.id,
+                                    image: sfImage
+                                )
+                            )
+                        }
+                    }
+                }
+            }
         }catch {
             self.error = error
         }
@@ -153,6 +187,9 @@ public struct SimplePicList: View {
             do {
                 if try await picBed.deleteFile(for: gitImage) {
                     allImageList.removeById(gitImage)
+                    allImage.removeAll(where: {
+                        $0.id == gitImage.id
+                    })
                 }
             }catch {
                 self.error = error
