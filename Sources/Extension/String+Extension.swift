@@ -110,6 +110,11 @@ public extension String {
         self + subfix
     }
     
+    /// 转换为 UUID
+    func toUUID() -> UUID {
+        UUID(uuidString: self) ?? UUID()
+    }
+    
     /// 转换为位置坐标 -  (lat,long) 高德格式
     ///
     /// lat = 120 long = 29
