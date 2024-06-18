@@ -120,7 +120,7 @@ public struct SimpleSlider: View {
             let gradientColor: LinearGradient =
             if hasGradient {
                 LinearGradient(
-                    colors: [color.opacity(0.5), color.darken(by: 0.13)],
+                    colors: [color.lighten(by: 0.3), color.darken(by: 0.13)],
                     startPoint: .leading, endPoint: .trailing)
             }else {
                 LinearGradient(colors: [color], startPoint: .leading, endPoint: .trailing)
@@ -130,7 +130,7 @@ public struct SimpleSlider: View {
                 // Background
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .foregroundStyle(backgroundColor)
-                    .frame(width: .infinity, height: barHeight)
+                    .frame(width: totalWidth, height: barHeight)
                 
                 // Bar Progress
                 RoundedRectangle(cornerRadius: cornerRadius)
@@ -284,7 +284,7 @@ public struct SimpleButtonSlider: View {
                 // Background
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .foregroundStyle(backgroundColor)
-                    .frame(width: .infinity, height: barHeight)
+                    .frame(width: totalWidth, height: barHeight)
                 
                 // Text
                 HStack {
@@ -431,6 +431,7 @@ public struct SimpleStarSlider: View {
                      cornerScale: 2)
         SimpleSlider(value: .constant(90),
                      range: 20...170,
+                     color: .red,
                      textType: .value)
         SimpleButtonSlider(value: .constant(20),
                            range: 0...100,

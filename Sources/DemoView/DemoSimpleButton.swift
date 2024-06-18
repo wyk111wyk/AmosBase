@@ -174,10 +174,10 @@ public struct DemoSimpleButton<V: View>: View {
     
     private func sliderSection() -> some View {
         Section {
-            SimpleSlider(value: $sliderValue, range: 0...150)
-            SimpleSlider(value: $sliderValue, range: 0...150, cornerScale: 2, textType: .value)
-            SimpleButtonSlider(value: $sliderValue, range: 0...150, minText: "0", maxText: "150")
-            SimpleButtonSlider(value: $sliderValue, range: 0...150, buttonWidth: 60, cornerScale: 2, textType: .value)
+            SimpleSlider(value: $sliderValue, range: 0...150, color: .blue)
+            SimpleSlider(value: $sliderValue, range: 0...150, cornerScale: 2, color: .red, textType: .value)
+            SimpleButtonSlider(value: $sliderValue, range: 0...150, color: .green, minText: "0", maxText: "150")
+            SimpleButtonSlider(value: $sliderValue, range: 0...150, buttonWidth: 60, cornerScale: 2, color: .brown, textColor: .white, textType: .value)
             SimpleStarSlider(currentRating: $starValue,
                              systemIcon: "externaldrive.fill",
                              state: starValue.toString())
