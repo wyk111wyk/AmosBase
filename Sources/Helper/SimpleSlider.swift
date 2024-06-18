@@ -32,7 +32,8 @@ public struct SimpleSlider: View {
     let range: ClosedRange<CGFloat>
     let ratio: CGFloat
     
-    let lineWidth: CGFloat
+    let barHeight: CGFloat
+    let cornerScale: CGFloat
     let color: Color
     let backgroundColor: Color
     let textColor: Color
@@ -45,7 +46,8 @@ public struct SimpleSlider: View {
     public init(
         value: Binding<CGFloat>,
         range: ClosedRange<CGFloat> = 0...100,
-        lineWidth: CGFloat = 38,
+        barHeight: CGFloat = 38,
+        cornerScale: CGFloat = 4,
         color: Color = .accentColor,
         backgroundColor: Color? = nil,
         textColor: Color = .primary,
@@ -60,7 +62,8 @@ public struct SimpleSlider: View {
         let totalValue = range.upperBound - range.lowerBound
         self.ratio = 100 / totalValue
         
-        self.lineWidth = lineWidth
+        self.barHeight = barHeight
+        self.cornerScale = cornerScale
         self.color = color
         if let backgroundColor {
             self.backgroundColor = backgroundColor
@@ -71,7 +74,7 @@ public struct SimpleSlider: View {
         self.hasGradient = hasGradient
         self.textType = textType
         self.isDragable =
-        if lineWidth > 10 { isDragable }
+        if barHeight > 10 { isDragable }
         else { false }
     }
     
@@ -87,14 +90,14 @@ public struct SimpleSlider: View {
                 }
             }, set: {
                 let temp = range.lowerBound + ($0 / ratio)
-                debugPrint("新的值: \(temp)")
+//                debugPrint("新的值: \(temp)")
                 value = temp
             })
         GeometryReader { geometry in
             // 进度条尺寸
             let totalWidth = geometry.size.width
-            let fontSize = lineWidth / 2.2
-            let cornerRadius = lineWidth / 4
+            let fontSize = barHeight / 2.2
+            let cornerRadius = barHeight / cornerScale
             let textWidth = fontSize * 5
             // 文字内容
             let textContent: String = textType.content(
@@ -127,13 +130,13 @@ public struct SimpleSlider: View {
                 // Background
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .foregroundStyle(backgroundColor)
-                    .frame(width: .infinity, height: lineWidth)
+                    .frame(width: .infinity, height: barHeight)
                 
                 // Bar Progress
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .foregroundStyle(gradientColor)
                     .frame(width: totalWidth * currentValue.wrappedValue,
-                           height: lineWidth)
+                           height: barHeight)
                     
                 if textContent.isNotEmpty {
                     Text(textContent)
@@ -144,13 +147,14 @@ public struct SimpleSlider: View {
                         .offset(x: offsetX)
                 }
             }
+            .clipShape(RoundedRectangle(cornerSize: .init(width: cornerRadius, height: barHeight)))
             .gesture(
                 DragGesture(minimumDistance: 0)
                     .onChanged({ dragValue in
                         isGragging = true
                         let start: Int = (dragValue.location.x / totalWidth * 100).toInt
                         if start >= 0, start <= 100, isDragable {
-                            debugPrint("目前进度：\(start)%")
+//                            debugPrint("目前进度：\(start)%")
                             withAnimation {
                                 currentValue.wrappedValue = CGFloat(start)
                             }
@@ -158,14 +162,189 @@ public struct SimpleSlider: View {
                     })
                     .onEnded({ endValue in
                         isGragging = false
-                        let end: Int = (endValue.location.x / totalWidth * 100).toInt
-                        if end >= 0, end <= 100, isDragable {
-                            debugPrint("结束进度: \(end)%")
-                        }
                     })
             )
         }
-        .frame(height: lineWidth)
+        .frame(height: barHeight)
+    }
+}
+
+public struct SimpleButtonSlider: View {
+//    @State private var value: CGFloat
+    @Binding var value: CGFloat
+    let range: ClosedRange<CGFloat>
+    let ratio: CGFloat
+    
+    let barHeight: CGFloat
+    let buttonWidth: CGFloat
+    let cornerScale: CGFloat
+    let cornerRadius: CGFloat
+    let color: Color
+    let backgroundColor: Color
+    let textColor: Color
+    
+    let gradientColor: LinearGradient
+    let hasGradient: Bool
+    
+    let textType: SimpleSlider.TextType
+    let minText: String?
+    let maxText: String?
+    let minTextColor: Color?
+    let maxTextColor: Color?
+    
+    @State private var isGragging: Bool = false
+    let isDragable: Bool
+    
+    public init(
+        value: Binding<CGFloat>,
+        range: ClosedRange<CGFloat> = 0...100,
+        barHeight: CGFloat = 38,
+        buttonWidth: CGFloat = 80,
+        cornerScale: CGFloat = 4,
+        color: Color = .accentColor,
+        backgroundColor: Color? = nil,
+        textColor: Color? = nil,
+        hasGradient: Bool = true,
+        textType: SimpleSlider.TextType = .percent,
+        minText: String? = nil,
+        maxText: String? = nil,
+        minTextColor: Color? = nil,
+        maxTextColor: Color? = nil,
+        isDragable: Bool = true
+    ) {
+        // 数据
+        self._value = value
+//        self._value = State(initialValue: value.wrappedValue)
+        self.range = range
+        let totalValue = range.upperBound - range.lowerBound
+        self.ratio = 100 / totalValue
+        
+        self.barHeight = barHeight
+        self.buttonWidth = buttonWidth
+        self.cornerScale = cornerScale
+        self.cornerRadius = barHeight / cornerScale
+        self.color = color
+        if let backgroundColor {
+            self.backgroundColor = backgroundColor
+        }else {
+            self.backgroundColor = color.opacity(0.12)
+        }
+        self.textColor = textColor ?? color.textColor
+        self.hasGradient = hasGradient
+        // 进度条颜色
+        self.gradientColor =
+        if hasGradient {
+            LinearGradient(
+                colors: [color.lighten(by: 0.22), color.darken(by: 0.13)],
+                startPoint: .leading, endPoint: .trailing)
+        }else {
+            LinearGradient(colors: [color], startPoint: .leading, endPoint: .trailing)
+        }
+        
+        self.textType = textType
+        self.minText = minText
+        self.maxText = maxText
+        self.minTextColor = minTextColor
+        self.maxTextColor = maxTextColor
+        
+        self.isDragable =
+        if barHeight > 10 { isDragable }
+        else { false }
+    }
+    
+    public var body: some View {
+        // 0 - 1 之间的系数值
+        let currentValue = Binding<CGFloat>(
+            get: {
+                if value < range.lowerBound { return 0 }
+                else if value > range.upperBound { return 1 }
+                else {
+                    let temp = (value - range.lowerBound) * ratio / 100
+                    return temp
+                }
+            }, set: {
+                let temp = range.lowerBound + ($0 / ratio)
+                value = temp
+            })
+        GeometryReader { geometry in
+            // 进度条尺寸
+            let totalWidth = geometry.size.width
+            let fontSize = barHeight / 2.4
+            // 文字内容
+            let textContent: String = textType.content(
+                percent: currentValue.wrappedValue,
+                value: value,
+                fontSize: fontSize
+            )
+            // 按钮位置
+            let sliderWidth = totalWidth - buttonWidth
+            let buttonOffsetX = sliderWidth * currentValue.wrappedValue
+            
+            ZStack(alignment: .leading) {
+                // Background
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .foregroundStyle(backgroundColor)
+                    .frame(width: .infinity, height: barHeight)
+                
+                // Text
+                HStack {
+                    if let minText {
+                        Text(minText)
+                            .foregroundStyle(minTextColor ?? .gray)
+                    }
+                    Spacer()
+                    if let maxText {
+                        Text(maxText)
+                            .foregroundStyle(maxTextColor ?? .gray)
+                    }
+                }
+                .font(.callout)
+                .padding(.horizontal)
+                
+                // Button Progress
+                ZStack(alignment: .center) {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .foregroundStyle(gradientColor)
+                        .frame(width: buttonWidth, height: barHeight)
+                    
+                    if textContent.isNotEmpty {
+                        Text(textContent)
+                            .lineLimit(1)
+                            .font(.system(size: fontSize, weight: .bold))
+                            .foregroundStyle(textColor)
+                    }
+                }
+                .offset(x: buttonOffsetX)
+            }
+            .clipShape(RoundedRectangle(cornerSize: .init(width: cornerRadius, height: barHeight)))
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged({ dragValue in
+                        isGragging = true
+                        let locationX: CGFloat = dragValue.location.x
+//                        debugPrint("移动坐标X: \(locationX)")
+                        
+                        let newTotalWidth = totalWidth - buttonWidth
+//                        debugPrint("修正宽度：\(newTotalWidth)")
+                        let newLocationX: CGFloat =
+                        if locationX <= (buttonWidth / 2) { 0 }
+                        else { locationX - buttonWidth / 2 }
+//                        debugPrint("修正坐标X: \(newLocationX)")
+                        let percentage: Int = min((newLocationX / newTotalWidth * 100).toInt, 100)
+                        
+                        if percentage >= 0, isDragable {
+//                            debugPrint("目前进度：\(percentage)%")
+                            withAnimation {
+                                currentValue.wrappedValue = CGFloat(percentage)
+                            }
+                        }
+                    })
+                    .onEnded({ endValue in
+                        isGragging = false
+                    })
+            )
+        }
+        .frame(height: barHeight)
     }
 }
 
@@ -244,11 +423,23 @@ public struct SimpleStarSlider: View {
 
 #Preview {
     VStack(spacing: 20) {
-        SimpleSlider(value: .constant(90),
-                     range: 20...170)
+        SimpleSlider(value: .constant(1),
+                     range: 0...100,
+                     barHeight: 20)
+        SimpleSlider(value: .constant(20),
+                     range: 0...100,
+                     cornerScale: 2)
         SimpleSlider(value: .constant(90),
                      range: 20...170,
                      textType: .value)
+        SimpleButtonSlider(value: .constant(20),
+                           range: 0...100,
+                           cornerScale: 2,
+                            minText: "0",
+                            maxText: "100")
+        SimpleButtonSlider(value: .constant(100),
+                           range: 20...100,
+                           textType: .value)
         SimpleStarSlider(
             currentRating: .constant(2),
             systemIcon: "moon.stars.fill",

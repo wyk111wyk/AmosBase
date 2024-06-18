@@ -26,12 +26,20 @@ import WatchKit
 
 public class SimpleDevice: NSObject {
     #if os(iOS)
-    /// 设备进行震动 -  根据传入状态
+    /// 设备进行震动 -  成功、失败
     ///
     /// 可自动判断设备是否支持
-    public static func playHaptic(_ type: UINotificationFeedbackGenerator.FeedbackType) {
+    public static func playNotificationHaptic(_ type: UINotificationFeedbackGenerator.FeedbackType) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(type)
+    }
+    
+    /// 设备进行震动 - 强、弱
+    ///
+    /// 可自动判断设备是否支持
+    public static func playFeedbackHaptic(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
+        let generator = UIImpactFeedbackGenerator(style: style)
+        generator.impactOccurred()
     }
     #elseif canImport(WatchKit)
     

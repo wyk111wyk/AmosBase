@@ -12,7 +12,7 @@ public extension ProgressView {
     /// 圆形进度条
     ///
     /// - Parameter height: 视图的高度（必填）
-    /// - Parameter lineWidth: 线宽（nil 则自动计算）
+    /// - Parameter barHeight: 线宽（nil 则自动计算）
     /// - Parameter hasGradient: 根据主题颜色自动计算渐变色
     /// - Parameter showText: 在中央显示百分比
     /// - Parameter startPoint: 起始点 - 上、下、左、右
@@ -42,11 +42,12 @@ public extension ProgressView {
     
     /// 条形进度条
     ///
-    /// - Parameter lineWidth: 进度条的高度
+    /// - Parameter barHeight: 进度条的高度
     /// - Parameter hasGradient: 根据主题颜色自动计算渐变色
     /// - Parameter textType: 显示文字的类型
     func barStyle(
-        lineWidth: CGFloat = 38,
+        barHeight: CGFloat = 38,
+        cornerScale: CGFloat = 4,
         color: Color = .blue,
         backgroundColor: Color? = nil,
         textColor: Color = .primary,
@@ -55,7 +56,8 @@ public extension ProgressView {
     ) -> some View {
         self.progressViewStyle(
             BarProgressStyle(
-                lineWidth: lineWidth,
+                barHeight: barHeight,
+                cornerScale: cornerScale,
                 color: color,
                 backgroundColor: backgroundColor,
                 textColor: textColor,
@@ -67,7 +69,8 @@ public extension ProgressView {
 }
 
 public struct BarProgressStyle: ProgressViewStyle {
-    let lineWidth: CGFloat
+    let barHeight: CGFloat
+    let cornerScale: CGFloat
     let color: Color
     let backgroundColor: Color
     let textColor: Color
@@ -76,14 +79,16 @@ public struct BarProgressStyle: ProgressViewStyle {
     let textType: SimpleSlider.TextType
     
     public init(
-        lineWidth: CGFloat = 38,
+        barHeight: CGFloat = 38,
+        cornerScale: CGFloat = 4,
         color: Color = .accentColor,
         backgroundColor: Color? = nil,
         textColor: Color = .primary,
         hasGradient: Bool = true,
         textType: SimpleSlider.TextType = .percent
     ) {
-        self.lineWidth = lineWidth
+        self.barHeight = barHeight
+        self.cornerScale = cornerScale
         self.color = color
         if let backgroundColor {
             self.backgroundColor = backgroundColor
@@ -99,7 +104,8 @@ public struct BarProgressStyle: ProgressViewStyle {
         let currentValue = configuration.fractionCompleted ?? 0
         SimpleSlider(value: .constant(currentValue),
                      range: 0...1,
-                     lineWidth: lineWidth,
+                     barHeight: barHeight,
+                     cornerScale: cornerScale,
                      color: color,
                      backgroundColor: backgroundColor,
                      textColor: textColor,
@@ -240,7 +246,7 @@ public struct CircularProgressStyle: ProgressViewStyle {
                 .font(.title)
         }
         VStack {
-            ProgressView(value: 0, total: 100)
+            ProgressView(value: 1, total: 100)
                 .barStyle()
             ProgressView(value: 10, total: 100)
                 .barStyle()
@@ -255,7 +261,7 @@ public struct CircularProgressStyle: ProgressViewStyle {
             ProgressView(value: 100, total: 100)
                 .barStyle(textType: .custom(msg: "Icon Man"))
             ProgressView(value: 80, total: 100)
-                .barStyle(lineWidth: 20)
+                .barStyle(barHeight: 20)
             Text("Bar Progress")
                 .font(.title)
         }

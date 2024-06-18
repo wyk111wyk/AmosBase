@@ -40,7 +40,6 @@ fileprivate struct ClearBackground: ViewModifier {
         if #available(watchOS 9.4, iOS 16.4, macOS 13.3, *) {
             content
                 .presentationBackground(.black.opacity(0.1))
-            //                .presentationBackground(.clear)
                 .presentationBackgroundInteraction(.enabled)
                 .allowsHitTesting(false)
         }else {
@@ -51,7 +50,6 @@ fileprivate struct ClearBackground: ViewModifier {
 }
 #endif
 
-@available(iOS 13, macOS 11, *)
 public struct ToastModifier<Item: Equatable>: ViewModifier{
     
     //    @Binding var isPresenting: Bool
@@ -201,13 +199,13 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
             switch toastView.type {
             case .success:
 #if os(iOS)
-                SimpleDevice.playHaptic(.success)
+                SimpleDevice.playNotificationHaptic(.success)
 #elseif canImport(WatchKit)
                 SimpleDevice.playWatchHaptic(.success)
 #endif
             case .error:
 #if os(iOS)
-                SimpleDevice.playHaptic(.error)
+                SimpleDevice.playNotificationHaptic(.error)
 #elseif canImport(WatchKit)
                 SimpleDevice.playWatchHaptic(.failure)
 #endif
