@@ -22,7 +22,13 @@ public struct SimpleColorPicker: View {
     }
     @State private var hexString: String
     @State private var type: ShowType = .small
+    #if os(watchOS)
+    let columns = [GridItem(.adaptive(minimum: 30, maximum: 40), spacing: 6)]
+    let colorLength: CGFloat = 30
+    #else
     let columns = [GridItem(.adaptive(minimum: 60, maximum: 80), spacing: 12)]
+    let colorLength: CGFloat = 70
+    #endif
     public let saveColor: (Color) -> Void
     
     public let isPush: Bool
@@ -64,6 +70,7 @@ public struct SimpleColorPicker: View {
                 dismissPage()
             }
             .navigationTitle("颜色选择")
+            #if !os(watchOS)
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 if type == .big {
                     bigDisplay()
@@ -71,6 +78,7 @@ public struct SimpleColorPicker: View {
                     smallDisplay()
                 }
             }
+            #endif
         }
     }
 }
@@ -86,6 +94,7 @@ extension SimpleColorPicker {
                 Text("浅色背景")
                     .foregroundStyle(selectedColor)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                     .font(.body)
                     .bold()
                     .padding()
@@ -96,6 +105,7 @@ extension SimpleColorPicker {
                 Text("深色背景")
                     .foregroundStyle(selectedColor)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                     .font(.body)
                     .bold()
                     .padding()
@@ -106,6 +116,7 @@ extension SimpleColorPicker {
                 Text("颜色展示")
                     .foregroundStyle(selectedColor.textColor)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                     .font(.body)
                     .bold()
                     .padding()
@@ -227,17 +238,23 @@ extension SimpleColorPicker {
             Button {
                 selectedColor = .random()
             } label: {
-                SimpleCell("随机颜色", systemImage: "target")
+                SimpleCell("随机颜色", systemImage: "target"){
+                    circleView(selectedColor)
+                }
             }
             Button {
                 selectedColor = .randomLight()
             } label: {
-                SimpleCell("随机颜色（淡）", systemImage: "smallcircle.filled.circle")
+                SimpleCell("随机颜色（淡）", systemImage: "smallcircle.filled.circle") {
+                    circleView(selectedColor)
+                }
             }
             Button {
                 selectedColor = .randomDark()
             } label: {
-                SimpleCell("随机颜色（深）", systemImage: "smallcircle.filled.circle.fill")
+                SimpleCell("随机颜色（深）", systemImage: "smallcircle.filled.circle.fill"){
+                    circleView(selectedColor)
+                }
             }
             lightenSection()
             darkenSection()
@@ -254,7 +271,7 @@ extension SimpleColorPicker {
                 } label: {
                     VStack {
                         colorData.color
-                            .frame(width: 70, height: 70)
+                            .frame(width: colorLength, height: colorLength)
                             .cornerRadius(12)
                         Text(colorData.name)
                             .font(.footnote)
@@ -275,15 +292,17 @@ extension SimpleColorPicker {
     
     @ViewBuilder
     private func darkenSection() -> some View {
-        HStack {
-            Image(systemName: "arrow.down.circle.fill")
-            Spacer()
-            darkenDemo("10%", rate: 0.1)
-            darkenDemo("20%", rate: 0.2)
-            darkenDemo("30%", rate: 0.3)
-            darkenDemo("40%", rate: 0.4)
-            darkenDemo("50%", rate: 0.5)
-            darkenDemo("60%", rate: 0.6)
+        ScrollView(.horizontal) {
+            HStack(spacing: 6) {
+                Image(systemName: "arrow.down.circle.fill")
+                Spacer()
+                darkenDemo("10%", rate: 0.1)
+                darkenDemo("20%", rate: 0.2)
+                darkenDemo("30%", rate: 0.3)
+                darkenDemo("40%", rate: 0.4)
+                darkenDemo("50%", rate: 0.5)
+                darkenDemo("60%", rate: 0.6)
+            }
         }
     }
     
@@ -305,15 +324,17 @@ extension SimpleColorPicker {
     
     @ViewBuilder
     private func lightenSection() -> some View {
-        HStack {
-            Image(systemName: "arrow.up.circle")
-            Spacer()
-            lightenDemo("10%", rate: 0.1)
-            lightenDemo("20%", rate: 0.2)
-            lightenDemo("30%", rate: 0.3)
-            lightenDemo("40%", rate: 0.4)
-            lightenDemo("50%", rate: 0.5)
-            lightenDemo("60%", rate: 0.6)
+        ScrollView(.horizontal) {
+            HStack(spacing: 6) {
+                Image(systemName: "arrow.up.circle")
+                Spacer()
+                lightenDemo("10%", rate: 0.1)
+                lightenDemo("20%", rate: 0.2)
+                lightenDemo("30%", rate: 0.3)
+                lightenDemo("40%", rate: 0.4)
+                lightenDemo("50%", rate: 0.5)
+                lightenDemo("60%", rate: 0.6)
+            }
         }
     }
     

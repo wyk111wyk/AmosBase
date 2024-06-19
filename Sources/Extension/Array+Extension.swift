@@ -94,9 +94,9 @@ public extension Array {
 }
 
 public extension Array where Element: Identifiable {
-    /// 添加或者更新一个元素
+    /// 在最后面添加或者更新一个元素
     @discardableResult
-    mutating func addOrReplace(_ item: Element) -> [Element] {
+    mutating func appendOrReplace(_ item: Element) -> [Element] {
         if self.containById(item) {
             self.replace(item)
         }else {

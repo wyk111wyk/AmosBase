@@ -10,7 +10,7 @@ import Foundation
 // MARK: - Methods
 
 public extension Dictionary where Value : Collection {
-    /// 计算字典的数组值的总个数
+    /// 当 value 是数组时，计算字典的数组内值的总Count
     ///
     /// 例如 字典A有三个Array值，那么就把所有的Array值的count加起来取和
     func elementCount() -> Int {
@@ -21,6 +21,7 @@ public extension Dictionary where Value : Collection {
         return count
     }
     
+    /// 当 value 是数组时，将所有数组合成为一个数组
     func flatElements<T>() -> [T] {
         lazy.flatMap { (_, value) in
             value as! [T]

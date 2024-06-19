@@ -19,7 +19,15 @@ public struct DemoSimpleButton<V: View>: View {
     @State private var singleValue: DemoPickerModel
     @State private var mutipleValue: Set<DemoPickerModel>
     
-    @State private var selectedTag: SimpleTagViewItem?
+    @State private var tagCollectOne: [SimpleTagViewItem] = [
+        .init(title: "Tag1", icon: "person.wave.2.fill"),
+        .init(title: "Tag2", icon: "person.wave.2.fill"),
+        .init(title: "Tag3", icon: "person.wave.2.fill"),
+        .init(title: "Tag4", icon: "person.wave.2.fill"),
+        .init(title: "Tag5", icon: "person.wave.2.fill"),
+        .init(title: "Tag6", icon: "person.wave.2.fill")
+    ]
+    @State private var tagCollectTwo: [SimpleTagViewItem] = []
     
     @State private var sliderValue: CGFloat = 20
     @State private var starValue: Int = 2
@@ -78,12 +86,11 @@ public struct DemoSimpleButton<V: View>: View {
     private func buttonSection() -> some View {
         Section("Button") {
             #if os(iOS) || targetEnvironment(macCatalyst)
-            SimpleMiddleButton("Middle button", role: .none) {
+            SimpleMiddleButton("普通中央按钮", role: .none) {
                 confirmShowPage = true }
                 .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
             #endif
-            SimpleMiddleButton("Middle button", role: .destructive) {}
-            SimpleMiddleButton("Middle button", systemImageName: "person.wave.2.fill", role: .destructive) {}
+            SimpleMiddleButton("重要中央按钮", systemImageName: "person.wave.2.fill", role: .destructive) {}
         }
     }
     
@@ -151,23 +158,30 @@ public struct DemoSimpleButton<V: View>: View {
     
     private func tagSection() -> some View {
         Section {
-            SimpleTagsView(tags: [
-                .init(title: "Tag1", icon: "person.wave.2.fill"),
-                .init(title: "Tag2", icon: "person.wave.2.fill"),
-                .init(title: "Tag3", icon: "person.wave.2.fill"),
-                .init(title: "Tag4", icon: "person.wave.2.fill"),
-                .init(title: "Tag5", icon: "person.wave.2.fill"),
-                .init(title: "Tag6", icon: "person.wave.2.fill")
-            ]) { tag in
-                selectedTag = tag
+            SimpleTagsView(tags: tagCollectOne) { tag in
+                var newTag = tag
+                newTag.color = .blue
+                newTag.icon = "medal"
+                newTag.viewType.toggle()
+                withAnimation {
+                    tagCollectOne.removeById(newTag)
+                    tagCollectTwo.appendOrReplace(newTag)
+                }
+            }
+            SimpleTagsView(tags: tagCollectTwo) { tag in
+                var newTag = tag
+                newTag.color = .purple
+                newTag.icon = "person.wave.2.fill"
+                newTag.viewType.toggle()
+                withAnimation {
+                    tagCollectTwo.removeById(newTag)
+                    tagCollectOne.appendOrReplace(newTag)
+                }
             }
         } header: {
             HStack {
                 Text("Tags")
                 Spacer()
-                if let selectedTag {
-                    Text(selectedTag.title)
-                }
             }
         }
     }

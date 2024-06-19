@@ -35,15 +35,11 @@ struct SimpleMap: View {
     @State private var selectedMarker: SimpleMapMarker?
     @State private var centerMarker: SimpleMapMarker?
     
-    let categories: [MKPointOfInterestCategory]
-    
-    init(categories: [MKPointOfInterestCategory] = [.cafe, .atm, .evCharger, .publicTransport, .hotel]) {
+    init() {
         if isPreviewCondition {
             let camera: MapCamera = .init(centerCoordinate: .init(latitude: 29.721462, longitude: 120.254904), distance: 2000)
             self._position = State(initialValue: .camera(camera))
         }
-        
-        self.categories = categories
     }
     
     var body: some View {
@@ -51,7 +47,7 @@ struct SimpleMap: View {
             .onChanged { value in
                 debugPrint("Tap location: \(value.location)")
             }
-        let press = LongPressGesture()
+        let _ = LongPressGesture()
             .sequenced(before: drag)
         
         Map(position: $position,
@@ -74,7 +70,6 @@ struct SimpleMap: View {
             .mapScope(mapScope)
             .mapStyle(
                 .standard(
-                    pointsOfInterest: .including(categories),
                     showsTraffic: isShowsTraffic
                 )
             )

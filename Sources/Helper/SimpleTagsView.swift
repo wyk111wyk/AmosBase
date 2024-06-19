@@ -7,20 +7,36 @@
 
 import SwiftUI
 
-public struct SimpleTagViewItem {
-    let id: UUID
-    let title: String
-    let icon: String?
-    let color: Color
+public struct SimpleTagViewItem: Identifiable {
+    public enum TagViewType {
+        case full, border
+        
+        @discardableResult
+        mutating func toggle() -> Self {
+            if self == .full { self = .border }
+            else { self = .full }
+            return self
+        }
+    }
     
-    public init(id: UUID = .init(),
-         title: String,
-         icon: String? = nil,
-         color: Color = .purple) {
+    public let id: UUID
+    var title: String
+    var icon: String?
+    var color: Color
+    var viewType: TagViewType
+    
+    public init(
+        id: UUID = .init(),
+        title: String,
+        icon: String? = nil,
+        color: Color = .purple,
+        viewType: TagViewType = .full
+    ) {
         self.id = id
         self.title = title
         self.icon = icon
         self.color = color
+        self.viewType = viewType
     }
 }
 
@@ -29,7 +45,7 @@ public struct SimpleTagsView: View {
         case list, vstack
     }
     
-    @State var tags: [SimpleTagViewItem]
+    let tags: [SimpleTagViewItem]
     @State private var totalHeight: CGFloat
     let tagAction: (SimpleTagViewItem) -> Void
     
@@ -96,9 +112,23 @@ public struct SimpleTagsView: View {
             }
             Text(tag.title)
         }
-            .simpleTag(.full(bgColor: tag.color))
+            .simpleTag(tagConfig(for: tag))
             .lineLimit(1)
             .frame(height: 22)
+    }
+    
+    private func tagConfig(for tag: SimpleTagViewItem) -> SimpleTagConfig {
+        switch tag.viewType {
+        case .full:
+                .full(bgColor: tag.color)
+        case .border:
+                .border(
+                    verticalPad: 5,
+                    horizontalPad: 10,
+                    cornerRadius: 6,
+                    contentColor: tag.color
+                )
+        }
     }
 
     private func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {
@@ -115,7 +145,7 @@ public struct SimpleTagsView: View {
 #Preview("TagView") {
     let example: [SimpleTagViewItem] = [
         .init(title: "simple", icon: "rectangle.portrait.and.arrow.right"),
-        .init(title: "tag"),
+        .init(title: "tag", viewType: .border),
         .init(title: "view", icon: "pencil.slash"),
         .init(title: "with"),
         .init(title: "Go"),

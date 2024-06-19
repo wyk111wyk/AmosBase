@@ -18,7 +18,8 @@ public extension View {
         type: SimplePlaceholderType? = nil,
         systemImageName: String? = nil,
         imageName: String? = nil,
-        imageLength: CGFloat = 120,
+        imageLength: CGFloat = 180,
+        imagePadding: CGFloat? = 80,
         title: String,
         subtitle: String? = nil,
         content: String? = nil,
@@ -30,22 +31,27 @@ public extension View {
         offsetY: CGFloat = 0,
         maxWidth: CGFloat = 250,
         @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }) -> some View {
-            modifier(SimplePlaceholderModify(isPresent: isPresent,
-                                             type: type,
-                                             systemImageName: systemImageName,
-                                             imageName: imageName,
-                                             imageLength: imageLength,
-                                             title: title,
-                                             subtitle: subtitle,
-                                             contentText: content,
-                                             themeColor: themeColor,
-                                             imageColor: imageColor,
-                                             titleColor: titleColor,
-                                             subtitleColor: subtitleColor,
-                                             contentColor: contentColor,
-                                             offsetY: offsetY,
-                                             maxWidth: maxWidth,
-                                             buttonView: buttonView))
+            modifier(
+                SimplePlaceholderModify(
+                    isPresent: isPresent,
+                    type: type,
+                    systemImageName: systemImageName,
+                    imageName: imageName,
+                    imageLength: imageLength,
+                    imagePadding: imagePadding,
+                    title: title,
+                    subtitle: subtitle,
+                    contentText: content,
+                    themeColor: themeColor,
+                    imageColor: imageColor,
+                    titleColor: titleColor,
+                    subtitleColor: subtitleColor,
+                    contentColor: contentColor,
+                    offsetY: offsetY,
+                    maxWidth: maxWidth,
+                    buttonView: buttonView
+                )
+            )
         }
 }
 
@@ -56,6 +62,7 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
     var systemImageName: String? = nil
     var imageName: String? = nil
     var imageLength: CGFloat = 120
+    var imagePadding: CGFloat? = 80
     var title: String
     var subtitle: String? = nil
     var contentText: String? = nil
@@ -86,6 +93,7 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
                     subtitleColor: subtitleColor,
                     contentColor: contentColor,
                     imageLength: imageLength,
+                    imagePadding: imagePadding,
                     offsetY: offsetY,
                     maxWidth: maxWidth,
                     buttonView: buttonView)
@@ -96,8 +104,16 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
     }
 }
 
-public enum SimplePlaceholderType {
-    case listEmpty, favorEmpty
+public enum SimplePlaceholderType: String, Identifiable {
+    case listEmpty, favorEmpty, allDone, map
+    
+    static var allCases: [SimplePlaceholderType] {
+        [.listEmpty, .favorEmpty, .allDone, .map]
+    }
+    
+    public var id: String {
+        self.rawValue
+    }
     
     var image: Image {
         switch self {
@@ -105,6 +121,23 @@ public enum SimplePlaceholderType {
             return .init(packageResource: "empty", ofType: "png")
         case .favorEmpty:
             return .init(packageResource: "star", ofType: "png")
+        case .allDone:
+            return .init(packageResource: "allDone", ofType: "png")
+        case .map:
+            return .init(packageResource: "map", ofType: "png")
+        }
+    }
+    
+    var title: String {
+        switch self {
+        case .listEmpty:
+            "内容为空"
+        case .favorEmpty:
+            "收藏夹"
+        case .allDone:
+            "全部完成"
+        case .map:
+            "授权地点"
         }
     }
 }
@@ -130,6 +163,7 @@ public struct SimplePlaceholder<V: View>: View {
     let contentColor: Color
     
     let imageLength: CGFloat
+    let imagePadding: CGFloat?
     let titleFont: Font
     let contentSpace: CGFloat
     let offsetY: CGFloat
@@ -150,9 +184,10 @@ public struct SimplePlaceholder<V: View>: View {
                 subtitleColor: Color = .gray,
                 contentColor: Color = .secondary,
                 imageLength: CGFloat = 120,
+                imagePadding: CGFloat? = 80,
                 titleFont: Font = .title,
                 contentSpace: CGFloat = 15,
-                offsetY: CGFloat = -30,
+                offsetY: CGFloat = -10,
                 maxWidth: CGFloat = 250,
                 @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }) {
         self.type = type
@@ -165,12 +200,14 @@ public struct SimplePlaceholder<V: View>: View {
         #if os(watchOS)
         self.titleFont = .system(size: 20, weight: .medium)
         self.imageLength = 50
+        self.imagePadding = 8
         self.contentSpace = 8
         self.offsetY = 0
         self.maxWidth = 120
         #else
         self.titleFont = titleFont
         self.imageLength = imageLength
+        self.imagePadding = imagePadding
         self.contentSpace = contentSpace
         self.offsetY = offsetY
         self.maxWidth = maxWidth
@@ -193,24 +230,28 @@ public struct SimplePlaceholder<V: View>: View {
     
     public var body: some View {
         VStack(spacing: contentSpace) {
-            if let type {
-                type.image
-                    .imageModify(length: imageLength)
-                    .modifier(TapImageAnimation())
-            }else if let systemImageName {
-                Image(systemName: systemImageName)
-                    .imageModify(color: imageColor, length: imageLength)
-                    .modifier(TapImageAnimation())
-            }else if let imageName {
-                Image(imageName)
-                    .imageModify(length: imageLength)
-                    .modifier(TapImageAnimation())
+            Group {
+                if let type {
+                    type.image
+                        .imageModify(length: imageLength)
+                        .modifier(TapImageAnimation())
+                }else if let systemImageName {
+                    Image(systemName: systemImageName)
+                        .imageModify(color: imageColor, length: imageLength)
+                        .modifier(TapImageAnimation())
+                }else if let imageName {
+                    Image(imageName)
+                        .imageModify(length: imageLength)
+                        .modifier(TapImageAnimation())
+                }
             }
+            .padding(.bottom, imagePadding)
             VStack(spacing: contentSpace/2) {
                 Text(LocalizedStringKey(title))
                     .font(titleFont)
                     .foregroundStyle(titleColor)
                     .lineLimit(1)
+                #if !os(watchOS)
                 if let subtitle {
                     Text(LocalizedStringKey(subtitle))
                         .font(.headline)
@@ -225,6 +266,7 @@ public struct SimplePlaceholder<V: View>: View {
                         .foregroundStyle(contentColor)
                         .fixedSize(horizontal: false, vertical: true)
                 }
+                #endif
             }
             buttonView()
         }

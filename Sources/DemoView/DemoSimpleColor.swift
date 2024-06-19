@@ -18,15 +18,30 @@ public struct DemoSimpleColor: View {
     
     @State private var showColor: SimpleColorModel? = nil
     
-    var columns = [GridItem(.adaptive(minimum: 60, maximum: 80), spacing: 12)]
+    #if os(watchOS)
+    let columns = [GridItem(.adaptive(minimum: 30, maximum: 40), spacing: 6)]
+    let colorLength: CGFloat = 30
+    #else
+    let columns = [GridItem(.adaptive(minimum: 60, maximum: 80), spacing: 12)]
+    let colorLength: CGFloat = 70
+    #endif
     
     public var body: some View {
         Form {
             Section("颜色处理") {
-                randomColorCell()
 #if !os(watchOS)
                 ColorPicker("挑选颜色", selection: $pickColor)
 #endif
+                NavigationLink {
+                    SimpleColorPicker { newColor in
+                        pickColor = newColor
+                    }
+                } label: {
+                    SimpleCell("自定义颜色") {
+                        circleView(pickColor)
+                    }
+                }
+                randomColorCell()
                 SimpleCell("颜色混合") {
                     HStack {
                         circleView(randomColor)
@@ -56,11 +71,19 @@ public struct DemoSimpleColor: View {
         .sheet(item: $showColor) { colorModel in
             ZStack {
                 colorModel.color
-                    .onTapGesture { showColor = nil }
+                    .onTapGesture {
+                        showColor = nil
+                    }
                     .ignoresSafeArea()
                 Text(colorModel.name)
                     .font(.headline)
                     .foregroundStyle(colorModel.color.isLight() ? .black : .white)
+            }
+            .buttonCirclePage(role: .destructive, labelColor: showColor?.color.textColor ?? .white) {
+                if let newColor = showColor?.color {
+                    pickColor = newColor
+                }
+                showColor = nil
             }
         }
     }
@@ -86,17 +109,19 @@ extension DemoSimpleColor {
     
     @ViewBuilder
     private func darkenSection() -> some View {
-        HStack {
-            Text("变暗")
-                .bold()
-                .foregroundStyle(pickColor)
-            Spacer()
-            darkenDemo("-10%", rate: 0.1)
-            darkenDemo("-20%", rate: 0.2)
-            darkenDemo("-30%", rate: 0.3)
-            darkenDemo("-40%", rate: 0.4)
-            darkenDemo("-50%", rate: 0.5)
-            darkenDemo("-60%", rate: 0.6)
+        ScrollView(.horizontal) {
+            HStack(spacing: 6) {
+                Text("变暗")
+                    .bold()
+                    .foregroundStyle(pickColor)
+                Spacer()
+                darkenDemo("-10%", rate: 0.1)
+                darkenDemo("-20%", rate: 0.2)
+                darkenDemo("-30%", rate: 0.3)
+                darkenDemo("-40%", rate: 0.4)
+                darkenDemo("-50%", rate: 0.5)
+                darkenDemo("-60%", rate: 0.6)
+            }
         }
     }
     
@@ -112,17 +137,19 @@ extension DemoSimpleColor {
     
     @ViewBuilder
     private func lightenSection() -> some View {
-        HStack {
-            Text("变淡")
-                .bold()
-                .foregroundStyle(pickColor)
-            Spacer()
-            lightenDemo("+10%", rate: 0.1)
-            lightenDemo("+20%", rate: 0.2)
-            lightenDemo("+30%", rate: 0.3)
-            lightenDemo("+40%", rate: 0.4)
-            lightenDemo("+50%", rate: 0.5)
-            lightenDemo("+60%", rate: 0.6)
+        ScrollView(.horizontal) {
+            HStack(spacing: 6) {
+                Text("变淡")
+                    .bold()
+                    .foregroundStyle(pickColor)
+                Spacer()
+                lightenDemo("+10%", rate: 0.1)
+                lightenDemo("+20%", rate: 0.2)
+                lightenDemo("+30%", rate: 0.3)
+                lightenDemo("+40%", rate: 0.4)
+                lightenDemo("+50%", rate: 0.5)
+                lightenDemo("+60%", rate: 0.6)
+            }
         }
     }
     
@@ -147,7 +174,8 @@ extension DemoSimpleColor {
                 } label: {
                     VStack {
                         colorData.color
-                            .frame(width: 70, height: 70)
+                            .frame(width: colorLength, 
+                                   height: colorLength)
                             .cornerRadius(12)
                         Text(colorData.name)
                             .font(.footnote)

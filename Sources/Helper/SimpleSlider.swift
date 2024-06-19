@@ -138,14 +138,12 @@ public struct SimpleSlider: View {
                     .frame(width: totalWidth * currentValue.wrappedValue,
                            height: barHeight)
                     
-                if textContent.isNotEmpty {
-                    Text(textContent)
-                        .lineLimit(1)
-                        .frame(width: textWidth, alignment: isTextFront ? .leading : .trailing)
-                        .font(.system(size: fontSize, weight: .bold))
-                        .foregroundStyle(textColor_)
-                        .offset(x: offsetX)
-                }
+                Text(textContent)
+                    .lineLimit(1)
+                    .frame(width: textWidth, alignment: isTextFront ? .leading : .trailing)
+                    .font(.system(size: fontSize, weight: .bold))
+                    .foregroundStyle(textColor_)
+                    .offset(x: offsetX)
             }
             .clipShape(RoundedRectangle(cornerSize: .init(width: cornerRadius, height: barHeight)))
             .gesture(
@@ -307,12 +305,10 @@ public struct SimpleButtonSlider: View {
                         .foregroundStyle(gradientColor)
                         .frame(width: buttonWidth, height: barHeight)
                     
-                    if textContent.isNotEmpty {
-                        Text(textContent)
-                            .lineLimit(1)
-                            .font(.system(size: fontSize, weight: .bold))
-                            .foregroundStyle(textColor)
-                    }
+                    Text(textContent)
+                        .lineLimit(1)
+                        .font(.system(size: fontSize, weight: .bold))
+                        .foregroundStyle(textColor)
                 }
                 .offset(x: buttonOffsetX)
             }
@@ -372,6 +368,7 @@ public struct SimpleStarSlider: View {
     
     public var body: some View {
         HStack(spacing: 8) {
+            #if !os(watchOS)
             HStack(spacing: 4) {
                 if let systemIcon {
                     Image(systemName: systemIcon)
@@ -389,6 +386,7 @@ public struct SimpleStarSlider: View {
                     .foregroundStyle(.secondary)
                     .opacity(0.4)
             }
+            #endif
             
             HStack(spacing: 12) {
                 ForEach(1...5) { rate in
@@ -396,12 +394,15 @@ public struct SimpleStarSlider: View {
                                isSelected: rate <= currentRating)
                 }
             }
+            
+            #if !os(watchOS)
             Spacer()
             
             if let state {
                 Text(state)
                     .simpleTag(tagConfig)
             }
+            #endif
         }
     }
     
@@ -422,31 +423,32 @@ public struct SimpleStarSlider: View {
 }
 
 #Preview {
-    VStack(spacing: 20) {
-        SimpleSlider(value: .constant(1),
-                     range: 0...100,
-                     barHeight: 20)
-        SimpleSlider(value: .constant(20),
-                     range: 0...100,
-                     cornerScale: 2)
-        SimpleSlider(value: .constant(90),
-                     range: 20...170,
-                     color: .red,
-                     textType: .value)
-        SimpleButtonSlider(value: .constant(20),
-                           range: 0...100,
-                           cornerScale: 2,
-                            minText: "0",
-                            maxText: "100")
-        SimpleButtonSlider(value: .constant(100),
-                           range: 20...100,
-                           textType: .value)
-        SimpleStarSlider(
-            currentRating: .constant(2),
-            systemIcon: "moon.stars.fill",
-            title: "经验",
-            state: "Nice"
-        )
+    NavigationStack {
+        Form {
+            SimpleStarSlider(
+                currentRating: .constant(2),
+                systemIcon: "moon.stars.fill",
+                title: "经验",
+                state: "Nice"
+            )
+            SimpleSlider(value: .constant(1),
+                         range: 0...100,
+                         barHeight: 20)
+            SimpleSlider(value: .constant(20),
+                         range: 0...100,
+                         cornerScale: 2)
+            SimpleSlider(value: .constant(90),
+                         range: 20...170,
+                         color: .red,
+                         textType: .value)
+            SimpleButtonSlider(value: .constant(20),
+                               range: 0...100,
+                               cornerScale: 2,
+                               minText: "0",
+                               maxText: "100")
+            SimpleButtonSlider(value: .constant(100),
+                               range: 20...100,
+                               textType: .value)
+        }
     }
-        .padding()
 }

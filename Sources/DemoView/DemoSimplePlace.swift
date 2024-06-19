@@ -8,8 +8,22 @@
 import SwiftUI
 
 struct DemoSimplePlaceholder: View {
+    @State private var selectedItem: SimplePlaceholderType?
     
     var body: some View {
+        TabView() {
+            ForEach(SimplePlaceholderType.allCases) { type in
+                placeholder(type).tag(type)
+            }
+        }
+        #if os(iOS)
+        .tabViewStyle(.page)
+        .indexViewStyle(.page(backgroundDisplayMode: .always))
+        #endif
+        .navigationTitle("占位符")
+    }
+    
+    private func placeholder(_ type: SimplePlaceholderType) -> some View {
         List {
             Text("")
             #if os(iOS)
@@ -17,10 +31,9 @@ struct DemoSimplePlaceholder: View {
             #endif
         }
         .listStyle(.plain)
-        .navigationTitle("占位符")
         .simplePlaceholder(isPresent: true,
-                           systemImageName: "list.clipboard",
-                           title: "Title Title",
+                           type: type,
+                           title: type.title,
                            subtitle: "Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle",
                            content: "content content content content content content content content content content content content content content content content") {
             Button("Button") {

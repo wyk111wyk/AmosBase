@@ -12,6 +12,7 @@ public struct DemoSimpleUpload: View {
     @AppStorage("gitToken") private var gitToken: String = ""
     @State private var showGithubKey = false
     
+    @State private var showPhotoPicker = false
     @State private var selectedItem: PhotosPickerItem?
     @State private var selectedImage: SFImage? {
         didSet {
@@ -37,12 +38,6 @@ public struct DemoSimpleUpload: View {
         NavigationStack {
             Form {
                 Section {
-                    photoView()
-                        #if !os(watchOS)
-                        .onDropImage { image in
-                            chooseImage(image)
-                        }
-                        #endif
                     imagePicker()
                     clipImageView()
                     imageInfo()
@@ -106,20 +101,17 @@ public struct DemoSimpleUpload: View {
     }
     
     @ViewBuilder
-    private func photoView() -> some View {
-        if let showImage {
-            Image(sfImage: showImage)
-                .imageModify()
-        }else {
-            Image(sfImage: .placeHolder)
-                .imageModify(length: 100)
-        }
-    }
-    
-    @ViewBuilder
     private func imagePicker() -> some View {
-        PhotosPicker("挑选图片", selection: $selectedItem, matching: .images)
-            #if os(iOS)
+        photoView()
+            .onTapGesture {
+                showPhotoPicker = true
+            }
+            #if !os(watchOS)
+            .onDropImage { image in
+                selectedImage = image
+            }
+            #endif
+            .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItem, matching: .images)
             .onChange(of: selectedItem) { newItem in
                 if let newItem {
                     Task {
@@ -128,7 +120,17 @@ public struct DemoSimpleUpload: View {
                     }
                 }
             }
-            #endif
+    }
+    
+    @ViewBuilder
+    private func photoView() -> some View {
+        if let showImage {
+            Image(sfImage: showImage)
+                .imageModify()
+        }else {
+            Image(sfImage: .placeHolder)
+                .imageModify(length: 100)
+        }
     }
     
     @ViewBuilder

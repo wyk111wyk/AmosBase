@@ -109,13 +109,15 @@ extension DemoSimpleImage {
     @ViewBuilder
     private func imagePicker() -> some View {
         photoView()
+            .onTapGesture {
+                showPhotoPicker = true
+            }
             #if !os(watchOS)
             .onDropImage { image in
                 selectedImage = image
             }
             #endif
-        PhotosPicker("挑选图片", selection: $selectedItem, matching: .images)
-            #if os(iOS)
+            .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItem, matching: .images)
             .onChange(of: selectedItem) { newItem in
                 if let newItem {
                     Task {
@@ -124,7 +126,6 @@ extension DemoSimpleImage {
                     }
                 }
             }
-        #endif
     }
     
     @MainActor
