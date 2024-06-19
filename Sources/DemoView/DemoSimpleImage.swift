@@ -99,7 +99,7 @@ extension DemoSimpleImage {
     private func photoView() -> some View {
         if let selectedImage {
             Image(sfImage: selectedImage)
-                .imageModify()
+                .imageModify(length: 1000)
         }else {
             Image(sfImage: placeHolder)
                 .imageModify()

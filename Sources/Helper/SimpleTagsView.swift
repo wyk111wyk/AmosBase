@@ -101,6 +101,7 @@ public struct SimpleTagsView: View {
                     .onTapGesture {
                         tagAction(tag)
                     }
+                    .contentShape(Rectangle())
             }
         }.background(viewHeightReader($totalHeight))
     }
