@@ -113,7 +113,7 @@ extension SimpleColorPicker {
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundStyle(.black)
                     }
-                Text("颜色展示")
+                Text("作为背景")
                     .foregroundStyle(selectedColor.textColor)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
@@ -233,26 +233,26 @@ extension SimpleColorPicker {
                     }
             }
             #if !os(watchOS)
-            ColorPicker("自定义", selection: $selectedColor, supportsOpacity: true)
+            ColorPicker("自定义颜色", selection: $selectedColor, supportsOpacity: true)
             #endif
             Button {
                 selectedColor = .random()
             } label: {
-                SimpleCell("随机颜色", systemImage: "target"){
+                SimpleCell("生成随机颜色", systemImage: "target"){
                     circleView(selectedColor)
                 }
             }
             Button {
                 selectedColor = .randomLight()
             } label: {
-                SimpleCell("随机颜色（淡）", systemImage: "smallcircle.filled.circle") {
+                SimpleCell("生成随机颜色（淡）", systemImage: "smallcircle.filled.circle") {
                     circleView(selectedColor)
                 }
             }
             Button {
                 selectedColor = .randomDark()
             } label: {
-                SimpleCell("随机颜色（深）", systemImage: "smallcircle.filled.circle.fill"){
+                SimpleCell("生成随机颜色（深）", systemImage: "smallcircle.filled.circle.fill"){
                     circleView(selectedColor)
                 }
             }
@@ -295,6 +295,7 @@ extension SimpleColorPicker {
         ScrollView(.horizontal) {
             HStack(spacing: 6) {
                 Image(systemName: "arrow.down.circle.fill")
+                Text("变深")
                 Spacer()
                 darkenDemo("10%", rate: 0.1)
                 darkenDemo("20%", rate: 0.2)
@@ -327,6 +328,7 @@ extension SimpleColorPicker {
         ScrollView(.horizontal) {
             HStack(spacing: 6) {
                 Image(systemName: "arrow.up.circle")
+                Text("变淡")
                 Spacer()
                 lightenDemo("10%", rate: 0.1)
                 lightenDemo("20%", rate: 0.2)
