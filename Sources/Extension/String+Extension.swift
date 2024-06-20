@@ -363,6 +363,65 @@ public extension String {
         return phoneNumber
     }
     
+    /// 生成随机中文句子
+    static func randomChineseSentence(
+        hasShort: Bool = true,
+        hasMedium: Bool = true,
+        hasLong: Bool = true
+    ) -> String {
+        let shortSentences: [String] = [
+            "买菜回来做饭。",
+            "今天的天气真好。",
+            "记得明天开会。",
+            "需要整理房间。",
+            "请尽快提交报告。",
+            "下午去健身房。",
+            "他很喜欢读书。",
+            "这个菜很好吃。",
+            "我们一起去旅行。",
+            "她正在学习编程。"
+        ]
+
+        let mediumSentences: [String] = [
+            "明天我们要去学校参加一个非常重要的会议。",
+            "他每天早上都会跑步，然后吃一顿丰盛的早餐。",
+            "最近的工作进展非常顺利，大家都很开心。",
+            "这个周末打算和朋友一起去看电影。",
+            "家里的花园需要重新整理一下，种些新的花草。",
+            "计划下个月去海边度假，放松一下心情。",
+            "他们正在开发一个新项目，希望能顺利完成。",
+            "这个菜谱非常简单，适合新手尝试。",
+            "她正在准备考试，压力有点大。",
+            "我们打算在年底前完成所有的工作任务。"
+        ]
+
+        let longSentences: [String] = [
+            "最近公司的业绩有所提升，团队的努力和付出得到了回报，大家都很有成就感，希望未来能够继续保持这种良好的势头。",
+            "昨天我去参加了一个非常有趣的讲座，讲座内容涉及到人工智能的发展前景，让我对这个领域产生了浓厚的兴趣。",
+            "这个周末我们全家打算去郊外野餐，带上美味的食物和饮料，还有一些休闲娱乐的工具，一定会度过一个愉快的时光。",
+            "他最近在学习一门新的编程语言，虽然有些难度，但他坚持不懈地努力，希望能够在不久的将来掌握这门技能。",
+            "今天下班后打算去超市采购一些生活必需品，然后回家做一顿丰盛的晚餐，犒劳一下自己。",
+            "这个项目的成功离不开团队的合作，每个人都贡献了自己的力量，最终才能取得这样的好成绩。",
+            "最近天气转凉了，要注意保暖，特别是早晚温差比较大的时候，容易感冒。",
+            "这个假期打算去几个不同的城市旅行，感受不同地方的风土人情和美食。",
+            "他最近在研究一项新的技术，希望能够将其应用到实际项目中，为公司创造更多的价值。",
+            "今天早上起来看到窗外的景色非常美丽，阳光洒在树叶上，显得格外温暖和宁静。"
+        ]
+
+        var textArray: [String] = []
+        if hasShort {
+            textArray.append(contentsOf: shortSentences)
+        }
+        if hasMedium {
+            textArray.append(contentsOf: mediumSentences)
+        }
+        if hasLong {
+            textArray.append(contentsOf: longSentences)
+        }
+        
+        return textArray.shuffled().randomElement() ?? "N/A"
+    }
+    
     /// 计算字符的宽度 -  使用UIFont
     func getWidth(font: SFFont) -> CGFloat {
         let fontAttributes = [NSAttributedString.Key.font: font]

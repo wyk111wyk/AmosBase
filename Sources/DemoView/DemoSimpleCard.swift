@@ -34,7 +34,7 @@ struct DemoSimpleCard: View {
             } background: { _ in
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundStyle(.green.gradient)
-                    .shadow(radius: 10)
+                    .shadow(radius: 5, y: 5)
             } bottomView: {
                 VStack(spacing: 15) {
                     buttonView()

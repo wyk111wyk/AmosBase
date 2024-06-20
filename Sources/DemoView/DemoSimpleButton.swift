@@ -60,24 +60,22 @@ public struct DemoSimpleButton<V: View>: View {
     
     private func cellSection() -> some View {
         Section("Cell") {
-            SimpleCell("Swipe Test", bundleImageName: "LAL_r",
-                       bundleImageType: "png", content: "Content") {
+            SimpleCell("划动测试", bundleImageName: "LAL_r",
+                       bundleImageType: "png", content: String.randomChineseSentence(hasMedium: false, hasLong: false)) {
                 HStack {
-                    Text("Tag")
-                        .simpleTag(.full())
                     Text("Tag")
                         .simpleTag(.border())
                 }
             }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
-            SimpleCell("Title Title Title Title Title Title Title Title Title Title",
+            SimpleCell(String.randomChineseSentence(hasLong: false),
                        systemImage: "person.wave.2.fill",
-                       content: "Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont",
+                       content: String.randomChineseSentence(hasShort: false),
                        fullContent: true
             )
-            SimpleCell("Title Title Title Title Title Title",
+            SimpleCell(String.randomChineseSentence(hasLong: false),
                        systemImage: "person.wave.2.fill",
-                       content: "Cont Cont Cont Cont Cont Cont Cont Cont Cont Cont",
-                       stateText: "State Text State Text State Text State Text"
+                       content: String.randomChineseSentence(hasShort: false, hasLong: false),
+                       stateText: String.randomChineseSentence(hasMedium: false, hasLong: false)
             )
         }
     }
@@ -123,9 +121,9 @@ public struct DemoSimpleButton<V: View>: View {
                     singleValue = newValue
                 }
             } label: {
-                SimpleCell("Single Picker",
+                SimpleCell("单项选择",
                            systemImage: "person.wave.2.fill",
-                           content: "Content Content Content",
+                           content: "仅可选择1项",
                            stateText: singleValue.title)
             }
             NavigationLink {
@@ -138,7 +136,7 @@ public struct DemoSimpleButton<V: View>: View {
                         mutipleValue = newSelects
                     })
             } label: {
-                SimpleCell("Mutile Picker",
+                SimpleCell("多项选择",
                            systemImage: "person.wave.2.fill",
                            content: "Select count: \(mutipleValue.count)") {
                     Text(mutipleValue.map { $0.title }.joined(separator: ", ")).multilineTextAlignment(.leading)
