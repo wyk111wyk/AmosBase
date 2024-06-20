@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SimpleTagViewItem: Identifiable {
+public struct SimpleTagViewItem: Identifiable, SimpleCardable {
     public enum TagViewType {
         case full, border
         

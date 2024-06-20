@@ -8,6 +8,7 @@
 import SwiftUI
 import PhotosUI
 
+#if os(iOS)
 public struct DemoSimpleImage: View {
     let title: String
     public init(_ title: String = "Image 图片") {
@@ -39,7 +40,6 @@ public struct DemoSimpleImage: View {
                 SimpleCell("主题颜色") {
                     if let aveColor { circleView(aveColor) }
                 }
-                #if os(iOS)
                 Button {
                     Task { await adjustImageSize() }
                 } label: {
@@ -59,9 +59,8 @@ public struct DemoSimpleImage: View {
                         Text(size.toStorage())
                     }
                 }
-                #endif
             }
-            #if os(iOS)
+            
             Section("图片识别") {
                 SimpleCell("识别文字", stateText: scanText)
                 SimpleCell("识别脸孔") {
@@ -77,7 +76,6 @@ public struct DemoSimpleImage: View {
                 .simpleImageViewer(selectedIndex: $selectedPhotoIndex,
                                    allPhotos: ImageStoreModel.examples())
             }
-            #endif
         }
         .navigationTitle(title)
         .task {
@@ -130,16 +128,13 @@ extension DemoSimpleImage {
     
     @MainActor
     private func adjustImageSize() async {
-        #if os(iOS)
         if let selectedImage {
             let newImage = selectedImage.adjustSizeToSmall(width: 300)
             self.selectedImage = newImage
         }
-        #endif
     }
     
     private func analyzeImage() async {
-        #if os(iOS)
         if let selectedImage {
             // 分析图片的主题颜色
             if let avg = selectedImage.averageColor() {
@@ -150,7 +145,6 @@ extension DemoSimpleImage {
             // 识别图中的脸孔
             faceCount = selectedImage.detectFace()?.count
         }
-        #endif
     }
 }
 
@@ -159,3 +153,4 @@ extension DemoSimpleImage {
         DemoSimpleImage()
     }
 }
+#endif

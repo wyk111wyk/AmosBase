@@ -113,12 +113,14 @@ public struct DemoSimpleUpload: View {
             #endif
             .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItem, matching: .images)
             .onChange(of: selectedItem) { newItem in
+                #if os(iOS)
                 if let newItem {
                     Task {
                         let newImage = try? await newItem.loadTransferable(type: SFImage.self)
                         chooseImage(newImage)
                     }
                 }
+                #endif
             }
     }
     

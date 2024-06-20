@@ -29,26 +29,26 @@ public struct DemoContent<V: View>: View {
                 Section("UI - 提醒") {
                     ForEach(Page.alertSection()) { page in
                         NavigationLink(value: page) {
-                            Label(page.title, systemImage: "bell")
+                            Label(page.title, systemImage: page.icon ?? "bell")
                         }
                     }
                     Button {
                         showToastPage.toggle()
                     } label: {
-                        Label("Toast - Sheet页面", systemImage: "bell")
+                        Label("Toast - Sheet页面", systemImage: "rectangle.portrait.topthird.inset.filled")
                     }
                 }
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
                         NavigationLink(value: page) {
-                            Label(page.title, systemImage: "display")
+                            Label(page.title, systemImage: page.icon ?? "display")
                         }
                     }
                 }
                 Section("Data - 数据处理") {
                     ForEach(Page.dataSection()) { page in
                         NavigationLink(value: page) {
-                            Label(page.title, systemImage: "externaldrive")
+                            Label(page.title, systemImage: page.icon ?? "externaldrive")
                         }
                     }
                 }
@@ -93,27 +93,37 @@ public struct DemoContent<V: View>: View {
                 case 2:
                     DemoSimpleButton(stateView: stateView)
                 case 3:
-                    #if !os(macOS) && !os(watchOS)
+                    if #available(iOS 17.0, macOS 14, watchOS 10, *) {
+                        DemoSimpleCard()
+                    } else {
+                        Text("Require iOS 17")
+                    }
+                case 4:
+                    #if os(iOS)
                     DemoSimpleWeb()
                     #else
-                    Text(selectedPage.title)
+                    Text("Only for iOS")
                     #endif
-                case 4:
-                    DemoSimpleDevice(selectedPage.title)
                 case 5:
-                    DemoSimplePlaceholder()
+                    DemoSimpleDevice(selectedPage.title)
                 case 6:
-                    DemoSimpleCollection(selectedPage.title)
+                    DemoSimplePlaceholder()
                 case 7:
-                    DemoSimpleDate()
-                case 8:
-                    DemoSimpleImage()
-                case 9:
-                    DemoSimpleColor()
-                case 10:
-                    DemoSimpleUnit()
-                case 11:
                     DemoSimpleUpload()
+                case 8:
+                    DemoSimpleCollection(selectedPage.title)
+                case 9:
+                    DemoSimpleDate()
+                case 10:
+                    #if os(iOS)
+                    DemoSimpleImage()
+                    #else
+                    Text("Only for iOS")
+                    #endif
+                case 11:
+                    DemoSimpleColor()
+                case 12:
+                    DemoSimpleUnit()
                 default:
                     Text(selectedPage.title)
                 }
@@ -135,31 +145,38 @@ struct Page: Identifiable, Equatable, Hashable {
     
     let id: Int
     let title: String
+    let icon: String?
     
-    init(id: Int, title: String) {
+    init(
+        id: Int,
+        title: String,
+        icon: String? = nil
+    ) {
         self.id = id
         self.title = title
+        self.icon = icon
     }
     
     static func alertSection() -> [Self] {
-        [.init(id: 0, title: "Toast - 简单提醒"),
+        [.init(id: 0, title: "Toast - 简单提醒", icon: "rectangle.portrait.topthird.inset.filled"),
          .init(id: 1, title: "Alert - 系统提醒")]
     }
     
     static func elementSection() -> [Self] {
-        [.init(id: 2, title: "UI - 页面元素"),
-         .init(id: 3, title: "Web - 网页"),
-         .init(id: 4, title: "Device - 设备信息"),
-         .init(id: 5, title: "PlaceHolder - 占位符")]
+        [.init(id: 2, title: "UI - 页面元素", icon: "uiwindow.split.2x1"),
+         .init(id: 3, title: "Card - 卡片", icon: "rectangle.portrait.on.rectangle.portrait.angled"),
+         .init(id: 4, title: "Web - 网页", icon: "safari"),
+         .init(id: 5, title: "Device - 设备信息", icon: "iphone.gen3"),
+         .init(id: 6, title: "PlaceHolder - 占位符", icon: "doc.text.image")]
     }
     
     static func dataSection() -> [Self] {
-        [.init(id: 11, title: "Upload - 图床"),
-         .init(id: 6, title: "Collection - 集合"),
-         .init(id: 7, title: "Date - 日期"),
-         .init(id: 8, title: "Image - 图片"),
-         .init(id: 9, title: "Color - 颜色"),
-         .init(id: 10, title: "Units - 单位")
+        [.init(id: 7, title: "Upload - 图床", icon: "photo.badge.arrow.down"),
+         .init(id: 8, title: "Collection - 集合", icon: "rectangle.grid.3x2"),
+         .init(id: 9, title: "Date - 日期", icon: "calendar.badge.clock"),
+         .init(id: 10, title: "Image - 图片", icon: "photo"),
+         .init(id: 11, title: "Color - 颜色", icon: "paintpalette"),
+         .init(id: 12, title: "Units - 单位", icon: "gauge.with.dots.needle.33percent")
         ]
     }
 }

@@ -137,6 +137,26 @@ public extension Array where Element: Identifiable {
             $0.id == item.id
         }
     }
+    
+    /// 下一个元素的 Index
+    func nextIndex(_ item: Element) -> Int? {
+        guard let index = self.indexById(item) else { return nil }
+        if index + 1 == self.count {
+            return index
+        }else {
+            return index + 1
+        }
+    }
+    
+    /// 上一个元素的 Index
+    func previousIndex(_ item: Element) -> Int? {
+        guard let index = self.indexById(item) else { return nil }
+        if index - 1 < 0 {
+            return index
+        }else {
+            return index - 1
+        }
+    }
 }
 
 // MARK: - Methods (Equatable)

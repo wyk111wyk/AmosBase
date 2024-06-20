@@ -96,7 +96,10 @@ public struct SimpleSlider: View {
         GeometryReader { geometry in
             // 进度条尺寸
             let totalWidth = geometry.size.width
-            let fontSize = barHeight / 2.2
+            let fontSize = 
+            if barHeight > 22 { barHeight / 2.2 }
+            else { barHeight / 1.55 }
+                
             let cornerRadius = barHeight / cornerScale
             let textWidth = fontSize * 5
             // 文字内容
@@ -434,6 +437,9 @@ public struct SimpleStarSlider: View {
             SimpleSlider(value: .constant(1),
                          range: 0...100,
                          barHeight: 20)
+            SimpleSlider(value: .constant(1),
+                         range: 0...100,
+                         barHeight: 22)
             SimpleSlider(value: .constant(20),
                          range: 0...100,
                          cornerScale: 2)
