@@ -9,16 +9,22 @@ import SwiftUI
 
 public struct SimpleColorPickerLink: View {
     public let title: String
+    public let systemImage: String?
+    public let content: String?
     
     @State private var pickColor: Color
     public let colorAction: (Color) -> Void
     
     public init(
         title: String = "自定义颜色",
+        systemImage: String? = nil,
+        content: String? = nil,
         pickColor: Color = .random(),
         colorAction: @escaping (Color) -> Void
     ) {
         self.title = title
+        self.systemImage = systemImage
+        self.content = content
         self.pickColor = pickColor
         self.colorAction = colorAction
     }
@@ -30,7 +36,9 @@ public struct SimpleColorPickerLink: View {
                 colorAction(newColor)
             }
         } label: {
-            SimpleCell("自定义颜色") {
+            SimpleCell(title, 
+                       systemImage: systemImage,
+                       content: content) {
                 circleView(pickColor)
             }
         }
