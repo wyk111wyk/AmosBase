@@ -62,7 +62,8 @@ public struct SimpleColorPicker: View {
                     colorColumn(SimpleColorModel.allYellow)
                 }
             }
-            .buttonCircleNavi(role: .destructive) {
+            .buttonCircleNavi(role: .destructive,
+                              labelColor: selectedColor) {
                 saveColor(selectedColor)
                 dismissPage()
             }

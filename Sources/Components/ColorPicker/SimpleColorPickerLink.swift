@@ -31,7 +31,7 @@ public struct SimpleColorPickerLink: View {
     
     public var body: some View {
         NavigationLink {
-            SimpleColorPicker { newColor in
+            SimpleColorPicker(selectedColor: pickColor) { newColor in
                 pickColor = newColor
                 colorAction(newColor)
             }
