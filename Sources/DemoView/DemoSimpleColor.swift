@@ -32,14 +32,8 @@ public struct DemoSimpleColor: View {
 #if !os(watchOS)
                 ColorPicker("挑选颜色", selection: $pickColor)
 #endif
-                NavigationLink {
-                    SimpleColorPicker { newColor in
-                        pickColor = newColor
-                    }
-                } label: {
-                    SimpleCell("自定义颜色") {
-                        circleView(pickColor)
-                    }
+                SimpleColorPickerLink(pickColor: pickColor) { newColor in
+                    pickColor = newColor
                 }
                 randomColorCell()
                 SimpleCell("颜色混合") {
