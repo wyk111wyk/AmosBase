@@ -17,6 +17,7 @@ public extension Collection {
 // MARK: - Methods
 
 public extension Array {
+    
     /// SwifterSwift: 在第一位插入。Insert an element at the beginning of array.
     ///
     ///        [2, 3, 4, 5].prepend(1) -> [1, 2, 3, 4, 5]
@@ -91,6 +92,14 @@ public extension Array {
         return String(data: jsonData, encoding: .utf8)
     }
     #endif
+}
+
+public extension Array where Element: Hashable {
+    
+    /// 转换为 Set
+    func toSet() -> Set<Element> {
+        Set(self)
+    }
 }
 
 public extension Array where Element: Identifiable {

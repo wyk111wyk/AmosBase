@@ -369,6 +369,7 @@ public extension String {
         hasMedium: Bool = true,
         hasLong: Bool = true
     ) -> String {
+        
         let shortSentences: [String] = [
             "买菜回来做饭。",
             "今天的天气真好。",

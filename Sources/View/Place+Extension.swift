@@ -238,7 +238,7 @@ public struct SimplePlaceholder<V: View>: View {
                 }else if let systemImageName {
                     Image(systemName: systemImageName)
                         .imageModify(color: imageColor, length: imageLength)
-                        .modifier(TapImageAnimation())
+                        .modifier(TapSystemIconAnimation())
                 }else if let imageName {
                     Image(imageName)
                         .imageModify(length: imageLength)
@@ -276,6 +276,28 @@ public struct SimplePlaceholder<V: View>: View {
 }
 
 struct TapImageAnimation: ViewModifier {
+    @State private var isScaled: Bool = false
+    
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(isScaled ? 1.1 : 1.0)
+            .animation(
+                Animation.interpolatingSpring(
+                    stiffness: 60,
+                    damping: 3
+                ).repeatCount(1, autoreverses: false),
+                value: isScaled
+            )
+            .onTapGesture {
+                isScaled = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    isScaled = false
+                }
+            }
+    }
+}
+
+struct TapSystemIconAnimation: ViewModifier {
     // the animation is triggered each time the value changes
     @State private var isAnimate: Bool = false
     
