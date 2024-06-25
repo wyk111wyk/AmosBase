@@ -57,6 +57,10 @@ public extension Int {
     var toDouble: Double {
         Double(self)
     }
+    
+    var toCGFloat: CGFloat {
+        CGFloat(self)
+    }
 }
 
 extension Int: Identifiable {
