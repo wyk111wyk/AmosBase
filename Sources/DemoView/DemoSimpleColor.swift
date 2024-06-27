@@ -22,7 +22,7 @@ public struct DemoSimpleColor: View {
     let columns = [GridItem(.adaptive(minimum: 30, maximum: 40), spacing: 6)]
     let colorLength: CGFloat = 30
     #else
-    let columns = [GridItem(.adaptive(minimum: 60, maximum: 80), spacing: 12)]
+    let columns = [GridItem(.adaptive(minimum: 60, maximum: 80), spacing: 8)]
     let colorLength: CGFloat = 70
     #endif
     
@@ -51,6 +51,11 @@ public struct DemoSimpleColor: View {
             }
             Section("SwiftUI 系统颜色") {
                 systemColor(SimpleColorModel.allSwiftUI)
+            }
+            Section("自定义渐变色") {
+                systemColor(SimpleColorModel.allGradient_Blue)
+                systemColor(SimpleColorModel.allGradient_Red)
+                systemColor(SimpleColorModel.allGradient_Green)
             }
             Section("自定义颜色") {
                 systemColor(SimpleColorModel.allGray)
@@ -170,7 +175,7 @@ extension DemoSimpleColor {
                         colorData.color
                             .frame(width: colorLength, 
                                    height: colorLength)
-                            .cornerRadius(12)
+                            .cornerRadius(8)
                         Text(colorData.name)
                             .font(.footnote)
                             .lineLimit(1)

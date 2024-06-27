@@ -118,6 +118,14 @@ public extension SFImage {
         SFImage(packageResource: "star", ofType: "png")!
     }
     
+    static var mapImage: SFImage {
+        SFImage(packageResource: "map", ofType: "png")!
+    }
+    
+    static var allDoneImage: SFImage {
+        SFImage(packageResource: "allDone", ofType: "png")!
+    }
+    
     static var logoBlack: SFImage {
         SFImage(packageResource: "AmosLogoB", ofType: "png")!
     }

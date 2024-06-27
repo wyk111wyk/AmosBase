@@ -26,7 +26,7 @@ public struct SimpleColorPicker: View {
     let columns = [GridItem(.adaptive(minimum: 30, maximum: 40), spacing: 6)]
     let colorLength: CGFloat = 30
     #else
-    let columns = [GridItem(.adaptive(minimum: 60, maximum: 80), spacing: 12)]
+    let columns = [GridItem(.adaptive(minimum: 60, maximum: 80), spacing: 8)]
     let colorLength: CGFloat = 70
     #endif
     public let saveColor: (Color) -> Void
@@ -52,6 +52,11 @@ public struct SimpleColorPicker: View {
                 colorSetting()
                 Section("SwiftUI 系统颜色") {
                     colorColumn(SimpleColorModel.allSwiftUI)
+                }
+                Section("自定义渐变色") {
+                    colorColumn(SimpleColorModel.allGradient_Blue)
+                    colorColumn(SimpleColorModel.allGradient_Red)
+                    colorColumn(SimpleColorModel.allGradient_Green)
                 }
                 Section("自定义颜色") {
                     colorColumn(SimpleColorModel.allGray)
@@ -124,7 +129,6 @@ extension SimpleColorPicker {
                     .background {
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundStyle(selectedColor)
-                            .shadow(radius: 10)
                     }
             }
         }
@@ -137,6 +141,8 @@ extension SimpleColorPicker {
             #else
             RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(.thickMaterial)
+                .opacity(0.8)
+                .shadow(radius: 6)
             #endif
         }
         .padding(.horizontal)
@@ -206,6 +212,7 @@ extension SimpleColorPicker {
             #else
             RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(.thickMaterial)
+                .opacity(0.8)
                 .shadow(radius: 10)
             #endif
         }
@@ -273,7 +280,7 @@ extension SimpleColorPicker {
                     VStack {
                         colorData.color
                             .frame(width: colorLength, height: colorLength)
-                            .cornerRadius(12)
+                            .cornerRadius(8)
                         Text(colorData.name)
                             .font(.footnote)
                             .lineLimit(1)
