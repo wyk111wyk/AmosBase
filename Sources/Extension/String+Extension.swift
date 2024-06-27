@@ -364,11 +364,25 @@ public extension String {
     }
     
     /// 生成随机中文句子
-    static func randomChineseSentence(
-        hasShort: Bool = true,
-        hasMedium: Bool = true,
-        hasLong: Bool = true
+    static func randomChinese(
+        word: Bool = false,
+        short: Bool = false,
+        medium: Bool = false,
+        long: Bool = false
     ) -> String {
+        
+        let wordSentences: [String] = [
+            "整理书籍",
+            "早起跑步",
+            "写日报",
+            "回复邮件",
+            "剪辑视频",
+            "看电影",
+            "读本小说",
+            "练习吉他",
+            "学习Swift",
+            "烹饪新菜"
+        ]
         
         let shortSentences: [String] = [
             "买菜回来做饭。",
@@ -410,13 +424,16 @@ public extension String {
         ]
 
         var textArray: [String] = []
-        if hasShort {
+        if word {
+            textArray.append(contentsOf: wordSentences)
+        }
+        if short {
             textArray.append(contentsOf: shortSentences)
         }
-        if hasMedium {
+        if medium {
             textArray.append(contentsOf: mediumSentences)
         }
-        if hasLong {
+        if long {
             textArray.append(contentsOf: longSentences)
         }
         

@@ -60,22 +60,26 @@ public struct DemoSimpleButton<V: View>: View {
     
     private func cellSection() -> some View {
         Section("Cell") {
-            SimpleCell("划动测试", bundleImageName: "LAL_r",
-                       bundleImageType: "png", content: String.randomChineseSentence(hasMedium: false, hasLong: false)) {
+            SimpleCell(
+                "划动测试",
+                bundleImageName: "LAL_r",
+                bundleImageType: "png",
+                content: String.randomChinese(short: true)
+            ) {
                 HStack {
                     Text("Tag")
                         .simpleTag(.border())
                 }
             }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
-            SimpleCell(String.randomChineseSentence(hasLong: false),
+            SimpleCell(String.randomChinese(short: true, medium: true),
                        systemImage: "person.wave.2.fill",
-                       content: String.randomChineseSentence(hasShort: false),
+                       content: String.randomChinese(medium: false),
                        fullContent: true
             )
-            SimpleCell(String.randomChineseSentence(hasLong: false),
+            SimpleCell(String.randomChinese(medium: true),
                        systemImage: "person.wave.2.fill",
-                       content: String.randomChineseSentence(hasShort: false, hasLong: false),
-                       stateText: String.randomChineseSentence(hasMedium: false, hasLong: false)
+                       content: String.randomChinese(medium: true),
+                       stateText: String.randomChinese(short: true)
             )
         }
     }
