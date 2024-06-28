@@ -17,8 +17,8 @@ public struct SimpleTextInputView: View {
     let name: String?
     let titlePrompt: String
     let contentPrompt: String
-    let startLine: Int
-    let endLine: Int
+    let contentStartLine: Int
+    let contentEndLine: Int
     let tintColor: Color
     let showTitle: Bool
     let showContent: Bool
@@ -34,8 +34,8 @@ public struct SimpleTextInputView: View {
         contentPrompt: String = "请输入文本",
         showTitle: Bool = true,
         showContent: Bool = true,
-        startLine: Int = 4,
-        endLine: Int = 6,
+        contentStartLine: Int = 4,
+        contentEndLine: Int = 6,
         tintColor: Color = .accentColor,
         saveAction: @escaping (inputResult) -> Void = {_ in}
     ) {
@@ -44,8 +44,8 @@ public struct SimpleTextInputView: View {
         self._content = State(initialValue: content)
         self.titlePrompt = titlePrompt
         self.contentPrompt = contentPrompt
-        self.startLine = startLine
-        self.endLine = endLine
+        self.contentStartLine = contentStartLine
+        self.contentEndLine = contentEndLine
         self.tintColor = tintColor
         self.showTitle = showTitle
         self.showContent = showContent
@@ -61,7 +61,7 @@ public struct SimpleTextInputView: View {
                             $title,
                             prompt: titlePrompt,
                             startLine: 1,
-                            endLine: 1,
+                            endLine: 3,
                             tintColor: tintColor,
                             isFocused: showTitle && !showContent
                         )
@@ -77,8 +77,8 @@ public struct SimpleTextInputView: View {
                         SimpleTextField(
                             $content,
                             prompt: contentPrompt,
-                            startLine: startLine,
-                            endLine: endLine,
+                            startLine: contentStartLine,
+                            endLine: contentEndLine,
                             tintColor: tintColor,
                             isFocused: !showTitle && showContent
                         )
