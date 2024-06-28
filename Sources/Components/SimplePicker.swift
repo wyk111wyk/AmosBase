@@ -9,6 +9,7 @@ import SwiftUI
 
 public protocol PickerValueModel: Identifiable, Hashable {
     var title: String { get }
+    var titleColor: Color? { get }
     var iconName: String? { get }
     var systemImage: String? { get }
     var contentSystemImage: String? { get }
@@ -120,6 +121,18 @@ public struct SimplePicker<Value: PickerValueModel>: View {
         disabledValues.contains(value)
     }
     
+    private func titleColor(_ value: Value) -> Color {
+        if hasSelected(value) {
+            if let titleColor = value.titleColor {
+                return titleColor
+            }else {
+                return .primary
+            }
+        }else {
+            return .secondary
+        }
+    }
+    
     private func contentView() -> some View {
         Form {
             Section {
@@ -129,7 +142,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
                     } label: {
                         SimpleCell(
                             value.title,
-                            titleColor: hasSelected(value) ? .primary : .secondary,
+                            titleColor: titleColor(value),
                             iconName: value.iconName,
                             systemImage: isDisabled(value) ? "xmark.circle" : value.systemImage,
                             contentSystemImage: value.contentSystemImage,
