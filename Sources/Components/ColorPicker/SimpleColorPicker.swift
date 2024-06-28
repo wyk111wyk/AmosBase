@@ -49,6 +49,11 @@ public struct SimpleColorPicker: View {
     public var body: some View {
         NavigationStack {
             Form {
+                #if !os(watchOS)
+                Section("色轮选择") {
+                    ColorPicker("自定义颜色", selection: $selectedColor, supportsOpacity: false)
+                }
+                #endif
                 colorSetting()
                 Section("SwiftUI 系统颜色") {
                     colorColumn(SimpleColorModel.allSwiftUI)
@@ -229,7 +234,7 @@ extension SimpleColorPicker {
 extension SimpleColorPicker {
     private func colorSetting() -> some View {
         Section {
-            SimpleCell("HEX") {
+            SimpleCell("HEX", systemImage: "hexagon") {
                 TextField("", text: $hexString, prompt: Text("颜色Hex值"))
                     .multilineTextAlignment(.trailing)
                     .onChange(of: hexString) { newHex in
@@ -240,9 +245,6 @@ extension SimpleColorPicker {
                         }
                     }
             }
-            #if !os(watchOS)
-            ColorPicker("自定义颜色", selection: $selectedColor, supportsOpacity: true)
-            #endif
             Button {
                 selectedColor = .random()
             } label: {

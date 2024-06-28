@@ -14,6 +14,7 @@ public struct SimpleTextInputView: View {
     @State var title: String
     @State var content: String
     
+    let name: String?
     let titlePrompt: String
     let contentPrompt: String
     let startLine: Int
@@ -26,6 +27,7 @@ public struct SimpleTextInputView: View {
     let saveAction: (inputResult) -> Void
     
     public init(
+        name: String? = nil,
         title: String = "",
         content: String = "",
         titlePrompt: String = "请输入标题",
@@ -37,6 +39,7 @@ public struct SimpleTextInputView: View {
         tintColor: Color = .accentColor,
         saveAction: @escaping (inputResult) -> Void = {_ in}
     ) {
+        self.name = name
         self._title = State(initialValue: title)
         self._content = State(initialValue: content)
         self.titlePrompt = titlePrompt
@@ -95,6 +98,7 @@ public struct SimpleTextInputView: View {
                 saveAction((title: title, content: content))
                 dismissPage()
             }
+            .navigationTitle(name ?? title)
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
