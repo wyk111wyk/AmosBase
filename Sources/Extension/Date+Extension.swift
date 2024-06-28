@@ -333,3 +333,9 @@ public extension Calendar {
         return range(of: .day, in: .month, for: date)!.count
     }
 }
+
+public extension DateComponents {
+    func toDate() -> Date? {
+        return Calendar.current.date(from: self)
+    }
+}
