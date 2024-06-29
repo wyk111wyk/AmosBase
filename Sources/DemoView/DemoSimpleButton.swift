@@ -55,6 +55,14 @@ public struct DemoSimpleButton<V: View>: View {
             })
             .navigationTitle("UI元素")
             .buttonCircleNavi(role: .destructive)
+            .sheet(isPresented: $showInput, content: {
+                SimpleTextInputView(
+                    pageName: "输入短文字",
+                    title: input,
+                    showContent: false) { result in
+                    input = result.title
+                }.presentationDetents([.height(200)])
+            })
         }
     }
     
@@ -105,11 +113,6 @@ public struct DemoSimpleButton<V: View>: View {
             }
             SimpleTextField($input)
         }
-        .sheet(isPresented: $showInput, content: {
-            SimpleTextInputView(title: input, showContent: false) { result in
-                input = result.title
-            }.presentationDetents([.fraction(0.3)])
-        })
         #endif
     }
     
