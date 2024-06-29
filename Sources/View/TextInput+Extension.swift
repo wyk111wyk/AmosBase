@@ -76,8 +76,8 @@ public struct SimpleTextInputView: View {
     }
     
     var isSaveDisabled: Bool {
-        (isTitleNoEmpty && title.isEmpty) ||
-        (isContentNoEmpty && content.isEmpty)
+        (isTitleNoEmpty && title.isEmpty && showTitle) ||
+        (isContentNoEmpty && content.isEmpty && showContent)
     }
     
     public var body: some View {
