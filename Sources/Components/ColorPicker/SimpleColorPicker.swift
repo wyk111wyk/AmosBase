@@ -22,6 +22,11 @@ public struct SimpleColorPicker: View {
     }
     @State private var hexString: String
     @State private var type: ShowType = .small
+    
+    @State private var isShowSystemColor = true
+    @State private var isShowCustomGradient = true
+    @State private var isShowCustomColor = true
+    
     #if os(watchOS)
     let columns = [GridItem(.adaptive(minimum: 30, maximum: 40), spacing: 6)]
     let colorLength: CGFloat = 30
@@ -55,21 +60,38 @@ public struct SimpleColorPicker: View {
                 }
                 #endif
                 colorSetting()
-                Section("SwiftUI 系统颜色") {
-                    colorColumn(SimpleColorModel.allSwiftUI)
+                Section {
+                    if isShowSystemColor {
+                        systemColor(SimpleColorModel.allSwiftUI)
+                    }
+                } header: {
+                    colorHeader(title: "SwiftUI 系统颜色",
+                                isPresent: $isShowSystemColor)
                 }
-                Section("自定义渐变色") {
-                    colorColumn(SimpleColorModel.allGradient_Blue)
-                    colorColumn(SimpleColorModel.allGradient_Red)
-                    colorColumn(SimpleColorModel.allGradient_Green)
+                Section {
+                    if isShowCustomGradient {
+                        systemColor(SimpleColorModel.allGradient_Blue)
+                        systemColor(SimpleColorModel.allGradient_Red)
+                        systemColor(SimpleColorModel.allGradient_Pink)
+                        systemColor(SimpleColorModel.allGradient_Green)
+                        systemColor(SimpleColorModel.allGradient_Purple)
+                    }
+                } header: {
+                    colorHeader(title: "自定义渐变色",
+                                isPresent: $isShowCustomGradient)
                 }
-                Section("自定义颜色") {
-                    colorColumn(SimpleColorModel.allGray)
-                    colorColumn(SimpleColorModel.allGreen)
-                    colorColumn(SimpleColorModel.allBlue)
-                    colorColumn(SimpleColorModel.allPurple)
-                    colorColumn(SimpleColorModel.allRed)
-                    colorColumn(SimpleColorModel.allYellow)
+                Section {
+                    if isShowCustomColor {
+                        systemColor(SimpleColorModel.allGray)
+                        systemColor(SimpleColorModel.allGreen)
+                        systemColor(SimpleColorModel.allBlue)
+                        systemColor(SimpleColorModel.allPurple)
+                        systemColor(SimpleColorModel.allRed)
+                        systemColor(SimpleColorModel.allYellow)
+                    }
+                } header: {
+                    colorHeader(title: "自定义颜色",
+                                isPresent: $isShowCustomColor)
                 }
             }
             .buttonCircleNavi(role: .destructive,
@@ -90,6 +112,25 @@ public struct SimpleColorPicker: View {
                 }
             }
             #endif
+        }
+    }
+    
+    private func colorHeader(
+        title: String,
+        isPresent: Binding<Bool>
+    ) -> some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Button {
+                withAnimation { isPresent.wrappedValue.toggle() }
+            } label: {
+                Image(systemName: "chevron.down")
+                    .rotationEffect(
+                        .degrees(isPresent.wrappedValue ? 0 : 90))
+                .frame(width: 20)
+            }
+            .tint(selectedColor)
         }
     }
 }
@@ -273,7 +314,7 @@ extension SimpleColorPicker {
         }
     }
     
-    private func colorColumn(_ colorBundle: [SimpleColorModel]) -> some View {
+    private func systemColor(_ colorBundle: [SimpleColorModel]) -> some View {
         LazyVGrid(columns: columns, spacing: 15){
             ForEach(colorBundle) { colorData in
                 Button {

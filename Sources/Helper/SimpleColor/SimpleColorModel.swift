@@ -83,6 +83,34 @@ extension SimpleColorModel {
         ]
     }
     
+    static var allGradient_Purple: [SimpleColorModel] {
+        [.init(name: "Purple01", color: .purple_01),
+         .init(name: "Purple02", color: .purple_02),
+         .init(name: "Purple03", color: .purple_03),
+         .init(name: "Purple04", color: .purple_04),
+         .init(name: "Purple05", color: .purple_05),
+         .init(name: "Purple06", color: .purple_06),
+         .init(name: "Purple07", color: .purple_07),
+         .init(name: "Purple08", color: .purple_08),
+         .init(name: "Purple09", color: .purple_09),
+         .init(name: "Purple10", color: .purple_10)
+        ]
+    }
+    
+    static var allGradient_Pink: [SimpleColorModel] {
+        [.init(name: "Pink01", color: .pink_01),
+         .init(name: "Pink02", color: .pink_02),
+         .init(name: "Pink03", color: .pink_03),
+         .init(name: "Pink04", color: .pink_04),
+         .init(name: "Pink05", color: .pink_05),
+         .init(name: "Pink06", color: .pink_06),
+         .init(name: "Pink07", color: .pink_07),
+         .init(name: "Pink08", color: .pink_08),
+         .init(name: "Pink09", color: .pink_09),
+         .init(name: "Pink10", color: .pink_10)
+        ]
+    }
+    
     static var allGreen: [SimpleColorModel] {
         [.init(name: "Ice", color: .green_Ice),
          .init(name: "Pastal", color: .green_Pastel),
@@ -132,7 +160,6 @@ extension SimpleColorModel {
          .init(name: "Heliotrope", color: .purple_Heliotrope),
          .init(name: "Wisteria", color: .purple_Wisteria),
          .init(name: "Razzle", color: .purple_Razzle),
-         .init(name: "Persian", color: .pink_Persian),
          .init(name: "Orchid", color: .pink_Orchid)
         ]
     }

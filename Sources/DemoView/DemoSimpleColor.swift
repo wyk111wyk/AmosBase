@@ -55,7 +55,9 @@ public struct DemoSimpleColor: View {
             Section("自定义渐变色") {
                 systemColor(SimpleColorModel.allGradient_Blue)
                 systemColor(SimpleColorModel.allGradient_Red)
+                systemColor(SimpleColorModel.allGradient_Pink)
                 systemColor(SimpleColorModel.allGradient_Green)
+                systemColor(SimpleColorModel.allGradient_Purple)
             }
             Section("自定义颜色") {
                 systemColor(SimpleColorModel.allGray)
