@@ -19,15 +19,15 @@ public struct SimpleNavigation {
         var mapName: String {
             switch self {
             case .appleMap:
-                return "Apple地图"
+                return "Apple Map".localized(bundle: .module)
             case .baiduMap:
-                return "百度地图"
+                return "Baidu Map".localized(bundle: .module)
             case .aMap:
-                return "高德地图"
+                return "AMap".localized(bundle: .module)
             case .googleMap:
-                return "谷歌地图"
+                return "Google Map".localized(bundle: .module)
             case .qqMap:
-                return "腾讯地图"
+                return "Tencent Map".localized(bundle: .module)
             }
         }
     }

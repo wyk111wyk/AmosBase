@@ -9,6 +9,9 @@ import SwiftUI
 
 public struct DemoSimpleButton<V: View>: View {
     @State private var isTapDismiss = true
+    
+    @State private var cellId: Int = Date().timeIntervalSince1970.toInt
+    
     @State private var input = ""
     @State private var showInput = false
     
@@ -55,6 +58,7 @@ public struct DemoSimpleButton<V: View>: View {
             })
             .navigationTitle("UI元素")
             .buttonCircleNavi(role: .destructive)
+            #if !os(watchOS)
             .sheet(isPresented: $showInput, content: {
                 SimpleTextInputView(
                     pageName: "输入短文字",
@@ -63,33 +67,46 @@ public struct DemoSimpleButton<V: View>: View {
                     input = result.title
                 }.presentationDetents([.height(200)])
             })
+            #endif
         }
     }
     
     private func cellSection() -> some View {
-        Section("Cell") {
+        Section {
             SimpleCell(
                 "划动测试",
                 bundleImageName: "LAL_r",
                 bundleImageType: "png",
-                content: String.randomChinese(short: true)
+                content: String.randomChinese(medium: true)
             ) {
                 HStack {
-                    Text("Tag")
+                    Text(String.randomChinese(word: true))
                         .simpleTag(.border())
                 }
             }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
             SimpleCell(String.randomChinese(short: true, medium: true),
                        systemImage: "person.wave.2.fill",
-                       content: String.randomChinese(medium: false),
+                       content: String.randomChinese(medium: true, long: true),
                        fullContent: true
             )
-            SimpleCell(String.randomChinese(medium: true),
+            SimpleCell(String.randomChinese(short: true),
                        systemImage: "person.wave.2.fill",
                        content: String.randomChinese(medium: true),
                        stateText: String.randomChinese(short: true)
             )
+        } header: {
+            HStack {
+                Text("Cell", bundle: .module)
+                Spacer()
+                Button {
+                    cellId = Date().timeIntervalSince1970.toInt
+                } label: {
+                    Text("随机文字")
+                        .font(.caption)
+                }
+            }
         }
+        .id(cellId)
     }
     
     @ViewBuilder
@@ -153,7 +170,7 @@ public struct DemoSimpleButton<V: View>: View {
             }
         } header: {
             HStack {
-                Text("Picker")
+                Text("Picker", bundle: .module)
                 Spacer()
                 Toggle("单选点击退出", isOn: $isTapDismiss)
                     .labelStyle(font: .footnote)
@@ -202,7 +219,7 @@ public struct DemoSimpleButton<V: View>: View {
                              state: starValue.toString())
         } header: {
             HStack {
-                Text("Slider")
+                Text("Slider", bundle: .module)
                 Spacer()
                 Text("\(sliderValue.toString(digit: 1))")
             }

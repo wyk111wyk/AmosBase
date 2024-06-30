@@ -41,6 +41,8 @@ public struct SimpleCell<V: View>: View {
     @ViewBuilder let stateView: () -> V
     let stateWidth: CGFloat
     
+    let localizationBundle: Bundle
+    
     public init(_ title: String,
                 titleFont: Font = .body,
                 titleColor: Color = .primary,
@@ -60,6 +62,7 @@ public struct SimpleCell<V: View>: View {
                 contentSpace: Double = 12,
                 stateText: String? = nil,
                 stateWidth: CGFloat = 100,
+                localizationBundle: Bundle = .main,
                 @ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
         self.isDisplay = isDisplay
         self.title = title
@@ -82,6 +85,8 @@ public struct SimpleCell<V: View>: View {
         self.stateText = stateText
         self.stateWidth = stateWidth
         self.stateView = stateView
+        
+        self.localizationBundle = localizationBundle
     }
     
     
@@ -120,28 +125,30 @@ public struct SimpleCell<V: View>: View {
                 }
                 // Title 和 Content
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(title.localized())
+                    Text(title.localized(bundle: localizationBundle))
                         .font(titleFont)
                         .foregroundColor(titleColor)
                     Group {
                         if let content = content, !content.isEmpty,
                            let contentSystemImage = contentSystemImage, contentSystemImage.count > 0 {
-                            Text("\(Image(systemName: contentSystemImage))\(content.localized())")
+                            Text("\(Image(systemName: contentSystemImage))\(content.localized(bundle: localizationBundle))")
                         } else if let content = content, content.count > 0 {
-                            Text(content.localized())
+                            Text(content.localized(bundle: localizationBundle))
                         }
                     }
                     .foregroundColor(contentColor)
                     .font(contentFont)
                     .lineLimit(contentLine)
+                    .multilineTextAlignment(.leading)
                 }
                 
                 if !fullContent {
                     Spacer(minLength: 0)
                     Group {
                         if let stateText = stateText {
-                            Text(stateText.localized())
+                            Text(stateText.localized(bundle: localizationBundle))
                                 .foregroundColor(.secondary)
+                                .multilineTextAlignment(.leading)
                         }else {
                             stateView()
                         }

@@ -1,0 +1,895 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "%@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      }
+    },
+    "%@%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@"
+          }
+        }
+      }
+    },
+    "%lld 字" : {
+
+    },
+    "=" : {
+
+    },
+    "1" : {
+
+    },
+    "2" : {
+
+    },
+    "About - 关于" : {
+
+    },
+    "Alert" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "警告"
+          }
+        }
+      }
+    },
+    "Alert - %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "警告 - %@"
+          }
+        }
+      }
+    },
+    "AMap" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高德地图"
+          }
+        }
+      }
+    },
+    "AmosStudio Apps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工作室应用"
+          }
+        }
+      }
+    },
+    "Amos基础库" : {
+
+    },
+    "App Store Review" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store 评分"
+          }
+        }
+      }
+    },
+    "Apple Map" : {
+      "comment" : "Apple地图",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple地图"
+          }
+        }
+      }
+    },
+    "Background" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "背景颜色"
+          }
+        }
+      }
+    },
+    "Baidu Map" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "百度地图"
+          }
+        }
+      }
+    },
+    "Bar Progress" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "条形进度"
+          }
+        }
+      }
+    },
+    "Bottom Toasts" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底部提醒"
+          }
+        }
+      }
+    },
+    "Button" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按钮"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        }
+      }
+    },
+    "Card" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡片"
+          }
+        }
+      }
+    },
+    "Cell" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "单元格"
+          }
+        }
+      }
+    },
+    "Center Toasts" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中央提醒"
+          }
+        }
+      }
+    },
+    "Checked" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已选"
+          }
+        }
+      }
+    },
+    "Choose Color" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "颜色选择"
+          }
+        }
+      }
+    },
+    "Circular Progress" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "环形进度"
+          }
+        }
+      }
+    },
+    "Color Hex" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "颜色 Hex 值"
+          }
+        }
+      }
+    },
+    "Color Picker" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "颜色选择器"
+          }
+        }
+      }
+    },
+    "Confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認"
+          }
+        }
+      }
+    },
+    "Confirmation" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认"
+          }
+        }
+      }
+    },
+    "Confirmation - %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认 - %@"
+          }
+        }
+      }
+    },
+    "Custom color" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "色彩自定义"
+          }
+        }
+      }
+    },
+    "Custom gradient color" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义渐变色"
+          }
+        }
+      }
+    },
+    "Custom single color" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定义单色"
+          }
+        }
+      }
+    },
+    "Dark" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "深色背景"
+          }
+        }
+      }
+    },
+    "Darken" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "变暗"
+          }
+        }
+      }
+    },
+    "Data - 数据处理" : {
+
+    },
+    "Github密钥" : {
+
+    },
+    "Google Map" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "谷歌地图"
+          }
+        }
+      }
+    },
+    "h: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高：%@"
+          }
+        }
+      }
+    },
+    "Haptic震动 - ⚠️ 警告" : {
+
+    },
+    "Haptic震动 - ✅ 成功" : {
+
+    },
+    "Haptic震动 - ❎ 错误" : {
+
+    },
+    "Haptic震动 - 强烈" : {
+
+    },
+    "Haptic震动 - 普通" : {
+
+    },
+    "Haptic震动 - 柔软" : {
+
+    },
+    "Haptic震动 - 轻柔" : {
+
+    },
+    "Haptic震动 - 较强" : {
+
+    },
+    "I am pure color background" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我是纯色背景"
+          }
+        }
+      }
+    },
+    "I am text with dark background" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我是深色背景中的文字"
+          }
+        }
+      }
+    },
+    "I am text with light background" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我是浅色背景中的文字"
+          }
+        }
+      }
+    },
+    "Image - 图片查看" : {
+
+    },
+    "l: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "长：%@"
+          }
+        }
+      }
+    },
+    "Label" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字"
+          }
+        }
+      }
+    },
+    "Lat: %lf" : {
+
+    },
+    "Light" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "浅色背景"
+          }
+        }
+      }
+    },
+    "Lighten" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "变淡"
+          }
+        }
+      }
+    },
+    "Loading -> Error" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "载入 -> 错误"
+          }
+        }
+      }
+    },
+    "Loading -> Success" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "载入 -> 成功"
+          }
+        }
+      }
+    },
+    "Loading Title Change" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "载入后改变标题"
+          }
+        }
+      }
+    },
+    "Lon: %lf" : {
+
+    },
+    "Map Share" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第三方地图"
+          }
+        }
+      }
+    },
+    "Map Share - 定位按钮" : {
+
+    },
+    "Map Share - 导航按钮" : {
+
+    },
+    "Navi - 导航" : {
+
+    },
+    "Navi Title" : {
+
+    },
+    "NBA官网" : {
+
+    },
+    "Only for iOS" : {
+
+    },
+    "Other Apps from us, equally concise and practical." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工作室的其他作品，同样的简洁与实用"
+          }
+        }
+      }
+    },
+    "Picker" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择器"
+          }
+        }
+      }
+    },
+    "Random color" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "随机颜色"
+          }
+        }
+      }
+    },
+    "Random dark color" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "随机深颜色"
+          }
+        }
+      }
+    },
+    "Random light color" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "随机淡颜色"
+          }
+        }
+      }
+    },
+    "Require iOS 17" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要iOS 17以上"
+          }
+        }
+      }
+    },
+    "Sheet页面测试" : {
+
+    },
+    "Simple Error" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简单错误"
+          }
+        }
+      }
+    },
+    "Simple Loading" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简单载入"
+          }
+        }
+      }
+    },
+    "Simple Success" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简单成功"
+          }
+        }
+      }
+    },
+    "Simple Toast" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简单提醒"
+          }
+        }
+      }
+    },
+    "Slider" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择条"
+          }
+        }
+      }
+    },
+    "System color" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系统预置颜色"
+          }
+        }
+      }
+    },
+    "System Setting" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系统设置"
+          }
+        }
+      }
+    },
+    "Tags" : {
+
+    },
+    "Tencent Map" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "腾讯地图"
+          }
+        }
+      }
+    },
+    "TextField" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输入框"
+          }
+        }
+      }
+    },
+    "Toast - Sheet页面" : {
+
+    },
+    "Top Toasts" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顶部提醒"
+          }
+        }
+      }
+    },
+    "UI - 提醒" : {
+
+    },
+    "UI - 页面元素" : {
+
+    },
+    "UI元素" : {
+
+    },
+    "Unchecked" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未选择"
+          }
+        }
+      }
+    },
+    "w: %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "宽：%@"
+          }
+        }
+      }
+    },
+    "Your support is very important to us." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的支持对我们非常重要"
+          }
+        }
+      }
+    },
+    "上一张" : {
+
+    },
+    "上传图床" : {
+
+    },
+    "下一张" : {
+
+    },
+    "不压缩" : {
+
+    },
+    "位置信息" : {
+
+    },
+    "储存 Storage" : {
+
+    },
+    "删除" : {
+
+    },
+    "删除%@" : {
+
+    },
+    "删除图片" : {
+
+    },
+    "单选点击退出" : {
+
+    },
+    "占位符" : {
+
+    },
+    "卡片 Card" : {
+
+    },
+    "压缩图片" : {
+
+    },
+    "压缩比率：%.1f" : {
+
+    },
+    "取消收藏" : {
+
+    },
+    "图床列表" : {
+
+    },
+    "图床图片：%lld 张" : {
+
+    },
+    "图床路径" : {
+
+    },
+    "图片信息" : {
+
+    },
+    "图片处理" : {
+
+    },
+    "图片识别" : {
+
+    },
+    "基础字典: %@" : {
+
+    },
+    "基础数组：%@" : {
+
+    },
+    "已选：%lld / %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "已选：%1$lld / %2$lld"
+          }
+        }
+      }
+    },
+    "当前时间" : {
+
+    },
+    "收藏" : {
+
+    },
+    "时间对比" : {
+
+    },
+    "时间拆解" : {
+
+    },
+    "时间长度 Duration" : {
+
+    },
+    "温度 Temperature" : {
+
+    },
+    "编辑" : {
+
+    },
+    "缩放图片（宽300）" : {
+
+    },
+    "自定义渐变色" : {
+
+    },
+    "自定义颜色" : {
+
+    },
+    "获取时间" : {
+
+    },
+    "虎扑" : {
+
+    },
+    "设备信息" : {
+
+    },
+    "设备操作" : {
+
+    },
+    "语义描述 - .toString_Relative" : {
+
+    },
+    "跳转系统设置" : {
+
+    },
+    "转换 Toast" : {
+
+    },
+    "转换为文字" : {
+
+    },
+    "选择时间" : {
+
+    },
+    "速度 Speed" : {
+
+    },
+    "长度 Length" : {
+
+    },
+    "随机文字" : {
+
+    }
+  },
+  "version" : "1.0"
+}

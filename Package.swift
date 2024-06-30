@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "AmosBase",
+    defaultLocalization: "en",
     platforms: [ // 本 Package 适用的平台
             .iOS(.v16),
             .macOS(.v13),
@@ -24,6 +25,8 @@ let package = Package(
         // 目标可以依赖于此程序包中的其他目标，以及此程序包所依赖的程序包中的产品。
         .target(name: "AmosBase", 
                 path: "Sources",
-                resources: [.process("Resources")])
+                resources: [
+                    .process("Resources"),
+                    .process("Localization")])
     ]
 )

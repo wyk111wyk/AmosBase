@@ -48,8 +48,8 @@ public struct DemoSimpleImage: View {
                 SimpleCell("图片尺寸") {
                     if let selectedImage {
                         VStack {
-                            Text("宽：\(selectedImage.width.toString())")
-                            Text("长：\(selectedImage.height.toString())")
+                            Text("w: \(selectedImage.width.toString())")
+                            Text("l: \(selectedImage.height.toString())")
                         }
                         .font(.callout)
                     }

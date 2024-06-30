@@ -24,19 +24,19 @@ public struct DemoSimpleToast: View {
     public var body: some View {
         Form {
             Section("转换 Toast") {
-                Button("Loading -> Success") {
+                Button("Loading -> Success".localized(bundle: .module)) {
                     selectedToast = .topLoading
                     SimpleTimer().after(timeInterval: 2) {
                         selectedToast = .centerSuccess
                     }
                 }
-                Button("Loading -> Error") {
+                Button("Loading -> Error".localized(bundle: .module)) {
                     selectedToast = .topLoading
                     SimpleTimer().after(timeInterval: 2) {
                         selectedToast = .topError
                     }
                 }
-                Button("Loading Title Change") {
+                Button("Loading Title Change".localized(bundle: .module)) {
                     loadingTest()
                 }
             }

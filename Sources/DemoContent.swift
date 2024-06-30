@@ -67,13 +67,20 @@ public struct DemoContent<V: View>: View {
                     } label: {
                         Label("Map Share - 定位按钮", systemImage: "map")
                     }
-                    .confirmationDialog("Map Share", isPresented: $showPositionShare) {
+                    .confirmationDialog(
+                        "Map Share".localized(
+                            bundle: .module
+                        ),
+                        isPresented: $showPositionShare
+                    ) {
                         SimpleNavigation(mode: .position).navigationButtons()
                     }
                 }
 #endif
                 
-                SimpleCommonAbout(txcId: "123", userId: "123", nickName: "Amos", avatarUrl: "123", appStoreId: "123", headerView: {Text("About - 关于")})
+                SimpleCommonAbout(txcId: "123", userId: "123", nickName: "Amos", avatarUrl: "123", appStoreId: "123", headerView: {
+                    Text("About - 关于")
+                })
             }
             .navigationTitle("Amos基础库")
             .sheet(isPresented: $showToastPage) {
@@ -96,7 +103,7 @@ public struct DemoContent<V: View>: View {
                     if #available(iOS 17.0, macOS 14, watchOS 10, *) {
                         DemoSimpleCard()
                     } else {
-                        Text("Require iOS 17")
+                        Text("Require iOS 17", bundle: .module)
                     }
                 case 4:
                     #if os(iOS)
@@ -121,7 +128,10 @@ public struct DemoContent<V: View>: View {
                     Text("Only for iOS")
                     #endif
                 case 11:
-                    DemoSimpleColor()
+                    SimpleColorPicker(
+                        selectedColor: .random(),
+                        isPush: true
+                    ) { _ in }
                 case 12:
                     DemoSimpleUnit()
                 default:

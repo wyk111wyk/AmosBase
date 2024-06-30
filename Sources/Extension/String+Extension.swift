@@ -151,8 +151,17 @@ public extension String {
     ///
     /// - Parameter comment: Optional comment for translators.
     /// - Returns: Localized string.
-    func localized(comment: String = "") -> String {
-        return NSLocalizedString(self, comment: comment)
+    func localized(
+        tableName: String? = nil,
+        bundle: Bundle = Bundle.main,
+        comment: String = ""
+    ) -> String {
+        return NSLocalizedString(
+            self,
+            tableName: tableName,
+            bundle: bundle,
+            comment: comment
+        )
     }
     
     /// SwifterSwift: Returns a format localized string.

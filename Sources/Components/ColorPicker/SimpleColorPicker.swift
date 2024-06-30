@@ -8,11 +8,12 @@
 import SwiftUI
 
 public struct SimpleColorPicker: View {
-    enum ShowType {
-        case small, big
+    enum ShowType: String {
+        case small, big, side
         
         mutating func toggle() {
             if self == .small { self = .big }
+            else if self == .big { self = .side }
             else { self = .small }
         }
     }
@@ -21,7 +22,7 @@ public struct SimpleColorPicker: View {
         didSet { hexString = selectedColor.hexString }
     }
     @State private var hexString: String
-    @State private var type: ShowType = .small
+    @AppStorage("DisplayType") private var type: ShowType = .side
     
     @State private var isShowSystemColor = true
     @State private var isShowCustomGradient = true
@@ -37,9 +38,11 @@ public struct SimpleColorPicker: View {
     public let saveColor: (Color) -> Void
     
     public let isPush: Bool
-    public init(selectedColor: Color? = nil,
-         isPush: Bool = true,
-         saveColor: @escaping (Color) -> Void) {
+    public init(
+        selectedColor: Color? = nil,
+        isPush: Bool = true,
+        saveColor: @escaping (Color) -> Void
+    ) {
         if let selectedColor {
             self._selectedColor = State(initialValue: selectedColor)
             self.hexString = selectedColor.hexString
@@ -55,8 +58,8 @@ public struct SimpleColorPicker: View {
         NavigationStack {
             Form {
                 #if !os(watchOS)
-                Section("色轮选择") {
-                    ColorPicker("自定义颜色", selection: $selectedColor, supportsOpacity: false)
+                Section("Choose Color".localized(bundle: .module)) {
+                    ColorPicker("Color Picker".localized(bundle: .module), selection: $selectedColor, supportsOpacity: false)
                 }
                 #endif
                 colorSetting()
@@ -65,7 +68,7 @@ public struct SimpleColorPicker: View {
                         systemColor(SimpleColorModel.allSwiftUI)
                     }
                 } header: {
-                    colorHeader(title: "SwiftUI 系统颜色",
+                    colorHeader(title: "System color",
                                 isPresent: $isShowSystemColor)
                 }
                 Section {
@@ -77,7 +80,7 @@ public struct SimpleColorPicker: View {
                         systemColor(SimpleColorModel.allGradient_Purple)
                     }
                 } header: {
-                    colorHeader(title: "自定义渐变色",
+                    colorHeader(title: "Custom gradient color",
                                 isPresent: $isShowCustomGradient)
                 }
                 Section {
@@ -90,7 +93,7 @@ public struct SimpleColorPicker: View {
                         systemColor(SimpleColorModel.allYellow)
                     }
                 } header: {
-                    colorHeader(title: "自定义颜色",
+                    colorHeader(title: "Custom single color",
                                 isPresent: $isShowCustomColor)
                 }
             }
@@ -102,13 +105,18 @@ public struct SimpleColorPicker: View {
             .buttonCircleNavi(role: .cancel, isPresent: !isPush) {
                 dismissPage()
             }
-            .navigationTitle("颜色选择")
+            .navigationTitle("Color Picker".localized(bundle: .module))
             #if !os(watchOS)
-            .safeAreaInset(edge: .bottom, spacing: 0) {
+            .safeAreaInset(
+                edge: .bottom,
+                spacing: 12
+            ) {
                 if type == .big {
                     bigDisplay()
-                }else {
+                }else if type == .small {
                     smallDisplay()
+                }else {
+                    sideDisplay()
                 }
             }
             #endif
@@ -120,8 +128,9 @@ public struct SimpleColorPicker: View {
         isPresent: Binding<Bool>
     ) -> some View {
         HStack {
-            Text(title)
+            Text(title.localized(bundle: .module))
             Spacer()
+            #if !os(watchOS)
             Button {
                 withAnimation { isPresent.wrappedValue.toggle() }
             } label: {
@@ -131,11 +140,39 @@ public struct SimpleColorPicker: View {
                 .frame(width: 20)
             }
             .tint(selectedColor)
+            #endif
         }
     }
 }
 
 extension SimpleColorPicker {
+    private func switchDisplay() {
+        type.toggle()
+    }
+    
+    private func sideDisplay() -> some View {
+        HStack {
+            ZStack {
+                Circle()
+                    .foregroundStyle(selectedColor.opacity(0.9))
+                    .shadow(radius: 5)
+                Text("Label", bundle: .module)
+                    .foregroundStyle(selectedColor.textColor)
+                    .font(.system(size: 18, weight: .medium))
+            }
+            .frame(width: 70, height: 70)
+            .padding(.leading)
+            .onTapGesture {
+                switchDisplay()
+            }
+            
+            Spacer()
+        }
+        #if os(macOS) || targetEnvironment(macCatalyst)
+        .padding(.bottom, 15)
+        #endif
+    }
+    
     private func smallDisplay() -> some View {
         VStack(spacing: 12) {
             RoundedRectangle(cornerRadius: 10)
@@ -143,35 +180,38 @@ extension SimpleColorPicker {
                 .frame(height: 20)
                 .padding(.horizontal, 6)
             HStack {
-                Text("浅色背景")
+                Text("Light", bundle: .module)
                     .foregroundStyle(selectedColor)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                     .font(.body)
                     .bold()
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
                     .background {
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundStyle(.white)
                     }
-                Text("深色背景")
+                Text("Dark", bundle: .module)
                     .foregroundStyle(selectedColor)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                     .font(.body)
                     .bold()
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
                     .background {
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundStyle(.black)
                     }
-                Text("作为背景")
+                Text("Background", bundle: .module)
                     .foregroundStyle(selectedColor.textColor)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                     .font(.body)
                     .bold()
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
                     .background {
                         RoundedRectangle(cornerRadius: 8)
                             .foregroundStyle(selectedColor)
@@ -187,7 +227,7 @@ extension SimpleColorPicker {
             #else
             RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(.thickMaterial)
-                .opacity(0.8)
+                .opacity(0.9)
                 .shadow(radius: 6)
             #endif
         }
@@ -196,7 +236,7 @@ extension SimpleColorPicker {
         .padding(.bottom, 15)
         #endif
         .onTapGesture {
-            type.toggle()
+            switchDisplay()
         }
     }
     
@@ -208,42 +248,48 @@ extension SimpleColorPicker {
                 .padding(.horizontal, 6)
             HStack {
                 Spacer()
-                Text("我是在浅色背景下的文字显示")
+                Text("I am text with light background", bundle: .module)
                     .foregroundStyle(selectedColor)
+                    .minimumScaleFactor(0.7)
                     .lineLimit(1)
                     .font(.body)
                     .bold()
                 Spacer()
             }
-            .padding()
+            .padding(.horizontal)
+            .padding(.vertical, 10)
             .background {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(.white)
             }
             HStack {
                 Spacer()
-                Text("我是在深色背景下的文字显示")
+                Text("I am text with dark background", bundle: .module)
                     .foregroundStyle(selectedColor)
+                    .minimumScaleFactor(0.7)
                     .lineLimit(1)
                     .font(.body)
                     .bold()
                 Spacer()
             }
-            .padding()
+            .padding(.horizontal)
+            .padding(.vertical, 10)
             .background {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(.black)
             }
             HStack {
                 Spacer()
-                Text("我是该色做背景时的纯色显示")
+                Text("I am pure color background", bundle: .module)
                     .foregroundStyle(selectedColor.textColor)
+                    .minimumScaleFactor(0.7)
                     .lineLimit(1)
                     .font(.body)
                     .bold()
                 Spacer()
             }
-            .padding()
+            .padding(.horizontal)
+            .padding(.vertical, 10)
             .background {
                 RoundedRectangle(cornerRadius: 8)
                     .foregroundStyle(selectedColor)
@@ -258,7 +304,7 @@ extension SimpleColorPicker {
             #else
             RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(.thickMaterial)
-                .opacity(0.8)
+                .opacity(0.9)
                 .shadow(radius: 10)
             #endif
         }
@@ -267,7 +313,7 @@ extension SimpleColorPicker {
         .padding(.bottom, 15)
         #endif
         .onTapGesture {
-            type.toggle()
+            switchDisplay()
         }
     }
 }
@@ -275,8 +321,8 @@ extension SimpleColorPicker {
 extension SimpleColorPicker {
     private func colorSetting() -> some View {
         Section {
-            SimpleCell("HEX", systemImage: "hexagon") {
-                TextField("", text: $hexString, prompt: Text("颜色Hex值"))
+            SimpleCell("Color Hex", systemImage: "hexagon", localizationBundle: .module) {
+                TextField("", text: $hexString, prompt: Text("Color Hex"))
                     .multilineTextAlignment(.trailing)
                     .onChange(of: hexString) { newHex in
                         if let newColor = Color(hex: newHex) {
@@ -289,28 +335,40 @@ extension SimpleColorPicker {
             Button {
                 selectedColor = .random()
             } label: {
-                SimpleCell("生成随机颜色", systemImage: "target"){
+                SimpleCell(
+                    "Random color",
+                    systemImage: "target",
+                    localizationBundle: .module
+                ){
                     circleView(selectedColor)
                 }
             }
             Button {
                 selectedColor = .randomLight()
             } label: {
-                SimpleCell("生成随机颜色（淡）", systemImage: "smallcircle.filled.circle") {
+                SimpleCell(
+                    "Random light color",
+                    systemImage: "smallcircle.filled.circle",
+                    localizationBundle: .module
+                ) {
                     circleView(selectedColor)
                 }
             }
             Button {
                 selectedColor = .randomDark()
             } label: {
-                SimpleCell("生成随机颜色（深）", systemImage: "smallcircle.filled.circle.fill"){
+                SimpleCell(
+                    "Random dark color",
+                    systemImage: "smallcircle.filled.circle.fill",
+                    localizationBundle: .module
+                ){
                     circleView(selectedColor)
                 }
             }
             lightenSection()
             darkenSection()
         } header: {
-            Text("颜色自定义")
+            Text("Custom color", bundle: .module)
         }
     }
     
@@ -346,7 +404,7 @@ extension SimpleColorPicker {
         ScrollView(.horizontal) {
             HStack(spacing: 6) {
                 Image(systemName: "arrow.down.circle.fill")
-                Text("变深")
+                Text("Darken", bundle: .module)
                 Spacer()
                 darkenDemo("10%", rate: 0.1)
                 darkenDemo("20%", rate: 0.2)
@@ -379,7 +437,7 @@ extension SimpleColorPicker {
         ScrollView(.horizontal) {
             HStack(spacing: 6) {
                 Image(systemName: "arrow.up.circle")
-                Text("变淡")
+                Text("Lighten", bundle: .module)
                 Spacer()
                 lightenDemo("10%", rate: 0.1)
                 lightenDemo("20%", rate: 0.2)
@@ -410,4 +468,5 @@ extension SimpleColorPicker {
 
 #Preview {
     SimpleColorPicker(){_ in}
+        .environment(\.locale, .zhHans)
 }

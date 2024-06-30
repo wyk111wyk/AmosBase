@@ -78,12 +78,12 @@ struct SimpleConfirmation: ViewModifier {
                                 titleVisibility: .visible) {
                 switch type {
                 case .singleCancel:
-                    Button("Cancel", role: .cancel, action: cancelTap)
+                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
 #if !os(watchOS)
     .keyboardShortcut(.escape)
 #endif
                 case .singleConfirm:
-                    Button("Confirm", role: .cancel) {
+                    Button("Confirm".localized(bundle: .module), role: .cancel) {
                         cancelTap()
                         confirmTap()
                     }
@@ -91,20 +91,20 @@ struct SimpleConfirmation: ViewModifier {
     .keyboardShortcut(.return)
 #endif
                 case .confirmCancel:
-                    Button("Confirm", role: .none, action: confirmTap)
+                    Button("Confirm".localized(bundle: .module), role: .none, action: confirmTap)
 #if !os(watchOS)
     .keyboardShortcut(.return)
 #endif
-                    Button("Cancel", role: .cancel, action: cancelTap)
+                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
 #if !os(watchOS)
     .keyboardShortcut(.escape)
 #endif
                 case .destructiveCancel:
-                    Button("Confirm", role: .destructive, action: confirmTap)
+                    Button("Confirm".localized(bundle: .module), role: .destructive, action: confirmTap)
 #if !os(watchOS)
     .keyboardShortcut(.return)
 #endif
-                    Button("Cancel", role: .cancel, action: cancelTap)
+                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
 #if !os(watchOS)
     .keyboardShortcut(.escape)
 #endif
@@ -147,12 +147,12 @@ struct SimpleAlert: ViewModifier {
                    isPresented: $isPresented) {
                 switch type {
                 case .singleCancel:
-                    Button("Cancel", role: .cancel, action: cancelTap)
+                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
                     #if !os(watchOS)
                         .keyboardShortcut(.escape)
                     #endif
                 case .singleConfirm:
-                    Button("Confirm", role: .cancel) {
+                    Button("Confirm".localized(bundle: .module), role: .cancel) {
                         cancelTap()
                         confirmTap()
                     }
@@ -160,20 +160,20 @@ struct SimpleAlert: ViewModifier {
     .keyboardShortcut(.return)
 #endif
                 case .confirmCancel:
-                    Button("Confirm", role: .none, action: confirmTap)
+                    Button("Confirm".localized(bundle: .module), role: .none, action: confirmTap)
 #if !os(watchOS)
     .keyboardShortcut(.return)
 #endif
-                    Button("Cancel", role: .cancel, action: cancelTap)
+                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
 #if !os(watchOS)
     .keyboardShortcut(.escape)
 #endif
                 case .destructiveCancel:
-                    Button("Confirm", role: .destructive, action: confirmTap)
+                    Button("Confirm".localized(bundle: .module), role: .destructive, action: confirmTap)
 #if !os(watchOS)
     .keyboardShortcut(.return)
 #endif
-                    Button("Cancel", role: .cancel, action: cancelTap)
+                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
 #if !os(watchOS)
     .keyboardShortcut(.escape)
 #endif

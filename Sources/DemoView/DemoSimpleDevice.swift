@@ -73,6 +73,7 @@ public struct DemoSimpleDevice: View {
                 mapContentPage(location)
             }
             #endif
+            
         }
         .navigationTitle(title)
     }

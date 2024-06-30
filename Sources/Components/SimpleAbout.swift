@@ -26,14 +26,16 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     let headerView: () -> Header
     let footerView: () -> Footer
     
-    public init(txcId: String?,
-         userId: String?,
-         nickName: String?,
-         avatarUrl: String?,
-         appStoreId: String?,
-         showAppVersion: Bool = true,
-         @ViewBuilder headerView: @escaping () -> Header = {EmptyView()},
-         @ViewBuilder footerView: @escaping () -> Footer = {EmptyView()}) {
+    public init(
+        txcId: String?,
+        userId: String?,
+        nickName: String?,
+        avatarUrl: String?,
+        appStoreId: String?,
+        showAppVersion: Bool = true,
+        @ViewBuilder headerView: @escaping () -> Header = {EmptyView()},
+        @ViewBuilder footerView: @escaping () -> Footer = {EmptyView()}
+    ) {
         if let txcId {
             feedbackLink = "https://support.qq.com/product/\(txcId)"
         }else {
@@ -57,8 +59,13 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     public var body: some View {
         Section {
             #if !os(watchOS) && !os(macOS)
-            Link(destination: URL(string: UIApplication.openSettingsURLString)!, label: {
-                SimpleCell("系统设置", systemImage: "gear")
+            Link(destination: URL(string: UIApplication.openSettingsURLString)!,
+                 label: {
+                SimpleCell(
+                    "System Setting",
+                    systemImage: "gear",
+                    localizationBundle: .module
+                )
             }).buttonStyle(.borderless)
             #endif
             
@@ -70,9 +77,10 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                     startFeedback()
                     #endif
                 } label: {
-                    SimpleCell("用户反馈",
+                    SimpleCell("User Feedback",
                                systemImage: "rectangle.3.group.bubble",
-                               content: "用来交流与建议的论坛")
+                               content: "A forum for communication and suggestions",
+                               localizationBundle: .module)
                 }
                 .buttonStyle(.borderless)
                 #if !os(watchOS) && !os(macOS)
@@ -86,9 +94,10 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                 Button(action: {
                     openURL(url)
                 }) {
-                    SimpleCell("App Store评分",
+                    SimpleCell("App Store Review",
                                systemImage: "star",
-                               content: "你的支持对我们非常重要")
+                               content: "Your support is very important to us.",
+                               localizationBundle: .module)
                 }
                 .buttonStyle(.borderless)
             }
@@ -97,11 +106,12 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                 Button {
                     openURL(url)
                 } label: {
-                    SimpleCell("Amos系列应用",
+                    SimpleCell("AmosStudio Apps",
                                bundleImageName: "AmosLogoB",
                                bundleImageNameDark: "AmosLogoW",
                                bundleImageType: "png",
-                               content: "工作室的其他作品，同样的简洁与实用")
+                               content: "Other Apps from us, equally concise and practical.",
+                               localizationBundle: .module)
                 }
                 .buttonStyle(.borderless)
             }
@@ -148,4 +158,5 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                           avatarUrl: "h",
                           appStoreId: "123")
     }
+    .environment(\.locale, .zhHans)
 }
