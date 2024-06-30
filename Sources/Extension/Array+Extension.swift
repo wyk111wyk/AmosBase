@@ -103,6 +103,7 @@ public extension Array where Element: Hashable {
 }
 
 public extension Array where Element: Identifiable {
+    
     /// 在最后面添加或者更新一个元素
     @discardableResult
     mutating func appendOrReplace(_ item: Element) -> [Element] {
@@ -131,6 +132,13 @@ public extension Array where Element: Identifiable {
             self[index] = item
         }
         return self
+    }
+    
+    /// 根据 Id 取出数组中的值
+    func findById(_ id: any Hashable) -> Element? {
+        self.first {
+            $0.id == id as? Element.ID
+        }
     }
     
     /// 根基 Id 取出第一个符合的 index
