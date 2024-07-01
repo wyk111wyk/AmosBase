@@ -27,9 +27,11 @@ public struct DemoSimpleCollection: View {
     "根据ID删除第二个值",
     "将第二个值改为‘Hello‘",
     "检测第二个值的Index",
-    "是否包含第二个值"]
+    "是否包含第二个值",
+    "根据 Id 寻找值"]
     @State private var secondIndex: Int?
     @State private var isContainSecond: Bool?
+    @State private var thirdValue: String?
     
     let baseDic: [String: [Int]] = ["a":[1,2,3], "b":[3,4,5], "c":[5,6,7]]
     @State private var answerDic: [Int: String] = [:]
@@ -59,6 +61,8 @@ public struct DemoSimpleCollection: View {
                                 Text(secondIndex.toString())
                             }else if index == 3, let isContainSecond {
                                 Text(isContainSecond.toString())
+                            }else if index == 4, let thirdValue {
+                                Text(thirdValue)
                             }
                         }
                     }
@@ -112,6 +116,7 @@ public struct DemoSimpleCollection: View {
     private func modelAction(_ index: Int) {
         var newArray: [DemoModel] = modelArr
         var second = newArray[1]
+        let thirdId = newArray[2].id
         switch index {
         case 0:
             newArray.removeById(second)
@@ -122,6 +127,8 @@ public struct DemoSimpleCollection: View {
             secondIndex = newArray.indexById(second)
         case 3:
             isContainSecond = newArray.containById(second)
+        case 4:
+            thirdValue = newArray.findById(thirdId)?.name
         default: break
         }
         

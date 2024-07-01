@@ -59,7 +59,9 @@ public struct SimpleColorPicker: View {
             Form {
                 #if !os(watchOS)
                 Section("Choose Color".localized(bundle: .module)) {
-                    ColorPicker("Color Picker".localized(bundle: .module), selection: $selectedColor, supportsOpacity: false)
+                    ColorPicker(selection: $selectedColor, supportsOpacity: false, label: {
+                        SimpleCell("Color Picker", systemImage: "paintpalette", localizationBundle: .module)
+                    })
                 }
                 #endif
                 colorSetting()

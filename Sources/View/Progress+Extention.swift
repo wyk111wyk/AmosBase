@@ -137,6 +137,7 @@ public struct CircularProgressStyle: ProgressViewStyle {
     let textColor: Color
     
     let textType: SimpleSlider.TextType
+    let hasDoneMark: Bool
     let startPoint: StartPoint
     
     public init(
@@ -147,6 +148,7 @@ public struct CircularProgressStyle: ProgressViewStyle {
         textColor: Color,
         hasGradient: Bool = true,
         textType: SimpleSlider.TextType = .percent,
+        hasDoneMark: Bool = true,
         startPoint: StartPoint = .top
     ) {
         self.height = height
@@ -160,6 +162,7 @@ public struct CircularProgressStyle: ProgressViewStyle {
         self.textColor = textColor
         self.hasGradient = hasGradient
         self.textType = textType
+        self.hasDoneMark = hasDoneMark
         self.startPoint = startPoint
     }
     
@@ -208,7 +211,11 @@ public struct CircularProgressStyle: ProgressViewStyle {
                     .animation(.linear, value: configuration.fractionCompleted)
                 
                 // Progress Text
-                if textContent.isNotEmpty {
+                if currentValue == 1 && hasDoneMark {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: fontSize * 2.1, weight: .bold))
+                        .foregroundStyle(color)
+                }else if textContent.isNotEmpty {
                     Text(textContent)
                         .font(.system(size: fontSize, weight: .bold))
                         .lineLimit(1)
@@ -226,19 +233,27 @@ public struct CircularProgressStyle: ProgressViewStyle {
     ScrollView {
         VStack {
             HStack(spacing: 30) {
-                ProgressView(value: 90, total: 100)
+                ProgressView(value: 70, total: 100)
                     .circularStyle(
                         height: 160,
                         color: .green,
                         hasGradient: true,
                         startPoint: .top
                     )
-                ProgressView(value: 80, total: 100)
+                ProgressView(value: 100, total: 100)
                     .circularStyle(
                         height: 110,
                         color: .red,
                         hasGradient: false,
                         textType: .value,
+                        startPoint: .top
+                    )
+                ProgressView(value: 100, total: 100)
+                    .circularStyle(
+                        height: 18,
+                        color: .red,
+                        hasGradient: false,
+                        textType: .none,
                         startPoint: .top
                     )
             }
