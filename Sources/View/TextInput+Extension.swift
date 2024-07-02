@@ -116,6 +116,7 @@ public struct SimpleTextInputView: View {
                             SimpleTextField(
                                 $content,
                                 prompt: contentPrompt,
+                                systemImage: "note.text",
                                 startLine: contentStartLine,
                                 endLine: contentEndLine,
                                 tintColor: tintColor,
@@ -163,6 +164,7 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
     @FocusState private var focused: Bool
     
     let prompt: String
+    let systemImage: String?
     let startLine: Int
     let endLine: Int
     let tintColor: Color
@@ -175,6 +177,7 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
     public init(
         _ inputText: Binding<String>,
         prompt: String = "请输入文本",
+        systemImage: String? = nil,
         startLine: Int = 5,
         endLine: Int = 12,
         tintColor: Color = .accentColor,
@@ -185,6 +188,7 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
     ) {
         self._inputText = inputText
         self.prompt = prompt
+        self.systemImage = systemImage
         self.startLine = startLine
         self.endLine = endLine
         self.style = style
@@ -225,33 +229,47 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
                 }
             }
         }
-        .overlay(alignment: .bottomTrailing) {
-            if endLine > 1 && canClear {
-                Menu {
-                    moreMenus()
-                } label: {
-                    HStack(spacing: 4) {
-                        Text("\(inputText.count) 字")
-                            .font(.footnote)
-                        if !inputText.isEmpty {
-                            Image(systemName: "xmark.circle.fill")
-                                .imageScale(.small)
-                                .opacity(0.9)
-                        }
+        .overlay(alignment: .bottom) {
+            HStack {
+                if let systemImage, inputText.isNotEmpty {
+                    HStack(spacing: 6) {
+                        Image(systemName: systemImage)
+                        Text(prompt)
+                            .lineLimit(1)
                     }
-                    .foregroundColor(.white)
-                    .padding(.vertical, 2.6)
-                    .padding(.horizontal, 6)
-                    .background {
-                        RoundedRectangle(cornerRadius: 15)
-                            .foregroundStyle(.secondary)
-                            .opacity(0.5)
-                    }
-                } primaryAction: {
-                    inputText = ""
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
                 }
-                .buttonStyle(.plain)
+            
+                Spacer()
+                if endLine > 1 && canClear {
+                    Menu {
+                        moreMenus()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text("\(inputText.count) 字")
+                                .font(.footnote)
+                            if !inputText.isEmpty {
+                                Image(systemName: "xmark.circle.fill")
+                                    .imageScale(.small)
+                                    .opacity(0.9)
+                            }
+                        }
+                        .foregroundColor(.white)
+                        .padding(.vertical, 2.6)
+                        .padding(.horizontal, 6)
+                        .background {
+                            RoundedRectangle(cornerRadius: 15)
+                                .foregroundStyle(.secondary)
+                                .opacity(0.5)
+                        }
+                    } primaryAction: {
+                        inputText = ""
+                    }
+                    .buttonStyle(.plain)
+                }
             }
+            .offset(y: 4)
         }
         .onAppear {
             focused = isFocused
