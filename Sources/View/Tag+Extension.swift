@@ -72,6 +72,7 @@ public struct SimpleTagConfig {
         verticalPad: CGFloat = 5,
         horizontalPad: CGFloat = 10,
         cornerRadius: CGFloat = 6,
+        lineWidth: CGFloat = 0,
         contentFont: Font = .caption,
         contentColor: Color = .white,
         bgColor: Color = .blue
@@ -79,6 +80,7 @@ public struct SimpleTagConfig {
         .init(verticalPad: verticalPad,
               horizontalPad: horizontalPad,
               cornerRadius: cornerRadius,
+              lineWidth: lineWidth,
               contentFont: contentFont,
               contentColor: contentColor,
               borderColor: bgColor,

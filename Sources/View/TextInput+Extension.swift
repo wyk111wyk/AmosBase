@@ -269,7 +269,7 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
                     .buttonStyle(.plain)
                 }
             }
-            .offset(y: 4)
+            .offset(y: 2)
         }
         .onAppear {
             focused = isFocused

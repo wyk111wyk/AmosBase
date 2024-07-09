@@ -81,7 +81,7 @@ public struct DemoSimpleButton<V: View>: View {
             ) {
                 HStack {
                     Text(String.randomChinese(word: true))
-                        .simpleTag(.border())
+                        .simpleTag(.full(bgColor: .blue.opacity(0.1)))
                 }
             }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
             SimpleCell(String.randomChinese(short: true, medium: true),
