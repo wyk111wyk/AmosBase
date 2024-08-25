@@ -339,3 +339,9 @@ public extension DateComponents {
         return Calendar.current.date(from: self)
     }
 }
+
+public extension Double {
+    func toDate() -> Date {
+        return Date(timeIntervalSince1970: self)
+    }
+}

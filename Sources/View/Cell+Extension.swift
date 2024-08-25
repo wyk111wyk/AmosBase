@@ -18,7 +18,7 @@ public struct SimpleCell<V: View>: View {
     
     let title: String
     let titleFont: Font
-    let titleColor: Color
+    let titleColor: Color?
     
     let iconName: String?
     let systemImage: String?
@@ -30,7 +30,7 @@ public struct SimpleCell<V: View>: View {
     let content: String?
     let contentLine: Int?
     let contentFont: Font
-    let contentColor: Color
+    let contentColor: Color?
     /// 过度属性：true 将会导致没有任何的StateView
     let fullContent: Bool
     
@@ -43,27 +43,29 @@ public struct SimpleCell<V: View>: View {
     
     let localizationBundle: Bundle
     
-    public init(_ title: String,
-                titleFont: Font = .body,
-                titleColor: Color = .primary,
-                iconName: String? = nil,
-                systemImage: String? = nil,
-                bundleImageName: String? = nil,
-                bundleImageNameDark: String? = nil,
-                bundleImageType: String? = nil,
-                imageSize: Double = 22,
-                contentSystemImage: String? = nil,
-                content: String? = nil,
-                contentLine: Int? = nil,
-                contentFont: Font = .caption,
-                contentColor: Color = .secondary,
-                isDisplay: Bool = true,
-                fullContent: Bool = false,
-                contentSpace: Double = 12,
-                stateText: String? = nil,
-                stateWidth: CGFloat = 100,
-                localizationBundle: Bundle = .main,
-                @ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
+    public init(
+        _ title: String,
+        titleFont: Font = .body,
+        titleColor: Color? = nil,
+        iconName: String? = nil,
+        systemImage: String? = nil,
+        bundleImageName: String? = nil,
+        bundleImageNameDark: String? = nil,
+        bundleImageType: String? = nil,
+        imageSize: Double = 22,
+        contentSystemImage: String? = nil,
+        content: String? = nil,
+        contentLine: Int? = nil,
+        contentFont: Font = .caption,
+        contentColor: Color? = .secondary,
+        isDisplay: Bool = true,
+        fullContent: Bool = false,
+        contentSpace: Double = 12,
+        stateText: String? = nil,
+        stateWidth: CGFloat = 100,
+        localizationBundle: Bundle = .main,
+        @ViewBuilder stateView: @escaping () -> V = { EmptyView() }
+    ) {
         self.isDisplay = isDisplay
         self.title = title
         self.titleFont = titleFont

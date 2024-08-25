@@ -184,7 +184,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
     return NavigationStack {
         SimplePicker(
             title: "Picker",
-            maxSelectCount: 1,
+            maxSelectCount: 2,
             allValue: allPickerContent,
             disabledValues: [allPickerContent.randomElement()!],
             selectValues: [allPickerContent.randomElement()!]
