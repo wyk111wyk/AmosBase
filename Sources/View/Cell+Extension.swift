@@ -22,6 +22,7 @@ public struct SimpleCell<V: View>: View {
     
     let iconName: String?
     let systemImage: String?
+    let iconColor: Color?
     let bundleImageName: String?
     let bundleImageNameDark: String?
     let bundleImageType: String?
@@ -41,7 +42,7 @@ public struct SimpleCell<V: View>: View {
     @ViewBuilder let stateView: () -> V
     let stateWidth: CGFloat
     
-    let localizationBundle: Bundle
+    public let localizationBundle: Bundle
     
     public init(
         _ title: String,
@@ -49,6 +50,7 @@ public struct SimpleCell<V: View>: View {
         titleColor: Color? = nil,
         iconName: String? = nil,
         systemImage: String? = nil,
+        iconColor: Color? = nil,
         bundleImageName: String? = nil,
         bundleImageNameDark: String? = nil,
         bundleImageType: String? = nil,
@@ -78,6 +80,7 @@ public struct SimpleCell<V: View>: View {
         self.fullContent = fullContent
         self.iconName = iconName
         self.systemImage = systemImage
+        self.iconColor = iconColor
         self.bundleImageName = bundleImageName
         self.bundleImageNameDark = bundleImageNameDark
         self.bundleImageType = bundleImageType
@@ -104,7 +107,7 @@ public struct SimpleCell<V: View>: View {
                 }else if let systemImage = systemImage {
                     Image(systemName: systemImage)
                         .frame(width: imageSize, height: imageSize)
-                        .foregroundColor(titleColor)
+                        .foregroundColor(iconColor)
                 }else if let bundleImageName, let bundleImageType {
                     if let bundleImageNameDark {
                         if colorScheme == .dark {
@@ -127,7 +130,7 @@ public struct SimpleCell<V: View>: View {
                 }
                 // Title 和 Content
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(title.localized(bundle: localizationBundle))
+                    Text(LocalizedStringKey(title), bundle: localizationBundle)
                         .font(titleFont)
                         .foregroundColor(titleColor)
                     Group {
@@ -135,7 +138,7 @@ public struct SimpleCell<V: View>: View {
                            let contentSystemImage = contentSystemImage, contentSystemImage.count > 0 {
                             Text("\(Image(systemName: contentSystemImage))\(content.localized(bundle: localizationBundle))")
                         } else if let content = content, content.count > 0 {
-                            Text(content.localized(bundle: localizationBundle))
+                            Text(LocalizedStringKey(content), bundle: localizationBundle)
                         }
                     }
                     .foregroundColor(contentColor)
@@ -148,7 +151,7 @@ public struct SimpleCell<V: View>: View {
                     Spacer(minLength: 0)
                     Group {
                         if let stateText = stateText {
-                            Text(stateText.localized(bundle: localizationBundle))
+                            Text(LocalizedStringKey(stateText), bundle: localizationBundle)
                                 .foregroundColor(.secondary)
                                 .multilineTextAlignment(.leading)
                         }else {

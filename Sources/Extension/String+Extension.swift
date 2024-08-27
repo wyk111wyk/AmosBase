@@ -152,15 +152,13 @@ public extension String {
     /// - Parameter comment: Optional comment for translators.
     /// - Returns: Localized string.
     func localized(
-        tableName: String? = nil,
-        bundle: Bundle = Bundle.main,
-        comment: String = ""
+        bundle: Bundle = .main,
+        table: String = "Localizable"
     ) -> String {
-        return NSLocalizedString(
-            self,
-            tableName: tableName,
-            bundle: bundle,
-            comment: comment
+        String(
+            localized: String.LocalizationValue(self),
+            table: table,
+            bundle: bundle
         )
     }
     

@@ -76,6 +76,11 @@ public class SimpleDevice: NSObject {
         return UIDevice.current.model
     }
     
+    ///获取系统语言
+    public static func getSystemLanguage() -> String {
+        return Locale.current.identifier
+    }
+    
     
     class public override func description() -> String {
         var message = "系统版本: \(getSystemVersion())\n"
