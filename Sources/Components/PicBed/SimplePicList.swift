@@ -54,10 +54,12 @@ public struct SimplePicList: View {
         NavigationStack {
             Form {
                 if showPathPicker {
-                    Picker("图床路径", selection: $uploadPath) {
+                    Picker(selection: $uploadPath) {
                         ForEach(PicBedPath.allCases, id: \.self) { path in
                             Text(path.title).tag(path)
                         }
+                    } label: {
+                        Text("Imagebed path", bundle: .module)
                     }
                 }
                 imageListSection()

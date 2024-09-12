@@ -142,9 +142,11 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     private func startFeedback() {
         #if !os(watchOS) && !os(macOS)
         if let userId, let nickName, let avatarUrl {
-            account = .init(openid: userId,
-                            nickName: nickName,
-                            avatar: avatarUrl)
+            account = .init(
+                openid: userId,
+                nickName: nickName,
+                avatar: avatarUrl
+            )
         }
         #endif
     }
@@ -152,11 +154,13 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
 
 #Preview {
     Form {
-        SimpleCommonAbout(txcId: "123",
-                          userId: "123",
-                          nickName: "Amos",
-                          avatarUrl: "h",
-                          appStoreId: "123")
+        SimpleCommonAbout(
+            txcId: "123",
+            userId: "123",
+            nickName: "Amos",
+            avatarUrl: "h",
+            appStoreId: "123"
+        )
     }
     .environment(\.locale, .zhHans)
 }

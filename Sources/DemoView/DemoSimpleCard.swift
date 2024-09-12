@@ -80,7 +80,7 @@ struct DemoSimpleCard: View {
             Button(role: .destructive) {
                 deleteCard()
             } label: {
-                Text("删除")
+                Text("Delete", bundle: .module)
             }
             .disabled(allCardItems.count == 0)
             Spacer()
@@ -151,4 +151,5 @@ struct DemoSimpleCard: View {
 @available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview {
     DemoSimpleCard()
+        .environment(\.locale, .zhHans)
 }

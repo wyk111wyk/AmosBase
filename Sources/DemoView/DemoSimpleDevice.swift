@@ -98,47 +98,47 @@ public struct DemoSimpleDevice: View {
             Button {
                 SimpleDevice.openSystemSetting()
             } label: {
-                Label("跳转系统设置", systemImage: "gear")
+                SimpleCell("跳转系统设置", systemImage: "gear")
             }
             Button {
                 SimpleDevice.playNotificationHaptic(.success)
             } label: {
-                Label("Haptic震动 - ✅ 成功", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - ✅ 成功", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
             Button {
                 SimpleDevice.playNotificationHaptic(.error)
             } label: {
-                Label("Haptic震动 - ❎ 错误", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - ❎ 错误", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
             Button {
                 SimpleDevice.playNotificationHaptic(.warning)
             } label: {
-                Label("Haptic震动 - ⚠️ 警告", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - ⚠️ 警告", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
             Button {
                 SimpleDevice.playFeedbackHaptic(.heavy)
             } label: {
-                Label("Haptic震动 - 强烈", systemImage: "iphone.radiowaves.left.and.right.circle.fill")
+                SimpleCell("Haptic震动 - 强烈", systemImage: "iphone.radiowaves.left.and.right.circle.fill")
             }
             Button {
                 SimpleDevice.playFeedbackHaptic(.rigid)
             } label: {
-                Label("Haptic震动 - 较强", systemImage: "iphone.radiowaves.left.and.right.circle.fill")
+                SimpleCell("Haptic震动 - 较强", systemImage: "iphone.radiowaves.left.and.right.circle.fill")
             }
             Button {
                 SimpleDevice.playFeedbackHaptic(.medium)
             } label: {
-                Label("Haptic震动 - 普通", systemImage: "iphone.radiowaves.left.and.right.circle.fill")
+                SimpleCell("Haptic震动 - 普通", systemImage: "iphone.radiowaves.left.and.right.circle.fill")
             }
             Button {
                 SimpleDevice.playFeedbackHaptic(.soft)
             } label: {
-                Label("Haptic震动 - 柔软", systemImage: "iphone.radiowaves.left.and.right.circle.fill")
+                SimpleCell("Haptic震动 - 柔软", systemImage: "iphone.radiowaves.left.and.right.circle.fill")
             }
             Button {
                 SimpleDevice.playFeedbackHaptic(.light)
             } label: {
-                Label("Haptic震动 - 轻柔", systemImage: "iphone.radiowaves.left.and.right.circle.fill")
+                SimpleCell("Haptic震动 - 轻柔", systemImage: "iphone.radiowaves.left.and.right.circle.fill")
             }
         }
         #elseif os(watchOS)
@@ -146,42 +146,42 @@ public struct DemoSimpleDevice: View {
             Button {
                 SimpleDevice.playWatchHaptic(.success)
             } label: {
-                Label("Haptic震动 - ✅ 成功", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - ✅ 成功", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
             Button {
                 SimpleDevice.playWatchHaptic(.failure)
             } label: {
-                Label("Haptic震动 - ❎ 错误", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - ❎ 错误", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
             Button {
                 SimpleDevice.playWatchHaptic(.notification)
             } label: {
-                Label("Haptic震动 - ⚠️ 警告", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - ⚠️ 警告", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
             Button {
                 SimpleDevice.playWatchHaptic(.directionUp)
             } label: {
-                Label("Haptic震动 - ⬆️ 增加", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - ⬆️ 增加", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
             Button {
                 SimpleDevice.playWatchHaptic(.directionDown)
             } label: {
-                Label("Haptic震动 - ⬇️ 减少", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - ⬇️ 减少", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
             Button {
                 SimpleDevice.playWatchHaptic(.retry)
             } label: {
-                Label("Haptic震动 - 🔁 重试", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - 🔁 重试", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
             Button {
                 SimpleDevice.playWatchHaptic(.start)
             } label: {
-                Label("Haptic震动 - ▶️ 开始", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - ▶️ 开始", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
             Button {
                 SimpleDevice.playWatchHaptic(.stop)
             } label: {
-                Label("Haptic震动 - 🛑 停止", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                SimpleCell("Haptic震动 - 🛑 停止", systemImage: "iphone.gen3.radiowaves.left.and.right")
             }
         }
         #endif

@@ -76,8 +76,10 @@ public struct ImageDetailView: View {
 
 struct ImageDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ImageDetailView(image: nil,
-                        caption: "I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan")
+        ImageDetailView(
+            image: nil,
+            caption: "I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan"
+        )
     }
 }
 #endif

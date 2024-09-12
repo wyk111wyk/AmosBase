@@ -113,20 +113,24 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
     
     func deleteButton() -> some View {
         Button(role: .destructive, action: deleteAction, label: {
-            Label("删除", systemImage: "trash")
+            SimpleCell("Delete", systemImage: "trash", localizationBundle: .module)
         })
     }
     
     func editButton() -> some View {
         Button(action: editAction, label: {
-            Label("编辑", systemImage: "square.and.pencil")
+            SimpleCell("Edit", systemImage: "square.and.pencil", localizationBundle: .module)
         }).tint(.blue)
     }
     
     func favorButton() -> some View {
-        Button(action: favorAction, label: {
-            Label(isFavor == true ? "取消收藏":"收藏",
-                  systemImage: isFavor == true ? "star.slash" : "star")
+        Button(action: favorAction,
+               label: {
+            SimpleCell(
+                isFavor == true ? "Unfavor":"Favor",
+                systemImage: isFavor == true ? "star.slash" : "star",
+                localizationBundle: .module
+            )
         }).tint(.yellow)
     }
 }

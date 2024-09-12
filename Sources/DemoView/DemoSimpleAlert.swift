@@ -19,7 +19,7 @@ public struct DemoSimpleAlert: View {
     
     public var body: some View {
         Form {
-            Section("Alert") {
+            Section("Alert".localized(bundle: .module)) {
                 ForEach(SimpleAlertType.allCases, id: \.self.rawValue) { alert in
                     Button("Alert - \(alert.rawValue)") {
                         selectedAlert = alert
@@ -35,7 +35,7 @@ public struct DemoSimpleAlert: View {
                 }
             }
             
-            Section("Confirmation") {
+            Section("Confirmation".localized(bundle: .module)) {
                 ForEach(SimpleAlertType.allCases, id: \.self.rawValue) { alert in
                     Button("Confirmation - \(alert.rawValue)") {
                         selectedConfirmation = alert

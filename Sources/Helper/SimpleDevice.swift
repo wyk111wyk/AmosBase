@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import AVFoundation
 #if os(iOS)
 import SystemConfiguration.CaptiveNetwork
 import CoreLocation
@@ -161,6 +162,28 @@ extension SimpleDevice {
     /// 应用版本
     public static func getAppVersion() -> String? {
         appVersion()
+    }
+    
+    #if !os(watchOS)
+    /// 检查是否有可用的摄像头
+    public static func hasCamera() -> Bool {
+        let discoverySession = AVCaptureDevice.DiscoverySession(
+            deviceTypes: [.builtInWideAngleCamera],
+            mediaType: .video,
+            position: .unspecified
+        )
+        return !discoverySession.devices.isEmpty
+    }
+    #endif
+    
+    /// 检查设备是否支持 iCloud
+    public static func hasiCloud() -> Bool {
+        // ubiquityIdentityToken 在 watchOS 上无法使用
+        if let _ = FileManager.default.ubiquityIdentityToken {
+            return true
+        } else {
+            return false
+        }
     }
 }
 

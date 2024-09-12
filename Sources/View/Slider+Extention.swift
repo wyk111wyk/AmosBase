@@ -425,34 +425,43 @@ public struct SimpleStarSlider: View {
     }
 }
 
+@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview {
+    @Previewable @State var starValue: Int = 1
+    @Previewable @State var value01: CGFloat = 1
+    @Previewable @State var value02: CGFloat = 1
+    @Previewable @State var value03: CGFloat = 20
+    @Previewable @State var value04: CGFloat = 90
+    @Previewable @State var value05: CGFloat = 20
+    @Previewable @State var value06: CGFloat = 100
+    
     NavigationStack {
         Form {
             SimpleStarSlider(
-                currentRating: .constant(2),
+                currentRating: $starValue,
                 systemIcon: "moon.stars.fill",
                 title: "经验",
                 state: "Nice"
             )
-            SimpleSlider(value: .constant(1),
+            SimpleSlider(value: $value01,
                          range: 0...100,
                          barHeight: 20)
-            SimpleSlider(value: .constant(1),
+            SimpleSlider(value: $value02,
                          range: 0...100,
                          barHeight: 22)
-            SimpleSlider(value: .constant(20),
+            SimpleSlider(value: $value03,
                          range: 0...100,
                          cornerScale: 2)
-            SimpleSlider(value: .constant(90),
+            SimpleSlider(value: $value04,
                          range: 20...170,
                          color: .red,
                          textType: .value)
-            SimpleButtonSlider(value: .constant(20),
+            SimpleButtonSlider(value: $value05,
                                range: 0...100,
                                cornerScale: 2,
                                minText: "0",
                                maxText: "100")
-            SimpleButtonSlider(value: .constant(100),
+            SimpleButtonSlider(value: $value06,
                                range: 20...100,
                                textType: .value)
         }

@@ -86,8 +86,7 @@ public struct DemoSimpleButton<V: View>: View {
             }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
             SimpleCell(String.randomChinese(short: true, medium: true),
                        systemImage: "person.wave.2.fill",
-                       content: String.randomChinese(medium: true, long: true),
-                       fullContent: true
+                       content: String.randomChinese(medium: true, long: true)
             )
             SimpleCell(String.randomChinese(short: true),
                        systemImage: "person.wave.2.fill",
@@ -231,4 +230,5 @@ public struct DemoSimpleButton<V: View>: View {
     NavigationStack {
         DemoSimpleButton()
     }
+    .environment(\.locale, .zhHans)
 }

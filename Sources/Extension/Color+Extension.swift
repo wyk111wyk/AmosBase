@@ -19,7 +19,7 @@ import AppKit
 public typealias SFColor = NSColor
 #endif
 
-extension Color: Identifiable {
+extension Color: @retroactive Identifiable {
     public var id: String {
         self.hexString
     }

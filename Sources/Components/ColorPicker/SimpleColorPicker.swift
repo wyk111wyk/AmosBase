@@ -30,9 +30,9 @@ public struct SimpleColorPicker: View {
     
     #if os(watchOS)
     let columns = [GridItem(.adaptive(minimum: 30, maximum: 40), spacing: 6)]
-    let colorLength: CGFloat = 30
+    let colorLength: CGFloat = 36
     #else
-    let columns = [GridItem(.adaptive(minimum: 60, maximum: 80), spacing: 8)]
+    let columns = [GridItem(.adaptive(minimum: 60, maximum: 100), spacing: 12)]
     let colorLength: CGFloat = 70
     #endif
     public let saveColor: (Color) -> Void

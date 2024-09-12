@@ -38,7 +38,7 @@ public extension CLPlacemark {
     }
 }
 
-extension CLLocationCoordinate2D: Equatable {
+extension CLLocationCoordinate2D: @retroactive Equatable {
     public static func ==(lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
         lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
@@ -47,7 +47,7 @@ extension CLLocationCoordinate2D: Equatable {
     }
 }
 
-extension MKCoordinateRegion: Equatable {
+extension MKCoordinateRegion: @retroactive Equatable {
     public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
         return (lhs.center.longitude == rhs.center.longitude) &&
         (lhs.center.latitude == rhs.center.latitude) &&
@@ -62,7 +62,7 @@ extension MKCoordinateRegion: Equatable {
     }
 }
 
-extension MKCoordinateSpan: Equatable {
+extension MKCoordinateSpan: @retroactive Equatable {
     public static func ==(lhs: MKCoordinateSpan, rhs: MKCoordinateSpan) -> Bool {
         lhs.latitudeDelta == rhs.latitudeDelta && lhs.longitudeDelta == rhs.longitudeDelta
     }
@@ -80,13 +80,17 @@ public extension String {
     }
 }
 
-extension CLLocationCoordinate2D: Identifiable {
+extension CLLocationCoordinate2D: @retroactive Identifiable {
     public var id: String {
         self.toAmapString()
     }
 }
 
 public extension CLLocationCoordinate2D {
+    /// 转换为CLLocation
+    func toLocation() -> CLLocation {
+        return CLLocation(latitude: self.latitude, longitude: self.longitude)
+    }
 
     /// longitude 120, latitude 29
     func toAmapString() -> String {

@@ -8,6 +8,7 @@
 import SwiftUI
 
 #if !os(watchOS)
+/// 完整的带边框的文字输入框
 public struct SimpleTextInputView: View {
     @Environment(\.dismiss) private var dismissPage
     
@@ -159,6 +160,7 @@ public struct SimpleTextInputView: View {
     ){_ in}
 }
 
+/// 多行文本输入框：带清空按钮
 public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
     @Binding var inputText: String
     @FocusState private var focused: Bool

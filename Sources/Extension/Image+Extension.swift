@@ -64,7 +64,7 @@ public extension Image {
 }
 
 #if canImport(UIKit)
-extension SFImage: Transferable {
+extension SFImage: @retroactive Transferable {
     public static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(contentType: .png) { layer in
             guard let data = layer.pngImageData() else {

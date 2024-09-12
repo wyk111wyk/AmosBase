@@ -199,7 +199,7 @@ public struct SimplePlaceholder<V: View>: View {
         
         #if os(watchOS)
         self.titleFont = .system(size: 20, weight: .medium)
-        self.imageLength = 50
+        self.imageLength = 76
         self.imagePadding = 8
         self.contentSpace = 8
         self.offsetY = 0
@@ -229,6 +229,16 @@ public struct SimplePlaceholder<V: View>: View {
     }
     
     public var body: some View {
+        #if os(watchOS)
+        ScrollView {
+            placeHolderContent()
+        }
+        #else
+        placeHolderContent()
+        #endif
+    }
+    
+    private func placeHolderContent() -> some View {
         VStack(spacing: contentSpace) {
             Group {
                 if let type {
@@ -245,13 +255,16 @@ public struct SimplePlaceholder<V: View>: View {
                         .modifier(TapImageAnimation())
                 }
             }
+            #if os(watchOS)
+            .padding(.top, 30)
+            #endif
             .padding(.bottom, imagePadding)
             VStack(spacing: contentSpace/2) {
                 Text(LocalizedStringKey(title))
                     .font(titleFont)
                     .foregroundStyle(titleColor)
                     .lineLimit(1)
-                #if !os(watchOS)
+            #if !os(watchOS)
                 if let subtitle {
                     Text(LocalizedStringKey(subtitle))
                         .font(.headline)
@@ -266,9 +279,12 @@ public struct SimplePlaceholder<V: View>: View {
                         .foregroundStyle(contentColor)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                #endif
+            #endif
             }
-            buttonView()
+            
+            if V.self != EmptyView.self {
+                buttonView()
+            }
         }
         .frame(maxWidth: maxWidth)
         .offset(x: 0, y: offsetY)

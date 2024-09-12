@@ -41,37 +41,37 @@ public struct DemoSimpleToast: View {
                 }
             }
             
-            Section("Simple Toast") {
-                Button("Simple Error") {
+            Section("Simple Toast".localized(bundle: .module)) {
+                Button("Simple Error".localized(bundle: .module)) {
                     simpleError = true
                 }
-                Button("Simple Loading") {
+                Button("Simple Loading".localized(bundle: .module)) {
                     if simpleLoading == true {
                         simpleLoading = nil
                     }else {
                         simpleLoading = true
                     }
                 }
-                Button("Simple Success") {
+                Button("Simple Success".localized(bundle: .module)) {
                     simpleSuccess = true
                 }
             }
             
-            Section("Top Toasts") {
+            Section("Top Toasts".localized(bundle: .module)) {
                 ForEach(ToastType.topToasts(), id: \.self.rawValue) { tosat in
                     Button(tosat.rawValue) {
                         selectedToast = tosat
                     }
                 }
             }
-            Section("Center Toasts") {
+            Section("Center Toasts".localized(bundle: .module)) {
                 ForEach(ToastType.centerToasts(), id: \.self.rawValue) { tosat in
                     Button(tosat.rawValue) {
                         selectedToast = tosat
                     }
                 }
             }
-            Section("Bottom Toasts") {
+            Section("Bottom Toasts".localized(bundle: .module)) {
                 ForEach(ToastType.bottomToasts(), id: \.self.rawValue) { tosat in
                     Button(tosat.rawValue) {
                         selectedToast = tosat

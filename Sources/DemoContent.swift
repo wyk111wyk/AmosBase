@@ -18,8 +18,13 @@ public struct DemoContent<V: View>: View {
     @State private var showMapShare = false
     @State private var showPositionShare = false
     
+    let iCloudIdentifier: String
     @ViewBuilder let stateView: () -> V
-    public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
+    public init(
+        iCloudIdentifier: String = "",
+        @ViewBuilder stateView: @escaping () -> V = { EmptyView() }
+    ) {
+        self.iCloudIdentifier = iCloudIdentifier
         self.stateView = stateView
     }
     
@@ -82,7 +87,7 @@ public struct DemoContent<V: View>: View {
                     Text("About - 关于")
                 })
             }
-            .navigationTitle("Amos基础库")
+            .navigationTitle("AmosBase".localized(bundle: .module))
             .sheet(isPresented: $showToastPage) {
                 NavigationStack {
                     DemoSimpleToast()
@@ -116,23 +121,25 @@ public struct DemoContent<V: View>: View {
                 case 6:
                     DemoSimplePlaceholder()
                 case 7:
-                    DemoSimpleUpload()
+                    DemoSimpleCloud(iCloudIdentifier: iCloudIdentifier)
                 case 8:
-                    DemoSimpleCollection(selectedPage.title)
+                    DemoSimpleUpload()
                 case 9:
-                    DemoSimpleDate()
+                    DemoSimpleCollection(selectedPage.title)
                 case 10:
+                    DemoSimpleDate()
+                case 11:
                     #if os(iOS)
                     DemoSimpleImage()
                     #else
                     Text("Only for iOS")
                     #endif
-                case 11:
+                case 12:
                     SimpleColorPicker(
                         selectedColor: .random(),
                         isPush: true
                     ) { _ in }
-                case 12:
+                case 13:
                     DemoSimpleUnit()
                 default:
                     Text(selectedPage.title)
@@ -181,12 +188,13 @@ struct Page: Identifiable, Equatable, Hashable {
     }
     
     static func dataSection() -> [Self] {
-        [.init(id: 7, title: "Upload - 图床", icon: "photo.badge.arrow.down"),
-         .init(id: 8, title: "Collection - 集合", icon: "rectangle.grid.3x2"),
-         .init(id: 9, title: "Date - 日期", icon: "calendar.badge.clock"),
-         .init(id: 10, title: "Image - 图片", icon: "photo"),
-         .init(id: 11, title: "Color - 颜色", icon: "paintpalette"),
-         .init(id: 12, title: "Units - 单位", icon: "gauge.with.dots.needle.33percent")
+        [.init(id: 7, title: "iCloud - 云存储", icon: "arrow.clockwise.icloud"),
+         .init(id: 8, title: "Upload - 图床", icon: "photo.badge.arrow.down"),
+         .init(id: 9, title: "Collection - 集合", icon: "rectangle.grid.3x2"),
+         .init(id: 10, title: "Date - 日期", icon: "calendar.badge.clock"),
+         .init(id: 11, title: "Image - 图片", icon: "photo"),
+         .init(id: 12, title: "Color - 颜色", icon: "paintpalette"),
+         .init(id: 13, title: "Units - 单位", icon: "gauge.with.dots.needle.33percent")
         ]
     }
 }

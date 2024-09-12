@@ -11,33 +11,37 @@ import SwiftUI
 ///
 /// 可定制按钮类型，文字颜色为app主要色
 public struct SimpleMiddleButton: View {
-    let title: String
+    let title: LocalizedStringKey
     let systemImageName: String?
     let role: ButtonRole?
     let rowVisibility: Visibility
+    let bundle: Bundle
     
     let buttonTap: () -> Void
     
     #if os(watchOS)
-    public init(_ title: String,
+    public init(_ title: LocalizedStringKey,
                 systemImageName: String? = nil,
                 role: ButtonRole? = nil,
                 rowVisibility: Visibility = .hidden,
+                bundle: Bundle = .main,
                 buttonTap: @escaping () -> Void) {
         self.title = title
         self.systemImageName = systemImageName
         self.role = role
         
         self.rowVisibility = rowVisibility
+        self.bundle = bundle
         self.buttonTap = buttonTap
     }
     #else
     let key: KeyEquivalent?
     let modifiers: EventModifiers?
-    public init(_ title: String,
+    public init(_ title: LocalizedStringKey,
                 systemImageName: String? = nil,
                 role: ButtonRole? = nil,
                 rowVisibility: Visibility = .hidden,
+                bundle: Bundle = .main,
                 key: KeyEquivalent? = nil,
                 modifiers: EventModifiers? = nil,
                 buttonTap: @escaping () -> Void) {
@@ -45,6 +49,7 @@ public struct SimpleMiddleButton: View {
         self.systemImageName = systemImageName
         self.role = role
         
+        self.bundle = bundle
         self.rowVisibility = rowVisibility
         self.key = key
         self.modifiers = modifiers
@@ -59,7 +64,7 @@ public struct SimpleMiddleButton: View {
                 if let systemImageName {
                     Image(systemName: systemImageName)
                 }
-                Text(title.localized())
+                Text(title, bundle: bundle)
                 Spacer()
             }
         }

@@ -17,7 +17,7 @@ public struct SimpleColorPickerLink: View {
     
     public init(
         title: String = "自定义颜色",
-        systemImage: String? = nil,
+        systemImage: String? = "paintpalette",
         content: String? = nil,
         pickColor: Color = .random(),
         colorAction: @escaping (Color) -> Void
@@ -31,14 +31,18 @@ public struct SimpleColorPickerLink: View {
     
     public var body: some View {
         NavigationLink {
-            SimpleColorPicker(selectedColor: pickColor) { newColor in
+            SimpleColorPicker(
+                selectedColor: pickColor
+            ) { newColor in
                 pickColor = newColor
                 colorAction(newColor)
             }
         } label: {
-            SimpleCell(title, 
-                       systemImage: systemImage,
-                       content: content) {
+            SimpleCell(
+                title,
+                systemImage: systemImage,
+                content: content
+            ) {
                 circleView(pickColor)
             }
         }
@@ -53,7 +57,7 @@ public struct SimpleColorPickerLink: View {
 #Preview {
     NavigationStack {
         Form {
-            SimpleColorPickerLink(pickColor: .random()) { _ in }
+            SimpleColorPickerLink() { _ in }
         }
     }
 }

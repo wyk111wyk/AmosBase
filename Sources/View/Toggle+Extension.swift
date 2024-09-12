@@ -90,11 +90,14 @@ struct LabelToggleStyle: ToggleStyle {
     }
 }
 
+@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview(body: {
+    @Previewable @State var isOn1: Bool = true
+    @Previewable @State var isOn2: Bool = true
     Form {
-        Toggle("Confirm", isOn: .constant(true))
+        Toggle("Confirm", isOn: $isOn1)
             .confirmStyle()
-        Toggle("Label", isOn: .constant(false))
+        Toggle("Label", isOn: $isOn2)
             .labelStyle()
     }
 })

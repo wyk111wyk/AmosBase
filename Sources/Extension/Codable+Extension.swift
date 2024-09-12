@@ -24,6 +24,10 @@ public extension Encodable {
         }
     }
     
+    func toData() -> Data? {
+        self.encode()
+    }
+    
     func encode() -> Data? {
         do {
             let encoder = JSONEncoder()

@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 #if !os(watchOS) && !os(macOS)
-import WebKit
+@preconcurrency import WebKit
 
 public struct SimpleWebViewVC: UIViewRepresentable {
     @Binding var isLoading: Bool

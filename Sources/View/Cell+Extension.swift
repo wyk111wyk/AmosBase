@@ -32,8 +32,6 @@ public struct SimpleCell<V: View>: View {
     let contentLine: Int?
     let contentFont: Font
     let contentColor: Color?
-    /// 过度属性：true 将会导致没有任何的StateView
-    let fullContent: Bool
     
     let imageSize: Double
     let contentSpace: Double
@@ -61,7 +59,6 @@ public struct SimpleCell<V: View>: View {
         contentFont: Font = .caption,
         contentColor: Color? = .secondary,
         isDisplay: Bool = true,
-        fullContent: Bool = false,
         contentSpace: Double = 12,
         stateText: String? = nil,
         stateWidth: CGFloat = 100,
@@ -77,7 +74,6 @@ public struct SimpleCell<V: View>: View {
         self.contentLine = contentLine
         self.contentFont = contentFont
         self.contentColor = contentColor
-        self.fullContent = fullContent
         self.iconName = iconName
         self.systemImage = systemImage
         self.iconColor = iconColor
@@ -147,7 +143,7 @@ public struct SimpleCell<V: View>: View {
                     .multilineTextAlignment(.leading)
                 }
                 
-                if !fullContent {
+                if V.self != EmptyView.self || stateText != nil {
                     Spacer(minLength: 0)
                     Group {
                         if let stateText = stateText {

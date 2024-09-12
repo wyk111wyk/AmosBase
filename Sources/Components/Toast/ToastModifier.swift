@@ -285,22 +285,26 @@ public extension View{
     }
     
     /// 简单UI组件 - 顶部错误提示（可进一步定制）
-    func simpleErrorToast<Item: Equatable>(presentState: Binding<Item?>,
-                                           displayMode: ToastView.DisplayMode = .topToast,
-                                           title: String? = nil,
-                                           subtitle: String? = nil,
-                                           labelColor: Color = .red,
-                                           bgColor: Color? = .red,
-                                           withHaptic: Bool = true,
-                                           isDebug: Bool = false,
-                                           onTap: (() -> ())? = nil,
-                                           backgroundTap: (() -> ())? = nil,
-                                           completion: (() -> ())? = nil) -> some View{
-        let errorToast = ToastView(displayMode: displayMode,
-                                   type: .error(labelColor),
-                                   bgColor: bgColor,
-                                   title: title,
-                                   subTitle: subtitle)
+    func simpleErrorToast<Item: Equatable>(
+        presentState: Binding<Item?>,
+        displayMode: ToastView.DisplayMode = .topToast,
+        title: String? = nil,
+        subtitle: String? = nil,
+        labelColor: Color = .red,
+        bgColor: Color? = .red,
+        withHaptic: Bool = true,
+        isDebug: Bool = false,
+        onTap: (() -> ())? = nil,
+        backgroundTap: (() -> ())? = nil,
+        completion: (() -> ())? = nil
+    ) -> some View{
+        let errorToast = ToastView(
+            displayMode: displayMode,
+            type: .error(labelColor),
+            bgColor: bgColor,
+            title: title,
+            subTitle: subtitle
+        )
         return modifier(ToastModifier(presentState: presentState,
                                       withHaptic: withHaptic,
                                       isDebug: isDebug,
@@ -311,22 +315,26 @@ public extension View{
     }
     
     /// 简单UI组件 - 中央成功动画提示（可进一步定制）
-    func simpleSuccessToast<Item: Equatable>(presentState: Binding<Item?>,
-                                             displayMode: ToastView.DisplayMode = .centerToast,
-                                             title: String? = nil,
-                                             subtitle: String? = nil,
-                                             labelColor: Color = .green,
-                                             bgColor: Color? = nil,
-                                             withHaptic: Bool = true,
-                                             isDebug: Bool = false,
-                                             onTap: (() -> ())? = nil,
-                                             backgroundTap: (() -> ())? = nil,
-                                             completion: (() -> ())? = nil) -> some View{
-        let errorToast = ToastView(displayMode: displayMode,
-                                   type: .success(labelColor),
-                                   bgColor: bgColor,
-                                   title: title,
-                                   subTitle: subtitle)
+    func simpleSuccessToast<Item: Equatable>(
+        presentState: Binding<Item?>,
+        displayMode: ToastView.DisplayMode = .centerToast,
+        title: String? = nil,
+        subtitle: String? = nil,
+        labelColor: Color = .green,
+        bgColor: Color? = nil,
+        withHaptic: Bool = true,
+        isDebug: Bool = false,
+        onTap: (() -> ())? = nil,
+        backgroundTap: (() -> ())? = nil,
+        completion: (() -> ())? = nil
+    ) -> some View{
+        let errorToast = ToastView(
+            displayMode: displayMode,
+            type: .success(labelColor),
+            bgColor: bgColor,
+            title: title,
+            subTitle: subtitle
+        )
         return modifier(ToastModifier(presentState: presentState,
                                       withHaptic: withHaptic,
                                       isDebug: isDebug,
@@ -339,28 +347,36 @@ public extension View{
     /// 简单UI组件 - 中央载入提示（可进一步定制）
     ///
     /// 不会自动从屏幕消失，需要程序dismss或手动点击
-    func simpleLoadingToast<Item: Equatable>(presentState: Binding<Item?>,
-                                             displayMode: ToastView.DisplayMode = .centerToast,
-                                             title: String? = nil,
-                                             subtitle: String? = nil,
-                                             withHaptic: Bool = true,
-                                             isDebug: Bool = false,
-                                             tapToDismiss: Bool = true,
-                                             onTap: (() -> ())? = nil,
-                                             backgroundTap: (() -> ())? = nil,
-                                             completion: (() -> ())? = nil) -> some View{
-        let errorToast = ToastView(displayMode: displayMode,
-                                   type: .loading,
-                                   title: title,
-                                   subTitle: subtitle)
-        return modifier(ToastModifier(presentState: presentState,
-                                      tapToDismiss: tapToDismiss,
-                                      withHaptic: withHaptic,
-                                      isDebug: isDebug,
-                                      toast: { errorToast },
-                                      onTap: onTap,
-                                      backgroundTap: backgroundTap,
-                                      completion: completion))
+    func simpleLoadingToast<Item: Equatable>(
+        presentState: Binding<Item?>,
+        displayMode: ToastView.DisplayMode = .centerToast,
+        title: String? = nil,
+        subtitle: String? = nil,
+        withHaptic: Bool = true,
+        isDebug: Bool = false,
+        tapToDismiss: Bool = true,
+        onTap: (() -> ())? = nil,
+        backgroundTap: (() -> ())? = nil,
+        completion: (() -> ())? = nil
+    ) -> some View{
+        let errorToast = ToastView(
+            displayMode: displayMode,
+            type: .loading,
+            title: title,
+            subTitle: subtitle
+        )
+        return modifier(
+            ToastModifier(presentState: presentState,
+                          tapToDismiss: tapToDismiss,
+                          withHaptic: withHaptic,
+                          isDebug: isDebug,
+                          toast: {
+                              errorToast
+                          },
+                          onTap: onTap,
+                          backgroundTap: backgroundTap,
+                          completion: completion)
+        )
     }
 }
 

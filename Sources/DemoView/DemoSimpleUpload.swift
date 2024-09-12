@@ -12,20 +12,15 @@ public struct DemoSimpleUpload: View {
     @AppStorage("gitToken") private var gitToken: String = ""
     @State private var showGithubKey = false
     
-    @State private var showPhotoPicker = false
-    @State private var selectedItem: PhotosPickerItem?
-    @State private var selectedImage: SFImage? {
-        didSet {
-            timeStampName = Date().timeIntervalSince1970.toString()
-        }
-    }
-    @State private var showImage: SFImage?
+    @State private var originalImage: SFImage?
+    @State private var adjustedImage: SFImage?
+    
     @State private var timeStampName: String = ""
     @State private var uploadPath: PicBedPath = .base
     @State private var isCrop = true
     @State private var newWidth: Int = 500
     @State private var ratio: CGFloat = 0.9
-    @State private var size: String = ""
+    @State private var imageFileSize: String = ""
     
     @State private var isLoading = false
     @State private var error: Error?
@@ -49,17 +44,22 @@ public struct DemoSimpleUpload: View {
                     Button {
                         imageUpload()
                     } label: {
-                        SimpleCell("上传到Github", systemImage: "square.and.arrow.up") {
-                            if isLoading {
-                                ProgressView()
-                            }
+                        SimpleCell(
+                            "Upload to Github",
+                            systemImage: "square.and.arrow.up",
+                            localizationBundle: .module
+                        )
+                        if isLoading {
+                            ProgressView()
                         }
                     }
-                    .disabled(isLoading || selectedImage == nil || gitToken.isEmpty)
-                    Picker("图床路径", selection: $uploadPath) {
+                    .disabled(isLoading || adjustedImage == nil || gitToken.isEmpty)
+                    Picker(selection: $uploadPath) {
                         ForEach(PicBedPath.allCases, id: \.self) { path in
                             Text(path.title).tag(path)
                         }
+                    } label: {
+                        Text("Imagebed path", bundle: .module)
                     }
                 } header: {
                     Text("上传图床")
@@ -102,42 +102,20 @@ public struct DemoSimpleUpload: View {
     
     @ViewBuilder
     private func imagePicker() -> some View {
-        photoView()
-            .onTapGesture {
-                showPhotoPicker = true
-            }
-            #if !os(watchOS)
-            .onDropImage { image in
-                selectedImage = image
-            }
-            #endif
-            .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItem, matching: .images)
-            .onChange(of: selectedItem) { newItem in
-                #if os(iOS)
-                if let newItem {
-                    Task {
-                        let newImage = try? await newItem.loadTransferable(type: SFImage.self)
-                        chooseImage(newImage)
-                    }
-                }
-                #endif
-            }
-    }
-    
-    @ViewBuilder
-    private func photoView() -> some View {
-        if let showImage {
-            Image(sfImage: showImage)
-                .imageModify()
-        }else {
-            Image(sfImage: .placeHolder)
-                .imageModify(length: 100)
+        SimpleImagePicker(
+            originalImage: $originalImage,
+            adjustedImage: $adjustedImage,
+            adjustWidth: isCrop ? newWidth.toCGFloat : nil,
+            adjustRatio: isCrop ? ratio : nil
+        )
+        .onChange(of: originalImage) { _ in
+            timeStampName = Date().timeIntervalSince1970.toString()
         }
     }
     
     @ViewBuilder
     private func clipImageView() -> some View {
-        Toggle("压缩图片", isOn: $isCrop)
+        Toggle("压缩图片", isOn: $isCrop.animation())
             .onChange(of: isCrop) { newValue in
                 adjustShowImage()
             }
@@ -167,11 +145,11 @@ public struct DemoSimpleUpload: View {
     
     @ViewBuilder
     private func imageInfo() -> some View {
-        if let showImage {
-            SimpleCell(timeStampName + ".jpeg", content: size) {
+        if let adjustedImage {
+            SimpleCell(timeStampName + ".jpeg", content: imageFileSize) {
                 VStack {
-                    Text("w: \(showImage.width.toString())")
-                    Text("h: \(showImage.height.toString())")
+                    Text("w: \(adjustedImage.width.toString())")
+                    Text("h: \(adjustedImage.height.toString())")
                 }
                 .foregroundStyle(.secondary)
                 .font(.caption)
@@ -181,37 +159,31 @@ public struct DemoSimpleUpload: View {
 }
 
 extension DemoSimpleUpload {
-    private func chooseImage(_ image: SFImage?) {
-        guard let image else { return }
-        selectedImage = image
-        adjustShowImage()
-    }
-    
     @discardableResult
     private func adjustShowImage() -> Data? {
-        guard let selectedImage else { return nil }
+        guard let originalImage else { return nil }
         if isCrop {
             // 进行缩放
-            var newImage = selectedImage.adjustSize(width: newWidth.toDouble)
+            var newImage = originalImage.adjustSize(width: newWidth.toDouble)
             let imageData = newImage.jpegImageData(quality: ratio)
             // 进行压缩
             if let imageData,
                let tempImage = SFImage(data: imageData) {
                 newImage = tempImage
             }
-            size = imageData?.count.toDouble.toStorage() ?? ""
-            showImage = newImage
+            imageFileSize = imageData?.count.toDouble.toStorage() ?? ""
+            adjustedImage = newImage
             return imageData
         }else {
-            let imageData = selectedImage.jpegImageData(quality: ratio)
-            size = imageData?.count.toDouble.toStorage() ?? ""
-            showImage = selectedImage
+            let imageData = originalImage.jpegImageData(quality: ratio)
+            imageFileSize = imageData?.count.toDouble.toStorage() ?? ""
+            adjustedImage = originalImage
             return imageData
         }
     }
     
     private func imageUpload() {
-        guard let imageData = adjustShowImage() else
+        guard let imageData = adjustedImage?.jpegImageData(quality: 1.0) else
         { return }
         
         Task {
@@ -224,9 +196,8 @@ extension DemoSimpleUpload {
                     type: "jpeg",
                     path: uploadPath.path
                 ) {
-                    selectedItem = nil
-                    selectedImage = nil
-                    showImage = nil
+                    adjustedImage = nil
+                    originalImage = nil
                 }
             }catch {
                 self.error = error

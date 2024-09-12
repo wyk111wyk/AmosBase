@@ -14,6 +14,18 @@ public class SimpleWeb {
         cacheHelper = try? SimpleCache(isDebuging: false)
     }
     
+    public func isNetworkAvailable(
+        url: URL = URL(string: "https://www.baidu.com")!
+    ) async -> Bool {
+        let result = try? await loadData(from: url)
+        if let result {
+            debugPrint(result)
+            return true
+        }else {
+            return false
+        }
+    }
+    
     /// 先从缓存读取，没有则从网络读取并缓存
     public func loadImage(from key: String) async throws -> SFImage? {
         guard let url = URL(string: key) else { return nil }

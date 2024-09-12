@@ -11,6 +11,22 @@
             "state" : "translated",
             "value" : "%@"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      }
+    },
+    "%@ 切换结果：%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ 切换结果：%2$lld"
+          }
         }
       }
     },
@@ -27,14 +43,28 @@
     "%lld 字" : {
 
     },
-    "=" : {
+    "🔍 搜索：地址 ｜ 地点" : {
 
     },
     "1" : {
 
     },
-    "2" : {
-
+    "A forum for communication and suggestions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户可以在登录后留言或交流使用体验"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用戶可以在登錄後留言或交流使用體驗"
+          }
+        }
+      }
     },
     "About - 关于" : {
 
@@ -46,12 +76,24 @@
             "state" : "translated",
             "value" : "警告"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "警告"
+          }
         }
       }
     },
     "Alert - %@" : {
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "警告 - %@"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "警告 - %@"
@@ -67,6 +109,29 @@
             "state" : "translated",
             "value" : "高德地图"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高德地圖"
+          }
+        }
+      }
+    },
+    "AmosBase" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amos基础库"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amos基礎庫"
+          }
         }
       }
     },
@@ -78,11 +143,14 @@
             "state" : "translated",
             "value" : "工作室应用"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工作室應用"
+          }
         }
       }
-    },
-    "Amos基础库" : {
-
     },
     "App Store Review" : {
       "extractionState" : "manual",
@@ -91,6 +159,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "App Store 评分"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store 評分"
           }
         }
       }
@@ -104,6 +178,12 @@
             "state" : "translated",
             "value" : "Apple地图"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple地圖"
+          }
         }
       }
     },
@@ -113,6 +193,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "背景颜色"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "背景顏色"
           }
         }
       }
@@ -125,15 +211,28 @@
             "state" : "translated",
             "value" : "百度地图"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "百度地圖"
+          }
         }
       }
     },
     "Bar Progress" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "条形进度"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "條形進度"
           }
         }
       }
@@ -141,6 +240,12 @@
     "Bottom Toasts" : {
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "底部提醒"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "底部提醒"
@@ -154,6 +259,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "按钮"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按鈕"
+          }
+        }
+      }
+    },
+    "Camera" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用摄像头"
+          }
+        }
+      }
+    },
+    "cameraError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There is no camera available for this device."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "该设备没有可用的摄像头"
           }
         }
       }
@@ -182,6 +321,12 @@
             "state" : "translated",
             "value" : "卡片"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "卡片"
+          }
         }
       }
     },
@@ -192,12 +337,24 @@
             "state" : "translated",
             "value" : "单元格"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "單元格"
+          }
         }
       }
     },
     "Center Toasts" : {
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中央提醒"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "中央提醒"
@@ -212,25 +369,45 @@
             "state" : "translated",
             "value" : "已选"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已選"
+          }
         }
       }
     },
     "Choose Color" : {
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "颜色选择"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顏色選擇"
+          }
         }
       }
     },
     "Circular Progress" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "环形进度"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "環形進度"
           }
         }
       }
@@ -242,15 +419,28 @@
             "state" : "translated",
             "value" : "颜色 Hex 值"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顏色 Hex 值"
+          }
         }
       }
     },
     "Color Picker" : {
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "颜色选择器"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顏色選擇器"
           }
         }
       }
@@ -279,6 +469,12 @@
             "state" : "translated",
             "value" : "确认"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認"
+          }
         }
       }
     },
@@ -288,6 +484,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "确认 - %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認 - %@"
           }
         }
       }
@@ -299,25 +501,45 @@
             "state" : "translated",
             "value" : "色彩自定义"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "色彩自定義"
+          }
         }
       }
     },
     "Custom gradient color" : {
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "自定义渐变色"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定義漸變色"
+          }
         }
       }
     },
     "Custom single color" : {
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "自定义单色"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自定義單色"
           }
         }
       }
@@ -325,6 +547,12 @@
     "Dark" : {
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "深色背景"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "深色背景"
@@ -339,11 +567,51 @@
             "state" : "translated",
             "value" : "变暗"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "變暗"
+          }
         }
       }
     },
     "Data - 数据处理" : {
 
+    },
+    "Delete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移除"
+          }
+        }
+      }
+    },
+    "Favor" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "收藏"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "收藏"
+          }
+        }
+      }
     },
     "Github密钥" : {
 
@@ -356,6 +624,12 @@
             "state" : "translated",
             "value" : "谷歌地图"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "谷歌地圖"
+          }
         }
       }
     },
@@ -366,32 +640,14 @@
             "state" : "translated",
             "value" : "高：%@"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高：%@"
+          }
         }
       }
-    },
-    "Haptic震动 - ⚠️ 警告" : {
-
-    },
-    "Haptic震动 - ✅ 成功" : {
-
-    },
-    "Haptic震动 - ❎ 错误" : {
-
-    },
-    "Haptic震动 - 强烈" : {
-
-    },
-    "Haptic震动 - 普通" : {
-
-    },
-    "Haptic震动 - 柔软" : {
-
-    },
-    "Haptic震动 - 轻柔" : {
-
-    },
-    "Haptic震动 - 较强" : {
-
     },
     "I am pure color background" : {
       "localizations" : {
@@ -400,12 +656,24 @@
             "state" : "translated",
             "value" : "我是纯色背景"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我是純色背景"
+          }
         }
       }
     },
     "I am text with dark background" : {
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我是深色背景中的文字"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "我是深色背景中的文字"
@@ -420,18 +688,48 @@
             "state" : "translated",
             "value" : "我是浅色背景中的文字"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我是淺色背景中的文字"
+          }
         }
       }
     },
     "Image - 图片查看" : {
 
     },
+    "Imagebed path" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "图床路径"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "圖床路徑"
+          }
+        }
+      }
+    },
     "l: %@" : {
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "长：%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "長：%@"
           }
         }
       }
@@ -439,6 +737,12 @@
     "Label" : {
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文字"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "文字"
@@ -456,6 +760,12 @@
             "state" : "translated",
             "value" : "浅色背景"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "淺色背景"
+          }
         }
       }
     },
@@ -466,35 +776,62 @@
             "state" : "translated",
             "value" : "变淡"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "變淡"
+          }
         }
       }
     },
     "Loading -> Error" : {
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "载入 -> 错误"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "載入 -> 錯誤"
+          }
         }
       }
     },
     "Loading -> Success" : {
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "载入 -> 成功"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "載入 -> 成功"
+          }
         }
       }
     },
     "Loading Title Change" : {
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "载入后改变标题"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "載入後改變標題"
           }
         }
       }
@@ -503,11 +840,18 @@
 
     },
     "Map Share" : {
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "第三方地图"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "第三方地圖"
           }
         }
       }
@@ -521,10 +865,10 @@
     "Navi - 导航" : {
 
     },
-    "Navi Title" : {
+    "NBA官网" : {
 
     },
-    "NBA官网" : {
+    "Network" : {
 
     },
     "Only for iOS" : {
@@ -538,6 +882,23 @@
             "state" : "translated",
             "value" : "工作室的其他作品，同样的简洁与实用"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工作室的其他作品，同樣的簡潔與實用"
+          }
+        }
+      }
+    },
+    "Photo album" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从相册挑选"
+          }
         }
       }
     },
@@ -547,6 +908,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "选择器"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇器"
           }
         }
       }
@@ -559,6 +926,12 @@
             "state" : "translated",
             "value" : "随机颜色"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隨機顏色"
+          }
         }
       }
     },
@@ -569,6 +942,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "随机深颜色"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隨機深顏色"
           }
         }
       }
@@ -581,12 +960,24 @@
             "state" : "translated",
             "value" : "随机淡颜色"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隨機淡顏色"
+          }
         }
       }
     },
     "Require iOS 17" : {
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "需要iOS 17以上"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "需要iOS 17以上"
@@ -604,6 +995,12 @@
             "state" : "translated",
             "value" : "简单错误"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "簡單錯誤"
+          }
         }
       }
     },
@@ -613,6 +1010,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "简单载入"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "簡單載入"
           }
         }
       }
@@ -624,6 +1027,12 @@
             "state" : "translated",
             "value" : "简单成功"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "簡單成功"
+          }
         }
       }
     },
@@ -633,6 +1042,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "简单提醒"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "簡單提醒"
           }
         }
       }
@@ -644,15 +1059,28 @@
             "state" : "translated",
             "value" : "选择条"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇條"
+          }
         }
       }
     },
     "System color" : {
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "系统预置颜色"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系統預置顏色"
           }
         }
       }
@@ -664,6 +1092,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "系统设置"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "系統設置"
           }
         }
       }
@@ -679,6 +1113,12 @@
             "state" : "translated",
             "value" : "腾讯地图"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "騰訊地圖"
+          }
         }
       }
     },
@@ -688,6 +1128,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "输入框"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "輸入框"
           }
         }
       }
@@ -701,6 +1147,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "顶部提醒"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "頂部提醒"
           }
         }
       }
@@ -721,6 +1173,74 @@
             "state" : "translated",
             "value" : "未选择"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未選擇"
+          }
+        }
+      }
+    },
+    "Unfavor" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消收藏"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消收藏"
+          }
+        }
+      }
+    },
+    "Upload" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上传"
+          }
+        }
+      }
+    },
+    "Upload to Github" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上传到Github"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上傳到Github"
+          }
+        }
+      }
+    },
+    "User Feedback" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户反馈"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用戶反饋"
+          }
         }
       }
     },
@@ -730,6 +1250,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "宽：%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "寬：%@"
           }
         }
       }
@@ -741,6 +1267,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你的支持对我们非常重要"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的支持對我們非常重要"
           }
         }
       }
@@ -757,16 +1289,37 @@
     "不压缩" : {
 
     },
+    "不可用" : {
+
+    },
+    "云存储 iCloud" : {
+
+    },
+    "交通状况" : {
+
+    },
+    "仅限视图内" : {
+
+    },
     "位置信息" : {
 
     },
+    "储存" : {
+
+    },
     "储存 Storage" : {
+
+    },
+    "储存 Upload" : {
 
     },
     "删除" : {
 
     },
     "删除%@" : {
+
+    },
+    "删除全部数据" : {
 
     },
     "删除图片" : {
@@ -787,16 +1340,13 @@
     "压缩比率：%.1f" : {
 
     },
-    "取消收藏" : {
+    "可用" : {
 
     },
     "图床列表" : {
 
     },
     "图床图片：%lld 张" : {
-
-    },
-    "图床路径" : {
 
     },
     "图片信息" : {
@@ -824,10 +1374,19 @@
         }
       }
     },
+    "布尔值" : {
+
+    },
     "当前时间" : {
 
     },
-    "收藏" : {
+    "搜索地址" : {
+
+    },
+    "日期选择" : {
+
+    },
+    "时间" : {
 
     },
     "时间对比" : {
@@ -839,16 +1398,22 @@
     "时间长度 Duration" : {
 
     },
+    "普通中央按钮" : {
+
+    },
+    "未知" : {
+
+    },
+    "未连接" : {
+
+    },
     "温度 Temperature" : {
 
     },
-    "编辑" : {
+    "确认" : {
 
     },
     "缩放图片（宽300）" : {
-
-    },
-    "自定义渐变色" : {
 
     },
     "自定义颜色" : {
@@ -869,7 +1434,7 @@
     "语义描述 - .toString_Relative" : {
 
     },
-    "跳转系统设置" : {
+    "读取 Download" : {
 
     },
     "转换 Toast" : {
@@ -878,10 +1443,16 @@
     "转换为文字" : {
 
     },
+    "输入内容" : {
+
+    },
     "选择时间" : {
 
     },
     "速度 Speed" : {
+
+    },
+    "重要中央按钮" : {
 
     },
     "长度 Length" : {
