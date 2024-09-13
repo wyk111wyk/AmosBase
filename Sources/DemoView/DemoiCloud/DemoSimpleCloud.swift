@@ -196,7 +196,7 @@ extension DemoSimpleCloud {
             }
         }
         .task {
-            isNetworkAvailable = await SimpleWeb().isNetworkAvailable()
+            isNetworkAvailable = try? await SimpleWeb().isNetworkAvailable()
             isICloudAvailable = cloudHelper != nil
         }
     }

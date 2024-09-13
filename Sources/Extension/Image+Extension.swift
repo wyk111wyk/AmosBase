@@ -9,6 +9,9 @@ import Foundation
 import SwiftUI
 import OSLog
 import UniformTypeIdentifiers
+#if canImport(Photos)
+import Photos
+#endif
 #if canImport(UIKit)
 import UIKit
 public typealias SFImage = UIImage
@@ -245,6 +248,68 @@ public extension SFImage {
         return scaled(width: width)
         #endif
     }
+    
+    #if !os(watchOS)
+    /// 用户可以将一张照片放入相册，使用前要先在 plist 中添加权限描述：
+    /// NSPhotoLibraryUsageDescription（完全访问）
+    /// NSPhotoLibraryAddUsageDescription（仅添加照片）
+    /// - Parameter accessLevel: 使用前需要进行授权
+    /// - Returns: 成功或者错误提示
+    func saveToPhotoLibrary(
+        accessLevel: PHAccessLevel = .readWrite
+    ) async throws -> Bool {
+        let status = PHPhotoLibrary.authorizationStatus(for: accessLevel)
+        switch status {
+        case .authorized:
+           // 用户已授权访问相册
+            return try await self.saveIntoPhotoLibrary()
+        case .denied, .restricted:
+            // 用户已拒绝访问相册或者家长控制限制了访问
+            throw SimpleError.customError(msg: "用户已拒绝访问相册或者家长控制限制了访问")
+        case .notDetermined:
+            // 用户还没有做出选择，需要请求授权访问相册
+            let response = await PHPhotoLibrary.requestAuthorization(for: accessLevel)
+            switch response {
+            case .authorized:
+                // 授权成功，可以访问相册
+                return try await self.saveIntoPhotoLibrary()
+            case .denied, .restricted:
+                // 授权失败
+                throw SimpleError.customError(msg: "用户已拒绝访问相册或者家长控制限制了访问")
+            case .notDetermined:
+                // 用户还没有做出选择
+                return false
+            case .limited:
+                throw SimpleError.customError(msg: "用户仅授权有限访问相册内容")
+            @unknown default:
+                throw SimpleError.customError(msg: "相册授权未知错误")
+            }
+        case .limited:
+            throw SimpleError.customError(msg: "用户仅授权有限访问相册内容")
+        @unknown default:
+            throw SimpleError.customError(msg: "相册授权未知错误")
+        }
+    }
+    
+    /// 仅内部使用：授权成功后直接将照片存入相册
+    private func saveIntoPhotoLibrary() async throws -> Bool {
+        try await withCheckedThrowingContinuation { continuation in
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.creationRequestForAsset(from: self)
+            }) { isSuccessed, error in
+                if let error {
+                    debugPrint("图片保存错误: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                }else {
+                    if isSuccessed {
+                        debugPrint("成功将图片保存至 Library")
+                    }
+                    continuation.resume(returning: isSuccessed)
+                }
+            }
+        }
+    }
+    #endif
 }
 
 #if os(iOS)

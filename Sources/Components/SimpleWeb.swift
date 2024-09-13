@@ -16,10 +16,10 @@ public class SimpleWeb {
     
     public func isNetworkAvailable(
         url: URL = URL(string: "https://www.baidu.com")!
-    ) async -> Bool {
-        let result = try? await loadData(from: url)
+    ) async throws -> Bool {
+        let result = try await loadData(from: url)
         if let result {
-            debugPrint(result)
+            debugPrint(result.count.toDouble.toStorage())
             return true
         }else {
             return false

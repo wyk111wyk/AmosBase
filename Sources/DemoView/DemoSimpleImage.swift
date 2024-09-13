@@ -21,6 +21,8 @@ public struct DemoSimpleImage: View {
         SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
     }
     
+    @State private var isSaveSuccessed: Bool? = nil
+    
     @State private var resizeImage: Bool = false
     @State private var scanText: String? = nil
     @State private var faceCount: Int? = nil
@@ -59,6 +61,16 @@ public struct DemoSimpleImage: View {
                 }
             }
             
+            if let originalImage {
+                Section {
+                    SimpleAsyncButton {
+                        self.isSaveSuccessed = try? await originalImage.saveToPhotoLibrary(accessLevel: .readWrite)
+                    } label: {
+                        SimpleCell("存入相册", systemImage: "arrow.down.doc")
+                    }
+                }
+            }
+            
             Section("图片识别") {
                 SimpleCell("识别文字", content: scanText)
                 SimpleCell("识别脸孔") {
@@ -69,13 +81,14 @@ public struct DemoSimpleImage: View {
                 Button {
                     selectedPhotoIndex = 0
                 } label: {
-                    Label("Image - 图片查看", systemImage: "photo.on.rectangle.angled")
+                    Label("图片查看浏览", systemImage: "photo.on.rectangle.angled")
                 }
                 .simpleImageViewer(selectedIndex: $selectedPhotoIndex,
                                    allPhotos: ImageStoreModel.examples())
             }
         }
         .navigationTitle(title)
+        .simpleSuccessToast(presentState: $isSaveSuccessed, title: "图片已存入相册")
         .task {
             if originalImage == nil {
                 originalImage = defaultImage

@@ -51,6 +51,7 @@ extension SimpleCloudHelper{
         return deleteResult.deleteResults.count
     }
     
+    /// 使用 CKRecord.ID 删除单个记录
     public func deleteSingleValue(
         dataType: DataType? = nil,
         zoneType: ZoneType = .privateType,

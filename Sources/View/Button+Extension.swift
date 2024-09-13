@@ -17,7 +17,7 @@ public struct SimpleMiddleButton: View {
     let rowVisibility: Visibility
     let bundle: Bundle
     
-    let buttonTap: () -> Void
+    let action: () -> Void
     
     #if os(watchOS)
     public init(_ title: LocalizedStringKey,
@@ -25,14 +25,14 @@ public struct SimpleMiddleButton: View {
                 role: ButtonRole? = nil,
                 rowVisibility: Visibility = .hidden,
                 bundle: Bundle = .main,
-                buttonTap: @escaping () -> Void) {
+                action: @escaping () -> Void) {
         self.title = title
         self.systemImageName = systemImageName
         self.role = role
         
         self.rowVisibility = rowVisibility
         self.bundle = bundle
-        self.buttonTap = buttonTap
+        self.action = action
     }
     #else
     let key: KeyEquivalent?
@@ -44,7 +44,7 @@ public struct SimpleMiddleButton: View {
                 bundle: Bundle = .main,
                 key: KeyEquivalent? = nil,
                 modifiers: EventModifiers? = nil,
-                buttonTap: @escaping () -> Void) {
+                action: @escaping () -> Void) {
         self.title = title
         self.systemImageName = systemImageName
         self.role = role
@@ -53,12 +53,12 @@ public struct SimpleMiddleButton: View {
         self.rowVisibility = rowVisibility
         self.key = key
         self.modifiers = modifiers
-        self.buttonTap = buttonTap
+        self.action = action
     }
     #endif
     
     public var body: some View {
-        Button(role: role, action: buttonTap) {
+        Button(role: role, action: action) {
             HStack(spacing: 8) {
                 Spacer()
                 if let systemImageName {
@@ -77,93 +77,172 @@ public struct SimpleMiddleButton: View {
     }
 }
 
-public struct SimpleConfirmButton<V: View>: View {
+/// 简单的用来进行多线程任务的按钮
+public struct SimpleAsyncButton<V: View>: View {
     let title: String?
     let systemImage: String?
     let role: ButtonRole?
     
-    @ViewBuilder var labelView: () -> V
-    let tapAction: () -> Void
+    let action: () async throws -> Void
+    @ViewBuilder var label: () -> V
     
     public init(
-        title: String? = "Confirm",
+        title: String? = nil,
         systemImage: String? = nil,
         role: ButtonRole? = nil,
-        labelView: @escaping () -> V = { EmptyView() },
-        tapAction: @escaping () -> Void
+        action: @escaping () async throws -> Void,
+        label: @escaping () -> V = { EmptyView() }
     ) {
         self.title = title
         self.systemImage = systemImage
         self.role = role
-        self.labelView = labelView
-        self.tapAction = tapAction
+        self.action = action
+        self.label = label
     }
     
     public var body: some View {
-        Button(role: role, action: tapAction, label: {
-            if title != nil || systemImage != nil {
+        Button(role: role) {
+            Task { try await action() }
+        } label: {
+            if V.self != EmptyView.self {
+                label()
+            } else {
                 if let systemImage {
                     Image(systemName: systemImage)
                 }
                 if let title {
                     Text(title.localized())
                 }
-            }else {
-                labelView()
+            }
+        }
+    }
+}
+
+/// 简单的确认用的按钮（默认Title是确认）
+public struct SimpleConfirmButton<V: View>: View {
+    let title: String?
+    let systemImage: String?
+    let role: ButtonRole?
+    
+    @ViewBuilder var label: () -> V
+    let action: () -> Void
+    
+    public init(
+        title: String? = "Confirm",
+        systemImage: String? = nil,
+        role: ButtonRole? = nil,
+        action: @escaping () -> Void,
+        label: @escaping () -> V = { EmptyView() }
+    ) {
+        self.title = title
+        self.systemImage = systemImage
+        self.role = role
+        self.label = label
+        self.action = action
+    }
+    
+    public var body: some View {
+        Button(role: role, action: action, label: {
+            if V.self != EmptyView.self {
+                label()
+            } else {
+                if let systemImage {
+                    Image(systemName: systemImage)
+                }
+                if let title {
+                    Text(title.localized())
+                }
             }
         })
     }
 }
 
+/// 简单的开关，点击后切换 isPresented 的值
 public struct SimpleTriggerButton<V: View>: View {
     let title: String?
     let systemImage: String?
     
-    @ViewBuilder var labelView: () -> V
+    @ViewBuilder var label: () -> V
     @Binding var isPresented: Bool
     
     public init(
         title: String? = "Trigger",
         systemImage: String? = nil,
         isPresented: Binding<Bool>,
-        labelView: @escaping () -> V = { EmptyView() }
+        label: @escaping () -> V = { EmptyView() }
     ) {
         self.title = title
         self.systemImage = systemImage
         self._isPresented = isPresented
-        self.labelView = labelView
+        self.label = label
     }
     
     public var body: some View {
         Button(action: {
-            isPresented = true
+            isPresented.toggle()
         }, label: {
-            if title != nil || systemImage != nil {
+            if V.self != EmptyView.self {
+                label()
+            }else {
                 if let systemImage {
                     Image(systemName: systemImage)
                 }
                 if let title {
                     Text(title.localized())
                 }
-            }else {
-                labelView()
             }
         })
     }
 }
 
-#Preview("Button", body: {
-    NavigationStack {
-        Form {
-            Section {
-                SimpleMiddleButton("Middle Button") {}
-            }
-            Section {
-                SimpleTriggerButton(isPresented: .constant(false))
-            }
-            Section {
-                SimpleConfirmButton {}
-            }
+@available(iOS 17.0, macOS 14, watchOS 10, *)
+#Preview(
+    "Button",
+    body: {
+        @Previewable @State var isPresent: Bool = false
+        @Previewable @State var isLoading: Bool = false
+        @Previewable @State var isNetworkWording: Bool?
+        NavigationStack {
+            Form {
+                Section {
+                    SimpleMiddleButton("Middle Button") {}
+                }
+                Section {
+                    SimpleTriggerButton(isPresented: $isPresent) {
+                        Text(isPresent.toString())
+                    }
+                }
+                Section {
+                    SimpleConfirmButton {}
+                    SimpleConfirmButton(
+                        title: "自定义标题",
+                        role: .destructive
+                    ) {}
+                }
+                Section {
+                    SimpleAsyncButton {
+                        isLoading = true
+                        do {
+                            isNetworkWording = try await SimpleWeb().isNetworkAvailable()
+                        }catch {
+                            debugPrint(error)
+                        }
+                        isLoading = false
+                    } label: {
+                        SimpleCell("多线程任务") {
+                            if isLoading {
+                                ProgressView()
+                            }else if let isNetworkWording {
+                                Text(isNetworkWording ? "连接" : "断开")
+                                    .simpleTag(.border(contentColor: isNetworkWording ? . green : .red))
+                            }
+                        }
+                    }
+                }
+                .navigationTitle("按钮类型")
+                #if os(iOS)
+                .navigationBarTitleDisplayMode(.large)
+                #endif
         }
         .buttonCircleNavi(role: .cancel)
         .buttonCircleNavi(role: .destructive)
