@@ -132,6 +132,7 @@ extension SimpleCloudHelper{
         return savedRecord
     }
     
+    /// 将 CKRecord 保存或更新至云端
     @discardableResult
     public func saveRecordToCloud(
         record: CKRecord,
@@ -147,13 +148,17 @@ extension SimpleCloudHelper{
         image: SFImage,
         idKey: String,
         attributes: [String: String] = [:],
-        zoneType: ZoneType = .privateType
+        zoneType: ZoneType = .privateType,
+        customKey: String? = nil,
+        customRecord: String? = nil
     ) async throws -> CKRecord? {
         try await saveDataToCloud(
             dataType: .image(image),
             zoneType: zoneType,
             idKey: idKey,
-            attributes: attributes
+            attributes: attributes,
+            customKey: customKey,
+            customRecord: customRecord
         )
     }
 }
