@@ -115,6 +115,11 @@ public extension String {
         UUID(uuidString: self) ?? UUID()
     }
     
+    /// 转换为 LocalizedStringKey
+    func toLocalizedKey() -> LocalizedStringKey {
+        LocalizedStringKey(self)
+    }
+    
     /// 转换为位置坐标 -  (lat,long) 高德格式
     ///
     /// lat = 120 long = 29

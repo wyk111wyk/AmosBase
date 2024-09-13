@@ -15,12 +15,14 @@ public extension View {
     /// 简单UI组件 -  Alert提醒，有四种形式，默认确认键取消
     ///
     /// 可自定义Title和Message，singleCancel, singleConfirm, ConfirmCancel, DestructiveCancel
-    func simpleAlert(type: SimpleAlertType = .singleConfirm,
-                            title: String?,
-                            message: String? = nil,
-                            isPresented: Binding<Bool>,
-                            confirmTap: @escaping () -> Void = {},
-                            cancelTap: @escaping () -> Void = {}) -> some View {
+    func simpleAlert(
+        type: SimpleAlertType = .singleConfirm,
+        title: String?,
+        message: LocalizedStringKey? = nil,
+        isPresented: Binding<Bool>,
+        confirmTap: @escaping () -> Void = {},
+        cancelTap: @escaping () -> Void = {}
+    ) -> some View {
         modifier(SimpleAlert(title: title,
                              message: message,
                              type: type,
@@ -32,12 +34,14 @@ public extension View {
     /// 简单UI组件 -  Confirmation提醒，有四种形式，默认确认键取消
     ///
     /// 可自定义Title和Message，singleCancel, singleConfirm, ConfirmCancel, DestructiveCancel
-    func simpleConfirmation(type: SimpleAlertType = .singleConfirm,
-                                   title: String?,
-                                   message: String? = nil,
-                                   isPresented: Binding<Bool>,
-                                   confirmTap: @escaping () -> Void = {},
-                                   cancelTap: @escaping () -> Void = {}) -> some View {
+    func simpleConfirmation(
+        type: SimpleAlertType = .singleConfirm,
+        title: String?,
+        message: LocalizedStringKey? = nil,
+        isPresented: Binding<Bool>,
+        confirmTap: @escaping () -> Void = {},
+        cancelTap: @escaping () -> Void = {}
+    ) -> some View {
         modifier(SimpleConfirmation(title: title,
                                     message: message,
                                     type: type,
@@ -50,22 +54,25 @@ public extension View {
 // MARK: - Confirmation
 struct SimpleConfirmation: ViewModifier {
     let title: String
-    let message: String?
+    let message: LocalizedStringKey?
     let type: SimpleAlertType
+    let messageBundle: Bundle
     @Binding var isPresented: Bool
     
     let confirmTap: () -> Void
     let cancelTap: () -> Void
     
     init(title: String?,
-         message: String?,
+         message: LocalizedStringKey?,
          type: SimpleAlertType,
+         messageBundle: Bundle = .main,
          isPresented: Binding<Bool>,
          confirmTap: @escaping () -> Void,
          cancelTap: @escaping () -> Void) {
         self.title = title ?? "N/A"
         self.message = message
         self.type = type
+        self.messageBundle = messageBundle
         self._isPresented = isPresented
         self.confirmTap = confirmTap
         self.cancelTap = cancelTap
@@ -73,45 +80,61 @@ struct SimpleConfirmation: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .confirmationDialog(title.localized(),
-                                isPresented: $isPresented,
-                                titleVisibility: .visible) {
+            .confirmationDialog(
+                title.localized(
+                    bundle: messageBundle
+                ),
+                isPresented: $isPresented,
+                titleVisibility: .visible
+            ) {
                 switch type {
                 case .singleCancel:
-                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.escape)
 #endif
                 case .singleConfirm:
-                    Button("Confirm".localized(bundle: .module), role: .cancel) {
+                    Button(role: .cancel, action: {
                         cancelTap()
                         confirmTap()
-                    }
+                    }, label: {
+                        Text("Confirm", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.return)
 #endif
                 case .confirmCancel:
-                    Button("Confirm".localized(bundle: .module), role: .none, action: confirmTap)
+                    Button(role: .none, action: confirmTap, label: {
+                        Text("Confirm", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.return)
 #endif
-                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.escape)
 #endif
                 case .destructiveCancel:
-                    Button("Confirm".localized(bundle: .module), role: .destructive, action: confirmTap)
+                    Button(role: .destructive, action: confirmTap, label: {
+                        Text("Confirm", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.return)
 #endif
-                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.escape)
 #endif
                 }
             } message: {
                 if let message {
-                    Text(message.localized())
+                    Text(message, bundle: messageBundle)
                 }
             }
     }
@@ -120,22 +143,25 @@ struct SimpleConfirmation: ViewModifier {
 // MARK: - Alert
 struct SimpleAlert: ViewModifier {
     let title: String
-    let message: String?
+    let message: LocalizedStringKey?
     let type: SimpleAlertType
+    let messageBundle: Bundle
     @Binding var isPresented: Bool
     
     let confirmTap: () -> Void
     let cancelTap: () -> Void
     
     init(title: String?,
-         message: String?,
+         message: LocalizedStringKey?,
          type: SimpleAlertType,
+         messageBundle: Bundle = .main,
          isPresented: Binding<Bool>,
          confirmTap: @escaping () -> Void,
          cancelTap: @escaping () -> Void) {
         self.title = title ?? "N/A"
         self.message = message
         self.type = type
+        self.messageBundle = messageBundle
         self._isPresented = isPresented
         self.confirmTap = confirmTap
         self.cancelTap = cancelTap
@@ -143,44 +169,56 @@ struct SimpleAlert: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .alert(title.localized(),
+            .alert(title.localized(bundle: messageBundle),
                    isPresented: $isPresented) {
                 switch type {
                 case .singleCancel:
-                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
                     #if !os(watchOS)
                         .keyboardShortcut(.escape)
                     #endif
                 case .singleConfirm:
-                    Button("Confirm".localized(bundle: .module), role: .cancel) {
+                    Button(role: .cancel, action: {
                         cancelTap()
                         confirmTap()
-                    }
+                    }, label: {
+                        Text("Confirm", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.return)
 #endif
                 case .confirmCancel:
-                    Button("Confirm".localized(bundle: .module), role: .none, action: confirmTap)
+                    Button(role: .none, action: confirmTap, label: {
+                        Text("Confirm", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.return)
 #endif
-                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.escape)
 #endif
                 case .destructiveCancel:
-                    Button("Confirm".localized(bundle: .module), role: .destructive, action: confirmTap)
+                    Button(role: .destructive, action: confirmTap, label: {
+                        Text("Confirm", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.return)
 #endif
-                    Button("Cancel".localized(bundle: .module), role: .cancel, action: cancelTap)
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
 #if !os(watchOS)
     .keyboardShortcut(.escape)
 #endif
                 }
             } message: {
                 if let message {
-                    Text(message.localized())
+                    Text(message, bundle: messageBundle)
                 }
             }
     }
