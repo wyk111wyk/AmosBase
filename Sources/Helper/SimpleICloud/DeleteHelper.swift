@@ -16,9 +16,9 @@ extension SimpleCloudHelper{
     public func deleteCloudValue(
         dataType: DataType? = nil,
         zoneType: ZoneType = .privateType,
-        customRecord: String? = nil,
         idKey: String? = nil,
-        predicate: NSPredicate? = nil
+        predicate: NSPredicate? = nil,
+        customRecord: String? = nil
     ) async throws -> Int {
         let dataBase = cloudDataBase(zoneType)
         let results = try await fetchCloudObjects(
