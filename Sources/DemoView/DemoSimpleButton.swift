@@ -81,7 +81,7 @@ public struct DemoSimpleButton<V: View>: View {
             ) {
                 HStack {
                     Text(String.randomChinese(word: true))
-                        .simpleTag(.full(bgColor: .blue.opacity(0.1)))
+                        .simpleTag(.full(bgColor: .blue.opacity(0.9)))
                 }
             }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
             SimpleCell(String.randomChinese(short: true, medium: true),
@@ -110,24 +110,28 @@ public struct DemoSimpleButton<V: View>: View {
     
     @ViewBuilder
     private func buttonSection() -> some View {
-        Section("Button") {
+        Section {
             #if os(iOS) || targetEnvironment(macCatalyst)
             SimpleMiddleButton("普通中央按钮", role: .none) {
                 confirmShowPage = true }
                 .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
             #endif
             SimpleMiddleButton("重要中央按钮", systemImageName: "person.wave.2.fill", role: .destructive) {}
+        } header: {
+            Text("Button", bundle: .module)
         }
     }
     
     @ViewBuilder
     private func textFieldSection() -> some View {
         #if !os(watchOS)
-        Section("TextField") {
+        Section {
             Button { showInput = true } label: {
                 SimpleCell("输入短文字", systemImage: "rectangle.and.pencil.and.ellipsis.rtl")
             }
             SimpleTextField($input)
+        } header: {
+            Text("TextField", bundle: .module)
         }
         #endif
     }
