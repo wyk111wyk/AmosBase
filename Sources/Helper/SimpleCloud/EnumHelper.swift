@@ -9,6 +9,10 @@ import Foundation
 import CoreLocation
 import CloudKit
 
+extension NSPredicate: @unchecked @retroactive Sendable {
+    
+}
+
 extension SimpleCloudHelper{
     public enum ZoneType {
         case privateType, publicType

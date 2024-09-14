@@ -38,7 +38,9 @@ extension SimpleCloudHelper{
             saving: [],
             deleting: allRecordIds
         )
-        debugPrint("成功删除iCloud数据：\(deleteResult.deleteResults.count)条")
+        if isDebuging {
+            debugPrint("成功删除iCloud数据：\(deleteResult.deleteResults.count)条")
+        }
         
         // 清空本地缓存
         if withCache, let idKey, let dataType {

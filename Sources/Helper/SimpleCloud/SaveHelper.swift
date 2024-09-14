@@ -78,7 +78,10 @@ extension SimpleCloudHelper{
             customKey: customKey
         )
         
-        debugPrint(record)
+        if isDebuging {
+            debugPrint("创建 CKRecord：")
+            debugPrint(record)
+        }
         return record
     }
     
@@ -123,8 +126,10 @@ extension SimpleCloudHelper{
         if withCache {
             if case let .data(data) = dataType {
                 try cacheHelper?.save(object: data, forKey: newKey)
+                debugPrint("成功缓存 Data: \(newKey)")
             } else if case let .image(image) = dataType, let image {
                 try cacheHelper?.save(image: image, forKey: newKey)
+                debugPrint("成功缓存 Image: \(newKey)")
             }
         }
         

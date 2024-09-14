@@ -48,6 +48,7 @@ public class SimpleCloudHelper {
         }else {
             self.contain = CKContainer.default()
         }
+        
         if isDebuging {
             debugPrint("iCloud Identifier: \(self.contain.containerIdentifier ?? "N/A")")
             self.contain.accountStatus { status, error in
@@ -61,6 +62,10 @@ public class SimpleCloudHelper {
         
         self.privateDatabase = contain.privateCloudDatabase
         self.publicDatabase = contain.publicCloudDatabase
+    }
+    
+    public func accountStatus() async throws -> CKAccountStatus {
+        try await contain.accountStatus()
     }
     
     internal func cloudDataBase(_ zoneType: ZoneType) -> CKDatabase {
