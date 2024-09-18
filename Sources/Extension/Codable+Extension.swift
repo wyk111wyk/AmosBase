@@ -64,12 +64,15 @@ public extension Data {
             return decoded
         } catch let DecodingError.dataCorrupted(context) {
             debugPrint("Data corrupted: \(context)")
+            debugPrint(String(describing: T.self))
             return nil
         } catch let DecodingError.keyNotFound(key, context) {
             debugPrint("Key '\(key)' not found:", context.debugDescription)
+            debugPrint(String(describing: T.self))
             return nil
         } catch let DecodingError.valueNotFound(value, context) {
             debugPrint("Value '\(value)' not found:", context.debugDescription)
+            debugPrint(String(describing: T.self))
             return nil
         } catch let DecodingError.typeMismatch(valueType, context)  {
             debugPrint("Type '\(valueType)' mismatch:", context.debugDescription)
@@ -77,6 +80,7 @@ public extension Data {
             return nil
         } catch {
             debugPrint("encode error: ", error)
+            debugPrint(String(describing: T.self))
             return nil
         }
     }

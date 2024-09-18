@@ -18,6 +18,11 @@ public struct DemoSimpleData: View {
         NavigationStack {
             Form {
                 Section("待编码数据") {
+                    Picker("选项", selection: $demoModel.animal) {
+                        Text("鸭子").tag(DemoCodableModel.DemoEnum.duck)
+                        Text("火腿").tag(DemoCodableModel.DemoEnum.ham)
+                        Text("狗狗").tag(DemoCodableModel.DemoEnum.dog)
+                    }
                     #if os(watchOS)
                     colorContent(title: "颜色1", color: demoModel.colorOne)
                     colorContent(title: "颜色2", color: demoModel.colorTwo)
@@ -76,6 +81,7 @@ public struct DemoSimpleData: View {
                 
                 if let decodeModel {
                     Section("还原后实例") {
+                        SimpleCell("选项", stateText: decodeModel.animal.title)
                         colorContent(title: "颜色1", color: decodeModel.colorOne)
                         colorContent(title: "颜色2", color: decodeModel.colorTwo)
                         colorContent(title: "颜色3", color: decodeModel.colorThree)
@@ -108,6 +114,25 @@ public struct DemoSimpleData: View {
 private struct DemoCodableModel: Codable {
     var id: UUID
     
+    enum DemoEnum: String, Codable, Identifiable {
+        case duck = "yaya"
+        case ham, dog
+        
+        var title: String {
+            switch self {
+            case .duck:
+                return "鸭子"
+            case .ham:
+                return "火腿"
+            case .dog:
+                return "狗狗"
+            }
+        }
+        
+        var id: String { self.rawValue }
+    }
+    var animal: DemoEnum
+    
     var colorOne: Color
     var colorTwo: Color
     var colorThree: Color
@@ -118,6 +143,7 @@ private struct DemoCodableModel: Codable {
     
     init(
         id: UUID = .init(),
+        animal: DemoEnum = .duck,
         colorOne: Color = .random(),
         colorTwo: Color = .random(),
         colorThree: Color = .random(),
@@ -126,6 +152,7 @@ private struct DemoCodableModel: Codable {
         array: [String] = ["text01", "text02", "text03"]
     ) {
         self.id = id
+        self.animal = animal
         self.colorOne = colorOne
         self.colorTwo = colorTwo
         self.colorThree = colorThree
