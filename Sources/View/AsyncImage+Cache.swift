@@ -20,6 +20,8 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
     
     private let successLoaded: (SFImage) -> Void
     
+    private let failLoad: () -> Void
+    
     private let cacheHelper: SimpleCache?
     
     public var body: some View {
@@ -31,21 +33,35 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         url: URL?,
         urlCache: URLCache = .shared,
         scale: CGFloat = 1,
-        successLoaded: @escaping (SFImage) -> Void = {_ in}
+        successLoaded: @escaping (SFImage) -> Void = {_ in},
+        failLoad: @escaping () -> Void = {}
     ) where Content == Image {
         let urlRequest = url == nil ? nil : URLRequest(url: url!)
-        self.init(urlRequest: urlRequest, urlCache: urlCache, scale: scale, successLoaded: successLoaded)
+        self.init(
+            urlRequest: urlRequest,
+            urlCache: urlCache,
+            scale: scale,
+            successLoaded: successLoaded,
+            failLoad: failLoad
+        )
     }
     
     public init(
         urlRequest: URLRequest?,
         urlCache: URLCache = .shared,
         scale: CGFloat = 1,
-        successLoaded: @escaping (SFImage) -> Void = {_ in}
+        successLoaded: @escaping (SFImage) -> Void = {_ in},
+        failLoad: @escaping () -> Void = {}
     ) where Content == Image {
-        self.init(urlRequest: urlRequest, urlCache: urlCache, scale: scale, content: { phase in
-            phase.image ?? Image(sfImage: .init())
-        }, successLoaded: successLoaded)
+        self.init(
+            urlRequest: urlRequest,
+            urlCache: urlCache,
+            scale: scale,
+            content: { phase in
+                phase.image ?? Image(sfImage: .init())
+            },
+            successLoaded: successLoaded,
+            failLoad: failLoad)
     }
     
     public init<I, P>(
@@ -54,7 +70,8 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         scale: CGFloat = 1,
         @ViewBuilder content: @escaping (Image) -> I,
         @ViewBuilder placeholder: @escaping () -> P,
-        successLoaded: @escaping (SFImage) -> Void = {_ in}
+        successLoaded: @escaping (SFImage) -> Void = {_ in},
+        failLoad: @escaping () -> Void = {}
     ) where Content == _ConditionalContent<I, P>, I : View, P : View {
         let urlRequest = url == nil ? nil : URLRequest(url: url!)
         self.init(
@@ -63,7 +80,8 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
             scale: scale,
             content: content,
             placeholder: placeholder,
-            successLoaded: successLoaded
+            successLoaded: successLoaded,
+            failLoad: failLoad
         )
     }
     
@@ -73,7 +91,8 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         scale: CGFloat = 1,
         @ViewBuilder content: @escaping (Image) -> I,
         @ViewBuilder placeholder: @escaping () -> P,
-        successLoaded: @escaping (SFImage) -> Void = {_ in}
+        successLoaded: @escaping (SFImage) -> Void = {_ in},
+        failLoad: @escaping () -> Void = {}
     ) where Content == _ConditionalContent<I, P>, I : View, P : View {
         self.init(
             urlRequest: urlRequest,
@@ -86,7 +105,8 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
                     placeholder()
                 }
             },
-            successLoaded: successLoaded
+            successLoaded: successLoaded,
+            failLoad: failLoad
         )
     }
     
@@ -96,7 +116,8 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         scale: CGFloat = 1,
         transaction: Transaction = Transaction(),
         @ViewBuilder content: @escaping (AsyncImagePhase) -> Content,
-        successLoaded: @escaping (SFImage) -> Void = {_ in}
+        successLoaded: @escaping (SFImage) -> Void = {_ in},
+        failLoad: @escaping () -> Void = {}
     ) {
         let urlRequest = url == nil ? nil : URLRequest(url: url!)
         self.init(
@@ -105,7 +126,8 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
             scale: scale,
             transaction: transaction,
             content: content,
-            successLoaded: successLoaded
+            successLoaded: successLoaded,
+            failLoad: failLoad
         )
     }
     
@@ -150,7 +172,8 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         scale: CGFloat = 1,
         transaction: Transaction = Transaction(),
         @ViewBuilder content: @escaping (AsyncImagePhase) -> Content,
-        successLoaded: @escaping (SFImage) -> Void = {_ in}
+        successLoaded: @escaping (SFImage) -> Void = {_ in},
+        failLoad: @escaping () -> Void = {}
     ) {
         let configuration = URLSessionConfiguration.default
         configuration.urlCache = urlCache
@@ -162,6 +185,7 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         self.cacheHelper = try? SimpleCache(isDebuging: false)
         self._phase = State(wrappedValue: .empty)
         self.successLoaded = successLoaded
+        self.failLoad = failLoad
         do {
             if let urlRequest = urlRequest, 
                let image = try cachedImage(from: urlRequest, cache: urlCache) {
@@ -190,6 +214,7 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
             }
         } catch {
             withAnimation(transaction.animation) {
+                self.failLoad()
                 phase = .failure(error)
             }
         }
