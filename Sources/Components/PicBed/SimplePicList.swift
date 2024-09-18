@@ -96,7 +96,7 @@ public struct SimplePicList: View {
                         content: gitImage.size.toStorage()
                     ) {
                         if let imageUrl = URL(string: gitImage.download_url) {
-                            CachedAsyncImage(url: imageUrl) { image in
+                            SimpleAsyncImage(url: imageUrl) { image in
                                 image
                                     .resizable()
                                     .scaledToFit()

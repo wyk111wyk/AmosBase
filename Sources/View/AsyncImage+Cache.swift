@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-public struct CachedAsyncImage<Content>: View where Content: View {
+public struct SimpleAsyncImage<Content>: View where Content: View {
     
     @State private var phase: AsyncImagePhase
     
@@ -203,7 +203,7 @@ private extension AsyncImage {
 }
 
 // MARK: - Helpers
-private extension CachedAsyncImage {
+private extension SimpleAsyncImage {
     private func remoteImage(
         from request: URLRequest,
         session: URLSession
