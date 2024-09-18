@@ -20,7 +20,7 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
     
     private let successLoaded: (SFImage) -> Void
     
-    private let failLoad: () -> Void
+    private let failLoad: (Error) -> Void
     
     private let cacheHelper: SimpleCache?
     
@@ -34,7 +34,7 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         urlCache: URLCache = .shared,
         scale: CGFloat = 1,
         successLoaded: @escaping (SFImage) -> Void = {_ in},
-        failLoad: @escaping () -> Void = {}
+        failLoad: @escaping (Error) -> Void = {_ in}
     ) where Content == Image {
         let urlRequest = url == nil ? nil : URLRequest(url: url!)
         self.init(
@@ -51,7 +51,7 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         urlCache: URLCache = .shared,
         scale: CGFloat = 1,
         successLoaded: @escaping (SFImage) -> Void = {_ in},
-        failLoad: @escaping () -> Void = {}
+        failLoad: @escaping (Error) -> Void = {_ in}
     ) where Content == Image {
         self.init(
             urlRequest: urlRequest,
@@ -71,7 +71,7 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         @ViewBuilder content: @escaping (Image) -> I,
         @ViewBuilder placeholder: @escaping () -> P,
         successLoaded: @escaping (SFImage) -> Void = {_ in},
-        failLoad: @escaping () -> Void = {}
+        failLoad: @escaping (Error) -> Void = {_ in}
     ) where Content == _ConditionalContent<I, P>, I : View, P : View {
         let urlRequest = url == nil ? nil : URLRequest(url: url!)
         self.init(
@@ -92,7 +92,7 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         @ViewBuilder content: @escaping (Image) -> I,
         @ViewBuilder placeholder: @escaping () -> P,
         successLoaded: @escaping (SFImage) -> Void = {_ in},
-        failLoad: @escaping () -> Void = {}
+        failLoad: @escaping (Error) -> Void = {_ in}
     ) where Content == _ConditionalContent<I, P>, I : View, P : View {
         self.init(
             urlRequest: urlRequest,
@@ -117,7 +117,7 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         transaction: Transaction = Transaction(),
         @ViewBuilder content: @escaping (AsyncImagePhase) -> Content,
         successLoaded: @escaping (SFImage) -> Void = {_ in},
-        failLoad: @escaping () -> Void = {}
+        failLoad: @escaping (Error) -> Void = {_ in}
     ) {
         let urlRequest = url == nil ? nil : URLRequest(url: url!)
         self.init(
@@ -173,7 +173,7 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
         transaction: Transaction = Transaction(),
         @ViewBuilder content: @escaping (AsyncImagePhase) -> Content,
         successLoaded: @escaping (SFImage) -> Void = {_ in},
-        failLoad: @escaping () -> Void = {}
+        failLoad: @escaping (Error) -> Void = {_ in}
     ) {
         let configuration = URLSessionConfiguration.default
         configuration.urlCache = urlCache
@@ -214,7 +214,7 @@ public struct SimpleAsyncImage<Content>: View where Content: View {
             }
         } catch {
             withAnimation(transaction.animation) {
-                self.failLoad()
+                self.failLoad(error)
                 phase = .failure(error)
             }
         }
