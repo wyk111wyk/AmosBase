@@ -25,6 +25,27 @@ extension Color: @retroactive Identifiable {
     }
 }
 
+extension Color: Codable {
+    enum CodingKeys: String, CodingKey {
+        case red, green, blue
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let red = try container.decode(Double.self, forKey: .red)
+        let green = try container.decode(Double.self, forKey: .green)
+        let blue = try container.decode(Double.self, forKey: .blue)
+        self.init(red: red, green: green, blue: blue)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(SFColor(self).toRGBAComponents().r, forKey: .red)
+        try container.encode(SFColor(self).toRGBAComponents().g, forKey: .green)
+        try container.encode(SFColor(self).toRGBAComponents().b, forKey: .blue)
+    }
+}
+
 public extension Color {
     /// 简化了RGB的颜色生成，可以直接使用 rgb(102,151,243)
     init(r: Double, g: Double, b: Double) {
@@ -198,7 +219,12 @@ public extension SFColor {
         if trans < 0 { trans = 0 }
         if trans > 1 { trans = 1 }
 
-        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: trans)
+        self.init(
+            red: CGFloat(red) / 255.0,
+            green: CGFloat(green) / 255.0,
+            blue: CGFloat(blue) / 255.0,
+            alpha: trans
+        )
     }
     
     /// SwifterSwift: Random color.
@@ -234,7 +260,12 @@ public extension SFColor {
             guard comps.count != 4 else { return comps }
             return [comps[0], comps[0], comps[0], comps[1]]
         }()
-        return String(format: "#%02X%02X%02X", components[0], components[1], components[2])
+        return String(
+            format: "#%02X%02X%02X",
+            components[0],
+            components[1],
+            components[2]
+        )
     }
     
     /// SwifterSwift: Alpha of Color (read-only).
@@ -261,7 +292,12 @@ public extension SFColor {
 
      - returns: The RGBA components as a tuple (r, g, b, a).
      */
-    func toRGBAComponents() -> (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
+    func toRGBAComponents() -> (
+        r: CGFloat,
+        g: CGFloat,
+        b: CGFloat,
+        a: CGFloat
+    ) {
       var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
 
       #if os(iOS) || os(tvOS) || os(watchOS)
@@ -291,8 +327,12 @@ public extension SFColor {
     ///   - color2: second color to blend
     ///   - intensity2: intensity of second color (default is 0.5)
     /// - Returns: Color created by blending first and second colors.
-    static func blend(_ color1: SFColor, intensity1: CGFloat = 0.5, with color2: SFColor,
-                      intensity2: CGFloat = 0.5) -> SFColor {
+    static func blend(
+        _ color1: SFColor,
+        intensity1: CGFloat = 0.5,
+        with color2: SFColor,
+        intensity2: CGFloat = 0.5
+    ) -> SFColor {
         // http://stackoverflow.com/questions/27342715/blend-uicolors-in-swift
 
         let total = intensity1 + intensity2
