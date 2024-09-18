@@ -73,7 +73,7 @@ public extension Data {
             return nil
         } catch let DecodingError.typeMismatch(valueType, context)  {
             debugPrint("Type '\(valueType)' mismatch:", context.debugDescription)
-            debugPrint(String(describing: self))
+            debugPrint(String(describing: T.self))
             return nil
         } catch {
             debugPrint("encode error: ", error)
