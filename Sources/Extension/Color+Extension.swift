@@ -25,27 +25,6 @@ extension Color: @retroactive Identifiable {
     }
 }
 
-extension Color: Codable {
-    enum CodingKeys: String, CodingKey {
-        case red, green, blue
-    }
-    
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let red = try container.decode(Double.self, forKey: .red)
-        let green = try container.decode(Double.self, forKey: .green)
-        let blue = try container.decode(Double.self, forKey: .blue)
-        self.init(red: red, green: green, blue: blue)
-    }
-    
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(SFColor(self).toRGBAComponents().r, forKey: .red)
-        try container.encode(SFColor(self).toRGBAComponents().g, forKey: .green)
-        try container.encode(SFColor(self).toRGBAComponents().b, forKey: .blue)
-    }
-}
-
 public extension Color {
     /// 简化了RGB的颜色生成，可以直接使用 rgb(102,151,243)
     init(r: Double, g: Double, b: Double) {

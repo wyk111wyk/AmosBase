@@ -191,8 +191,13 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
         self._inputText = inputText
         self.prompt = prompt
         self.systemImage = systemImage
-        self.startLine = startLine
-        self.endLine = endLine
+        if endLine <= startLine {
+            self.startLine = endLine
+            self.endLine = endLine
+        }else {
+            self.startLine = startLine
+            self.endLine = endLine
+        }
         self.style = style
         self.tintColor = tintColor
         self.isFocused = isFocused

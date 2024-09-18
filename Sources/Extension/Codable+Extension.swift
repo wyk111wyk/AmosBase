@@ -5,7 +5,7 @@
 //  Created by AmosFitness on 2023/12/7.
 //
 
-import Foundation
+import SwiftUI
 import CoreData
 
 public extension Encodable {
@@ -67,15 +67,13 @@ public extension Data {
             return nil
         } catch let DecodingError.keyNotFound(key, context) {
             debugPrint("Key '\(key)' not found:", context.debugDescription)
-            debugPrint("codingPath:", context.codingPath)
             return nil
         } catch let DecodingError.valueNotFound(value, context) {
             debugPrint("Value '\(value)' not found:", context.debugDescription)
-            debugPrint("codingPath:", context.codingPath)
             return nil
-        } catch let DecodingError.typeMismatch(type, context)  {
-            debugPrint("Type '\(type)' mismatch:", context.debugDescription)
-            debugPrint("codingPath:", context.codingPath)
+        } catch let DecodingError.typeMismatch(valueType, context)  {
+            debugPrint("Type '\(valueType)' mismatch:", context.debugDescription)
+            debugPrint(String(describing: self))
             return nil
         } catch {
             debugPrint("encode error: ", error)
@@ -96,5 +94,28 @@ public extension Data {
 public extension NSManagedObject {
     var entityName: String {
         String(describing: type(of: self))
+    }
+}
+
+// MARK: - 属性的 Codable 实现
+
+extension Color: Codable {
+    enum CodingKeys: String, CodingKey {
+        case red, green, blue
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let red = try container.decode(Double.self, forKey: .red)
+        let green = try container.decode(Double.self, forKey: .green)
+        let blue = try container.decode(Double.self, forKey: .blue)
+        self.init(red: red, green: green, blue: blue)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(SFColor(self).toRGBAComponents().r, forKey: .red)
+        try container.encode(SFColor(self).toRGBAComponents().g, forKey: .green)
+        try container.encode(SFColor(self).toRGBAComponents().b, forKey: .blue)
     }
 }

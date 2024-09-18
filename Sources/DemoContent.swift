@@ -70,7 +70,7 @@ public struct DemoContent<V: View>: View {
                     Button {
                         showPositionShare.toggle()
                     } label: {
-                        Label("Map Share - 定位按钮", systemImage: "map")
+                        Label("Map Share - 定位按钮", systemImage: "mappin.circle")
                     }
                     .confirmationDialog(
                         "Map Share".localized(
@@ -141,6 +141,8 @@ public struct DemoContent<V: View>: View {
                     ) { _ in }
                 case 13:
                     DemoSimpleUnit()
+                case 14:
+                    DemoSimpleData()
                 default:
                     Text(selectedPage.title)
                 }
@@ -194,7 +196,8 @@ struct Page: Identifiable, Equatable, Hashable {
          .init(id: 10, title: "Date - 日期", icon: "calendar.badge.clock"),
          .init(id: 11, title: "Image - 图片", icon: "photo"),
          .init(id: 12, title: "Color - 颜色", icon: "paintpalette"),
-         .init(id: 13, title: "Units - 单位", icon: "gauge.with.dots.needle.33percent")
+         .init(id: 13, title: "Units - 单位", icon: "gauge.with.dots.needle.33percent"),
+         .init(id: 14, title: "Data - 编解码", icon: "externaldrive")
         ]
     }
 }
