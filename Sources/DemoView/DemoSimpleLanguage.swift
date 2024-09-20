@@ -60,5 +60,5 @@ struct DemoSimpleLanguage: View {
 }
 
 #Preview {
-    DemoSimpleLanguage(sourceText: "The American Red Cross was established in Washington, D.C., by Clara Barton.")
+    DemoSimpleLanguage(sourceText: "王维诗歌赏析")
 }

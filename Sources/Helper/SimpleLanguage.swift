@@ -9,7 +9,9 @@ import Foundation
 import NaturalLanguage
 
 public class SimpleLanguage {
-     public typealias tagResult = [(range: Range<String.Index>, tag: NLTag)]
+    public typealias tagResult = [(range: Range<String.Index>, tag: NLTag)]
+    
+    public init() {}
     
     /// 检测一段文字使用的主要语言
     public func detectLanguage(for sourceText: String) -> NLLanguage? {
