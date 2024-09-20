@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public protocol PickerValueModel: Identifiable, Hashable {
+public protocol SimplePickerItem: Identifiable, Hashable {
     var title: String { get }
     var titleColor: Color? { get }
     var iconName: String? { get }
@@ -16,7 +16,7 @@ public protocol PickerValueModel: Identifiable, Hashable {
     var content: String? { get }
 }
 
-public struct SimplePicker<Value: PickerValueModel>: View {
+public struct SimplePicker<Value: SimplePickerItem>: View {
     @Environment(\.dismiss) private var dismissPage
     // Picker属性
     let title: String
@@ -177,7 +177,7 @@ public struct SimplePicker<Value: PickerValueModel>: View {
 
 #Preview {
     let allPickerContent = DemoPickerModel.allContent
-    return NavigationStack {
+    NavigationStack {
         SimplePicker(
             title: "Picker",
             maxSelectCount: 2,

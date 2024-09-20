@@ -311,7 +311,6 @@ public extension String {
 
 // MARK: - 生成和计算
 public extension String {
-    // MARK: - 截取句子中的文字
     /// 获取最初的几位字符（默认1位）
     ///
     /// 数量不足则返回字符本身
@@ -408,7 +407,7 @@ public extension String {
             "我们一起去旅行。",
             "她正在学习编程。"
         ]
-
+        
         let mediumSentences: [String] = [
             "明天我们要去学校参加一个非常重要的会议。",
             "他每天早上都会跑步，然后吃一顿丰盛的早餐。",
@@ -421,7 +420,7 @@ public extension String {
             "她正在准备考试，压力有点大。",
             "我们打算在年底前完成所有的工作任务。"
         ]
-
+        
         let longSentences: [String] = [
             "最近公司的业绩有所提升，团队的努力和付出得到了回报，大家都很有成就感，希望未来能够继续保持这种良好的势头。",
             "昨天我去参加了一个非常有趣的讲座，讲座内容涉及到人工智能的发展前景，让我对这个领域产生了浓厚的兴趣。",
@@ -434,7 +433,7 @@ public extension String {
             "他最近在研究一项新的技术，希望能够将其应用到实际项目中，为公司创造更多的价值。",
             "今天早上起来看到窗外的景色非常美丽，阳光洒在树叶上，显得格外温暖和宁静。"
         ]
-
+        
         var textArray: [String] = []
         if word {
             textArray.append(contentsOf: wordSentences)
@@ -451,7 +450,10 @@ public extension String {
         
         return textArray.shuffled().randomElement() ?? "N/A"
     }
-    
+}
+
+// MARK: - 作为名称使用
+public extension String {
     /// 计算字符的宽度 -  使用UIFont
     func getWidth(font: SFFont) -> CGFloat {
         let fontAttributes = [NSAttributedString.Key.font: font]
@@ -464,6 +466,25 @@ public extension String {
         let fontAttributes = [NSAttributedString.Key.font: font]
         let size = self.size(withAttributes: fontAttributes)
         return size.height
+    }
+
+    /// 作为文件名从 Bundle 中获取文件
+    func getFileFromBundle<T: Codable>(bundle: Bundle = Bundle.main) -> T? {
+        guard let path = bundle.path(
+            forResource: self,
+            ofType: nil
+        ) else { return nil }
+
+        guard let data = try? Data(
+            contentsOf: URL(fileURLWithPath: path),
+            options: .mappedIfSafe
+        ) else { return nil }
+        
+        if T.self == Data.self {
+            return data as? T
+        }else {
+            return data.decode(type: T.self)
+        }
     }
 }
 

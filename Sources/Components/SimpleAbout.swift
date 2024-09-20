@@ -77,10 +77,12 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                     startFeedback()
                     #endif
                 } label: {
-                    SimpleCell("User Feedback",
-                               systemImage: "rectangle.3.group.bubble",
-                               content: "A forum for communication and suggestions",
-                               localizationBundle: .module)
+                    SimpleCell(
+                        "User Feedback",
+                        systemImage: "rectangle.3.group.bubble",
+                        content: "A forum for communication and suggestions",
+                        localizationBundle: .module
+                    )
                 }
                 .buttonStyle(.borderless)
                 #if !os(watchOS) && !os(macOS)
@@ -94,10 +96,12 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                 Button(action: {
                     openURL(url)
                 }) {
-                    SimpleCell("App Store Review",
-                               systemImage: "star",
-                               content: "Your support is very important to us.",
-                               localizationBundle: .module)
+                    SimpleCell(
+                        "App Store Review",
+                        systemImage: "star",
+                        content: "Your support is very important to us.",
+                        localizationBundle: .module
+                    )
                 }
                 .buttonStyle(.borderless)
             }
@@ -106,14 +110,16 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                 Button {
                     openURL(url)
                 } label: {
-                    SimpleCell("AmosStudio Apps",
-                               bundleImageName: "AmosLogoB",
-                               bundleImageNameDark: "AmosLogoW",
-                               bundleImageType: "png",
-                               content: "Other Apps from us, equally concise and practical.",
-                               localizationBundle: .module)
+                    SimpleCell(
+                        "AmosStudio Apps",
+                        bundleImageName: "AmosLogoB",
+                        bundleImageNameDark: "AmosLogoW",
+                        bundleImageType: "png",
+                        content: "Other Apps from us, equally concise and practical.",
+                        localizationBundle: .module
+                    )
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(.plain)
             }
         } header: {
             headerView()

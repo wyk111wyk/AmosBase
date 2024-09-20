@@ -25,7 +25,7 @@ public extension CLPlacemark {
         if self.name != self.thoroughfare {
             address += self.name ?? ""
         }
-        mylog.log("AppleMap Address: \(address)")
+//        mylog.log("从 CLPlacemark 解析地址: \(address)")
         return address
     }
     

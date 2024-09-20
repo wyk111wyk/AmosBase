@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public struct DemoPickerModel: PickerValueModel {
+public struct DemoPickerModel: SimplePickerItem {
     
     public let id: UUID
     public var title: String
@@ -36,7 +36,7 @@ public struct DemoPickerModel: PickerValueModel {
         self.content = content
     }
     
-    public static var allContent: [Self] {
+    public static var allContent: [DemoPickerModel] {
         return (1..<20).map {
             DemoPickerModel(
                 title: "标题部分 \($0)",
