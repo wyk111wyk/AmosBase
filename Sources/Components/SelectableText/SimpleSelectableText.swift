@@ -16,6 +16,8 @@ import AppKit
 extension NSParagraphStyle: @unchecked @retroactive Sendable {}
 
 public struct SimpleSelectableText: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
     let text: String
     let attributedText: AttributedString?
     
@@ -38,6 +40,9 @@ public struct SimpleSelectableText: View {
             return attributedText
         }else {
             var attributedString = AttributedString(text)
+            #if os(iOS)
+            attributedString.uiKit.foregroundColor = colorScheme == .dark ? .white : .black
+            #endif
             attributedString.font = .systemFont(ofSize: 18)
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.lineSpacing = 8

@@ -90,7 +90,7 @@ public struct SimpleImagePicker<V: View>: View {
 #endif
         }
             .photosPicker(isPresented: $showLibrary, selection: $selectedItem, matching: .images)
-#if os(iOS) || targetEnvironment(macCatalyst)
+#if os(iOS)
             .sheet(isPresented: $showCamera) {
                 SimpleCamera() { newPhoto in
                     adjustImage(for: newPhoto)

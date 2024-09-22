@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-#if os(iOS) || targetEnvironment(macCatalyst)
+#if os(iOS)
 struct SimpleCamera: UIViewControllerRepresentable {
     
     @Environment(\.presentationMode) var isPresented
