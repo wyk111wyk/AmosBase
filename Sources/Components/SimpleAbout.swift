@@ -11,7 +11,7 @@ import SwiftUI
 public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     @Environment(\.openURL) private var openURL
 #if !os(watchOS) && !os(macOS)
-    @State private var account: SimpleFBUser? = nil
+    @State private var account: SimpleFeedbackModel? = nil
 #endif
     
     let introWebLink = "https://www.amosstudio.com.cn/"
@@ -27,11 +27,11 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     let footerView: () -> Footer
     
     public init(
-        txcId: String?,
-        userId: String?,
-        nickName: String?,
-        avatarUrl: String?,
-        appStoreId: String?,
+        txcId: String? = nil,
+        userId: String? = nil,
+        nickName: String? = nil,
+        avatarUrl: String? = nil,
+        appStoreId: String? = nil,
         showAppVersion: Bool = true,
         @ViewBuilder headerView: @escaping () -> Header = {EmptyView()},
         @ViewBuilder footerView: @escaping () -> Footer = {EmptyView()}
@@ -58,7 +58,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     
     public var body: some View {
         Section {
-            #if !os(watchOS) && !os(macOS)
+            #if os(iOS)
             Link(destination: URL(string: UIApplication.openSettingsURLString)!,
                  label: {
                 SimpleCell(
@@ -66,7 +66,8 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                     systemImage: "gear",
                     localizationBundle: .module
                 )
-            }).buttonStyle(.borderless)
+            })
+            .buttonStyle(.plain)
             #endif
             
             if let url = URL(string: feedbackLink) {
@@ -84,7 +85,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                         localizationBundle: .module
                     )
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(.plain)
                 #if !os(watchOS) && !os(macOS)
                 .sheet(item: $account) { account in
                     SimpleWebView(url: url, account: account)
@@ -103,7 +104,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                         localizationBundle: .module
                     )
                 }
-                .buttonStyle(.borderless)
+                .buttonStyle(.plain)
             }
             
             if let url = URL(string: introWebLink) {

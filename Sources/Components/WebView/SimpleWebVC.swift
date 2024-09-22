@@ -20,7 +20,7 @@ public struct SimpleWebViewVC: UIViewRepresentable {
         url: URL,
         isloading: Binding<Bool>,
         showErrorAlert: Binding<Bool?>,
-        account: SimpleFBUser?,
+        account: SimpleFeedbackModel?,
         model: SimpleWebModel
     ) {
         self._isLoading = isloading

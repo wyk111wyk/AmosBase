@@ -19,7 +19,13 @@ public class SimpleFileHelper {
         public var size: Double
         public var path: URL
         
-        public init(id: UUID = UUID(), name: String, suffix: String, size: Double, path: URL) {
+        public init(
+            id: UUID = UUID(),
+            name: String,
+            suffix: String,
+            size: Double,
+            path: URL
+        ) {
             self.id = id
             self.name = name
             self.suffix = suffix
@@ -29,9 +35,15 @@ public class SimpleFileHelper {
     }
     
     /// 获取（创建）文件夹路径URL
-    public func folderPath(_ folderName: String? = "audioFile", isCreate: Bool = true) -> URL? {
+    public func folderPath(
+        _ folderName: String? = "audioFile",
+        isCreate: Bool = true
+    ) -> URL? {
         // 获取文档目录路径
-        guard let documentsDirectory = file.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        guard let documentsDirectory = file.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        ).first else {
             return nil
         }
         
@@ -44,12 +56,53 @@ public class SimpleFileHelper {
         // 检查audioFile文件夹是否存在，如果不存在则创建
         if !file.fileExists(atPath: folderDirectory.path()), isCreate {
             do {
-                try file.createDirectory(at: folderDirectory, withIntermediateDirectories: true)
+                try file.createDirectory(
+                    at: folderDirectory,
+                    withIntermediateDirectories: true
+                )
             } catch {
                 return nil
             }
         }
         return folderDirectory
+    }
+    
+    /// 判断某个文件是否存在
+    public func fileExists(
+        _ fileName: String,
+        folderName: String? = "audioFile",
+        suffix: String? = "wav"
+    ) -> Bool {
+        // 获取文档目录路径
+        guard let documentsDirectory = file.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        ).first else {
+            debugPrint("获取文档目录路径失败")
+            return false
+        }
+        
+        // 创建文件夹路径
+        var folderDirectory = documentsDirectory
+        if let folderName {
+            folderDirectory = documentsDirectory.appendingPathComponent(folderName)
+        }
+        
+        guard file.fileExists(atPath: folderDirectory.path()) else {
+            debugPrint("文件夹:\(folderName.wrapped)不存在")
+            return false
+        }
+        
+        // 检查文件路径
+        let fullFileName: String =
+        if let suffix { "\(fileName).\(suffix)" }
+        else { fileName }
+        let finalFilePath = folderDirectory.appendingPathComponent(fullFileName)
+        
+        let isFileExist = file.fileExists(atPath: finalFilePath.path())
+        debugPrint("文件:\(fileName)是否存在：\(isFileExist.toString())")
+        
+        return isFileExist
     }
 
     /// 获取（创建）某个文件的路径 URL
@@ -59,7 +112,7 @@ public class SimpleFileHelper {
         suffix: String? = "wav"
     ) -> URL? {
         // 获取文档目录路径
-        guard let folderPath = folderPath(folderName) else {
+        guard let folderDirectory = folderPath(folderName) else {
             return nil
         }
         
@@ -68,9 +121,13 @@ public class SimpleFileHelper {
         if let suffix { "\(fileName).\(suffix)" }
         else { fileName }
         
-        let finalFilePath = folderPath.appendingPathComponent(fullFileName)
+        let finalFilePath = folderDirectory.appendingPathComponent(fullFileName)
         if !file.fileExists(atPath: finalFilePath.path()) {
-            file.createFile(atPath: finalFilePath.path(), contents: nil, attributes: nil)
+            file.createFile(
+                atPath: finalFilePath.path(),
+                contents: nil,
+                attributes: nil
+            )
         }
         
         // 返回文件路径的字符串表示
@@ -80,7 +137,10 @@ public class SimpleFileHelper {
     /// 获取文件夹内所有文件的URL路径
     public func fetchFileURL(_ folderPath: URL) -> [URL] {
         do {
-            let fileURLs = try file.contentsOfDirectory(at: folderPath, includingPropertiesForKeys: nil)
+            let fileURLs = try file.contentsOfDirectory(
+                at: folderPath,
+                includingPropertiesForKeys: nil
+            )
             return fileURLs
         } catch {
             debugPrint("Error fetching folder files: \(error)")
@@ -95,10 +155,12 @@ public class SimpleFileHelper {
             for fileURL in fetchFileURL(folderPath) {
                 let attributes = try file.attributesOfItem(atPath: fileURL.path())
                 let fileSize = attributes[FileAttributeKey.size] as? UInt64 ?? 0
-                let fileInfo = FileInfo(name: fileURL.deletingPathExtension().lastPathComponent,
-                                        suffix: fileURL.pathExtension,
-                                        size: Double(fileSize),
-                                        path: fileURL)
+                let fileInfo = FileInfo(
+                    name: fileURL.deletingPathExtension().lastPathComponent,
+                    suffix: fileURL.pathExtension,
+                    size: Double(fileSize),
+                    path: fileURL
+                )
                 filesInfo.append(fileInfo)
             }
             return filesInfo

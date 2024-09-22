@@ -19,7 +19,7 @@ public struct SimpleWebView: View {
     
     // 兔小巢的link是 https://support.qq.com/product/{产品id}
     let url: URL
-    let account: SimpleFBUser?
+    let account: SimpleFeedbackModel?
     let isPushIn: Bool
     let showReloadButton: Bool
     
@@ -29,7 +29,7 @@ public struct SimpleWebView: View {
     public init(url: URL,
                 pushIn: Bool = false,
                 showReloadButton: Bool = true,
-                account: SimpleFBUser? = nil) {
+                account: SimpleFeedbackModel? = nil) {
         self.url = url
         self.isPushIn = pushIn
         self.showReloadButton = showReloadButton
