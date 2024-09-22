@@ -12,13 +12,9 @@ import CommonCrypto
 
 #if canImport(UIKit)
 import UIKit
-/// SwifterSwift: Font
 public typealias SFFont = UIFont
-#endif
-
-#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+#elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
-/// SwifterSwift: Font
 public typealias SFFont = NSFont
 #endif
 

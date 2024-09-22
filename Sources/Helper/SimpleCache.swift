@@ -8,7 +8,7 @@
 import Foundation
 #if canImport(UIKit)
 import UIKit
-#elseif canImport(AppKit)
+#elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 #endif
 
@@ -347,7 +347,7 @@ class Utils {
     static func image(data: Data) -> SFImage? {
         #if canImport(UIKit)
         return UIImage(data: data)
-        #elseif canImport(AppKit)
+        #elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
         return NSImage(data: data)
         #else
         return nil
@@ -357,7 +357,7 @@ class Utils {
     static func data(image: SFImage) -> Data? {
         #if canImport(UIKit)
         return image.jpegData(compressionQuality: 0.9)
-        #elseif canImport(AppKit)
+        #elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
         return image.tiffRepresentation
         #else
         return nil

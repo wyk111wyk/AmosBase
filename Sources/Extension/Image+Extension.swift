@@ -15,8 +15,7 @@ import Photos
 #if canImport(UIKit)
 import UIKit
 public typealias SFImage = UIImage
-#endif
-#if canImport(AppKit)
+#elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 public typealias SFImage = NSImage
 #endif

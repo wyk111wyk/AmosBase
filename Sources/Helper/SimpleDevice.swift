@@ -14,10 +14,10 @@ import CoreLocation
 #endif
 #if canImport(UIKit)
 import UIKit
-#endif
-#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+#elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 #endif
+
 #if canImport(CoreTelephony)
 import CoreTelephony
 #endif
