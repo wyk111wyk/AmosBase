@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-#if canImport(AppKit)
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
 extension NSFont: @unchecked @retroactive Sendable {}
