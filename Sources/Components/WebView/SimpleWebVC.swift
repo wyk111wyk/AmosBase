@@ -16,11 +16,13 @@ public struct SimpleWebViewVC: UIViewRepresentable {
     @State private var urlRequest: URLRequest
     @ObservedObject var model: SimpleWebModel
     
-    init(url: URL,
-         isloading: Binding<Bool>,
-         showErrorAlert: Binding<Bool?>,
-         account: SimpleFBUser?,
-         model: SimpleWebModel) {
+    init(
+        url: URL,
+        isloading: Binding<Bool>,
+        showErrorAlert: Binding<Bool?>,
+        account: SimpleFBUser?,
+        model: SimpleWebModel
+    ) {
         self._isLoading = isloading
         self._showErrorAlert = showErrorAlert
         self.model = model
@@ -69,18 +71,26 @@ public class SimpleWebCoordinator: NSObject, WKNavigationDelegate {
         self.parent = parent
     }
     
-    public func webView(_ webView: WKWebView,
-                        didReceive challenge: URLAuthenticationChallenge,
-                        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    public func webView(
+        _ webView: WKWebView,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
         completionHandler(.performDefaultHandling, nil)
     }
     
-    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    public func webView(
+        _ webView: WKWebView,
+        didStartProvisionalNavigation navigation: WKNavigation!
+    ) {
         //        print("1.开始加载网页")
         parent.isLoading = true
     }
     
-    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    public func webView(
+        _ webView: WKWebView,
+        didFinish navigation: WKNavigation!
+    ) {
         webView.evaluateJavaScript("document.title") { (response, error) in
             if let _ = response as? String {
 //                debugPrint("2.网页加载完毕: \(title)")
@@ -89,7 +99,11 @@ public class SimpleWebCoordinator: NSObject, WKNavigationDelegate {
         parent.isLoading = false
     }
     
-    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    public func webView(
+        _ webView: WKWebView,
+        didFail navigation: WKNavigation!,
+        withError error: Error
+    ) {
         print("3.加载网页失败，失败原因:\n\(error)")
         if (error as NSError).code != NSURLErrorCancelled {
             parent.showErrorAlert = true
@@ -99,7 +113,9 @@ public class SimpleWebCoordinator: NSObject, WKNavigationDelegate {
 }
 
 #Preview {
-    SimpleWebView(url: URL(string: "https://www.baidu.com")!,
-                  pushIn: false)
+    SimpleWebView(
+        url: URL(string: "https://www.baidu.com")!,
+        pushIn: false
+    )
 }
 #endif

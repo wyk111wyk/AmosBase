@@ -124,6 +124,10 @@ public extension Double {
         Int(self)
     }
     
+    var toFloat: Float {
+        Float(self)
+    }
+    
     /// 转换为文字
     ///
     /// 默认不带小数点，最多8位

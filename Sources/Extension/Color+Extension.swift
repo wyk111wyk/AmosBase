@@ -13,7 +13,7 @@ import UIKit
 public typealias SFColor = UIColor
 #endif
 
-#if canImport(AppKit) && !targetEnvironment(macCatalyst)
+#if canImport(AppKit)
 import AppKit
 /// SwifterSwift: Color
 public typealias SFColor = NSColor

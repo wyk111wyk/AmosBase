@@ -450,6 +450,116 @@ public extension String {
         
         return textArray.shuffled().randomElement() ?? "N/A"
     }
+    
+    enum TestType: Identifiable, CaseIterable {
+        case chineseAndEngish, chineseWuxia, chineseStory, chineseCasual, chinesePoem, englishSpeech, englishPoem
+        
+        public var id: String { title }
+        public static var allCases: [TestType] {
+            [.chineseAndEngish,
+            .chineseWuxia,
+            .chineseStory,
+            .chineseCasual,
+            .chinesePoem,
+            .englishSpeech,
+            .englishPoem]
+        }
+        
+        public var title: String {
+            switch self {
+            case .chineseAndEngish:
+                return "中英文混合"
+            case .chineseWuxia:
+                return "中文武侠"
+            case .chineseStory:
+                return "中文故事"
+            case .chineseCasual:
+                return "中文口语"
+            case .chinesePoem:
+                return "中文诗歌"
+            case .englishSpeech:
+                return "英文叙述"
+            case .englishPoem:
+                return "英文诗歌"
+            }
+        }
+        
+        public var content: String {
+            switch self {
+            case .chineseAndEngish:
+                return testText(.chineseAndEngish)
+            case .chineseWuxia:
+                return testText(.chineseWuxia)
+            case .chineseStory:
+                return testText(.chineseStory)
+            case .chineseCasual:
+                return testText(.chineseCasual)
+            case .chinesePoem:
+                return testText(.chinesePoem)
+            case .englishSpeech:
+                return testText(.englishSpeech)
+            case .englishPoem:
+                return testText(.englishPoem)
+            }
+        }
+    }
+    
+    static func testText(_ type: TestType) -> String {
+        switch type {
+        case .chineseAndEngish:
+        """
+        大家好，欢迎来到我室内的声音测试。我们将要测试今天新购买的TTS设备。在测试过程中，我们将通过这台设备播放多种语言的音频，以确保其性能和质量均符合标准。希望这次测试将会是一次愉快且成功的经验。谢谢。Hello everyone, welcome to my indoor sound test. We will be testing the TTS device that we just purchased today. During the testing process, we will be playing audio in multiple languages through this device to ensure its performance and quality meet standards. We hope this test will be a pleasant and successful experience. Thank you.
+        """
+        case .chineseWuxia:
+        """
+        龙公子找我买剑，五百两黄金要了玄铁定制版，都知道他是要跟张三比武，所以我要了一千。
+        龙公子富家子弟、成名多年，张三籍籍无名，两个人本无任何交集，但据说因为龙公子调戏女侠被张三辱骂，下不来台，于是有三个月之后的生死决斗。
+        江湖都知道龙公子拿了我的剑，都说张三败了。
+        玄铁剑的锋利天下无双，连我也觉得张三败了。
+        然后张三果然败了。没有反转。
+        """
+        case .chineseStory:
+        """
+        小孩子快五岁，已经自己睡小床了。有时候半夜想喝水，懒得自己去拿，就会叫我“妈妈，我要喝水！”我如果醒着就会过去给她拿水壶。
+        有一次早上起来，她和我抱怨说昨晚叫我好久我都没来，我说对不起啊妈妈可能太累了，睡熟了就什么都听不到了，下次如果你叫不醒妈妈，你可以自己去喝水吗？她说“好吧。”
+        昨天晚上赶论文很晚才睡，才躺下没一会，就听到她喊我“妈妈，我要喝水！”我实在太累了，心想孩子大了也懂事了自己会去喝水的，我就没有回答她。她喊了好几遍，我都没理她。我听到了她悉悉索索起床的声音，很欣慰，孩子终于长大了。
+        然后我就听到了她穿上拖鞋，叭叽叭叽走到厨房，打开冰箱吃冰棒的声音。
+        """
+        case .chineseCasual:
+        """
+        但我现在对这个职业的热爱还是非常的，呵呵，非常的，嗯，怎么说呢？日月可鉴的，哈哈，嗯还是希望可以把这个职业做下去或者做这个声音相关领域的工作，嗯，就是把自己的优势发挥的大一点，尽可能能用到自己擅长的东西，而不是说为了工作，为了挣钱而工作。
+        """
+        case .chinesePoem:
+        """
+        水调歌头·明月几时有。
+        宋：苏轼。
+        丙辰中秋，欢饮达旦，大醉，作此篇，兼怀子由。
+        明月几时有？把酒问青天。不知天上宫阙，今夕是何年。我欲乘风归去，又恐琼楼玉宇，高处不胜寒。起舞弄清影，何似在人间。
+        转朱阁，低绮户，照无眠。不应有恨，何事长向别时圆？人有悲欢离合，月有阴晴圆缺，此事古难全。但愿人长久，千里共婵娟。
+        """
+        case .englishSpeech:
+        """
+        With the launch of Xcode 10, we’re introduced to a new build system for compiling and building codes. This new build system provides improved reliability and build performance, and it catches project configuration problems that the legacy build system does not.
+        """
+        case .englishPoem:
+        """
+        When You Are Old.
+        William Butler Yeats, 1893.
+        When you are old and grey and full of sleep,
+        And nodding by the fire, take down this book,
+        And slowly read, and dream of the soft look.
+        Your eyes had once, and of their shadows deep;
+        How many loved your moments of glad grace,
+        And loved your beauty with love false or true,
+        But one man loved the pilgrim Soul in you,
+        And loved the sorrows of your changing face;
+        And bending down beside the glowing bars,
+        Murmur, a little sadly, how Love fled,
+        And paced upon the mountains overhead,
+        And hid his face amid a crowd of stars.
+        """
+        }
+    }
 }
 
 // MARK: - 作为名称使用

@@ -79,6 +79,12 @@ public extension Optional where Wrapped: StringProtocol {
     }
 }
 
+public extension Swift.Optional where Wrapped == String {
+    var wrapped: String {
+        self ?? "N/A"
+    }
+}
+
 public extension Optional where Wrapped: RawRepresentable, Wrapped.RawValue: Equatable {
 
     // swiftlint:disable missing_swifterswift_prefix

@@ -206,10 +206,12 @@ public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
     }
     
     public var body: some View {
-        TextField("",
-                  text: $inputText,
-                  prompt: Text(prompt),
-                  axis: .vertical)
+        TextField(
+            "",
+            text: $inputText,
+            prompt: Text(prompt),
+            axis: .vertical
+        )
         .textFieldStyle(style)
         .lineLimit(startLine...endLine)
         .lineSpacing(4)
