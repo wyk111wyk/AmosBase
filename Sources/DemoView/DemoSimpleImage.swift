@@ -15,8 +15,9 @@ public struct DemoSimpleImage: View {
         self.title = title
     }
     
-    @State private var originalImage: SFImage?
-    @State private var adjustedImage: SFImage?
+    @State private var originalImage: SFImage? = SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
+    @State private var adjustedImage: SFImage? = SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
+    
     var defaultImage: SFImage {
         SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
     }
@@ -83,18 +84,17 @@ public struct DemoSimpleImage: View {
                 } label: {
                     Label("图片查看浏览", systemImage: "photo.on.rectangle.angled")
                 }
-                .simpleImageViewer(selectedIndex: $selectedPhotoIndex,
-                                   allPhotos: ImageStoreModel.examples())
+                .simpleImageViewer(
+                    selectedIndex: $selectedPhotoIndex,
+                    allPhotos: ImageStoreModel.examples()
+                )
             }
         }
         .navigationTitle(title)
-        .simpleSuccessToast(presentState: $isSaveSuccessed, title: "图片已存入相册")
-        .task {
-            if originalImage == nil {
-                originalImage = defaultImage
-                adjustImageSize()
-            }
-        }
+        .simpleSuccessToast(
+            presentState: $isSaveSuccessed,
+            title: "图片已存入相册"
+        )
     }
     
     private func circleView(_ color: Color) -> some View {

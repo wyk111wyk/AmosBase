@@ -20,10 +20,11 @@ struct SimpleDualView<v1: View, v2: View>: View {
                     Spacer()
                 }
                 .frame(width: geometry.size.width / 2)
-                .background{Color.red}
+//                .background{Color.red}
+                
                 content2()
                     .frame(width: geometry.size.width / 2)
-                    .background{Color.blue}
+//                    .background{Color.blue}
             }
             .edgesIgnoringSafeArea(.all)
         }
@@ -34,11 +35,24 @@ struct SimpleDualView<v1: View, v2: View>: View {
 #Preview("Dual") {
     NavigationStack {
         Form {
-            SimpleDualView(content1: {
-                Text("1")
-            }, content2: {
-                Text("2")
-            })
+            SimpleDualView(
+                content1: {
+                    Text("1")
+                },
+                content2: {
+                    Text("2")
+                }
+            )
+            SimpleDualView(
+                content1: {
+                    Button("按钮1"){}
+                        .buttonStyle(.borderedProminent)
+                },
+                content2: {
+                    Button("按钮2"){}
+                        .buttonStyle(.bordered)
+                }
+            )
         }
     }
 }

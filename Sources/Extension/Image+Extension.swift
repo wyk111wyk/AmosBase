@@ -377,9 +377,12 @@ public extension UIImage {
     /// 识别图片内的文字 -  使用Vision框架
     ///
     /// 可自定义识别的语言
-    func scanForText(autoCorrection: Bool = false,
-                     languages: [String] = ["zh-Hans", "en-US"]) async -> String {
-        return await withCheckedContinuation({ contionuation in
+    func scanForText(
+        autoCorrection: Bool = false,
+        languages: [String] = ["zh-Hans", "en-US"]
+    ) async -> String {
+        return await withCheckedContinuation(
+            { contionuation in
             let textRecognitionRequest = VNRecognizeTextRequest { (request, error) in
                 guard let observations = request.results as? [VNRecognizedTextObservation] else {
                     mylog.log("The observations are of an unexpected type.")
@@ -413,7 +416,9 @@ public extension UIImage {
     /// 识别图片中的人脸 -  使用Vision框架
     ///
     /// 结果是一个可选数组
-    func detectFace(_ orientation: CGImagePropertyOrientation = .right) -> [VNFaceObservation]? {
+    func detectFace(
+        _ orientation: CGImagePropertyOrientation = .right
+    ) -> [VNFaceObservation]? {
         let facePoseRequest = VNDetectFaceRectanglesRequest()
         facePoseRequest.revision = VNDetectFaceRectanglesRequestRevision3
         let requestHandler = VNSequenceRequestHandler()
@@ -495,7 +500,11 @@ public extension UIImage {
         guard let cgImage = cgImage else {
             return nil
         }
-        let resultImage = UIImage(cgImage: cgImage, scale: self.scale, orientation: self.imageOrientation)
+        let resultImage = UIImage(
+            cgImage: cgImage,
+            scale: self.scale,
+            orientation: self.imageOrientation
+        )
         mylog.log("new image: \(resultImage)")
         return resultImage
     }
@@ -511,18 +520,40 @@ public extension UIImage {
     /// 返回值为可选
     func averageColor() -> UIColor? {
         guard let inputImage = CIImage(image: self) else { return nil }
-        let extentVector = CIVector(x: inputImage.extent.origin.x, y: inputImage.extent.origin.y, z: inputImage.extent.size.width, w: inputImage.extent.size.height)
+        let extentVector = CIVector(
+            x: inputImage.extent.origin.x,
+            y: inputImage.extent.origin.y,
+            z: inputImage.extent.size.width,
+            w: inputImage.extent.size.height
+        )
 
-        guard let filter = CIFilter(name: "CIAreaAverage",
-                                    parameters: [kCIInputImageKey: inputImage, kCIInputExtentKey: extentVector])
+        guard let filter = CIFilter(
+            name: "CIAreaAverage",
+            parameters: [
+                kCIInputImageKey: inputImage,
+                kCIInputExtentKey: extentVector
+            ]
+        )
         else { return nil }
         guard let outputImage = filter.outputImage else { return nil }
 
         var bitmap = [UInt8](repeating: 0, count: 4)
         let context = CIContext(options: [.workingColorSpace: kCFNull!])
-        context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
+        context.render(
+            outputImage,
+            toBitmap: &bitmap,
+            rowBytes: 4,
+            bounds: CGRect(x: 0, y: 0, width: 1, height: 1),
+            format: .RGBA8,
+            colorSpace: nil
+        )
 
-        return UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
+        return UIColor(
+            red: CGFloat(bitmap[0]) / 255,
+            green: CGFloat(bitmap[1]) / 255,
+            blue: CGFloat(bitmap[2]) / 255,
+            alpha: CGFloat(bitmap[3]) / 255
+        )
     }
     
     enum CIEffectType {
@@ -580,7 +611,10 @@ public extension UIImage {
         
         // 获取经过滤镜处理之后的图片，并且将其放置在开头设置好的CIContext()中
         if let result = filter.outputImage,
-           let outImage = context.createCGImage(result, from: result.extent) {
+           let outImage = context.createCGImage(
+            result,
+            from: result.extent
+           ) {
             return UIImage(cgImage: outImage)
         }else {
             return nil
@@ -590,8 +624,10 @@ public extension UIImage {
 #endif
 
 #if canImport(AppKit) && !targetEnvironment(macCatalyst)
+extension NSImage: @retroactive @unchecked Sendable {}
+
 public extension NSImage {
-    /// SwifterSwift: NSImage scaled to maximum size with respect to aspect ratio.
+    /// SwifterSwift: NSImage 在不改变比例的情况下进行缩放
     ///
     /// - Parameter maxSize: maximum size
     /// - Returns: scaled NSImage
@@ -612,11 +648,18 @@ public extension NSImage {
         let newHeight = imageHeight * aspectRatio
 
         // Create a new NSSize object with the newly calculated size
-        let newSize = NSSize(width: newWidth.rounded(.down), height: newHeight.rounded(.down))
+        let newSize = NSSize(
+            width: newWidth.rounded(.down),
+            height: newHeight.rounded(.down)
+        )
 
         // Cast the NSImage to a CGImage
         var imageRect = CGRect(origin: .zero, size: size)
-        guard let imageRef = cgImage(forProposedRect: &imageRect, context: nil, hints: nil) else { return self }
+        guard let imageRef = cgImage(
+            forProposedRect: &imageRect,
+            context: nil,
+            hints: nil
+        ) else { return self }
 
         // GPT 提供的方法
 //        let newImage = NSImage(size: scaledSize)
@@ -634,13 +677,20 @@ public extension NSImage {
     ///   - type: Type of image (default is .jpeg).
     ///   - compressionFactor: used only for JPEG files. The value is a float between 0.0 and 1.0, with 1.0 resulting in
     /// no compression and 0.0 resulting in the maximum compression possible.
-    func write(to url: URL, fileType type: NSBitmapImageRep.FileType = .jpeg, compressionFactor: NSNumber = 1.0) {
+    func write(
+        to url: URL,
+        fileType type: NSBitmapImageRep.FileType = .jpeg,
+        compressionFactor: NSNumber = 1.0
+    ) {
         // https://stackoverflow.com/a/45042611/3882644
 
         guard let data = tiffRepresentation else { return }
         guard let imageRep = NSBitmapImageRep(data: data) else { return }
 
-        guard let imageData = imageRep.representation(using: type, properties: [.compressionFactor: compressionFactor]) else { return }
+        guard let imageData = imageRep.representation(
+            using: type,
+            properties: [.compressionFactor: compressionFactor]
+        ) else { return }
         try? imageData.write(to: url)
     }
     
@@ -658,7 +708,10 @@ public extension NSImage {
                 // 在这里保存图片到用户选择的路径
                 guard let data = self.tiffRepresentation,
                       let bitmapImage = NSBitmapImageRep(data: data),
-                      let imageData = bitmapImage.representation(using: .png, properties: [:]) else { return }
+                      let imageData = bitmapImage.representation(
+                        using: .png,
+                        properties: [:]
+                      ) else { return }
 
                 do {
                     try imageData.write(to: url)

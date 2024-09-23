@@ -41,7 +41,9 @@ public struct SimpleSelectableText: View {
         }else {
             var attributedString = AttributedString(text)
             #if os(iOS)
-            attributedString.uiKit.foregroundColor = colorScheme == .dark ? .white : .black
+            attributedString.uiKit.foregroundColor = .label
+            #elseif os(macOS)
+            attributedString.appKit.foregroundColor = .labelColor
             #endif
             attributedString.font = .systemFont(ofSize: 18)
             let paragraphStyle = NSMutableParagraphStyle()

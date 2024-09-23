@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DemoSimpleLanguage: View {
     let language = SimpleLanguage()
+    @State private var inputText: String.TestType = .chinesePoem
     @State private var sourceText: String
     
     @State private var firstLanguage: String?
@@ -25,7 +26,30 @@ struct DemoSimpleLanguage: View {
         NavigationStack {
             Form {
                 Section {
+                    Picker(selection: $inputText) {
+                        ForEach(
+                            String.TestType.allCases,
+                            id: \.self
+                        ) { type in
+                            Text(type.title).tag(type)
+                        }
+                    } label: {
+                        Button("导入") {
+                            sourceText = inputText.content
+                        }
+                        .buttonStyle(.borderless)
+                    }
+                    #if os(watchOS)
+                    .pickerStyle(.automatic)
+                    #else
+                    .pickerStyle(.menu)
+                    #endif
+
+                    #if !os(watchOS)
                     SimpleTextField($sourceText)
+                    #else
+                    Text(sourceText)
+                    #endif
                     SimpleMiddleButton("开始分析", rowVisibility: .automatic) {
                         startAnalysis()
                     }
@@ -35,7 +59,7 @@ struct DemoSimpleLanguage: View {
                     SimpleCell("文字情绪", stateText: textSentiment)
                     SimpleCell("拆分成词组", content: allWords?.description)
                     SimpleCell("标记词性", content: allClass?.description)
-                    SimpleCell("标记名词性质", content: allNames?.description)
+                    SimpleCell("标记地名个人名", content: allNames?.description)
                 }
             }
             .navigationTitle("自然语言分析")

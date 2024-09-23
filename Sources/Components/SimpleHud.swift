@@ -23,7 +23,7 @@ struct SimpleHud: ViewModifier {
                         }
                     }
                     .padding()
-                    .frame(width: 250, height: 150)
+                    .frame(width: 240, height: 140)
                     .background {
                         if #available(iOS 16.0, macOS 13, watchOS 10, *) {
                             // 使用 regularMaterial
@@ -58,7 +58,7 @@ extension View {
                     isLoading.toggle()
                 }
             } label: {
-                Text("测试Hud")
+                Text("开/关 HUD")
             }
         }
     }

@@ -53,7 +53,7 @@ public struct SimpleImagePicker<V: View>: View {
     
     public var body: some View {
         Group {
-#if os(watchOS)
+            #if os(watchOS)
             Button {
                 showLibrary = true
             } label: {
@@ -61,7 +61,7 @@ public struct SimpleImagePicker<V: View>: View {
                 Text("Photo album", bundle: .module)
             }
             .buttonStyle(.plain)
-#else
+            #else
             Menu {
                 if pickerType == .both && SimpleDevice.hasCamera() {
                     Button {
@@ -87,16 +87,16 @@ public struct SimpleImagePicker<V: View>: View {
             .onDropImage { newImage in
                 adjustImage(for: newImage)
             }
-#endif
+            #endif
         }
             .photosPicker(isPresented: $showLibrary, selection: $selectedItem, matching: .images)
-#if os(iOS)
+            #if os(iOS)
             .sheet(isPresented: $showCamera) {
                 SimpleCamera() { newPhoto in
                     adjustImage(for: newPhoto)
                 }
             }
-#endif
+            #endif
             .onChange(of: selectedItem) { newItem in
                 if let newItem {
                     Task {
