@@ -189,7 +189,7 @@ public struct SimpleTriggerButton<V: View>: View {
     }
     
     public var body: some View {
-        Button(action: {
+        Button(role: .none, action: {
             isPresented.toggle()
         }, label: {
             if V.self != EmptyView.self {
@@ -214,6 +214,8 @@ public struct SimpleTriggerButton<V: View>: View {
         @Previewable @State var isPresent: Bool = false
         @Previewable @State var isLoading: Bool = false
         @Previewable @State var isNetworkWording: Bool?
+        @Previewable @State var showConfirm: Bool = false
+        
         NavigationStack {
             Form {
                 Section {
@@ -225,12 +227,18 @@ public struct SimpleTriggerButton<V: View>: View {
                     ) {}.tint(.red)
                 }
                 Section {
-                    SimpleTriggerButton(isPresented: $isPresent) {
+                    SimpleTriggerButton(
+                        isPresented: $isPresent
+                    ) {
                         Text(isPresent.toString())
                     }
                 }
                 Section {
-                    SimpleConfirmButton {}
+                    SimpleConfirmButton(
+                        title: "显示对话框"
+                    ) {
+                        showConfirm = true
+                    }
                     SimpleConfirmButton(
                         title: "自定义标题",
                         role: .destructive
@@ -264,6 +272,16 @@ public struct SimpleTriggerButton<V: View>: View {
         .formStyle(.grouped)
         .buttonCircleNavi(role: .cancel)
         .buttonCircleNavi(role: .destructive, isLoading: false)
+        .confirmationDialog(
+            "测试按钮",
+            isPresented: $showConfirm,
+            titleVisibility: .visible
+        ) {
+            SimpleTriggerButton(title: "切换载入",
+                                isPresented: $isLoading)
+            SimpleTriggerButton(title: "切换显示",
+                                isPresented: $isPresent)
+        }
     }
 })
 

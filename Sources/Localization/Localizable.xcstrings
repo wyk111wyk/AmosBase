@@ -494,6 +494,15 @@
         }
       }
     },
+    "Custom Button 01" : {
+
+    },
+    "Custom Button 02" : {
+
+    },
+    "Custom Button 03" : {
+
+    },
     "Custom color" : {
       "localizations" : {
         "zh-Hans" : {
@@ -865,6 +874,9 @@
     "Middle Button" : {
 
     },
+    "More Buttons" : {
+
+    },
     "Navi - 导航" : {
 
     },
@@ -989,6 +1001,9 @@
       }
     },
     "Sheet页面测试" : {
+
+    },
+    "Show buttons confirmation" : {
 
     },
     "Simple Error" : {
@@ -1140,6 +1155,9 @@
           }
         }
       }
+    },
+    "Title" : {
+
     },
     "Toast - Sheet页面" : {
 
@@ -1438,6 +1456,9 @@
 
     },
     "未连接" : {
+
+    },
+    "测试按钮" : {
 
     },
     "清空图片" : {

@@ -117,6 +117,7 @@ public struct SimplePicList: View {
                         }
                     }
                 }
+                .buttonStyle(.borderless)
                 .simpleSwipe(deleteAction: {
                     deleteImage = gitImage
                 })
