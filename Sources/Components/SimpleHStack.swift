@@ -54,5 +54,6 @@ struct SimpleDualView<v1: View, v2: View>: View {
                 }
             )
         }
+        .formStyle(.grouped)
     }
 }

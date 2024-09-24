@@ -28,6 +28,7 @@ public struct SimpleImagePicker<V: View>: View {
     @Binding var adjustedImage: SFImage?
     public let pickerType: PickerType
     public let maxImageWidth: CGFloat
+    public let maxImageHeight: CGFloat
     public let adjustWidth: CGFloat?
     public let adjustRatio: CGFloat?
     
@@ -37,7 +38,8 @@ public struct SimpleImagePicker<V: View>: View {
         originalImage: Binding<SFImage?> = .constant(nil),
         adjustedImage: Binding<SFImage?>,
         pickerType: PickerType = .both,
-        maxImageWidth: CGFloat = 1000,
+        maxImageWidth: CGFloat = 400,
+        maxImageHeight: CGFloat = 400,
         adjustWidth: CGFloat? = nil,
         adjustRatio: CGFloat? = nil,
         @ViewBuilder emptyView: @escaping () -> V = { EmptyView() }
@@ -46,6 +48,7 @@ public struct SimpleImagePicker<V: View>: View {
         self._adjustedImage = adjustedImage
         self.pickerType = pickerType
         self.maxImageWidth = maxImageWidth
+        self.maxImageHeight = maxImageHeight
         self.adjustWidth = adjustWidth
         self.adjustRatio = adjustRatio
         self.emptyView = emptyView
@@ -155,8 +158,17 @@ extension SimpleImagePicker {
     @ViewBuilder
     private func photoView() -> some View {
         if let adjustedImage {
-            Image(sfImage: adjustedImage)
-                .imageModify(length: maxImageWidth)
+            HStack {
+                Spacer()
+                Image(sfImage: adjustedImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(
+                        maxWidth: maxImageWidth,
+                        maxHeight: maxImageHeight
+                    )
+                Spacer()
+            }
         }else {
             if V.self == EmptyView.self {
                 HStack {
@@ -192,5 +204,6 @@ extension SimpleImagePicker {
                 Text("清空图片")
             }
         }
+        .formStyle(.grouped)
     }
 }

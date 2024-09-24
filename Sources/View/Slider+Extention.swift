@@ -393,8 +393,10 @@ public struct SimpleStarSlider: View {
             
             HStack(spacing: 12) {
                 ForEach(1...5) { rate in
-                    starButton(rate: rate,
-                               isSelected: rate <= currentRating)
+                    starButton(
+                        rate: rate,
+                        isSelected: rate <= currentRating
+                    )
                 }
             }
             
@@ -465,5 +467,6 @@ public struct SimpleStarSlider: View {
                                range: 20...100,
                                textType: .value)
         }
+        .formStyle(.grouped)
     }
 }

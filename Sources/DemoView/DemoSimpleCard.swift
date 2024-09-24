@@ -22,27 +22,29 @@ struct DemoSimpleCard: View {
     
     var body: some View {
         NavigationStack {
-            SimpleCard(
-                allCardItems: $allCardItems,
-                currentPositionID: $currentPositionID
-            ) { card in
-                Group {
-                    if let item = card as? SimpleTagViewItem {
-                        Text(item.title)
-                            .font(.largeTitle)
-                            .foregroundStyle(.white)
+            VStack(spacing: 10) {
+                SimpleCard(
+                    allCardItems: $allCardItems,
+                    currentPositionID: $currentPositionID
+                ) { card in
+                    Group {
+                        if let item = card as? SimpleTagViewItem {
+                            Text(item.title)
+                                .font(.largeTitle)
+                                .foregroundStyle(.white)
+                        }
                     }
+                } background: { _ in
+                    RoundedRectangle(cornerRadius: 20)
+                        .foregroundStyle(.green.gradient)
+                        .shadow(radius: 5, y: 5)
                 }
-            } background: { _ in
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundStyle(.green.gradient)
-                    .shadow(radius: 5, y: 5)
-            } bottomView: {
+                
                 VStack(spacing: 15) {
                     buttonView()
                     progressView()
                 }
-                .padding(.top, 8)
+                .padding(.bottom)
             }
             .navigationTitle("卡片 Card")
             .toolbar {
@@ -162,4 +164,5 @@ struct DemoSimpleCard: View {
 #Preview {
     DemoSimpleCard()
         .environment(\.locale, .zhHans)
+        .frame(minWidth: 500, minHeight: 500)
 }

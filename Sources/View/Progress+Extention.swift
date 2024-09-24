@@ -228,10 +228,11 @@ public struct CircularProgressStyle: ProgressViewStyle {
     }
 }
 
-#Preview("Progress",
-         body: {
+#Preview("Progress") {
     ScrollView {
         VStack {
+            Text("Circular Progress")
+                .font(.title)
             HStack(spacing: 30) {
                 ProgressView(value: 70, total: 100)
                     .circularStyle(
@@ -257,10 +258,10 @@ public struct CircularProgressStyle: ProgressViewStyle {
                         startPoint: .top
                     )
             }
-            Text("Circular Progress")
-                .font(.title)
         }
         VStack {
+            Text("Bar Progress")
+                .font(.title)
             ProgressView(value: 1, total: 100)
                 .barStyle()
             ProgressView(value: 10, total: 100)
@@ -277,9 +278,9 @@ public struct CircularProgressStyle: ProgressViewStyle {
                 .barStyle(textType: .custom(msg: "Icon Man"))
             ProgressView(value: 80, total: 100)
                 .barStyle(barHeight: 20)
-            Text("Bar Progress")
-                .font(.title)
         }
         .padding(.horizontal)
     }
-})
+    .padding()
+    .frame(minWidth: 500, minHeight: 500)
+}

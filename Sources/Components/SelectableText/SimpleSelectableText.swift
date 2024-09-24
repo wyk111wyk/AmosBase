@@ -39,7 +39,7 @@ public struct SimpleSelectableText: View {
         if let attributedText {
             return attributedText
         }else {
-            var attributedString = AttributedString(text)
+            var attributedString = (try? AttributedString(markdown: text)) ?? AttributedString(text)
             #if os(iOS)
             attributedString.uiKit.foregroundColor = .label
             #elseif os(macOS)
@@ -78,7 +78,7 @@ public struct SimpleSelectableText: View {
     NavigationStack {
         ScrollView {
             SimpleSelectableText(text: text)
-                .padding(.horizontal)
+                .padding()
         }
         .navigationTitle("显示内容")
     }

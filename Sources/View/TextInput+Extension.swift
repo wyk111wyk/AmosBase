@@ -161,7 +161,10 @@ public struct SimpleTextInputView: View {
 }
 
 /// 多行文本输入框：带清空按钮
-public struct SimpleTextField<Menus: View, S: TextFieldStyle>: View {
+public struct SimpleTextField<
+    Menus: View,
+    S: TextFieldStyle
+>: View {
     @Binding var inputText: String
     @FocusState private var focused: Bool
     

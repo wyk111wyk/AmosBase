@@ -92,7 +92,12 @@ public struct SimpleMap: View {
                     centerMarker.marker
                 }
             }
-            .mapStyle(.standard(elevation: .realistic, showsTraffic: isShowsTraffic))
+            .mapStyle(
+                .standard(
+                    elevation: .realistic,
+                    showsTraffic: isShowsTraffic
+                )
+            )
             .mapControls {
                 if showUserLocation {
                     MapUserLocationButton() // 当前位置
@@ -126,7 +131,10 @@ public struct SimpleMap: View {
             #if os(iOS)
             .toolbarBackground(.hidden, for: .navigationBar)
             #endif
-            .buttonCircleNavi(role: .cancel, isPresent: !isPushin) {
+            .buttonCircleNavi(
+                role: .cancel,
+                isPresent: !isPushin
+            ) {
                 dismissPage()
             }
             .onAppear {
@@ -248,7 +256,7 @@ extension SimpleMap {
                     Rectangle()
                         .foregroundColor(colorScheme == .light ? .white : .black)
                         .cornerRadius(8)
-                        .shadow(color: .secondary, radius: 3)
+                        .shadow(color: .secondary, radius: 1)
                 }
                 .overlay(alignment: .trailing) {
                     if query.count > 0 {
@@ -271,9 +279,10 @@ extension SimpleMap {
                         Image(systemName: "magnifyingglass")
                     }
                 }
+                .keyboardShortcut(.return, modifiers: .command)
                 .buttonBorderShape(.circle)
                 .buttonStyle(.borderedProminent)
-                .shadow(color: .secondary, radius: 3)
+                .shadow(color: .secondary, radius: 1)
             }
             .disabled(isLoading)
         }
@@ -285,19 +294,19 @@ extension SimpleMap {
         HStack {
             VStack(alignment: .leading, spacing: 8) {
                 if let marker = selectedMarker{
-                   if let address = marker.place?.toFullAddress(),
-                      let city = marker.place?.toCity() {
-                       VStack(alignment: .leading, spacing: 6) {
-                           Text(marker.title + "·" + city)
-                               .font(.headline)
-                           Text(address)
-                               .font(.footnote)
-                               .foregroundStyle(.secondary)
-                       }
-                   }else {
-                       Text(marker.title)
-                           .font(.headline)
-                   }
+                    if let address = marker.place?.toFullAddress(),
+                       let city = marker.place?.toCity() {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(marker.title + "·" + city)
+                                .font(.headline)
+                            Text(address)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                    }else {
+                        Text(marker.title)
+                            .font(.headline)
+                    }
                 }
                 Button {
                     switchItem()
@@ -318,6 +327,7 @@ extension SimpleMap {
                             .imageScale(.large)
                         Text("确认")
                     }
+                    .padding(.vertical, 6)
                 }
                 .keyboardShortcut("D", modifiers: .command)
             }
@@ -326,16 +336,17 @@ extension SimpleMap {
         .fontWeight(.medium)
         .padding(.vertical, 8)
         .padding(.horizontal, 10)
-        #if targetEnvironment(macCatalyst)
-            .frame(width: 400)
+        #if targetEnvironment(macCatalyst) || os(macOS)
+        .frame(width: 400)
         #else
-            .frame(width: 240)
+        .frame(width: 240)
         #endif
         .background {
             RoundedRectangle(cornerRadius: 8)
                 .foregroundStyle(.regularMaterial.opacity(0.8))
-                .shadow(radius: 6)
+                .shadow(radius: 4)
         }
+        .padding(.top)
     }
 }
 #endif

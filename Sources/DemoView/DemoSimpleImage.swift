@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 
-#if os(iOS)
+#if !os(watchOS)
 public struct DemoSimpleImage: View {
     let title: String
     public init(_ title: String = "Image 图片") {
@@ -90,11 +90,15 @@ public struct DemoSimpleImage: View {
                 )
             }
         }
+        .formStyle(.grouped)
         .navigationTitle(title)
         .simpleSuccessToast(
             presentState: $isSaveSuccessed,
             title: "图片已存入相册"
         )
+        .task {
+            await analyzeImage()
+        }
     }
     
     private func circleView(_ color: Color) -> some View {
@@ -119,7 +123,9 @@ extension DemoSimpleImage {
         guard let originalImage else { return }
         
         if resizeImage {
-            let newImage = originalImage.adjustSizeToSmall(width: 300)
+            let newImage = originalImage.adjustSize(
+                width: 300
+            )
             self.adjustedImage = newImage
         }else {
             self.adjustedImage = originalImage
@@ -132,7 +138,7 @@ extension DemoSimpleImage {
         if let adjustedImage {
             // 分析图片的主题颜色
             if let avg = adjustedImage.averageColor() {
-                aveColor = Color(uiColor: avg)
+                aveColor = Color(sfColor: avg)
             }
             // 分析图片中的文字
             scanText = await adjustedImage.scanForText()

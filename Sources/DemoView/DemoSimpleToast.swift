@@ -30,21 +30,25 @@ public struct DemoSimpleToast: View {
                         selectedToast = .centerSuccess
                     }
                 }
+                .buttonStyle(.borderless)
                 Button("Loading -> Error".localized(bundle: .module)) {
                     selectedToast = .topLoading
                     SimpleTimer().after(timeInterval: 2) {
                         selectedToast = .topError
                     }
                 }
+                .buttonStyle(.borderless)
                 Button("Loading Title Change".localized(bundle: .module)) {
                     loadingTest()
                 }
+                .buttonStyle(.borderless)
             }
             
             Section("Simple Toast".localized(bundle: .module)) {
                 Button("Simple Error".localized(bundle: .module)) {
                     simpleError = true
                 }
+                .buttonStyle(.borderless)
                 Button("Simple Loading".localized(bundle: .module)) {
                     if simpleLoading == true {
                         simpleLoading = nil
@@ -52,9 +56,11 @@ public struct DemoSimpleToast: View {
                         simpleLoading = true
                     }
                 }
+                .buttonStyle(.borderless)
                 Button("Simple Success".localized(bundle: .module)) {
                     simpleSuccess = true
                 }
+                .buttonStyle(.borderless)
             }
             
             Section("Top Toasts".localized(bundle: .module)) {
@@ -62,6 +68,7 @@ public struct DemoSimpleToast: View {
                     Button(tosat.rawValue) {
                         selectedToast = tosat
                     }
+                    .buttonStyle(.borderless)
                 }
             }
             Section("Center Toasts".localized(bundle: .module)) {
@@ -69,6 +76,7 @@ public struct DemoSimpleToast: View {
                     Button(tosat.rawValue) {
                         selectedToast = tosat
                     }
+                    .buttonStyle(.borderless)
                 }
             }
             Section("Bottom Toasts".localized(bundle: .module)) {
@@ -76,9 +84,11 @@ public struct DemoSimpleToast: View {
                     Button(tosat.rawValue) {
                         selectedToast = tosat
                     }
+                    .buttonStyle(.borderless)
                 }
             }
         }
+        .formStyle(.grouped)
         .navigationTitle(title)
         .refreshable {
             loadingTest()

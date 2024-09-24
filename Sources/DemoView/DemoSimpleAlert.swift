@@ -24,6 +24,7 @@ public struct DemoSimpleAlert: View {
                     Button("Alert - \(alert.rawValue)") {
                         selectedAlert = alert
                     }
+                    .buttonStyle(.borderless)
                 }
                 .simpleAlert(type: selectedAlert ?? .singleConfirm,
                              title: selectedAlert?.rawValue ?? "Title",
@@ -40,6 +41,7 @@ public struct DemoSimpleAlert: View {
                     Button("Confirmation - \(alert.rawValue)") {
                         selectedConfirmation = alert
                     }
+                    .buttonStyle(.borderless)
                 }
                 .simpleConfirmation(type: selectedConfirmation ?? .singleConfirm,
                                     title: selectedConfirmation?.rawValue ?? "Title",
@@ -51,6 +53,7 @@ public struct DemoSimpleAlert: View {
                 }
             }
         }
+        .formStyle(.grouped)
         .navigationTitle(title)
     }
 }

@@ -17,7 +17,9 @@ import UIKit
 #elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 #endif
-
+#if canImport(WatchKit)
+import WatchKit
+#endif
 #if canImport(CoreTelephony)
 import CoreTelephony
 #endif
@@ -60,16 +62,6 @@ public class SimpleDevice: NSObject {
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)
         }
-    }
-    
-    ///获取系统名称 iOS
-    public static func getSystemName() -> String {
-        return UIDevice.current.systemName
-    }
-    
-    ///获取系统版本 15.0
-    public static func getSystemVersion() -> String {
-        return UIDevice.current.systemVersion
     }
     
     ///获取设备类型 iPhone
@@ -131,6 +123,29 @@ public class SimpleDevice: NSObject {
 }
 
 extension SimpleDevice {
+    ///获取系统名称 iOS
+    public static func getSystemName() -> String {
+        #if os(iOS)
+        UIDevice.current.systemName
+        #elseif os(macOS)
+        Host.current().localizedName ?? "macOS"
+        #elseif os(watchOS)
+        WKInterfaceDevice.current().systemName
+        #endif
+    }
+    
+    ///获取系统版本 15.0
+    public static func getSystemVersion() -> String {
+        #if os(iOS)
+        return UIDevice.current.systemVersion
+        #elseif os(macOS)
+        let osVersion = ProcessInfo.processInfo.operatingSystemVersion
+        let versionString = "\(osVersion.majorVersion).\(osVersion.minorVersion).\(osVersion.patchVersion)"
+        return versionString
+        #elseif os(watchOS)
+        WKInterfaceDevice.current().systemVersion
+        #endif
+    }
     
     /// 获取设备型号
     ///

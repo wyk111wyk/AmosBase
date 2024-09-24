@@ -57,6 +57,7 @@ public struct DemoSimpleUnit: View {
                 SimpleCell(duration.toDuration(style: .spellOut, locale: .zhHans))
             }
         }
+        .formStyle(.grouped)
         .navigationTitle(title)
     }
     

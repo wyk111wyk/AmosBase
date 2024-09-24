@@ -204,10 +204,17 @@ public struct SimplePlaceholder<V: View>: View {
         self.contentSpace = 8
         self.offsetY = 0
         self.maxWidth = 120
-        #else
+        #elseif os(iOS) || targetEnvironment(macCatalyst)
         self.titleFont = titleFont
         self.imageLength = imageLength
         self.imagePadding = imagePadding
+        self.contentSpace = contentSpace
+        self.offsetY = offsetY
+        self.maxWidth = maxWidth
+        #else
+        self.titleFont = titleFont
+        self.imageLength = 100
+        self.imagePadding = 40
         self.contentSpace = contentSpace
         self.offsetY = offsetY
         self.maxWidth = maxWidth
@@ -337,12 +344,15 @@ struct TapSystemIconAnimation: ViewModifier {
         }
         .navigationTitle("Navi Title")
     }
-    .simplePlaceholder(isPresent: true,
-                       type: .favorEmpty,
-                       systemImageName: "list.clipboard",
-                       title: "Title Title",
-                       subtitle: "Subtitle Subtitle Subtitle",
-                       content: "content content content content content content content") {
+    .frame(minWidth: 500, minHeight: 400)
+    .simplePlaceholder(
+        isPresent: true,
+        type: .favorEmpty,
+        systemImageName: "list.clipboard",
+        title: "Title Title",
+        subtitle: "Subtitle Subtitle Subtitle",
+        content: "content content content content content content content"
+    ) {
         Button("Button") {}
             .buttonStyle(.borderedProminent)
     }

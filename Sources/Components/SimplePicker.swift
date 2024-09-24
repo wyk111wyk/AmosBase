@@ -35,16 +35,18 @@ public struct SimplePicker<Value: SimplePickerItem>: View {
     
     @State private var searchKey = ""
     
-    public init(title: String,
-                maxSelectCount: Int? = 1,
-                themeColor: Color = .green,
-                dismissAfterTap: Bool = false,
-                isPushin: Bool = true,
-                allValue: [Value],
-                disabledValues: [Value] = [],
-                selectValues: Set<Value>,
-                singleSaveAction: @escaping (Value) -> Void = {_ in},
-                multipleSaveAction: @escaping (Set<Value>) -> Void = {_ in}) {
+    public init(
+        title: String,
+        maxSelectCount: Int? = 1,
+        themeColor: Color = .green,
+        dismissAfterTap: Bool = false,
+        isPushin: Bool = true,
+        allValue: [Value],
+        disabledValues: [Value] = [],
+        selectValues: Set<Value>,
+        singleSaveAction: @escaping (Value) -> Void = {_ in},
+        multipleSaveAction: @escaping (Set<Value>) -> Void = {_ in}
+    ) {
         self.title = title
         if let maxSelectCount {
             self.maxSelectCount = maxSelectCount
@@ -161,17 +163,38 @@ public struct SimplePicker<Value: SimplePickerItem>: View {
                     Text("已选：\(selectValues.count) / \(maxSelectCount)")
                 }
             }
+            
+            #if os(macOS)
+            Section {
+                SimpleMiddleButton("完成") {
+                    save()
+                }.tint(.accentColor)
+                SimpleMiddleButton("取消") {
+                    dismissPage()
+                }
+            }
+            #endif
         }
+        .formStyle(.grouped)
         .navigationTitle(title)
         .searchable(text: $searchKey)
+        #if !os(macOS)
         .buttonCircleNavi(role: .cancel, isPresent: !isPushin) {dismissPage()}
-        .buttonCircleNavi(role: .destructive, isPresent: !dismissAfterTap) {
-            if let first = selectValues.first {
-                singleSaveAction(first)
-            }
-            multipleSaveAction(selectValues)
-            dismissPage()
+        .buttonCircleNavi(
+            role: .destructive,
+            isPresent: !dismissAfterTap
+        ) {
+            save()
         }
+        #endif
+    }
+    
+    private func save() {
+        if let first = selectValues.first {
+            singleSaveAction(first)
+        }
+        multipleSaveAction(selectValues)
+        dismissPage()
     }
 }
 

@@ -168,5 +168,6 @@ public struct SimpleTagsView: View {
         Form {
             SimpleTagsView(tags: example)
         }
+        .formStyle(.grouped)
     }
 }

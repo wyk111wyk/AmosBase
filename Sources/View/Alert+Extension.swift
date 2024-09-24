@@ -186,35 +186,35 @@ struct SimpleAlert: ViewModifier {
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.return)
-#endif
+                    #if !os(watchOS)
+                        .keyboardShortcut(.return)
+                    #endif
                 case .confirmCancel:
                     Button(role: .none, action: confirmTap, label: {
                         Text("Confirm", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.return)
-#endif
+                    #if !os(watchOS)
+                        .keyboardShortcut(.return)
+                    #endif
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.escape)
-#endif
+                    #if !os(watchOS)
+                        .keyboardShortcut(.escape)
+                    #endif
                 case .destructiveCancel:
                     Button(role: .destructive, action: confirmTap, label: {
                         Text("Confirm", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.return)
-#endif
+                    #if !os(watchOS)
+                    .keyboardShortcut(.return)
+                    #endif
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.escape)
-#endif
+                    #if !os(watchOS)
+                    .keyboardShortcut(.escape)
+                    #endif
                 }
             } message: {
                 if let message {
@@ -224,3 +224,6 @@ struct SimpleAlert: ViewModifier {
     }
 }
 
+#Preview(body: {
+    DemoSimpleAlert()
+})

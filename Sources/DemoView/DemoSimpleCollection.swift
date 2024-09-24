@@ -49,6 +49,7 @@ public struct DemoSimpleCollection: View {
                         SimpleCell(arrTitles[index],
                                    content: answerArr[index]?.description ?? "")
                     }
+                    .buttonStyle(.borderless)
                 }
             }
             Section("根据ID管理数组：\(modelArr.map{$0.name})") {
@@ -66,6 +67,7 @@ public struct DemoSimpleCollection: View {
                             }
                         }
                     }
+                    .buttonStyle(.borderless)
                 }
             }
             
@@ -77,9 +79,11 @@ public struct DemoSimpleCollection: View {
                         SimpleCell(dicTitles[index],
                                    content: answerDic[index] ?? "")
                     }
+                    .buttonStyle(.borderless)
                 }
             }
         }
+        .formStyle(.grouped)
         .navigationTitle(title)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {

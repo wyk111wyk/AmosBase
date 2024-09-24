@@ -14,20 +14,27 @@ public class SimpleFileHelper {
     
     public struct FileInfo: Identifiable {
         public var id: UUID
+        public let createDate: Date
         public var name: String
+        public var type: String?
+        
         public var suffix: String
         public var size: Double
         public var path: URL
         
         public init(
             id: UUID = UUID(),
+            createDate: Date,
             name: String,
+            type: String?,
             suffix: String,
             size: Double,
             path: URL
         ) {
             self.id = id
+            self.createDate = createDate
             self.name = name
+            self.type = type
             self.suffix = suffix
             self.size = size
             self.path = path
@@ -155,8 +162,13 @@ public class SimpleFileHelper {
             for fileURL in fetchFileURL(folderPath) {
                 let attributes = try file.attributesOfItem(atPath: fileURL.path())
                 let fileSize = attributes[FileAttributeKey.size] as? UInt64 ?? 0
+                let fileType = attributes[FileAttributeKey.type] as? NSString
+                let createDate = attributes[FileAttributeKey.creationDate] as? NSDate ?? NSDate()
+                
                 let fileInfo = FileInfo(
+                    createDate: Date(timeIntervalSince1970: createDate.timeIntervalSince1970),
                     name: fileURL.deletingPathExtension().lastPathComponent,
+                    type: fileType as String?,
                     suffix: fileURL.pathExtension,
                     size: Double(fileSize),
                     path: fileURL

@@ -17,7 +17,9 @@ struct SimpleHud: ViewModifier {
                 if isLoading {
                     VStack(spacing: 15) {
                         ProgressView()
+                            #if os(iOS)
                             .scaleEffect(1.5)
+                            #endif
                         if let title {
                             Text(title)
                         }
@@ -43,8 +45,16 @@ struct SimpleHud: ViewModifier {
 }
 
 extension View {
-    public func simpleHud(isLoading: Bool, title: String?) -> some View {
-        modifier(SimpleHud(isLoading: isLoading, title: title))
+    public func simpleHud(
+        isLoading: Bool,
+        title: String?
+    ) -> some View {
+        modifier(
+            SimpleHud(
+                isLoading: isLoading,
+                title: title
+            )
+        )
     }
 }
 
@@ -63,4 +73,5 @@ extension View {
         }
     }
     .simpleHud(isLoading: isLoading, title: "我是Hud")
+    .frame(minWidth: 500, minHeight: 500)
 }

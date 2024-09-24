@@ -1,6 +1,6 @@
 //
 //  SwiftUIView.swift
-//  
+//
 //
 //  Created by AmosFitness on 2023/12/7.
 //
@@ -53,21 +53,24 @@ public struct DemoSimpleButton<V: View>: View {
                 sliderSection()
                 textFieldSection()
             }
-            .navigationDestination(isPresented: $showPage, destination: {
-                stateView()
-            })
+            .formStyle(.grouped)
+            .navigationDestination(
+                isPresented: $showPage,
+                destination: {
+                    stateView()
+                })
             .navigationTitle("UI元素")
             .buttonCircleNavi(role: .destructive)
-            #if !os(watchOS)
+#if !os(watchOS)
             .sheet(isPresented: $showInput, content: {
                 SimpleTextInputView(
                     pageName: "输入短文字",
                     title: input,
                     showContent: false) { result in
-                    input = result.title
-                }.presentationDetents([.height(200)])
+                        input = result.title
+                    }.presentationDetents([.height(200)])
             })
-            #endif
+#endif
         }
     }
     
@@ -84,14 +87,16 @@ public struct DemoSimpleButton<V: View>: View {
                         .simpleTag(.full(bgColor: .blue.opacity(0.9)))
                 }
             }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
-            SimpleCell(String.randomChinese(short: true, medium: true),
-                       systemImage: "person.wave.2.fill",
-                       content: String.randomChinese(medium: true, long: true)
+            SimpleCell(
+                String.randomChinese(short: true, medium: true),
+                systemImage: "person.wave.2.fill",
+                content: String.randomChinese(medium: true, long: true)
             )
-            SimpleCell(String.randomChinese(short: true),
-                       systemImage: "person.wave.2.fill",
-                       content: String.randomChinese(medium: true),
-                       stateText: String.randomChinese(short: true)
+            SimpleCell(
+                String.randomChinese(short: true),
+                systemImage: "person.wave.2.fill",
+                content: String.randomChinese(medium: true),
+                stateText: String.randomChinese(short: true)
             )
         } header: {
             HStack {
@@ -111,11 +116,11 @@ public struct DemoSimpleButton<V: View>: View {
     @ViewBuilder
     private func buttonSection() -> some View {
         Section {
-            #if os(iOS) || targetEnvironment(macCatalyst)
+#if os(iOS) || targetEnvironment(macCatalyst)
             SimpleMiddleButton("普通中央按钮", role: .none) {
                 confirmShowPage = true }
-                .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
-            #endif
+            .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
+#endif
             SimpleMiddleButton("重要中央按钮", systemImageName: "person.wave.2.fill", role: .destructive) {}
         } header: {
             Text("Button", bundle: .module)
@@ -124,16 +129,17 @@ public struct DemoSimpleButton<V: View>: View {
     
     @ViewBuilder
     private func textFieldSection() -> some View {
-        #if !os(watchOS)
+#if !os(watchOS)
         Section {
             Button { showInput = true } label: {
                 SimpleCell("输入短文字", systemImage: "rectangle.and.pencil.and.ellipsis.rtl")
             }
+            .buttonStyle(.borderless)
             SimpleTextField($input)
         } header: {
             Text("TextField", bundle: .module)
         }
-        #endif
+#endif
     }
     
     private func pickerSection() -> some View {
@@ -158,7 +164,7 @@ public struct DemoSimpleButton<V: View>: View {
                     title: "多选",
                     maxSelectCount: nil,
                     allValue: allPickerContent,
-                    selectValues: mutipleValue, 
+                    selectValues: mutipleValue,
                     multipleSaveAction:  { newSelects in
                         mutipleValue = newSelects
                     })
@@ -230,9 +236,7 @@ public struct DemoSimpleButton<V: View>: View {
     }
 }
 
-#Preview("Navi") {
-    NavigationStack {
-        DemoSimpleButton()
-    }
-    .environment(\.locale, .zhHans)
+#Preview("Cell") {
+    DemoSimpleButton()
+        .environment(\.locale, .zhHans)
 }

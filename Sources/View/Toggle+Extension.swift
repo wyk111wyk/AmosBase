@@ -100,4 +100,5 @@ struct LabelToggleStyle: ToggleStyle {
         Toggle("Label", isOn: $isOn2)
             .labelStyle()
     }
+    .formStyle(.grouped)
 })

@@ -206,7 +206,7 @@ public extension Color {
     let columns = [GridItem(.adaptive(minimum: 30, maximum: 40), spacing: 6)]
     let colorLength: CGFloat = 30
     #else
-    let columns = [GridItem(.adaptive(minimum: 60, maximum: 80), spacing: 8)]
+    let columns = [GridItem(.adaptive(minimum: 70, maximum: 80), spacing: 8)]
     let colorLength: CGFloat = 70
     #endif
     
@@ -243,4 +243,5 @@ public extension Color {
             systemColor(SimpleColorModel.allYellow)
         }
     }
+    .formStyle(.grouped)
 }

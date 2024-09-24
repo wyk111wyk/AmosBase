@@ -34,6 +34,7 @@ public struct DemoSimpleCloudFetch<T: Hashable>: View {
                         }
                 }
             }
+            .formStyle(.grouped)
             .navigationTitle(dataType.recordType())
             .simplePlaceholder(
                 isPresent: fetchResults.isEmpty || isLoading,

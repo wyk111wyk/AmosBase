@@ -59,5 +59,6 @@ public struct SimpleColorPickerLink: View {
         Form {
             SimpleColorPickerLink() { _ in }
         }
+        .formStyle(.grouped)
     }
 }

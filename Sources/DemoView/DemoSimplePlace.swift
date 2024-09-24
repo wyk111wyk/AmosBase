@@ -31,11 +31,13 @@ struct DemoSimplePlaceholder: View {
             #endif
         }
         .listStyle(.plain)
-        .simplePlaceholder(isPresent: true,
-                           type: type,
-                           title: type.title,
-                           subtitle: "Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle",
-                           content: "content content content content content content content content content content content content content content content content") {
+        .simplePlaceholder(
+            isPresent: true,
+            type: type,
+            title: type.title,
+            subtitle: "Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle",
+            content: "content content content content content content content content content content content content content content content content"
+        ) {
             Button("Button") {
                 
             }.buttonStyle(.borderedProminent)

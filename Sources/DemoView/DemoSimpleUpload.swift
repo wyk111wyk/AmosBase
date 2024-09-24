@@ -76,6 +76,7 @@ public struct DemoSimpleUpload: View {
                     SimpleCell("浏览所有图片")
                 }
             }
+            .formStyle(.grouped)
             .navigationTitle("上传图床")
         }
         .simpleErrorToast(error: $error)

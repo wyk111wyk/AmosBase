@@ -279,17 +279,16 @@ public extension SFColor {
 
       #if os(iOS) || os(tvOS) || os(watchOS)
         getRed(&r, green: &g, blue: &b, alpha: &a)
-
-        return (r, g, b, a)
       #elseif os(macOS)
-        guard let rgbaColor = self.usingColorSpace(.deviceRGB) else {
-          fatalError("Could not convert color to RGBA.")
+        guard let ciColor: CIColor = .init(color: self) else {
+            fatalError("Could not convert color to ciColor.")
         }
-
-        rgbaColor.getRed(&r, green: &g, blue: &b, alpha: &a)
-
-        return (r, g, b, a)
+        r = ciColor.red
+        g = ciColor.green
+        b = ciColor.blue
+        a = ciColor.alpha
       #endif
+        return (r, g, b, a)
     }
 }
 
@@ -359,13 +358,11 @@ public extension SFColor {
     /// - Parameter percentage: Percentage by which to lighten the color.
     /// - Returns: A lightened color.
     func lighten(by percentage: CGFloat = 0.2) -> SFColor {
-        // https://stackoverflow.com/questions/38435308/swift-get-lighter-and-darker-color-variations-for-a-given-uicolor
-        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
-        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return SFColor(red: min(red + percentage, 1.0),
-                       green: min(green + percentage, 1.0),
-                       blue: min(blue + percentage, 1.0),
-                       alpha: alpha)
+        let components = self.toRGBAComponents()
+        return SFColor(red: min(components.r + percentage, 1.0),
+                       green: min(components.g + percentage, 1.0),
+                       blue: min(components.b + percentage, 1.0),
+                       alpha: components.a)
     }
 
     /// SwifterSwift: Darken a color.
@@ -376,12 +373,10 @@ public extension SFColor {
     /// - Parameter percentage: Percentage by which to darken the color.
     /// - Returns: A darkened color.
     func darken(by percentage: CGFloat = 0.2) -> SFColor {
-        // https://stackoverflow.com/questions/38435308/swift-get-lighter-and-darker-color-variations-for-a-given-uicolor
-        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
-        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return SFColor(red: max(red - percentage, 0),
-                       green: max(green - percentage, 0),
-                       blue: max(blue - percentage, 0),
-                       alpha: alpha)
+        let components = self.toRGBAComponents()
+        return SFColor(red: max(components.r - percentage, 0),
+                       green: max(components.g - percentage, 0),
+                       blue: max(components.b - percentage, 0),
+                       alpha: components.a)
     }
 }

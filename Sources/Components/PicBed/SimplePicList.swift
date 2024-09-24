@@ -28,14 +28,16 @@ public struct SimplePicList: View {
     let copyAfterTap: Bool
     public let tapImage: (GithubRepoFileListModel) -> Void
     
-    public init(gitToken: String = "",
-                isPushIn: Bool = true,
-                showPathPicker: Bool = true,
-                autoLoad: Bool = true,
-                dismissAfterTap: Bool = false,
-                copyAfterTap: Bool = true,
-                uploadPath: PicBedPath = .base,
-                tapImage: @escaping (GithubRepoFileListModel) -> Void = {_ in}) {
+    public init(
+        gitToken: String = "",
+        isPushIn: Bool = true,
+        showPathPicker: Bool = true,
+        autoLoad: Bool = true,
+        dismissAfterTap: Bool = false,
+        copyAfterTap: Bool = true,
+        uploadPath: PicBedPath = .base,
+        tapImage: @escaping (GithubRepoFileListModel) -> Void = {_ in}
+    ) {
         self.gitToken = gitToken
         self.isPushIn = isPushIn
         self.showPathPicker = showPathPicker
@@ -64,6 +66,7 @@ public struct SimplePicList: View {
                 }
                 imageListSection()
             }
+            .formStyle(.grouped)
             .navigationTitle("图床列表")
             .buttonCircleNavi(role: .cancel, isPresent: !isPushIn) {
                 dismissPage()

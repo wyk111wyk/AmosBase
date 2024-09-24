@@ -1,6 +1,6 @@
 import SwiftUI
 
-#if os(iOS)
+#if os(iOS) || os(macOS)
 // 查看照片的Sheet
 public struct MutiImageViewer: View {
     @Environment(\.dismiss) private var dismissPage
@@ -19,22 +19,30 @@ public struct MutiImageViewer: View {
         TabView(selection: $selectedIndex) {
             if allImages.count > 0 {
                 ForEach(allImages.indices, id: \.self) { index in
-                    ImageDetailView(image: allImages[index].image,
-                                    caption: allImages[index].caption)
-                        .tag(index)
+                    ImageDetailView(
+                        image: allImages[index].image,
+                        caption: allImages[index].caption
+                    ).tag(index)
                 }
             }
         }
+        #if os(iOS)
         .tabViewStyle(.page(indexDisplayMode: .automatic))
+        #elseif os(macOS)
+        .tabViewStyle(.automatic)
+        #endif
         .ignoresSafeArea(.all)
-        .buttonCirclePage(role: .cancel, labelColor: .white) { dismissPage() }
+        .buttonCirclePage(
+            role: .cancel,
+            labelColor: .white
+        ) { dismissPage() }
     }
 }
 
-struct MutiImageViewer_Previews: PreviewProvider {
-    static var previews: some View {
-        MutiImageViewer(allImages: ImageStoreModel.examples(),
-                        selectedIndex: 0)
-    }
+#Preview {
+    MutiImageViewer(
+        allImages: ImageStoreModel.examples(),
+        selectedIndex: 0
+    )
 }
 #endif

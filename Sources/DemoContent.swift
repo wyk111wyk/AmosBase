@@ -42,6 +42,7 @@ public struct DemoContent<V: View>: View {
                     } label: {
                         Label("Toast - Sheet页面", systemImage: "rectangle.portrait.topthird.inset.filled")
                     }
+                    .buttonStyle(.borderless)
                 }
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
@@ -87,6 +88,10 @@ public struct DemoContent<V: View>: View {
                     Text("About - 关于")
                 })
             }
+            #if !os(watchOS)
+            .listStyle(.sidebar)
+            #endif
+            .navigationSplitViewColumnWidth(ideal: 180, max: 250)
             .navigationTitle("AmosBase".localized(bundle: .module))
             .sheet(isPresented: $showToastPage) {
                 NavigationStack {
@@ -111,7 +116,7 @@ public struct DemoContent<V: View>: View {
                         Text("Require iOS 17", bundle: .module)
                     }
                 case 4:
-                    #if os(iOS)
+                    #if !os(watchOS)
                     DemoSimpleWeb()
                     #else
                     Text("Only for iOS")
@@ -129,7 +134,7 @@ public struct DemoContent<V: View>: View {
                 case 10:
                     DemoSimpleDate()
                 case 11:
-                    #if os(iOS)
+                    #if !os(watchOS)
                     DemoSimpleImage()
                     #else
                     Text("Only for iOS")

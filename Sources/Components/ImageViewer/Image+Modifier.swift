@@ -7,11 +7,18 @@
 
 import SwiftUI
 
-#if os(iOS)
+#if os(iOS) || os(macOS)
 public extension View {
-    func simpleImageViewer(selectedIndex: Binding<Int?>,
-                           allPhotos: [SimpleImageStore]) -> some View {
-        modifier(SimpleImageViewer(selectedIndex: selectedIndex, allPhotos: allPhotos))
+    func simpleImageViewer(
+        selectedIndex: Binding<Int?>,
+        allPhotos: [SimpleImageStore]
+    ) -> some View {
+        modifier(
+            SimpleImageViewer(
+                selectedIndex: selectedIndex,
+                allPhotos: allPhotos
+            )
+        )
     }
 }
 

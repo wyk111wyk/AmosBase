@@ -116,6 +116,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
                         bundleImageName: "AmosLogoB",
                         bundleImageNameDark: "AmosLogoW",
                         bundleImageType: "png",
+                        imageSize: 20,
                         content: "Other Apps from us, equally concise and practical.",
                         localizationBundle: .module
                     )
@@ -169,5 +170,6 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
             appStoreId: "123"
         )
     }
+    .formStyle(.grouped)
     .environment(\.locale, .zhHans)
 }

@@ -20,12 +20,14 @@ public struct SimpleMiddleButton: View {
     let action: () -> Void
     
     #if os(watchOS)
-    public init(_ title: LocalizedStringKey,
-                systemImageName: String? = nil,
-                role: ButtonRole? = nil,
-                rowVisibility: Visibility = .hidden,
-                bundle: Bundle = .main,
-                action: @escaping () -> Void) {
+    public init(
+        _ title: LocalizedStringKey,
+        systemImageName: String? = nil,
+        role: ButtonRole? = nil,
+        rowVisibility: Visibility = .hidden,
+        bundle: Bundle = .main,
+        action: @escaping () -> Void
+    ) {
         self.title = title
         self.systemImageName = systemImageName
         self.role = role
@@ -37,14 +39,16 @@ public struct SimpleMiddleButton: View {
     #else
     let key: KeyEquivalent?
     let modifiers: EventModifiers?
-    public init(_ title: LocalizedStringKey,
-                systemImageName: String? = nil,
-                role: ButtonRole? = nil,
-                rowVisibility: Visibility = .hidden,
-                bundle: Bundle = .main,
-                key: KeyEquivalent? = nil,
-                modifiers: EventModifiers? = nil,
-                action: @escaping () -> Void) {
+    public init(
+        _ title: LocalizedStringKey,
+        systemImageName: String? = nil,
+        role: ButtonRole? = nil,
+        rowVisibility: Visibility = .hidden,
+        bundle: Bundle = .main,
+        key: KeyEquivalent? = nil,
+        modifiers: EventModifiers? = nil,
+        action: @escaping () -> Void
+    ) {
         self.title = title
         self.systemImageName = systemImageName
         self.role = role
@@ -69,10 +73,15 @@ public struct SimpleMiddleButton: View {
             }
         }
         #if !os(watchOS)
+        .buttonStyle(.borderless)
         .listRowSeparator(rowVisibility)
-        .modifier(ButtonShortkey(role: role,
-                                 key: key,
-                                 modifiers: modifiers))
+        .modifier(
+            ButtonShortkey(
+                role: role,
+                key: key,
+                modifiers: modifiers
+            )
+        )
         #endif
     }
 }
@@ -115,6 +124,7 @@ public struct SimpleAsyncButton<V: View>: View {
                 }
             }
         }
+        .buttonStyle(.borderless)
     }
 }
 
@@ -154,6 +164,7 @@ public struct SimpleConfirmButton<V: View>: View {
                 }
             }
         })
+        .buttonStyle(.borderless)
     }
 }
 
@@ -192,6 +203,7 @@ public struct SimpleTriggerButton<V: View>: View {
                 }
             }
         })
+        .buttonStyle(.borderless)
     }
 }
 
@@ -206,6 +218,11 @@ public struct SimpleTriggerButton<V: View>: View {
             Form {
                 Section {
                     SimpleMiddleButton("Middle Button") {}
+                    SimpleMiddleButton(
+                        "Middle Button",
+                        role: .destructive,
+                        rowVisibility: .visible
+                    ) {}.tint(.red)
                 }
                 Section {
                     SimpleTriggerButton(isPresented: $isPresent) {
@@ -244,8 +261,9 @@ public struct SimpleTriggerButton<V: View>: View {
                 .navigationBarTitleDisplayMode(.large)
                 #endif
         }
+        .formStyle(.grouped)
         .buttonCircleNavi(role: .cancel)
-        .buttonCircleNavi(role: .destructive)
+        .buttonCircleNavi(role: .destructive, isLoading: false)
     }
 })
 
@@ -368,13 +386,15 @@ public struct CircleButton: View {
     #if !os(watchOS)
     let key: KeyEquivalent?
     let modifiers: EventModifiers?
-    public init(role: ButtonRole? = nil,
-                imageName: String? = nil,
-                labelColor: Color? = nil,
-                isLoading: Bool = false,
-                key: KeyEquivalent? = nil,
-                modifiers: EventModifiers? = nil,
-                callback: @escaping () -> Void = {}) {
+    public init(
+        role: ButtonRole? = nil,
+        imageName: String? = nil,
+        labelColor: Color? = nil,
+        isLoading: Bool = false,
+        key: KeyEquivalent? = nil,
+        modifiers: EventModifiers? = nil,
+        callback: @escaping () -> Void = {}
+    ) {
         self.role = role
         if role == .cancel {
             self.title = LocalizedStringKey("Cancel")
@@ -405,26 +425,36 @@ public struct CircleButton: View {
             Button {} label: {
                 ProgressView()
                     .tint(labelColor)
+                    #if os(macOS)
+                    .scaleEffect(0.56)
+                    #endif
             }
-//            .modifier(ButtonCircleBackground(labelColor))
             .disabled(true)
         }else {
-            Button(title,
-                   systemImage: imageName,
-                   role: role,
-                   action: callback)
+            Button(
+                title,
+                systemImage: imageName,
+                role: role,
+                action: callback
+            )
+            .modifier(
+                ButtonShortkey(
+                    role: role,
+                    key: key,
+                    modifiers: modifiers
+                )
+            )
             .modifier(ButtonCircleBackground(labelColor))
-            .modifier(ButtonShortkey(role: role,
-                                     key: key,
-                                     modifiers: modifiers))
         }
     }
     #else
-    public init(role: ButtonRole? = nil,
-                imageName: String? = nil,
-                labelColor: Color? = nil,
-                isLoading: Bool = false,
-                callback: @escaping () -> Void = {}) {
+    public init(
+        role: ButtonRole? = nil,
+        imageName: String? = nil,
+        labelColor: Color? = nil,
+        isLoading: Bool = false,
+        callback: @escaping () -> Void = {}
+    ) {
         self.role = role
         if role == .cancel {
             self.title = LocalizedStringKey("Cancel")
@@ -449,10 +479,12 @@ public struct CircleButton: View {
     }
     
     public var body: some View {
-        Button(title,
-               systemImage: imageName,
-               role: role,
-               action: callback)
+        Button(
+            title,
+            systemImage: imageName,
+            role: role,
+            action: callback
+        )
         .modifier(ButtonCircleBackground(labelColor))
     }
     #endif
@@ -506,13 +538,15 @@ struct CircleButtonPage: ViewModifier {
     func body(content: Content) -> some View {
         if isPresent {
             content.overlay(alignment: alignment) {
-                CircleButton(role: role,
-                             imageName: imageName,
-                             labelColor: labelColor,
-                             isLoading: isLoading,
-                             key: key,
-                             modifiers: modifiers,
-                             callback: callback)
+                CircleButton(
+                    role: role,
+                    imageName: imageName,
+                    labelColor: labelColor,
+                    isLoading: isLoading,
+                    key: key,
+                    modifiers: modifiers,
+                    callback: callback
+                )
                 .disabled(isDisable)
                 .padding()
             }
@@ -711,6 +745,9 @@ struct ButtonCircleBackground: ViewModifier {
 #elseif os(watchOS)
             content
                 .foregroundStyle(labelColor ?? Color.accentColor)
+#elseif os(macOS)
+            content
+                .buttonStyle(.bordered)
 #endif
         }
         else {

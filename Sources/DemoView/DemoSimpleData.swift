@@ -91,6 +91,7 @@ public struct DemoSimpleData: View {
                     }
                 }
             }
+            .formStyle(.grouped)
             .navigationTitle("Data 编解码")
         }
     }

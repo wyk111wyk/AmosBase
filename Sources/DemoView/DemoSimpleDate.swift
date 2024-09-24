@@ -81,6 +81,7 @@ public struct DemoSimpleDate: View {
                     SimpleCell("今年初始", stateText: theDate.toStartOfYear().toString_DateTime())
                 }
             }
+            .formStyle(.grouped)
             .navigationTitle(title)
         }
     }

@@ -82,8 +82,12 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
     public func main() -> some View{
         if showToast, let toastView = toast() {
             toastView
-                .modifier(ToastTransition(mode: toast()?.displayMode,
-                                          transition: transition))
+                .modifier(
+                    ToastTransition(
+                        mode: toast()?.displayMode,
+                        transition: transition
+                    )
+                )
                 .onTapGesture {
                     if isDebug{ debugPrint("Toast onTap action") }
                     onTap?()

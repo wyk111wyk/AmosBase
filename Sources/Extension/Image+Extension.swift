@@ -54,9 +54,11 @@ public extension Image {
         #endif
     }
     
-    func imageModify(color: Color? = nil,
-                     mode: ContentMode = .fit,
-                     length: CGFloat? = nil) -> some View {
+    func imageModify(
+        color: Color? = nil,
+        mode: ContentMode = .fit,
+        length: CGFloat? = nil
+    ) -> some View {
         self
             .resizable()
             .aspectRatio(contentMode: .fit)
@@ -248,6 +250,48 @@ public extension SFImage {
         #endif
     }
     
+    /// 获取一幅图片的平均颜色
+    ///
+    /// 返回值为可选
+    func averageColor() -> SFColor? {
+        #if !os(watchOS) && canImport(UIKit)
+        return averageColor_ios()
+        #elseif os(macOS)
+        return averageColor_mac()
+        #else
+        return nil
+        #endif
+    }
+    
+    /// 转换为 CGImage
+    func toCGImage() -> CGImage? {
+        #if canImport(UIKit)
+        return self.cgImage
+        #elseif canImport(AppKit)
+        // 创建一个 NSRect 来指定图像的大小
+        let size = self.size
+        var rect = NSRect(x: 0, y: 0, width: size.width, height: size.height)
+
+        // 使用 NSBitmapImageRep 来获取图像的位图表示
+        guard let bitmapRep = self.representations.first as? NSBitmapImageRep else {
+            return nil
+        }
+
+        // 创建 CGImage
+        guard let cgImage = bitmapRep.cgImage(
+            forProposedRect: &rect,
+            context: nil,
+            hints: nil
+        ) else {
+            return nil
+        }
+
+        return cgImage
+        #else
+        return nil
+        #endif
+    }
+    
     #if !os(watchOS)
     /// 用户可以将一张照片放入相册，使用前要先在 plist 中添加权限描述：
     /// NSPhotoLibraryUsageDescription（完全访问）
@@ -353,7 +397,7 @@ public extension UIImage {
     /// 改变图片尺寸 -  不改变比例
     ///
     /// 可自定义宽度，默认300px
-    func adjustSizeToSmall(width: CGFloat = 300) -> UIImage {
+    private func adjustSizeToSmall(width: CGFloat = 300) -> UIImage {
         func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
             let scale = newWidth / image.size.width
             let newHeight = image.size.height * scale
@@ -370,9 +414,9 @@ public extension UIImage {
 }
 #endif
 
-#if canImport(Vision) && canImport(UIKit)
+#if canImport(Vision)
 // MARK: - 使用 Vision 功能进行图片检测文字或人脸
-public extension UIImage {
+public extension SFImage {
     
     /// 识别图片内的文字 -  使用Vision框架
     ///
@@ -383,7 +427,10 @@ public extension UIImage {
     ) async -> String {
         return await withCheckedContinuation(
             { contionuation in
-            let textRecognitionRequest = VNRecognizeTextRequest { (request, error) in
+                let textRecognitionRequest = VNRecognizeTextRequest { (
+                    request,
+                    error
+                ) in
                 guard let observations = request.results as? [VNRecognizedTextObservation] else {
                     mylog.log("The observations are of an unexpected type.")
                     contionuation.resume(returning: "")
@@ -401,7 +448,7 @@ public extension UIImage {
             textRecognitionRequest.recognitionLevel = .accurate
             textRecognitionRequest.recognitionLanguages = languages
             
-            if let cgImage = self.cgImage {
+            if let cgImage = self.toCGImage() {
                 let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
                     
                 do {
@@ -419,12 +466,18 @@ public extension UIImage {
     func detectFace(
         _ orientation: CGImagePropertyOrientation = .right
     ) -> [VNFaceObservation]? {
+        guard let cgImage = self.toCGImage() else {
+            return nil
+        }
+        
         let facePoseRequest = VNDetectFaceRectanglesRequest()
         facePoseRequest.revision = VNDetectFaceRectanglesRequestRevision3
         let requestHandler = VNSequenceRequestHandler()
-        try? requestHandler.perform([facePoseRequest],
-                                    on: CIImage(image: self)!,
-                                    orientation: orientation)
+        try? requestHandler.perform(
+            [facePoseRequest],
+            on: cgImage,
+            orientation: orientation
+        )
         
         mylog.info("面孔识别：\(facePoseRequest)")
         return facePoseRequest.results
@@ -433,7 +486,10 @@ public extension UIImage {
     /// 根据位置裁切图片
     ///
     /// 可选是否根据位置进行扩大
-    func crop(rect: CGRect? = nil, isExtend: Bool = true) -> UIImage? {
+    func crop(
+        rect: CGRect? = nil,
+        isExtend: Bool = true
+    ) -> SFImage? {
         var faceRect: CGRect?
         if let rect = rect {
             faceRect = rect
@@ -455,10 +511,14 @@ public extension UIImage {
             mylog.log("old rate: \(rate.debugDescription)")
             mylog.log("maxX: \(rate.maxX), maxY: \(rate.maxY)")
             
-            let newSize = CGSize(width: self.size.width * rate.width,
-                                 height: self.size.height * rate.height)
-            let newOrigin = CGPoint(x: (1-rate.maxY) * self.size.height,
-                                    y: (1-rate.maxX) * self.size.width)
+            let newSize = CGSize(
+                width: self.size.width * rate.width,
+                height: self.size.height * rate.height
+            )
+            let newOrigin = CGPoint(
+                x: (1-rate.maxY) * self.size.height,
+                y: (1-rate.maxX) * self.size.width
+            )
             let rect = CGRect(origin: newOrigin, size: newSize)
             
             mylog.log("rect: \(rect.origin.debugDescription) size: \(rect.size.debugDescription)")
@@ -495,11 +555,13 @@ public extension UIImage {
         let finalRect = extend(imageRect)
         
         //        let testRect = CGRect(origin: CGPoint(x: 550, y: 40), size: CGSize(width: 700, height: 1000))
-        let oldCgImage = self.cgImage
+        let oldCgImage = self.toCGImage()
         let cgImage = oldCgImage?.cropping(to: finalRect)
         guard let cgImage = cgImage else {
             return nil
         }
+        
+        #if canImport(UIKit)
         let resultImage = UIImage(
             cgImage: cgImage,
             scale: self.scale,
@@ -507,6 +569,14 @@ public extension UIImage {
         )
         mylog.log("new image: \(resultImage)")
         return resultImage
+        #elseif canImport(AppKit)
+        let resultImage = NSImage(
+            cgImage: cgImage,
+            size: self.size
+        )
+        mylog.log("new image: \(resultImage)")
+        return resultImage
+        #endif
     }
 }
 #endif
@@ -518,7 +588,7 @@ public extension UIImage {
     /// 获取一幅图片的平均颜色
     ///
     /// 返回值为可选
-    func averageColor() -> UIColor? {
+    private func averageColor_ios() -> UIColor? {
         guard let inputImage = CIImage(image: self) else { return nil }
         let extentVector = CIVector(
             x: inputImage.extent.origin.x,
@@ -627,25 +697,24 @@ public extension UIImage {
 extension NSImage: @retroactive @unchecked Sendable {}
 
 public extension NSImage {
+    
     /// SwifterSwift: NSImage 在不改变比例的情况下进行缩放
     ///
     /// - Parameter maxSize: maximum size
     /// - Returns: scaled NSImage
-    func scaled(width: CGFloat = 300) -> NSImage {
-        let originalSize = self.size
-                
-        // Calculate the aspect ratio
-        let aspectRatio = originalSize.height / originalSize.width
-        
-        // Calculate the new size that maintains the aspect ratio
-//        let targetHeight = width * aspectRatio
-//        let scaledSize = NSSize(width: width, height: targetHeight)
-        
-        let imageWidth = originalSize.width
-        let imageHeight = originalSize.height
+    private func scaled(width: CGFloat = 300) -> NSImage {
+        let imageWidth = size.width
+        let imageHeight = size.height
+
+        guard imageHeight > 0 else { return self }
+
+        // Get ratio (landscape or portrait)
+        let ratio: CGFloat
+        ratio = width / imageWidth
+
         // Calculate new size based on the ratio
-        let newWidth = imageWidth * aspectRatio
-        let newHeight = imageHeight * aspectRatio
+        let newWidth = width
+        let newHeight = imageHeight * ratio
 
         // Create a new NSSize object with the newly calculated size
         let newSize = NSSize(
@@ -660,14 +729,57 @@ public extension NSImage {
             context: nil,
             hints: nil
         ) else { return self }
-
-        // GPT 提供的方法
-//        let newImage = NSImage(size: scaledSize)
-//        newImage.lockFocus()
-//        self.draw(in: NSRect(origin: .zero, size: scaledSize), from: NSRect(origin: .zero, size: originalSize), operation: .copy, fraction: 1.0)
-//        newImage.unlockFocus()
         
         return NSImage(cgImage: imageRef, size: newSize)
+    }
+    
+    /// 获取一幅图片的平均颜色
+    ///
+    /// 返回值为可选
+    private func averageColor_mac() -> NSColor? {
+        guard let imageRep = self.representations.first as? NSBitmapImageRep else {
+            return nil
+        }
+        
+        // 获取图像的宽度和高度
+        let width = imageRep.pixelsWide
+        let height = imageRep.pixelsHigh
+        
+        // 获取图像的像素数据
+        let bitmapData = imageRep.bitmapData
+        
+        var totalR: CGFloat = 0
+        var totalG: CGFloat = 0
+        var totalB: CGFloat = 0
+        var totalA: CGFloat = 0
+        var pixelCount: CGFloat = 0
+        
+        // 遍历每个像素
+        for y in 0..<height {
+            for x in 0..<width {
+                let pixelIndex = (y * width + x) * 4 // 每个像素4个分量（RGBA）
+                if let data = bitmapData {
+                    let r = CGFloat(data[pixelIndex]) / 255.0
+                    let g = CGFloat(data[pixelIndex + 1]) / 255.0
+                    let b = CGFloat(data[pixelIndex + 2]) / 255.0
+                    let a = CGFloat(data[pixelIndex + 3]) / 255.0
+                    
+                    totalR += r
+                    totalG += g
+                    totalB += b
+                    totalA += a
+                    pixelCount += 1
+                }
+            }
+        }
+        
+        // 计算平均颜色
+        let averageR = totalR / pixelCount
+        let averageG = totalG / pixelCount
+        let averageB = totalB / pixelCount
+        let averageA = totalA / pixelCount
+        
+        return NSColor(red: averageR, green: averageG, blue: averageB, alpha: averageA)
     }
 
     /// SwifterSwift: Write NSImage to url.
@@ -694,7 +806,7 @@ public extension NSImage {
         try? imageData.write(to: url)
     }
     
-    /// 保存到硬盘
+    /// 保存到硬盘（用户选择路径）
     func saveImage() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.png, .jpeg, .bmp, .heic, .heif]

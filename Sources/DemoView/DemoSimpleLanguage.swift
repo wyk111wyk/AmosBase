@@ -62,6 +62,7 @@ struct DemoSimpleLanguage: View {
                     SimpleCell("标记地名个人名", content: allNames?.description)
                 }
             }
+            .formStyle(.grouped)
             .navigationTitle("自然语言分析")
         }
     }

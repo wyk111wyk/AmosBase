@@ -99,8 +99,11 @@ public struct SimpleColorPicker: View {
                                 isPresent: $isShowCustomColor)
                 }
             }
-            .buttonCircleNavi(role: .destructive,
-                              labelColor: selectedColor) {
+            .formStyle(.grouped)
+            .buttonCircleNavi(
+                role: .destructive,
+                labelColor: selectedColor
+            ) {
                 saveColor(selectedColor)
                 dismissPage()
             }
@@ -345,6 +348,7 @@ extension SimpleColorPicker {
                     circleView(selectedColor)
                 }
             }
+            .buttonStyle(.borderless)
             Button {
                 selectedColor = .randomLight()
             } label: {
@@ -356,6 +360,7 @@ extension SimpleColorPicker {
                     circleView(selectedColor)
                 }
             }
+            .buttonStyle(.borderless)
             Button {
                 selectedColor = .randomDark()
             } label: {
@@ -367,6 +372,7 @@ extension SimpleColorPicker {
                     circleView(selectedColor)
                 }
             }
+            .buttonStyle(.borderless)
             lightenSection()
             darkenSection()
         } header: {

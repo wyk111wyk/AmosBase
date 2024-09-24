@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-#if !os(watchOS) && !os(macOS)
+#if !os(watchOS)
 public struct DemoSimpleWeb: View {
     enum PageType {
         case hupu, nba
         var url: URL {
             switch self {
             case .hupu:
-                return URL(string: "https://m.hupu.com/nba")!
+                return URL(string: "https://www.hupu.com/nba")!
             case .nba:
                 return URL(string: "https://china.nba.cn/index")!
             }
@@ -26,7 +26,9 @@ public struct DemoSimpleWeb: View {
     public var body: some View {
         NavigationStack {
             SimpleWebView(url: page.url, pushIn: true)
+                #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
+                #endif
                 .toolbar{ toolbarMenu() }
         }
     }

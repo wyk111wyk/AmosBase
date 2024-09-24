@@ -77,6 +77,7 @@ public struct DemoSimpleCloud: View {
                     }
                 }
             }
+            .formStyle(.grouped)
             .navigationTitle("云存储 iCloud")
             .simpleHud(isLoading: isLoading, title: loadingMsg)
             .simpleAlert(title: errorMsg, isPresented: .isPresented($errorMsg))

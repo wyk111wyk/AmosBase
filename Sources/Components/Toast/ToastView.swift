@@ -253,6 +253,7 @@ public struct ToastView: View{
                 Spacer()
                 bannerView
             }
+            .padding(.bottom)
         }
     }
 }

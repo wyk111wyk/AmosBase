@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-#if os(iOS)
+#if os(iOS) || os(macOS)
 public struct ImageDetailView: View {
     @Environment(\.dismiss) private var dismissPage
     
@@ -19,16 +19,23 @@ public struct ImageDetailView: View {
     @State var dragOffset: CGSize = CGSize.zero
     @State var dragOffsetPredicted: CGSize = CGSize.zero
     
-    public init(image: SFImage,
-                caption: String? = nil) {
+    public init(
+        image: SFImage,
+        caption: String? = nil
+    ) {
         self.image = .init(sfImage: image)
         self.imageOpt = nil
         self.caption = caption
     }
     
-    public init(image: Image?,
-                caption: String? = nil) {
-        self.image = .init(packageResource: "photoProcess", ofType: "png")
+    public init(
+        image: Image?,
+        caption: String? = nil
+    ) {
+        self.image = .init(
+            packageResource: "photoProcess",
+            ofType: "png"
+        )
         self.imageOpt = image
         self.caption = caption
     }
@@ -48,7 +55,9 @@ public struct ImageDetailView: View {
             .scaledToFit()
             .offset(x: self.dragOffset.width, 
                     y: self.dragOffset.height)
+        #if os(iOS)
             .pinchToZoom()
+        #endif
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(red: 0.12, green: 0.12, blue: 0.12, opacity: (1.0 - Double(abs(self.dragOffset.width) + abs(self.dragOffset.height)) / 1000)).edgesIgnoringSafeArea(.all))
         .overlay(alignment: .bottom) {
@@ -74,12 +83,10 @@ public struct ImageDetailView: View {
     }
 }
 
-struct ImageDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        ImageDetailView(
-            image: nil,
-            caption: "I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan"
-        )
-    }
+#Preview {
+    ImageDetailView(
+        image: nil,
+        caption: "I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan"
+    )
 }
 #endif

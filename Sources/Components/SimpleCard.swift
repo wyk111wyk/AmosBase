@@ -40,17 +40,23 @@ public struct SimpleCard<
     public var body: some View {
         GeometryReader { geometry in
             let width: CGFloat = geometry.size.width
-#if !os(watchOS)
-            let height: CGFloat = min(geometry.size.height*0.85, width * 3 / 2)
-#else
+            #if !os(watchOS)
+            let height: CGFloat = min(
+                geometry.size.height * 0.85,
+                width * 3 / 2
+            )
+            #else
             let height: CGFloat = geometry.size.height
-#endif
+            #endif
             
             VStack(spacing: 0) {
                 ScrollView(.horizontal,
                            showsIndicators: false) {
                     LazyHStack(spacing: 0) {
-                        ForEach(allCardItems, id: \.self.id) { card in
+                        ForEach(
+                            allCardItems,
+                            id: \.self.id
+                        ) { card in
                             cardView(
                                 card,
                                 width: width,
@@ -71,12 +77,13 @@ public struct SimpleCard<
                     }
                     .scrollTargetLayout()
                 }
-                           .scrollTargetBehavior(.paging)
-                           .scrollPosition(id: $currentPositionID)
-                           .frame(width: width, height: height + 30)
-                //                           .background{Color.red}
+               .scrollTargetBehavior(.paging)
+               .scrollPosition(id: $currentPositionID)
+//               .frame(width: width, height: height + 30)
                 
-                bottomView()
+                if BottomView.self != EmptyView.self {
+                    bottomView()
+                }
             }
         }
         .onAppear {
