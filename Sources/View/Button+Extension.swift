@@ -270,17 +270,21 @@ public struct SimpleTriggerButton<V: View>: View {
                 #endif
         }
         .formStyle(.grouped)
-        .buttonCircleNavi(role: .cancel)
+        .buttonCircleNavi(role: .cancel, title: "测试按钮")
         .buttonCircleNavi(role: .destructive, isLoading: false)
         .confirmationDialog(
             "测试按钮",
             isPresented: $showConfirm,
             titleVisibility: .visible
         ) {
-            SimpleTriggerButton(title: "切换载入",
-                                isPresented: $isLoading)
-            SimpleTriggerButton(title: "切换显示",
-                                isPresented: $isPresent)
+            SimpleTriggerButton(
+                title: "切换载入",
+                isPresented: $isLoading
+            )
+            SimpleTriggerButton(
+                title: "切换显示",
+                isPresented: $isPresent
+            )
         }
     }
 })
@@ -294,6 +298,7 @@ extension View {
     ///
     /// 可自定义图标颜色，不设置role可自定义图标
     public func buttonCircleNavi(role: ButtonRole? = nil,
+                                 title: String? = nil,
                                  imageName: String? = nil,
                                  labelColor: Color? = nil,
                                  isDisable: Bool = false,
@@ -302,6 +307,7 @@ extension View {
                                  placement: ToolbarItemPlacement? = nil,
                                  callback: @escaping () -> Void = {}) -> some View {
         modifier(CircleButtonNavi(role: role,
+                                  title: title,
                                   imageName: imageName,
                                   labelColor: labelColor,
                                   isDisable: isDisable,
@@ -317,6 +323,7 @@ extension View {
     ///
     /// 可自定义图标颜色，不设置role可自定义图标
     public func buttonCirclePage(role: ButtonRole? = nil,
+                                 title: String? = nil,
                                  imageName: String? = nil,
                                  labelColor: Color? = nil,
                                  isDisable: Bool = false,
@@ -325,6 +332,7 @@ extension View {
                                  alignment: Alignment? = nil,
                                  callback: @escaping () -> Void = {}) -> some View {
         modifier(CircleButtonPage(role: role,
+                                  title: title,
                                   imageName: imageName,
                                   labelColor: labelColor,
                                   isDisable: isDisable,
@@ -340,6 +348,7 @@ extension View {
     ///
     /// 可自定义图标颜色，不设置role可自定义图标
     public func buttonCircleNavi(role: ButtonRole? = nil,
+                                 title: String? = nil,
                                  imageName: String? = nil,
                                  labelColor: Color? = nil,
                                  isDisable: Bool = false,
@@ -350,6 +359,7 @@ extension View {
                                  placement: ToolbarItemPlacement? = nil,
                                  callback: @escaping () -> Void = {}) -> some View {
         modifier(CircleButtonNavi(role: role,
+                                  title: title,
                                   imageName: imageName,
                                   labelColor: labelColor,
                                   isDisable: isDisable,
@@ -367,6 +377,7 @@ extension View {
     ///
     /// 可自定义图标颜色，不设置role可自定义图标
     public func buttonCirclePage(role: ButtonRole? = nil,
+                                 title: String? = nil,
                                  imageName: String? = nil,
                                  labelColor: Color? = nil,
                                  isDisable: Bool = false,
@@ -377,6 +388,7 @@ extension View {
                                  alignment: Alignment? = nil,
                                  callback: @escaping () -> Void = {}) -> some View {
         modifier(CircleButtonPage(role: role,
+                                  title: title,
                                   imageName: imageName,
                                   labelColor: labelColor,
                                   isDisable: isDisable,
@@ -397,7 +409,7 @@ public struct CircleButton: View {
     let labelColor: Color?
     let callback: () -> Void
     
-    let title: LocalizedStringKey
+    var title: LocalizedStringKey
     let imageName: String
     let isLoading: Bool
     
@@ -406,6 +418,7 @@ public struct CircleButton: View {
     let modifiers: EventModifiers?
     public init(
         role: ButtonRole? = nil,
+        title: String? = nil,
         imageName: String? = nil,
         labelColor: Color? = nil,
         isLoading: Bool = false,
@@ -430,6 +443,10 @@ public struct CircleButton: View {
             self.title = LocalizedStringKey("Confirm")
             self.imageName = imageName ?? "checkmark"
             self.labelColor = labelColor
+        }
+        
+        if let title {
+            self.title = LocalizedStringKey(title)
         }
         
         self.isLoading = isLoading
@@ -468,6 +485,7 @@ public struct CircleButton: View {
     #else
     public init(
         role: ButtonRole? = nil,
+        title: String? = nil,
         imageName: String? = nil,
         labelColor: Color? = nil,
         isLoading: Bool = false,
@@ -492,6 +510,10 @@ public struct CircleButton: View {
             self.labelColor = labelColor
         }
         
+        if let title {
+            self.title = LocalizedStringKey(title)
+        }
+        
         self.isLoading = isLoading
         self.callback = callback
     }
@@ -510,6 +532,7 @@ public struct CircleButton: View {
 
 struct CircleButtonPage: ViewModifier {
     let role: ButtonRole?
+    let title: String?
     let imageName: String?
     let labelColor: Color?
     let isDisable: Bool
@@ -524,6 +547,7 @@ struct CircleButtonPage: ViewModifier {
     let key: KeyEquivalent?
     let modifiers: EventModifiers?
     init(role: ButtonRole? = nil,
+         title: String? = nil,
          imageName: String? = nil,
          labelColor: Color? = nil,
          isDisable: Bool = false,
@@ -534,6 +558,7 @@ struct CircleButtonPage: ViewModifier {
          alignment: Alignment? = nil,
          callback: @escaping () -> Void = {}) {
         self.role = role
+        self.title = title
         self.imageName = imageName
         self.labelColor = labelColor
         self.isDisable = isDisable
@@ -558,6 +583,7 @@ struct CircleButtonPage: ViewModifier {
             content.overlay(alignment: alignment) {
                 CircleButton(
                     role: role,
+                    title: title,
                     imageName: imageName,
                     labelColor: labelColor,
                     isLoading: isLoading,
@@ -574,6 +600,7 @@ struct CircleButtonPage: ViewModifier {
     }
     #else
     init(role: ButtonRole? = nil,
+         title: String? = nil,
          imageName: String? = nil,
          labelColor: Color? = nil,
          isDisable: Bool = false,
@@ -582,6 +609,7 @@ struct CircleButtonPage: ViewModifier {
          alignment: Alignment? = nil,
          callback: @escaping () -> Void = {}) {
         self.role = role
+        self.title = title
         self.imageName = imageName
         self.labelColor = labelColor
         self.isDisable = isDisable
@@ -602,11 +630,14 @@ struct CircleButtonPage: ViewModifier {
     func body(content: Content) -> some View {
         if isPresent {
             content.overlay(alignment: alignment) {
-                CircleButton(role: role,
-                             imageName: imageName,
-                             labelColor: labelColor,
-                             isLoading: isLoading,
-                             callback: callback)
+                CircleButton(
+                    role: role,
+                    title: title,
+                    imageName: imageName,
+                    labelColor: labelColor,
+                    isLoading: isLoading,
+                    callback: callback
+                )
                 .disabled(isDisable)
                 .padding()
             }
@@ -619,6 +650,7 @@ struct CircleButtonPage: ViewModifier {
 
 struct CircleButtonNavi: ViewModifier {
     let role: ButtonRole?
+    let title: String?
     let imageName: String?
     let labelColor: Color?
     let isDisable: Bool
@@ -631,17 +663,21 @@ struct CircleButtonNavi: ViewModifier {
     #if !os(watchOS)
     let key: KeyEquivalent?
     let modifiers: EventModifiers?
-    init(role: ButtonRole? = nil,
-         imageName: String? = nil,
-         labelColor: Color? = nil,
-         isDisable: Bool = false,
-         isPresent: Bool = true,
-         isLoading: Bool = false,
-         key: KeyEquivalent? = nil,
-         modifiers: EventModifiers? = nil,
-         placement: ToolbarItemPlacement? = nil,
-         callback: @escaping () -> Void = {}) {
+    init(
+        role: ButtonRole? = nil,
+        title: String? = nil,
+        imageName: String? = nil,
+        labelColor: Color? = nil,
+        isDisable: Bool = false,
+        isPresent: Bool = true,
+        isLoading: Bool = false,
+        key: KeyEquivalent? = nil,
+        modifiers: EventModifiers? = nil,
+        placement: ToolbarItemPlacement? = nil,
+        callback: @escaping () -> Void = {}
+    ) {
         self.role = role
+        self.title = title
         self.imageName = imageName
         self.labelColor = labelColor
         self.isDisable = isDisable
@@ -665,13 +701,16 @@ struct CircleButtonNavi: ViewModifier {
         if isPresent {
             content.toolbar {
                 ToolbarItem(placement: placement) {
-                    CircleButton(role: role,
-                                 imageName: imageName,
-                                 labelColor: labelColor,
-                                 isLoading: isLoading,
-                                 key: key,
-                                 modifiers: modifiers,
-                                 callback: callback)
+                    CircleButton(
+                        role: role,
+                        title: title,
+                        imageName: imageName,
+                        labelColor: labelColor,
+                        isLoading: isLoading,
+                        key: key,
+                        modifiers: modifiers,
+                        callback: callback
+                    )
                     .disabled(isDisable)
                 }
             }
@@ -680,15 +719,19 @@ struct CircleButtonNavi: ViewModifier {
         }
     }
     #else
-    init(role: ButtonRole? = nil,
-         imageName: String? = nil,
-         labelColor: Color? = nil,
-         isDisable: Bool = false,
-         isPresent: Bool = true,
-         isLoading: Bool = false,
-         placement: ToolbarItemPlacement? = nil,
-         callback: @escaping () -> Void = {}) {
+    init(
+        role: ButtonRole? = nil,
+        title: String? = nil,
+        imageName: String? = nil,
+        labelColor: Color? = nil,
+        isDisable: Bool = false,
+        isPresent: Bool = true,
+        isLoading: Bool = false,
+        placement: ToolbarItemPlacement? = nil,
+        callback: @escaping () -> Void = {}
+    ) {
         self.role = role
+        self.title = title
         self.imageName = imageName
         self.labelColor = labelColor
         self.isDisable = isDisable
@@ -710,11 +753,14 @@ struct CircleButtonNavi: ViewModifier {
         if isPresent {
             content.toolbar {
                 ToolbarItem(placement: placement) {
-                    CircleButton(role: role,
-                                 imageName: imageName,
-                                 labelColor: labelColor,
-                                 isLoading: isLoading,
-                                 callback: callback)
+                    CircleButton(
+                        role: role,
+                        title: title,
+                        imageName: imageName,
+                        labelColor: labelColor,
+                        isLoading: isLoading,
+                        callback: callback
+                    )
                     .disabled(isDisable)
                 }
             }

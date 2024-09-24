@@ -10,7 +10,7 @@ import SwiftUI
 #if canImport(UIKit) && !os(watchOS)
 import UIKit
 
-struct PhoneTextView: UIViewRepresentable {
+struct SimpleText_iOS: UIViewRepresentable {
     var attributedString: AttributedString
     @Binding var calculatedHeight: CGFloat
     let selectTextCallback: (String) -> ()
@@ -30,12 +30,15 @@ struct PhoneTextView: UIViewRepresentable {
 
     func updateUIView(_ uiView: UITextView, context: Context) {
         uiView.attributedText = NSAttributedString(attributedString)
-        PhoneTextView.recalculateHeight(view: uiView, result: $calculatedHeight)
+        SimpleText_iOS.recalculateHeight(
+            view: uiView,
+            result: $calculatedHeight
+        )
     }
     
     class Coordinator: NSObject, UITextViewDelegate {
-        var parent: PhoneTextView
-        init(for parent: PhoneTextView) {
+        var parent: SimpleText_iOS
+        init(for parent: SimpleText_iOS) {
             self.parent = parent
         }
         
@@ -54,7 +57,10 @@ struct PhoneTextView: UIViewRepresentable {
         }
     }
     
-    static func recalculateHeight(view: UITextView, result: Binding<CGFloat>) {
+    static func recalculateHeight(
+        view: UITextView,
+        result: Binding<CGFloat>
+    ) {
         let size = view.sizeThatFits(
             CGSize(
                 width: view.frame.size.width,
@@ -64,6 +70,7 @@ struct PhoneTextView: UIViewRepresentable {
         if result.wrappedValue != size.height {
             DispatchQueue.main.async {
                 result.wrappedValue = size.height
+                debugPrint("更新iOS高度：\(size.height)")
             }
         }
     }

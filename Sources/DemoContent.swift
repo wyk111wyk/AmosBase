@@ -150,6 +150,8 @@ public struct DemoContent<V: View>: View {
                     DemoSimpleData()
                 case 15:
                     DemoSimpleLanguage()
+                case 16:
+                    DemoSimpleText()
                 default:
                     Text(selectedPage.title)
                 }
@@ -205,7 +207,8 @@ struct Page: Identifiable, Equatable, Hashable {
          .init(id: 12, title: "Color - 颜色", icon: "paintpalette"),
          .init(id: 13, title: "Units - 单位", icon: "gauge.with.dots.needle.33percent"),
          .init(id: 14, title: "Data - 编解码", icon: "externaldrive"),
-         .init(id: 15, title: "NL - 自然语言", icon: "character.book.closed")
+         .init(id: 15, title: "NL - 自然语言", icon: "character.book.closed"),
+         .init(id: 16, title: "Text - 可选文字", icon: "richtext.page")
         ]
     }
 }

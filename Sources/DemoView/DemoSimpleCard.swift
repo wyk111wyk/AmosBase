@@ -164,5 +164,5 @@ struct DemoSimpleCard: View {
 #Preview {
     DemoSimpleCard()
         .environment(\.locale, .zhHans)
-        .frame(minWidth: 500, minHeight: 500)
+        .frame(minWidth: 300, minHeight: 500)
 }

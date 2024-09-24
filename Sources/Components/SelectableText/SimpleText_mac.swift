@@ -13,7 +13,7 @@ import AppKit
 
 extension NSFont: @unchecked @retroactive Sendable {}
 
-struct MacTextView: NSViewRepresentable {
+struct SimpleText_mac: NSViewRepresentable {
     var attributedString: AttributedString
     @Binding var calculatedHeight: CGFloat
     let selectTextCallback: (String) -> ()
@@ -25,6 +25,7 @@ struct MacTextView: NSViewRepresentable {
         textView.isSelectable = true
         textView.isVerticallyResizable = true
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.textContainerInset = NSSize(width: 10, height: 10)
         textView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         textView.setContentHuggingPriority(.defaultLow, for: .vertical)
         return textView
@@ -40,8 +41,8 @@ struct MacTextView: NSViewRepresentable {
     }
     
     class Coordinator: NSObject, NSTextViewDelegate {
-        var parent: MacTextView
-        init(for parent: MacTextView) {
+        var parent: SimpleText_mac
+        init(for parent: SimpleText_mac) {
             self.parent = parent
         }
         
@@ -63,8 +64,8 @@ struct MacTextView: NSViewRepresentable {
         textView.layoutManager?.ensureLayout(for: textView.textContainer!)
         let height = textView.layoutManager?.usedRect(for: textView.textContainer!).height ?? 0
         DispatchQueue.main.async {
-            self.calculatedHeight = height
-            debugPrint("更新高度：\(self.calculatedHeight)")
+            self.calculatedHeight = height + 20
+            debugPrint("更新mac高度：\(self.calculatedHeight)")
         }
     }
 }

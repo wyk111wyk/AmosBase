@@ -448,7 +448,7 @@ public extension String {
     }
     
     enum TestType: Identifiable, CaseIterable {
-        case chineseAndEngish, chineseWuxia, chineseStory, chineseCasual, chinesePoem, englishSpeech, englishPoem
+        case chineseAndEngish, chineseWuxia, chineseStory, chineseCasual, chinesePoem, englishSpeech, englishPoem, markdown01, markdown02
         
         public var id: String { title }
         public static var allCases: [TestType] {
@@ -477,26 +477,15 @@ public extension String {
                 return "英文叙述"
             case .englishPoem:
                 return "英文诗歌"
+            case .markdown01:
+                return "Markdown 01"
+            case .markdown02:
+                return "Markdown 02"
             }
         }
         
         public var content: String {
-            switch self {
-            case .chineseAndEngish:
-                return testText(.chineseAndEngish)
-            case .chineseWuxia:
-                return testText(.chineseWuxia)
-            case .chineseStory:
-                return testText(.chineseStory)
-            case .chineseCasual:
-                return testText(.chineseCasual)
-            case .chinesePoem:
-                return testText(.chinesePoem)
-            case .englishSpeech:
-                return testText(.englishSpeech)
-            case .englishPoem:
-                return testText(.englishPoem)
-            }
+            testText(.chineseAndEngish)
         }
     }
     
@@ -553,6 +542,87 @@ public extension String {
         Murmur, a little sadly, how Love fled,
         And paced upon the mountains overhead,
         And hid his face amid a crowd of stars.
+        """
+        case .markdown01:
+        """
+        在Swift中，`Sendable`协议是Swift 5.5引入的，作为并发编程中的一部分，用于标记可以安全地在并行执行的任务之间传递的类型。当你看到“Conformance of 'NSParagraphStyle' to 'Sendable' is unavailable”的错误时，它意味着尝试将`NSParagraphStyle`实例用在需要`Sendable`遵守的上下文中，但`NSParagraphStyle`（一个来自UIKit的Objective-C类）并没有被标记为`Sendable`。
+
+        这个问题的根源在于`NSParagraphStyle`并不是一个原生的Swift类型，而是从Objective-C继承过来的，而且Objective-C的类型默认不遵守`Sendable`协议。这导致了它不能被保证是线程安全的，也就不能在Swift的并发上下文中安全使用。
+
+        ### 解决方案
+
+        解决这个问题的方法取决于你的具体使用场景。以下是几种可能的解决方法：
+
+        1. **使用值类型的替代品**：如果可能的话，寻找或创建一个纯Swift的、值类型的替代品，这个替代品应该是`Sendable`的。对于`NSParagraphStyle`，你可以考虑使用或创建一个包含所需属性的自定义Swift结构体。
+
+        2. **在安全的上下文中使用**：如果你必须使用`NSParagraphStyle`，确保在访问和修改它的时候，是在一个线程安全的上下文中。这可能意味着使用锁、串行队列或其他同步机制来保护对其的访问。
+
+        3. **使用@unchecked Sendable**：从Swift 5.5开始，你可以使用`@unchecked Sendable`闭包来表示一个类型是安全发送的，即使它没有显式地遵循`Sendable`。这是一个危险的操作，因为它绕过了编译器的安全检查，所以只有当你确信使用的类型是线程安全时才应该使用。
+
+            ```swift
+            @Sendable func safelyUseNSParagraphStyle() {
+                // 你的代码，使用NSParagraphStyle
+            }
+            ```
+
+        4. **深入理解并发和Sendable**：深入学习Swift的并发模型和`Sendable`协议，了解哪些类型是自动遵守的，哪些需要手动处理，以及如何安全地在并发环境中管理不遵守`Sendable`的类型。
+
+        在处理涉及Swift并发的问题时，了解并遵循`Sendable`协议的要求非常重要，这有助于保证代码的线程安全性和稳定性。
+        """
+        case .markdown02:
+        """
+        # Headline 1
+        ## Headline 2
+        ### Headline 3
+        #### Headline 4
+        ##### Headline 5
+
+        Here is an [链接](https://example.com). Lorem ipsum **bold粗体字** dolor sit _italic斜体字_ amet, __consectetur__ **adipisicing粗体字** elit.veniam, ~~strikethrough 划线~~ quis,Ut enim ad `inline code 文内代码` minim veniam.
+
+        子弹列表
+        - List item 1 lorem ipsum dolor sit amet lorem ipsum dolor
+        - List item 2
+
+        顺序列表
+        1. List item 1
+        2. List item 2
+        3. List item 3
+        
+        ---
+
+        > 引用：Blockquote loorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+        ```
+        代码部分
+        5 LET S = 0
+        10 MAT INPUT V
+        20 LET N = NUM
+        30 IF N = 0 THEN 99
+        40 FOR I = 1 TO N
+        45 LET S = S + V(I)
+        ```
+        在SwiftUI中，你不会直接使用`UIFont`，因为那是UIKit的一部分。SwiftUI提供了自己的视图和控制器，以及用于字体、颜色和布局的修饰符。如果你想要在SwiftUI中设置文本的大小和权重，你可以使用`.font()`修饰符，它接受一个`Font`实例。例如，要设置文本的大小为24点并将其权重设置为粗体，你可以这样做：
+
+        ```swift
+        代码部分
+        Text("Hello, SwiftUI!")
+            .font(.system(size: 24, weight: .bold, design: .default))
+        ```
+
+        ```
+        | First Header  | Second Header |
+        | ------------- | ------------- |
+        | Content Cell  | Content Cell  |
+        | Content Cell  | Content Cell  |
+        ```
+
+        表格形式
+        | First Header  | Second Header |
+        | ------------- | ------------- |
+        | Content Cell  | Content Cell  |
+        | Content Cell  | Content Cell  |
+        
+        在这个例子中，`.system(size: weight: design:)`是一个创建系统字体的方法，它允许你指定字体的大小(`size`)、权重(`weight`)和设计(`design`)。权重是通过`Font.Weight`枚举指定的，它提供了`.ultraLight`、`.thin`、`.light`、`.regular`、`.medium`、`.semibold`、`.bold`、`.heavy`和`.black`等多种选项。
         """
         }
     }

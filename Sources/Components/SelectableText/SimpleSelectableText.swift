@@ -13,24 +13,24 @@ import UIKit
 import AppKit
 #endif
 
-extension NSParagraphStyle: @unchecked @retroactive Sendable {}
-
 public struct SimpleSelectableText: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
-    let text: String
-    let attributedText: AttributedString?
     
     @State private var textViewHeight: CGFloat = 600
+    
+    let text: String
+    let markdownText: String?
+    let attributedText: AttributedString?
     
     let selectTextCallback: (String) -> ()
     
     public init(
         text: String = "",
+        markdown: String? = nil,
         attributedText: AttributedString? = nil,
         selectTextCallback: @escaping (String) -> () = {_ in}
     ) {
         self.text = text
+        self.markdownText = markdown
         self.attributedText = attributedText
         self.selectTextCallback = selectTextCallback
     }
@@ -38,6 +38,8 @@ public struct SimpleSelectableText: View {
     var attributedString: AttributedString {
         if let attributedText {
             return attributedText
+        }else if let markdownText {
+            return markdownText.markdown
         }else {
             var attributedString = (try? AttributedString(markdown: text)) ?? AttributedString(text)
             #if os(iOS)
@@ -55,31 +57,28 @@ public struct SimpleSelectableText: View {
     }
     
     public var body: some View {
-        #if os(iOS)
-        PhoneTextView(
-            attributedString: attributedString,
-            calculatedHeight: $textViewHeight,
-            selectTextCallback: selectTextCallback
-        ).frame(height: textViewHeight)
-        #elseif os(macOS)
-        MacTextView(
-            attributedString: attributedString,
-            calculatedHeight: $textViewHeight,
-            selectTextCallback: selectTextCallback
-        )
+        Group {
+            #if os(iOS)
+            SimpleText_iOS(
+                attributedString: attributedString,
+                calculatedHeight: $textViewHeight,
+                selectTextCallback: selectTextCallback
+            )
+            #elseif os(macOS)
+            SimpleText_mac(
+                attributedString: attributedString,
+                calculatedHeight: $textViewHeight,
+                selectTextCallback: selectTextCallback
+            )
+            #endif
+        }
         .frame(height: textViewHeight)
-        #endif
     }
 }
 
 #Preview("Text") {
-    let text = String.testText(.chineseAndEngish) + String.testText(.chinesePoem) +
-        String.testText(.chineseStory)
-    NavigationStack {
-        ScrollView {
-            SimpleSelectableText(text: text)
-                .padding()
-        }
-        .navigationTitle("显示内容")
-    }
+    DemoSimpleText(
+        markdown: String.testText(.markdown02)
+    )
+    .frame(minWidth: 300, minHeight: 500)
 }
