@@ -15,7 +15,7 @@ import AppKit
 
 public struct SimpleSelectableText: View {
     
-    @State private var textViewHeight: CGFloat = 600
+    @State private var textViewHeight: CGFloat = 1200
     
     let text: String
     let markdownText: String?

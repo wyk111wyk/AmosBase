@@ -238,7 +238,7 @@ public struct SimplePlaceholder<V: View>: View {
         self.subtitleFont = .headline
         self.contentFont = .body
         self.imageLength = 100
-        self.imagePadding = 30
+        self.imagePadding = 24
         self.contentSpace = 18
         self.offsetY = -10
         self.maxWidth = 300
@@ -285,6 +285,8 @@ public struct SimplePlaceholder<V: View>: View {
         }
     }
     
+    @State private var isHiden = false
+    
     public var body: some View {
         #if os(watchOS)
         ScrollView {
@@ -301,45 +303,48 @@ public struct SimplePlaceholder<V: View>: View {
                 if let type {
                     type.image
                         .imageModify(length: imageLength)
-                        .modifier(TapImageAnimation())
+                        .modifier(TapImageAnimation(isToggled: $isHiden))
                 }else if let systemImageName {
                     Image(systemName: systemImageName)
                         .imageModify(color: imageColor, length: imageLength)
-                        .modifier(TapSystemIconAnimation())
+                        .modifier(TapSystemIconAnimation(isToggled: $isHiden))
                 }else if let imageName {
                     Image(imageName)
                         .imageModify(length: imageLength)
-                        .modifier(TapImageAnimation())
+                        .modifier(TapImageAnimation(isToggled: $isHiden))
                 }
             }
+            .opacity(isHiden ? 0.3 : 1)
             #if os(watchOS)
             .padding(.top, 30)
             #endif
             .padding(.bottom, imagePadding)
-            VStack(spacing: contentSpace/2) {
-                Text(LocalizedStringKey(title))
-                    .font(titleFont)
-                    .foregroundStyle(titleColor)
-                    .lineLimit(1)
-                if let subtitle {
-                    Text(LocalizedStringKey(subtitle))
-                        .font(subtitleFont)
-                        .foregroundStyle(subtitleColor)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
+            if !isHiden {
+                VStack(spacing: contentSpace/2) {
+                    Text(LocalizedStringKey(title))
+                        .font(titleFont)
+                        .foregroundStyle(titleColor)
+                        .lineLimit(1)
+                    if let subtitle {
+                        Text(LocalizedStringKey(subtitle))
+                            .font(subtitleFont)
+                            .foregroundStyle(subtitleColor)
+                            .lineLimit(2)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    if let content {
+                        Text(LocalizedStringKey(content))
+                            .font(contentFont)
+                            .lineLimit(8)
+                            .foregroundStyle(contentColor)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
-                if let content {
-                    Text(LocalizedStringKey(content))
-                        .font(contentFont)
-                        .lineLimit(8)
-                        .foregroundStyle(contentColor)
-                        .fixedSize(horizontal: false, vertical: true)
+                
+                if V.self != EmptyView.self {
+                    buttonView()
+                        .padding(.top, contentSpace/2)
                 }
-            }
-            
-            if V.self != EmptyView.self {
-                buttonView()
-                    .padding(.top, contentSpace/2)
             }
         }
         .frame(maxWidth: maxWidth)
@@ -349,6 +354,11 @@ public struct SimplePlaceholder<V: View>: View {
 
 struct TapImageAnimation: ViewModifier {
     @State private var isScaled: Bool = false
+    @Binding var isToggled: Bool
+    
+    init(isToggled: Binding<Bool> = .constant(false)) {
+        self._isToggled = isToggled
+    }
     
     func body(content: Content) -> some View {
         content
@@ -360,9 +370,13 @@ struct TapImageAnimation: ViewModifier {
                 ).repeatCount(1, autoreverses: false),
                 value: isScaled
             )
+            .contentShape(Rectangle())
             .onTapGesture {
+                #if os(iOS)
+                isToggled.toggle()
+                #endif
                 isScaled = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                     isScaled = false
                 }
             }
@@ -372,13 +386,21 @@ struct TapImageAnimation: ViewModifier {
 struct TapSystemIconAnimation: ViewModifier {
     // the animation is triggered each time the value changes
     @State private var isAnimate: Bool = false
+    @Binding var isToggled: Bool
+    
+    init(isToggled: Binding<Bool> = .constant(false)) {
+        self._isToggled = isToggled
+    }
     
     func body(content: Content) -> some View {
         if #available(iOS 17, watchOS 10, macOS 14.0, *) {
             content
                 .symbolEffect(.bounce, value: isAnimate)
                 .onTapGesture {
-                    self.isAnimate.toggle()
+                    #if os(iOS)
+                    isToggled.toggle()
+                    #endif
+                    isAnimate.toggle()
                 }
         }else {
             content
