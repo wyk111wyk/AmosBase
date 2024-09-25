@@ -314,7 +314,6 @@ public struct SimplePlaceholder<V: View>: View {
                         .modifier(TapImageAnimation(isToggled: $isHiden))
                 }
             }
-            .opacity(isHiden ? 0.3 : 1)
             #if os(watchOS)
             .padding(.top, 30)
             #endif
@@ -363,6 +362,7 @@ struct TapImageAnimation: ViewModifier {
     func body(content: Content) -> some View {
         content
             .scaleEffect(isScaled ? 1.1 : 1.0)
+            .opacity(isToggled ? 0.3 : 1)
             .animation(
                 Animation.interpolatingSpring(
                     stiffness: 60,
@@ -373,12 +373,15 @@ struct TapImageAnimation: ViewModifier {
             .contentShape(Rectangle())
             .onTapGesture {
                 #if os(iOS)
-                isToggled.toggle()
-                #endif
+                withAnimation {
+                    isToggled.toggle()
+                }
+                #else
                 isScaled = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                     isScaled = false
                 }
+                #endif
             }
     }
 }
@@ -396,11 +399,15 @@ struct TapSystemIconAnimation: ViewModifier {
         if #available(iOS 17, watchOS 10, macOS 14.0, *) {
             content
                 .symbolEffect(.bounce, value: isAnimate)
+                .opacity(isToggled ? 0.3 : 1)
                 .onTapGesture {
                     #if os(iOS)
-                    isToggled.toggle()
-                    #endif
+                    withAnimation {
+                        isToggled.toggle()
+                    }
+                    #else
                     isAnimate.toggle()
+                    #endif
                 }
         }else {
             content
