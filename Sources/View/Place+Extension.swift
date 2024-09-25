@@ -18,18 +18,21 @@ public extension View {
         type: SimplePlaceholderType? = nil,
         systemImageName: String? = nil,
         imageName: String? = nil,
-        imageLength: CGFloat = 180,
-        imagePadding: CGFloat? = 80,
+        imageLength: CGFloat? = nil,
+        imagePadding: CGFloat? = nil,
         title: String,
         subtitle: String? = nil,
         content: String? = nil,
+        titleFont: Font? = nil,
+        subtitleFont: Font? = nil,
+        contentFont: Font? = nil,
         themeColor: Color? = nil,
         imageColor: Color = .primary,
         titleColor: Color = .primary,
         subtitleColor: Color = .gray,
         contentColor: Color = .secondary,
-        offsetY: CGFloat = 0,
-        maxWidth: CGFloat = 250,
+        offsetY: CGFloat? = nil,
+        maxWidth: CGFloat? = nil,
         @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }) -> some View {
             modifier(
                 SimplePlaceholderModify(
@@ -37,16 +40,19 @@ public extension View {
                     type: type,
                     systemImageName: systemImageName,
                     imageName: imageName,
-                    imageLength: imageLength,
-                    imagePadding: imagePadding,
                     title: title,
                     subtitle: subtitle,
                     contentText: content,
+                    titleFont: titleFont,
+                    subtitleFont: subtitleFont,
+                    contentFont: contentFont,
                     themeColor: themeColor,
                     imageColor: imageColor,
                     titleColor: titleColor,
                     subtitleColor: subtitleColor,
                     contentColor: contentColor,
+                    imageLength: imageLength,
+                    imagePadding: imagePadding,
                     offsetY: offsetY,
                     maxWidth: maxWidth,
                     buttonView: buttonView
@@ -61,11 +67,13 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
         
     var systemImageName: String? = nil
     var imageName: String? = nil
-    var imageLength: CGFloat = 120
-    var imagePadding: CGFloat? = 80
     var title: String
     var subtitle: String? = nil
     var contentText: String? = nil
+    
+    var titleFont: Font? = nil
+    var subtitleFont: Font? = nil
+    var contentFont: Font? = nil
     
     var themeColor: Color? = nil
     var imageColor: Color = .primary
@@ -73,8 +81,10 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
     var subtitleColor: Color = .gray
     var contentColor: Color = .secondary
     
-    var offsetY: CGFloat = -30
-    var maxWidth: CGFloat = 250
+    var imageLength: CGFloat? = nil
+    var imagePadding: CGFloat? = nil
+    var offsetY: CGFloat? = nil
+    var maxWidth: CGFloat? = nil
     @ViewBuilder var buttonView: () -> V
     
     func body(content: Content) -> some View {
@@ -162,65 +172,105 @@ public struct SimplePlaceholder<V: View>: View {
     let subtitleColor: Color
     let contentColor: Color
     
-    let imageLength: CGFloat
-    let imagePadding: CGFloat?
-    let titleFont: Font
-    let contentSpace: CGFloat
-    let offsetY: CGFloat
-    let maxWidth: CGFloat
+    var imageLength: CGFloat
+    var imagePadding: CGFloat?
+    var titleFont: Font
+    var subtitleFont: Font
+    var contentFont: Font
+    var contentSpace: CGFloat
+    var offsetY: CGFloat
+    var maxWidth: CGFloat
     @ViewBuilder let buttonView: () -> V
     
     @State private var isAnimate = false
     
-    public init(type: SimplePlaceholderType? = nil,
-                systemImageName: String? = nil,
-                imageName: String? = nil,
-                title: String,
-                subtitle: String? = nil,
-                content: String? = nil,
-                themeColor: Color? = nil,
-                imageColor: Color = .primary,
-                titleColor: Color = .primary,
-                subtitleColor: Color = .gray,
-                contentColor: Color = .secondary,
-                imageLength: CGFloat = 120,
-                imagePadding: CGFloat? = 80,
-                titleFont: Font = .title,
-                contentSpace: CGFloat = 15,
-                offsetY: CGFloat = -10,
-                maxWidth: CGFloat = 250,
-                @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }) {
+    public init(
+        type: SimplePlaceholderType? = nil,
+        systemImageName: String? = nil,
+        imageName: String? = nil,
+        title: String,
+        subtitle: String? = nil,
+        content: String? = nil,
+        themeColor: Color? = nil,
+        imageColor: Color = .primary,
+        titleColor: Color = .primary,
+        subtitleColor: Color = .gray,
+        contentColor: Color = .secondary,
+        imageLength: CGFloat? = nil,
+        imagePadding: CGFloat? = nil,
+        titleFont: Font? = nil,
+        subtitleFont: Font? = nil,
+        contentFont: Font? = nil,
+        contentSpace: CGFloat? = nil,
+        offsetY: CGFloat? = nil,
+        maxWidth: CGFloat? = nil,
+        @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }
+    ) {
         self.type = type
         self.systemImageName = systemImageName
         self.imageName = imageName
         self.title = title
         self.subtitle = subtitle
         self.content = content
-        
-        #if os(watchOS)
-        self.titleFont = .system(size: 20, weight: .medium)
-        self.imageLength = 76
-        self.imagePadding = 8
-        self.contentSpace = 8
-        self.offsetY = 0
-        self.maxWidth = 120
-        #elseif os(iOS) || targetEnvironment(macCatalyst)
-        self.titleFont = titleFont
-        self.imageLength = imageLength
-        self.imagePadding = imagePadding
-        self.contentSpace = contentSpace
-        self.offsetY = offsetY
-        self.maxWidth = maxWidth
-        #else
-        self.titleFont = titleFont
-        self.imageLength = 100
-        self.imagePadding = 40
-        self.contentSpace = contentSpace
-        self.offsetY = offsetY
-        self.maxWidth = maxWidth
-        #endif
         self.buttonView = buttonView
         
+        // 样式设计
+        #if os(watchOS)
+        self.titleFont = .system(size: 22, weight: .medium)
+        self.subtitleFont = .system(size: 15, weight: .medium)
+        self.contentFont = .footnote
+        self.imageLength = 76
+        self.imagePadding = 6
+        self.contentSpace = 12
+        self.offsetY = 0
+        self.maxWidth = 140
+        #elseif os(iOS)
+        self.titleFont = .title
+        self.subtitleFont = .headline
+        self.contentFont = .footnote
+        self.imageLength = 130
+        self.imagePadding = 30
+        self.contentSpace = 15
+        self.offsetY = -26
+        self.maxWidth = 250
+        #elseif os(macOS) || targetEnvironment(macCatalyst)
+        self.titleFont = .title
+        self.subtitleFont = .headline
+        self.contentFont = .body
+        self.imageLength = 100
+        self.imagePadding = 30
+        self.contentSpace = 18
+        self.offsetY = -10
+        self.maxWidth = 300
+        #endif
+        
+        // 用户配置
+        if let titleFont {
+            self.titleFont = titleFont
+        }
+        if let subtitleFont {
+            self.subtitleFont = subtitleFont
+        }
+        if let contentFont {
+            self.contentFont = contentFont
+        }
+        if let imageLength {
+            self.imageLength = imageLength
+        }
+        if let imagePadding {
+            self.imagePadding = imagePadding
+        }
+        if let contentSpace {
+            self.contentSpace = contentSpace
+        }
+        if let offsetY {
+            self.offsetY = offsetY
+        }
+        if let maxWidth {
+            self.maxWidth = maxWidth
+        }
+        
+        // 主题颜色
         self.themeColor = themeColor
         if let themeColor {
             self.imageColor = themeColor
@@ -271,26 +321,25 @@ public struct SimplePlaceholder<V: View>: View {
                     .font(titleFont)
                     .foregroundStyle(titleColor)
                     .lineLimit(1)
-            #if !os(watchOS)
                 if let subtitle {
                     Text(LocalizedStringKey(subtitle))
-                        .font(.headline)
+                        .font(subtitleFont)
                         .foregroundStyle(subtitleColor)
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 if let content {
                     Text(LocalizedStringKey(content))
-                        .font(.footnote)
+                        .font(contentFont)
                         .lineLimit(8)
                         .foregroundStyle(contentColor)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-            #endif
             }
             
             if V.self != EmptyView.self {
                 buttonView()
+                    .padding(.top, contentSpace/2)
             }
         }
         .frame(maxWidth: maxWidth)
@@ -344,7 +393,9 @@ struct TapSystemIconAnimation: ViewModifier {
         }
         .navigationTitle("Navi Title")
     }
+    #if os(macOS)
     .frame(minWidth: 500, minHeight: 400)
+    #endif
     .simplePlaceholder(
         isPresent: true,
         type: .favorEmpty,
