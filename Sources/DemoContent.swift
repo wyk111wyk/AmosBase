@@ -104,7 +104,7 @@ public struct DemoContent<V: View>: View {
             #if !os(watchOS)
             .listStyle(.sidebar)
             #endif
-            .navigationSplitViewColumnWidth(ideal: 180, max: 250)
+            .navigationSplitViewColumnWidth(ideal: 250, max: 400)
             .navigationTitle("AmosBase".localized(bundle: .module))
         } detail: {
             if let selectedPage {
