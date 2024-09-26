@@ -18,6 +18,8 @@ public struct DemoContent<V: View>: View {
     @State private var showMapShare = false
     @State private var showPositionShare = false
     
+    @State private var showWelcomePage = false
+    
     let iCloudIdentifier: String
     @ViewBuilder let stateView: () -> V
     public init(
@@ -43,12 +45,32 @@ public struct DemoContent<V: View>: View {
                         Label("Toast - Sheet页面", systemImage: "rectangle.portrait.bottomthird.inset.filled")
                     }
                     .buttonStyle(.borderless)
+                    .sheet(isPresented: $showToastPage) {
+                        NavigationStack {
+                            DemoSimpleToast()
+                                .navigationTitle("Sheet页面测试")
+                                .buttonCircleNavi(role: .cancel) { showToastPage.toggle() }
+                        }
+                    }
                 }
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
                         NavigationLink(value: page) {
                             Label(page.title, systemImage: page.icon)
                         }
+                    }
+                    Button {
+                        showWelcomePage.toggle()
+                    } label: {
+                        Label("Welcome - 欢迎页", systemImage: "list.bullet.below.rectangle")
+                    }
+                    .buttonStyle(.borderless)
+                    .sheet(isPresented: $showWelcomePage) {
+                        SimpleWelcome<EmptyView>(
+                            allIntroItems: .allExamples,
+                            appName: "AmosBase",
+                            continueType: .dismiss)
+                        .interactiveDismissDisabled(true)
                     }
                 }
                 Section("Data - 数据处理") {
@@ -84,13 +106,6 @@ public struct DemoContent<V: View>: View {
             #endif
             .navigationSplitViewColumnWidth(ideal: 180, max: 250)
             .navigationTitle("AmosBase".localized(bundle: .module))
-            .sheet(isPresented: $showToastPage) {
-                NavigationStack {
-                    DemoSimpleToast()
-                        .navigationTitle("Sheet页面测试")
-                        .buttonCircleNavi(role: .cancel) { showToastPage.toggle() }
-                }
-            }
         } detail: {
             if let selectedPage {
                 switch selectedPage.id {
@@ -130,12 +145,7 @@ public struct DemoContent<V: View>: View {
                 case 14: DemoSimpleData()
                 case 15: DemoSimpleLanguage()
                 case 16: DemoSimpleText()
-                case 17:
-                    SimpleWelcome<EmptyView>(
-                        allIntroItems: .allExamples,
-                        appName: "AmosBase",
-                        continueType: .dismiss)
-                case 18: DemoSimpleLoad()
+                case 17: DemoSimpleLoad()
                 default: Text(selectedPage.title)
                 }
             }
@@ -205,14 +215,13 @@ struct Page: Identifiable, Equatable, Hashable {
         [.init(id: 2, title: "UI - 页面元素", icon: "uiwindow.split.2x1"),
          .init(id: 3, title: "Card - 卡片", icon: "rectangle.portrait.on.rectangle.portrait.angled"),
          .init(id: 5, title: "Device - 设备信息", icon: "iphone.gen3"),
-         .init(id: 6, title: "Holder - 占位符", icon: "doc.text.image"),
-         .init(id: 17, title: "Welcome - 欢迎页", icon: "list.bullet.below.rectangle")]
+         .init(id: 6, title: "Holder - 占位符", icon: "doc.text.image")]
     }
     
     static func webSection() -> [Self] {
         [.init(id: 7, title: "iCloud - 云存储", icon: "arrow.clockwise.icloud"),
          .init(id: 8, title: "Upload - 图床", icon: "photo.badge.arrow.down"),
-         .init(id: 18, title: "FTP - 网络传输", icon: "arrow.left.arrow.right.square"),
+         .init(id: 17, title: "FTP - 网络传输", icon: "arrow.left.arrow.right.square"),
          .init(id: 4, title: "Web - 网页浏览", icon: "safari")]
     }
     
