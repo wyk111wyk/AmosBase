@@ -39,6 +39,8 @@ public struct SimpleMap: View {
     public let isSearchPOI: Bool
     public let saveAction: (SimpleMapMarker) -> Void
     
+    @State private var state: GestureState = .init(initialValue: CGPoint())
+    
     public init(
         isPushin: Bool = true,
         pinMarker: SimpleMapMarker? = nil,
@@ -92,6 +94,9 @@ public struct SimpleMap: View {
                     centerMarker.marker
                 }
             }
+//            .onTapGesture { position in
+//                debugPrint(position)
+//            }
             .mapStyle(
                 .standard(
                     elevation: .realistic,
@@ -199,7 +204,12 @@ extension SimpleMap {
         displayIndex = (displayIndex + 1) % searchResults.count
         guard displayIndex < searchResults.count else { return }
         selectedMarker = searchResults[displayIndex]
-        position = .camera(.init(centerCoordinate: searchResults[displayIndex].coordinate, distance: 1800))
+        position = .camera(
+            .init(
+                centerCoordinate: searchResults[displayIndex].coordinate,
+                distance: 1800
+            )
+        )
     }
     
     private func clearSearch() {
@@ -212,7 +222,7 @@ extension SimpleMap {
             if let place = await context.camera.centerCoordinate.toPlace(
                 locale: .zhHans
             ) {
-                debugPrint(place)
+//                debugPrint(place)
                 self.centerMarker = .init(
                     title: place.name ?? place.toFullAddress(),
                     systemIcon: "smallcircle.filled.circle.fill",

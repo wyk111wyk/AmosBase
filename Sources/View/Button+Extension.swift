@@ -43,7 +43,7 @@ public struct SimpleMiddleButton: View {
         _ title: LocalizedStringKey,
         systemImageName: String? = nil,
         role: ButtonRole? = nil,
-        rowVisibility: Visibility = .hidden,
+        rowVisibility: Visibility = .visible,
         bundle: Bundle = .main,
         key: KeyEquivalent? = nil,
         modifiers: EventModifiers? = nil,

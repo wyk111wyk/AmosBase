@@ -92,13 +92,18 @@ public extension CLLocationCoordinate2D {
         return CLLocation(latitude: self.latitude, longitude: self.longitude)
     }
 
-    /// longitude 120, latitude 29
+    /// longitude(120), latitude(29)
     func toAmapString() -> String {
         if self.longitude == 0 && self.latitude == 0 {
             return "N/A"
         }else {
             return "\(self.longitude),\(self.latitude)"
         }
+    }
+    
+    /// latitude,longitude
+    func toGoogleString() -> String {
+        "\(self.latitude),\(self.longitude)"
     }
     
     /// 判断是否是国内的坐标

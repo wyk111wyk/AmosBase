@@ -281,11 +281,15 @@ public extension View{
                 backgroundTap: backgroundTap,
                 completion: completion))}
     /// 简单UI组件 - 顶部错误提示（使用 Error）
-    func simpleErrorToast(error: Binding<Error?>,
-                          displayMode: ToastView.DisplayMode = .topToast) -> some View {
-        self.simpleErrorToast(presentState: .isOptionalPresented(error),
-                              displayMode: displayMode,
-                              title: error.wrappedValue?.localizedDescription ?? "发生错误")
+    func simpleErrorToast(
+        error: Binding<Error?>,
+        displayMode: ToastView.DisplayMode = .topToast
+    ) -> some View {
+        self.simpleErrorToast(
+            presentState: .isOptionalPresented(error),
+            displayMode: displayMode,
+            title: error.wrappedValue?.localizedDescription ?? "发生错误"
+        )
     }
     
     /// 简单UI组件 - 顶部错误提示（可进一步定制）
@@ -309,13 +313,18 @@ public extension View{
             title: title,
             subTitle: subtitle
         )
-        return modifier(ToastModifier(presentState: presentState,
-                                      withHaptic: withHaptic,
-                                      isDebug: isDebug,
-                                      toast: { errorToast },
-                                      onTap: onTap,
-                                      backgroundTap: backgroundTap,
-                                      completion: completion))
+        return modifier(
+            ToastModifier(
+                presentState: presentState,
+                withHaptic: withHaptic,
+                isDebug: isDebug,
+                toast: {
+                    errorToast
+                },
+                onTap: onTap,
+                backgroundTap: backgroundTap,
+                completion: completion)
+        )
     }
     
     /// 简单UI组件 - 中央成功动画提示（可进一步定制）
@@ -339,13 +348,18 @@ public extension View{
             title: title,
             subTitle: subtitle
         )
-        return modifier(ToastModifier(presentState: presentState,
-                                      withHaptic: withHaptic,
-                                      isDebug: isDebug,
-                                      toast: { errorToast },
-                                      onTap: onTap,
-                                      backgroundTap: backgroundTap,
-                                      completion: completion))
+        return modifier(
+            ToastModifier(
+                presentState: presentState,
+                withHaptic: withHaptic,
+                isDebug: isDebug,
+                toast: {
+                    errorToast
+                },
+                onTap: onTap,
+                backgroundTap: backgroundTap,
+                completion: completion)
+        )
     }
     
     /// 简单UI组件 - 中央载入提示（可进一步定制）
@@ -370,16 +384,17 @@ public extension View{
             subTitle: subtitle
         )
         return modifier(
-            ToastModifier(presentState: presentState,
-                          tapToDismiss: tapToDismiss,
-                          withHaptic: withHaptic,
-                          isDebug: isDebug,
-                          toast: {
-                              errorToast
-                          },
-                          onTap: onTap,
-                          backgroundTap: backgroundTap,
-                          completion: completion)
+            ToastModifier(
+                presentState: presentState,
+                tapToDismiss: tapToDismiss,
+                withHaptic: withHaptic,
+                isDebug: isDebug,
+                toast: {
+                    errorToast
+                },
+                onTap: onTap,
+                backgroundTap: backgroundTap,
+                completion: completion)
         )
     }
 }

@@ -129,6 +129,7 @@ public struct SimpleCell<V: View>: View {
                     Text(LocalizedStringKey(title), bundle: localizationBundle)
                         .font(titleFont)
                         .foregroundColor(titleColor)
+                        .multilineTextAlignment(.leading)
                     Group {
                         if let content = content, !content.isEmpty,
                            let contentSystemImage = contentSystemImage, contentSystemImage.count > 0 {

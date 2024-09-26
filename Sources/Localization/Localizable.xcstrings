@@ -43,6 +43,9 @@
     "%lld 字" : {
 
     },
+    "🔍 搜索" : {
+
+    },
     "🔍 搜索：地址 ｜ 地点" : {
 
     },
@@ -220,23 +223,6 @@
         }
       }
     },
-    "Bar Progress" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "条形进度"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "條形進度"
-          }
-        }
-      }
-    },
     "Bottom Toasts" : {
       "localizations" : {
         "zh-Hans" : {
@@ -395,23 +381,6 @@
         }
       }
     },
-    "Circular Progress" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "环形进度"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "環形進度"
-          }
-        }
-      }
-    },
     "Color Hex" : {
       "localizations" : {
         "zh-Hans" : {
@@ -490,6 +459,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "確認 - %@"
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "继续"
           }
         }
       }
@@ -884,7 +864,14 @@
 
     },
     "Network" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "网络"
+          }
+        }
+      }
     },
     "Only for iOS" : {
 
@@ -929,6 +916,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選擇器"
+          }
+        }
+      }
+    },
+    "Privacy Policy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隐私条款"
           }
         }
       }
@@ -1082,6 +1080,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選擇條"
+          }
+        }
+      }
+    },
+    "slogen" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solve critical \\\"little things\\\" in life"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解决生活中重要的『小事』"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解決生活中重要的『小事』"
           }
         }
       }
@@ -1277,6 +1298,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "寬：%@"
+          }
+        }
+      }
+    },
+    "Welcome to use" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "欢迎使用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "歡迎使用"
           }
         }
       }
@@ -1483,6 +1521,9 @@
 
     },
     "缩放图片（宽300）" : {
+
+    },
+    "网络传输 - Fetch" : {
 
     },
     "自定义颜色" : {

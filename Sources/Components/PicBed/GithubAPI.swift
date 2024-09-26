@@ -42,155 +42,77 @@ extension GithubAPI {
         path: String,
         parameters: [String : String]? = nil) async throws -> T?
     {
-        return try await withCheckedThrowingContinuation({ contionuation in
-            self.get(
-                url: fullUrl(path),
-                parameters: parameters
-            ) {(data, response, error) in
-                if let error {
-                    contionuation.resume(throwing: error)
-                }else {
-                    if let httpResponse = response as? HTTPURLResponse {
-                        // 获取状态码
-                        let statusCode = httpResponse.statusCode
-                        debugPrint("HTTP 状态码: \(statusCode)")
-                        
-                        if statusCode == 200,
-                           let model = data?.decode(type: T.self) {
-                            contionuation.resume(returning: model)
-                        }else {
-                            let error = GithubError.error(from: statusCode)
-                            contionuation.resume(throwing: error)
-                        }
-                    }
-                }
-            }
-        })
-    }
-    
-    private func get(
-        url: String,
-        parameters: [String: String]? = nil,
-        body: Data? = nil,
-        callbackQueue: DispatchQueue = .main,
-        completion: @escaping BaseAPICompletion
-    ) {
-        let request = BaseRequest(
-            url: url,
+        let result = try await SimpleWeb().request(
             method: .GET,
-            parameters: parameters,
-            headers: headers,
-            body: body
+            url: fullUrl(path),
+            parameters: parameters
         )
-        let buildRequest = request.request()
-        if let urlRequest = buildRequest.request {
-            let task = session.dataTask(with: urlRequest) { (data, response, error) in
-                callbackQueue.async { completion(data, response, error) }
+        
+        if let httpResponse = result.response as? HTTPURLResponse {
+            // 获取状态码
+            let statusCode = httpResponse.statusCode
+            debugPrint("GET HTTP 状态码: \(statusCode)")
+            
+            if statusCode == 200,
+               let model = result.data?.decode(type: T.self) {
+                return model
+            }else {
+                let error = GithubError.error(from: statusCode)
+                throw error
             }
-            task.resume()
-        } else {
-            callbackQueue.async { completion(nil, nil, buildRequest.error) }
         }
+        
+        return nil
     }
-}
-
-// Put
-extension GithubAPI {
+    
+    // Put
     public func gh_put(path: String, parameters: [String : String]? = nil, body: Data?) async throws -> Data? {
-        return try await withCheckedThrowingContinuation({ contionuation in
-            self.put(
-                url: fullUrl(path),
-                parameters: parameters,
-                body: body
-            ) {(data, response, error) in
-                if let error {
-                    contionuation.resume(throwing: error)
-                }else {
-                    if let httpResponse = response as? HTTPURLResponse {
-                        // 获取状态码
-                        let statusCode = httpResponse.statusCode
-                        debugPrint("HTTP 状态码: \(statusCode)")
-                        
-                        if statusCode == 200 || statusCode == 201 {
-                            contionuation.resume(returning: data)
-                        }else {
-                            let error = GithubError.error(from: statusCode)
-                            contionuation.resume(throwing: error)
-                        }
-                    }
-                }
-            }
-        })
-    }
-    
-    private func put(url: String, parameters: [String: String]? = nil, body: Data?, callbackQueue: DispatchQueue = .main, completion: @escaping BaseAPICompletion) {
-        let request = BaseRequest(
-            url: url,
+        let result = try await SimpleWeb().request(
             method: .PUT,
+            url: fullUrl(path),
             parameters: parameters,
-            headers: headers,
             body: body
         )
-        let buildRequest = request.request()
-        if let urlRequest = buildRequest.request {
-            let task = session.dataTask(with: urlRequest) { (data, response, error) in
-                callbackQueue.async { completion(data, response, error) }
+        
+        if let httpResponse = result.response as? HTTPURLResponse {
+            // 获取状态码
+            let statusCode = httpResponse.statusCode
+            debugPrint("PUT HTTP 状态码: \(statusCode)")
+            
+            if statusCode == 200 || statusCode == 201 {
+                return result.data
+            }else {
+                let error = GithubError.error(from: statusCode)
+                throw error
             }
-            task.resume()
-        } else {
-            callbackQueue.async { completion(nil, nil, buildRequest.error) }
         }
-    }
-}
-
-// Delete
-extension GithubAPI {
-    public func delete(path: String, parameters: [String : String]? = nil, body: Data?) async throws -> Bool {
-        return try await withCheckedThrowingContinuation({ contionuation in
-            self.delete(
-                url: fullUrl(path),
-                parameters: parameters,
-                headers: headers,
-                body: body
-            ) {(data, response, error) in
-                if let error {
-                    contionuation.resume(throwing: error)
-                }else {
-                    if let httpResponse = response as? HTTPURLResponse {
-                        // 获取状态码
-                        let statusCode = httpResponse.statusCode
-                        debugPrint("HTTP 状态码: \(statusCode)")
-                        
-                        if statusCode == 200 {
-                            contionuation.resume(returning: true)
-                        }else {
-                            let error = GithubError.error(from: statusCode)
-                            contionuation.resume(throwing: error)
-                        }
-                    }else {
-                        contionuation.resume(returning: false)
-                    }
-                }
-            }
-        })
+        
+        return nil
     }
     
-    private func delete(url: String, parameters: [String: String]? = nil, headers: [String: String]? = nil, body: Data?, callbackQueue: DispatchQueue = .main, completion: @escaping BaseAPICompletion) {
-        let request = BaseRequest(
-            url: url,
+    // Delete
+    public func delete(path: String, parameters: [String : String]? = nil, body: Data?) async throws -> Bool {
+        let result = try await SimpleWeb().request(
             method: .DELETE,
+            url: fullUrl(path),
             parameters: parameters,
             headers: headers,
             body: body
         )
-        let buildRequest = request.request()
-        if let urlRequest = buildRequest.request {
-            let task = session.dataTask(with: urlRequest) { (data, response, error) in
-                callbackQueue.async { completion(data, response, error) }
+        
+        if let httpResponse = result.response as? HTTPURLResponse {
+            // 获取状态码
+            let statusCode = httpResponse.statusCode
+            debugPrint("DELETE HTTP 状态码: \(statusCode)")
+            
+            if statusCode == 200 || statusCode == 201 {
+                return true
+            }else {
+                let error = GithubError.error(from: statusCode)
+                throw error
             }
-            task.resume()
-        } else {
-            callbackQueue.async { completion(nil, nil, buildRequest.error) }
         }
+        
+        return false
     }
 }

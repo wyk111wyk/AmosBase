@@ -55,7 +55,7 @@ public class SimpleLocationHelper: NSObject, ObservableObject {
 extension SimpleLocationHelper: CLLocationManagerDelegate {
     // notDetermined = 0 
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        debugPrint("改变地点权限：\(manager.authorizationStatus)")
+//        debugPrint("改变地点权限：\(manager.authorizationStatus)")
         startLocation()
     }
     
@@ -73,7 +73,7 @@ extension SimpleLocationHelper: CLLocationManagerDelegate {
     }
     
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        debugPrint("定位失败:\(error.localizedDescription)")
+        debugPrint("定位失败:\(error)")
         isLoading = false
     }
 }

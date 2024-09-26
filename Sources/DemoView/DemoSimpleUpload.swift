@@ -33,6 +33,9 @@ public struct DemoSimpleUpload: View {
         NavigationStack {
             Form {
                 Section {
+                    tokenSection()
+                }
+                Section {
                     imagePicker()
                     clipImageView()
                     imageInfo()
@@ -40,7 +43,6 @@ public struct DemoSimpleUpload: View {
                     Text("图片信息")
                 }
                 Section {
-                    tokenSection()
                     Button {
                         imageUpload()
                     } label: {
@@ -82,23 +84,12 @@ public struct DemoSimpleUpload: View {
         .simpleErrorToast(error: $error)
     }
     
-    @ViewBuilder
     private func tokenSection() -> some View {
-        if gitToken.isEmpty || showGithubKey {
-            TextField("Github密钥", text: $gitToken, axis: .vertical)
-                .lineLimit(nil)
-                .scrollDismissesKeyboard(.automatic)
-                .onSubmit { showGithubKey = false }
-        }else {
-            Button {
-                showGithubKey = true
-            } label: {
-                HStack {
-                    Text("Github密钥")
-                    Text(gitToken.lastCharacters())
-                }
-            }
-        }
+        SimpleTokenTextField(
+            $gitToken,
+            tokenTitle: "Github密钥",
+            prompt: "Github密钥"
+        )
     }
     
     @ViewBuilder

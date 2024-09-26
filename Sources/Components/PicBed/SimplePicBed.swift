@@ -27,7 +27,7 @@ public class SimplePicBed: GithubAPI {
             let fileList: [GithubRepoFileListModel]? = try await self.gh_get(path: fetchPath)
             return fileList ?? []
         }catch {
-            debugPrint("读取所有文件失败: \(error.localizedDescription)")
+            debugPrint("读取所有文件失败: \(error)")
             throw error
         }
     }
@@ -45,7 +45,7 @@ public class SimplePicBed: GithubAPI {
         do {
             return try await self.delete(path: detetePath, body: bodyJson.jsonData())
         }catch {
-            debugPrint("删除一个文件\(gitImage.name)失败: \(error.localizedDescription)")
+            debugPrint("删除一个文件\(gitImage.name)失败: \(error)")
             throw error
         }
     }
@@ -77,7 +77,7 @@ public class SimplePicBed: GithubAPI {
             
             return responseData?.decode(type: GithubRepoFileAddModel.self)?.content
         }catch {
-            debugPrint("上传文件失败: \(error.localizedDescription)")
+            debugPrint("上传文件失败: \(error)")
             throw error
         }
     }

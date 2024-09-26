@@ -85,6 +85,30 @@ public extension Swift.Optional where Wrapped == String {
     }
 }
 
+public extension Optional where Wrapped == Double {
+    var wrapped: Double {
+        self ?? 0.0
+    }
+}
+
+public extension Optional where Wrapped == Int {
+    var wrapped: Int {
+        self ?? 0
+    }
+}
+
+public extension Optional where Wrapped == CGFloat {
+    var wrapped: CGFloat {
+        self ?? 0.0
+    }
+}
+
+public extension Optional where Wrapped == Float {
+    var wrapped: Float {
+        self ?? 0.0
+    }
+}
+
 public extension Optional where Wrapped: RawRepresentable, Wrapped.RawValue: Equatable {
 
     // swiftlint:disable missing_swifterswift_prefix

@@ -53,7 +53,7 @@ public class SimpleCloudHelper {
             debugPrint("iCloud Identifier: \(self.contain.containerIdentifier ?? "N/A")")
             self.contain.accountStatus { status, error in
                 if let error {
-                    debugPrint("iCloud Container Error: \(error.localizedDescription)")
+                    debugPrint("iCloud Container Error: \(error)")
                 }else {
                     debugPrint("iCloud Container Status: \(status.title)")
                 }

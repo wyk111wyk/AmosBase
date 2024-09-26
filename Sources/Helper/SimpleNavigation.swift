@@ -49,12 +49,14 @@ public struct SimpleNavigation {
         self.mode = mode
     }
     
-    public init(title: String,
-         content: String = "ak23",
-         lat: Double,
-         long: Double,
-         address: String,
-         mode: MapShareMode = .position) {
+    public init(
+        title: String,
+        content: String = "ak23",
+        lat: Double,
+        long: Double,
+        address: String,
+        mode: MapShareMode = .position
+    ) {
         self.title = title
         self.content = content
         self.lat = lat

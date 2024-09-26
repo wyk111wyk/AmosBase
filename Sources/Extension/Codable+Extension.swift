@@ -85,14 +85,38 @@ public extension Data {
         }
     }
     
-#if canImport(Foundation)
-    func jsonToObject<T>(prettify: Bool = false) -> T? {
+    #if canImport(Foundation)
+    func jsonToObject<T>() -> T? {
         guard let jsonData = try? JSONSerialization.jsonObject(with: self) as? T else {
             return nil
         }
         return jsonData
     }
-#endif
+    #endif
+    
+    @discardableResult
+    func toJsonPrint() -> String {
+        do {
+            // 使用JSONSerialization将Data转换为JSON对象
+            let jsonObject = try JSONSerialization.jsonObject(with: self, options: [])
+            
+            // 检查jsonObject类型
+            if let jsonDict = jsonObject as? [String: Any] {
+                debugPrint("JSON Dictionary: \(jsonDict)")
+                return jsonDict.description
+            } else if let jsonArray = jsonObject as? [[String: Any]] {
+                debugPrint("JSON Array: \(jsonArray)")
+                return jsonArray.description
+            } else {
+                debugPrint("JSON is not a valid dictionary or array")
+                return "JSON is not a valid dictionary or array"
+            }
+        } catch {
+            let errorMsg = "Error converting Data to JSON: \(error)"
+            debugPrint(errorMsg)
+            return errorMsg
+        }
+    }
 }
 
 public extension NSManagedObject {

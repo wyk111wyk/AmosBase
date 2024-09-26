@@ -45,9 +45,9 @@ public extension String {
     ///        print(str) // prints "it's%20easy%20to%20encode%20strings"
     ///
     @discardableResult
-    mutating func urlEncode(_ encoding: CharacterSet = .urlHostAllowed) -> String {
+    func urlEncode(_ encoding: CharacterSet = .urlQueryAllowed) -> String {
         if let encoded = addingPercentEncoding(withAllowedCharacters: encoding) {
-            self = encoded
+            return encoded
         }
         return self
     }
@@ -59,9 +59,9 @@ public extension String {
     ///        print(str) // prints "it's easy to decode strings"
     ///
     @discardableResult
-    mutating func urlDecode() -> String {
+    func urlDecode() -> String {
         if let decoded = removingPercentEncoding {
-            self = decoded
+            return decoded
         }
         return self
     }
@@ -73,11 +73,35 @@ public extension String {
         URL(string: self)
     }
     
+    /// 作为网址添加参数
+    @discardableResult
+    func addParams(_ params: [String: String]) -> String {
+//        guard var urlComponents = URLComponents(string: self) else {
+//            return self
+//        }
+//        debugPrint(urlComponents.urlString)
+//        debugPrint(params)
+//        urlComponents.queryItems = params.map { URLQueryItem(name: $0.key, value: $0.value) }
+//        return urlComponents.urlString
+        var paramsStr = ""
+        for (key, value) in params {
+            if value.isNotEmpty {
+                paramsStr += "&\(key)=\(value.urlEncode())"
+            }
+        }
+        if !paramsStr.isEmpty {
+            paramsStr.removeFirst(1)
+        }
+        
+        let urlString = self + "?" + paramsStr
+        return urlString
+    }
+    
     /// SwifterSwift: 清除空格。String with no spaces or new lines in beginning and end.
     ///
     ///        "   hello  \n".trimmed -> "hello"
     ///
-    func trimmed() -> String {
+    func removeSpaces() -> String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
     }
     

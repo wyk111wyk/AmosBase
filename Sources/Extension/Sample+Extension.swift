@@ -13,6 +13,7 @@ public struct DemoPickerModel: SimplePickerItem {
     public let id: UUID
     public var title: String
     public var titleColor: Color?
+    
     public var iconName: String?
     public var systemImage: String?
     public var contentSystemImage: String?

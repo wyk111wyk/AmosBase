@@ -138,6 +138,14 @@ public extension SFImage {
         SFImage(packageResource: "AmosLogoW", ofType: "png")!
     }
     
+    static var logoNameWhite: SFImage {
+        SFImage(packageResource: "Logo-White", ofType: "png")!
+    }
+    
+    static var logoNameBlack: SFImage {
+        SFImage(packageResource: "Logo-Black", ofType: "png")!
+    }
+    
     static var lady01Image: SFImage {
         SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
     }
@@ -341,7 +349,7 @@ public extension SFImage {
                 PHAssetChangeRequest.creationRequestForAsset(from: self)
             }) { isSuccessed, error in
                 if let error {
-                    debugPrint("图片保存错误: \(error.localizedDescription)")
+                    debugPrint("图片保存错误: \(error)")
                     continuation.resume(throwing: error)
                 }else {
                     if isSuccessed {
@@ -828,7 +836,7 @@ public extension NSImage {
                 do {
                     try imageData.write(to: url)
                 } catch {
-                    print(error.localizedDescription)
+                    debugPrint(error)
                 }
             }
         }

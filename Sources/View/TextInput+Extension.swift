@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-#if !os(watchOS)
+//#if !os(watchOS)
 /// 完整的带边框的文字输入框
 public struct SimpleTextInputView: View {
     @Environment(\.dismiss) private var dismissPage
@@ -149,17 +149,6 @@ public struct SimpleTextInputView: View {
     }
 }
 
-#Preview("Input"){
-    SimpleTextInputView(
-        pageName: "演示输入",
-        title: "输入标题",
-        content: "输入短文字",
-        showTitle: true,
-        showContent: true,
-        tintColor: .red
-    ){_ in}
-}
-
 /// 多行文本输入框：带清空按钮
 public struct SimpleTextField<
     Menus: View,
@@ -168,6 +157,7 @@ public struct SimpleTextField<
     @Binding var inputText: String
     @FocusState private var focused: Bool
     
+    let title: String
     let prompt: String
     let systemImage: String?
     let startLine: Int
@@ -181,10 +171,11 @@ public struct SimpleTextField<
     
     public init(
         _ inputText: Binding<String>,
+        title: String = "",
         prompt: String = "请输入文本",
         systemImage: String? = nil,
-        startLine: Int = 5,
-        endLine: Int = 12,
+        startLine: Int = 4,
+        endLine: Int = 10,
         tintColor: Color = .accentColor,
         style: S = .plain,
         isFocused: Bool = false,
@@ -192,6 +183,7 @@ public struct SimpleTextField<
         @ViewBuilder moreMenus: @escaping () -> Menus = { EmptyView() }
     ) {
         self._inputText = inputText
+        self.title = title
         self.prompt = prompt
         self.systemImage = systemImage
         if endLine <= startLine {
@@ -210,7 +202,7 @@ public struct SimpleTextField<
     
     public var body: some View {
         TextField(
-            "",
+            title,
             text: $inputText,
             prompt: Text(prompt),
             axis: .vertical
@@ -224,10 +216,10 @@ public struct SimpleTextField<
         .focused($focused)
         .tint(tintColor)
         .padding(.bottom, endLine > 1 ? 28 : 0)
-        .onDropText() { text in inputText = text }
+        #if os(iOS)
         .overlay(alignment: .trailing) {
             if endLine == 1 {
-                if canClear {
+                if canClear && !inputText.isEmpty {
                     Menu {
                         moreMenus()
                     } label: {
@@ -241,6 +233,9 @@ public struct SimpleTextField<
                 }
             }
         }
+        #endif
+        #if !os(watchOS)
+        .onDropText() { text in inputText = text }
         .overlay(alignment: .bottom) {
             HStack {
                 if let systemImage, inputText.isNotEmpty {
@@ -283,9 +278,82 @@ public struct SimpleTextField<
             }
             .offset(y: 2)
         }
+        #endif
         .onAppear {
             focused = isFocused
         }
     }
 }
-#endif
+
+/// 用来输入密钥的输入框
+public struct SimpleTokenTextField: View {
+    @State private var showFullKey = false
+    
+    @Binding var tokenText: String
+    let tokenTitle: String
+    let prompt: String
+    let tintColor: Color
+    
+    init(
+        _ tokenText: Binding<String>,
+        tokenTitle: String = "密钥",
+        prompt: String = "请输入密钥",
+        tintColor: Color = .accentColor
+    ) {
+        self._tokenText = tokenText
+        self.tokenTitle = tokenTitle
+        self.prompt = prompt
+        self.tintColor = tintColor
+    }
+    
+    public var body: some View {
+        if tokenText.isEmpty || showFullKey {
+            SimpleTextField(
+                $tokenText,
+                title: tokenTitle,
+                prompt: prompt,
+                endLine: 1,
+                tintColor: tintColor
+            )
+            .onSubmit { showFullKey = false }
+        }else {
+            Button {
+                showFullKey = true
+            } label: {
+                HStack {
+                    Text(tokenTitle)
+                    Text(tokenText.lastCharacters())
+                }
+            }
+            .buttonStyle(.borderless)
+        }
+    }
+}
+
+#Preview("Input"){
+    SimpleTextInputView(
+        pageName: "演示输入",
+        title: "输入标题",
+        content: "输入短文字",
+        showTitle: true,
+        showContent: true,
+        tintColor: .red
+    ){_ in}
+}
+
+@available(iOS 17.0, macOS 14, watchOS 10, *)
+#Preview("Form") {
+    @Previewable @State var input01: String = ""
+    @Previewable @State var input02: String = ""
+    @Previewable @State var input03: String = ""
+    
+    NavigationStack {
+        Form {
+            SimpleTextField($input01, title: "New TextField")
+            SimpleTextField($input02, title: "New TextField", endLine: 1)
+            SimpleTokenTextField($input03)
+        }
+        .formStyle(.grouped)
+    }
+}
+//#endif
