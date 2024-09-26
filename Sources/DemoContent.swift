@@ -73,7 +73,7 @@ public struct DemoContent<V: View>: View {
                         .interactiveDismissDisabled(true)
                     }
                 }
-                Section("Data - 数据处理") {
+                Section("Web - 网络关联") {
                     ForEach(Page.webSection()) { page in
                         NavigationLink(value: page) {
                             Label(page.title, systemImage: page.icon)

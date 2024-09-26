@@ -106,9 +106,10 @@ struct DemoSimpleLoad: View {
                         prompt: "输入关键词搜索地点",
                         endLine: 1
                     )
-                    SimpleMiddleButton("🔍 搜索") {
+                    Button("🔍 搜索") {
                         fetchAmapTips()
-                    }.disabled(amapKey.isEmpty)
+                    }
+                    .disabled(amapKey.isEmpty)
                     if let amapPOIs {
                         ForEach(amapPOIs) { poi in
                             Button {
