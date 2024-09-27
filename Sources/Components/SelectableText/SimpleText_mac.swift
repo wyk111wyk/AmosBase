@@ -25,6 +25,7 @@ struct SimpleText_mac: NSViewRepresentable {
         textView.isSelectable = true
         textView.isVerticallyResizable = true
         textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.backgroundColor = .clear
         textView.textContainerInset = NSSize(width: 10, height: 10)
         textView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         textView.setContentHuggingPriority(.defaultLow, for: .vertical)
@@ -65,7 +66,7 @@ struct SimpleText_mac: NSViewRepresentable {
         let height = textView.layoutManager?.usedRect(for: textView.textContainer!).height ?? 0
         DispatchQueue.main.async {
             self.calculatedHeight = height + 20
-            debugPrint("更新mac高度：\(self.calculatedHeight)")
+//            debugPrint("更新mac高度：\(self.calculatedHeight)")
         }
     }
 }

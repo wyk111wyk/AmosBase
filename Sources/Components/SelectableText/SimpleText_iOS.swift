@@ -21,6 +21,7 @@ struct SimpleText_iOS: UIViewRepresentable {
         textView.isEditable = false
         textView.isSelectable = true
         textView.attributedText = NSAttributedString(attributedString)
+        textView.backgroundColor = .clear
         return textView
     }
     
@@ -70,7 +71,7 @@ struct SimpleText_iOS: UIViewRepresentable {
         if result.wrappedValue != size.height {
             DispatchQueue.main.async {
                 result.wrappedValue = size.height
-                debugPrint("更新iOS高度：\(size.height)")
+//                debugPrint("更新iOS高度：\(size.height)")
             }
         }
     }
