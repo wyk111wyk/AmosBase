@@ -20,6 +20,7 @@ public struct SimpleSelectableText: View {
     let text: String
     let markdownText: String?
     let attributedText: AttributedString?
+    var alignment: NSTextAlignment
     
     let selectTextCallback: (String) -> ()
     
@@ -27,11 +28,13 @@ public struct SimpleSelectableText: View {
         text: String = "",
         markdown: String? = nil,
         attributedText: AttributedString? = nil,
+        alignment: NSTextAlignment = .left,
         selectTextCallback: @escaping (String) -> () = {_ in}
     ) {
         self.text = text
         self.markdownText = markdown
         self.attributedText = attributedText
+        self.alignment = alignment
         self.selectTextCallback = selectTextCallback
     }
 
@@ -48,8 +51,11 @@ public struct SimpleSelectableText: View {
             attributedString.appKit.foregroundColor = .labelColor
             #endif
             attributedString.font = .systemFont(ofSize: 18)
+            // 段落设置
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.lineSpacing = 8
+            paragraphStyle.alignment = alignment
+            
             attributedString.paragraphStyle = paragraphStyle
             
             return attributedString
