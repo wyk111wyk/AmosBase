@@ -21,6 +21,7 @@ public struct SimpleSelectableText: View {
     let markdownText: String?
     let attributedText: AttributedString?
     
+    let isScrollEnabled: Bool
     var fontSize: CGFloat
     var lineSpace: CGFloat
     var alignment: NSTextAlignment
@@ -32,6 +33,7 @@ public struct SimpleSelectableText: View {
         text: String = "",
         markdown: String? = nil,
         attributedText: AttributedString? = nil,
+        isScrollEnabled: Bool = true,
         fontSize: CGFloat = 18,
         lineSpace: CGFloat = 8,
         alignment: NSTextAlignment = .left,
@@ -43,6 +45,7 @@ public struct SimpleSelectableText: View {
         self.attributedText = attributedText
         self.selectTextCallback = selectTextCallback
         
+        self.isScrollEnabled = isScrollEnabled
         self.fontSize = fontSize
         self.lineSpace = lineSpace
         self.alignment = alignment
@@ -82,39 +85,40 @@ public struct SimpleSelectableText: View {
     }
     
     public var body: some View {
-        GeometryReader { geometry in
-            #if os(iOS)
-            SimpleText_iOS(
+        #if os(iOS)
+        SimpleText_iOS(
+            attributedString: attributedString,
+            calculatedHeight: $textViewHeight,
+            selectTextCallback: selectTextCallback
+        )
+        .frame(maxHeight: textViewHeight)
+        #elseif os(macOS)
+        ScrollView {
+            SimpleText_mac(
                 attributedString: attributedString,
                 calculatedHeight: $textViewHeight,
                 selectTextCallback: selectTextCallback
             )
-            .frame(width: geometry.size.width,
-                   height: geometry.size.height)
-            #elseif os(macOS)
-            ScrollView {
-                SimpleText_mac(
-                    attributedString: attributedString,
-                    calculatedHeight: $textViewHeight,
-                    selectTextCallback: selectTextCallback
-                )
-                .frame(width: geometry.size.width,
-                       height: textViewHeight)
-            }
-            #endif
+            .frame(height: textViewHeight)
         }
+        #endif
     }
 }
 
 #Preview("poem") {
-    SimpleSelectableText(
-        text: String.testText(.chinesePoem) + String.testText(.chinesePoem) + String.testText(.chinesePoem)
-    )
+    VStack(spacing: 0) {
+        SimpleSelectableText(
+            text: String.testText(.chinesePoem)
+        )
+        Divider()
+        SimpleSelectableText(
+            text: String.testText(.chineseStory)
+        )
+    }
 }
 
 #Preview("markdown") {
     DemoSimpleText(
-        markdown: String.testText(.markdown02)
+        markdown: String.testText(.markdown01)
     )
-    .frame(minWidth: 300, minHeight: 500)
 }

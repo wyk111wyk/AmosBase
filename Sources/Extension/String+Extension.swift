@@ -583,12 +583,6 @@ public extension String {
 
         3. **使用@unchecked Sendable**：从Swift 5.5开始，你可以使用`@unchecked Sendable`闭包来表示一个类型是安全发送的，即使它没有显式地遵循`Sendable`。这是一个危险的操作，因为它绕过了编译器的安全检查，所以只有当你确信使用的类型是线程安全时才应该使用。
 
-            ```swift
-            @Sendable func safelyUseNSParagraphStyle() {
-                // 你的代码，使用NSParagraphStyle
-            }
-            ```
-
         4. **深入理解并发和Sendable**：深入学习Swift的并发模型和`Sendable`协议，了解哪些类型是自动遵守的，哪些需要手动处理，以及如何安全地在并发环境中管理不遵守`Sendable`的类型。
 
         在处理涉及Swift并发的问题时，了解并遵循`Sendable`协议的要求非常重要，这有助于保证代码的线程安全性和稳定性。
@@ -613,6 +607,16 @@ public extension String {
         3. List item 3
         
         ---
+        ```swift
+        let textView = UITextView()
+        textView.isScrollEnabled = false
+        textView.textContainer.lineBreakMode = .byWordWrapping
+        textView.textContainer.widthTracksTextView = true
+        textView.textContainer.lineBreakMode = .byWordWrapping
+
+        // 设置文本
+        textView.text = "这是一个测试文本，用于演示UITextView的换行功能。"
+        ```
 
         > 引用：Blockquote loorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 

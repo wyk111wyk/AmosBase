@@ -20,6 +20,10 @@ struct SimpleText_iOS: UIViewRepresentable {
         textView.delegate = context.coordinator
         textView.isEditable = false
         textView.isSelectable = true
+        textView.isScrollEnabled = true
+        
+        textView.textContainer.lineBreakMode = .byWordWrapping
+        textView.textContainer.widthTracksTextView = true
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
         textView.attributedText = NSAttributedString(attributedString)
         textView.backgroundColor = .clear
@@ -72,7 +76,7 @@ struct SimpleText_iOS: UIViewRepresentable {
         if result.wrappedValue != size.height {
             DispatchQueue.main.async {
                 result.wrappedValue = size.height
-//                debugPrint("更新iOS高度：\(size.height)")
+                debugPrint("更新iOS高度：\(size.height)")
             }
         }
     }
@@ -81,6 +85,6 @@ struct SimpleText_iOS: UIViewRepresentable {
 
 #Preview("poem") {
     DemoSimpleText(
-        text: String.testText(.markdown01)
+        markdown: String.testText(.markdown02)
     )
 }
