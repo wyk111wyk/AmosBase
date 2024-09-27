@@ -119,6 +119,6 @@ public struct SimpleSelectableText: View {
 
 #Preview("markdown") {
     DemoSimpleText(
-        markdown: String.testText(.markdown01)
+        markdown: String.testText(.markdownCode)
     )
 }

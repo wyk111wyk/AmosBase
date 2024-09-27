@@ -35,7 +35,7 @@ struct SimpleText_iOS: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UITextView, context: Context) {
-        uiView.attributedText = NSAttributedString(attributedString)
+//        uiView.attributedText = NSAttributedString(attributedString)
         SimpleText_iOS.recalculateHeight(
             view: uiView,
             result: $calculatedHeight
@@ -76,7 +76,7 @@ struct SimpleText_iOS: UIViewRepresentable {
         if result.wrappedValue != size.height {
             DispatchQueue.main.async {
                 result.wrappedValue = size.height
-                debugPrint("更新iOS高度：\(size.height)")
+//                debugPrint("更新iOS高度：\(size.height)")
             }
         }
     }
@@ -85,6 +85,6 @@ struct SimpleText_iOS: UIViewRepresentable {
 
 #Preview("poem") {
     DemoSimpleText(
-        markdown: String.testText(.markdown02)
+        markdown: String.testText(.markdownCode)
     )
 }

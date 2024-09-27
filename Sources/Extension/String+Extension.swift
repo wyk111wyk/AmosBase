@@ -472,7 +472,7 @@ public extension String {
     }
     
     enum TestType: Identifiable, CaseIterable {
-        case chineseAndEngish, chineseWuxia, chineseStory, chineseCasual, chinesePoem, englishSpeech, englishPoem, markdown01, markdown02
+        case chineseAndEngish, chineseWuxia, chineseStory, chineseCasual, chinesePoem, englishSpeech, englishPoem, markdown01, markdown02, markdownCode
         
         public var id: String { title }
         public static var allCases: [TestType] {
@@ -505,6 +505,8 @@ public extension String {
                 return "Markdown 01"
             case .markdown02:
                 return "Markdown 02"
+            case .markdownCode:
+                return "Markdown Code"
             }
         }
         
@@ -651,6 +653,12 @@ public extension String {
         | Content Cell  | Content Cell  |
         
         在这个例子中，`.system(size: weight: design:)`是一个创建系统字体的方法，它允许你指定字体的大小(`size`)、权重(`weight`)和设计(`design`)。权重是通过`Font.Weight`枚举指定的，它提供了`.ultraLight`、`.thin`、`.light`、`.regular`、`.medium`、`.semibold`、`.bold`、`.heavy`和`.black`等多种选项。
+        """
+        case .markdownCode:
+        """
+        在SwiftUI中，你可以使用 `UIReferenceLibraryViewController` 来调用设备的字典查询功能。下面是一个简单的示例，展示如何在SwiftUI应用中实现这个功能。\n\n首先，创建一个SwiftUI视图，其中包含一个按钮来触发字典查询：\n\n```swift\nimport SwiftUI\nimport UIKit\n\nstruct ContentView: View {\n    @State private var selectedWord: String = \"汉字\"\n\n    var body: some View {\n        VStack {\n            Text(\"点击下面的按钮查询汉字:\")\n                .padding()\n            Button(action: {\n                self.showDictionary(for: self.selectedWord)\n            }) {\n                Text(\"查询 \'\\(selectedWord)\'\")\n                    .padding()\n                    .background(Color.blue)\n                    .foregroundColor(.white)\n                    .cornerRadius(8)\n            }\n        }\n    }\n\n    private func showDictionary(for word: String) {\n        guard let url = URL(string: \"dict://\\(word)\") else { return }\n        if UIApplication.shared.canOpenURL(url) {\n            UIApplication.shared.open(url, options: [:], completionHandler: nil)\n        }\n    }\n}\n\nstruct ContentView_Previews: PreviewProvider {\n    static var previews: some View {\n        ContentView()\n    }\n}\n```\n\n### 说明：\n1. **按钮触发**：当用户点击按钮时，会调用 `showDictionary(for:)` 方法。\n2. **字典查询**：`showDictionary(for:)` 方法使用 `UIApplication.shared.open(_:options:completionHandler:)` 来打开字典应用。通过构造一个 URL，使用 `dict://` 协议来查询指定的汉字。\n\n### 注意事项：\n- 这种方法在模拟器中可能无法正常工作，因为模拟器不支持字典应用。\n- 确保在真实的设备上测试此功能。\n- 你可以根据需要修改 `selectedWord` 变量的值，以查询不同的汉字。\n\n这种方式简单且能有效地使用系统提供的字典功能来查询汉字。"
+        "在SwiftUI中，你可以使用 `UIReferenceLibraryViewController` 来调用设备的字典查询功能。下面是一个简单的示例，展示如何在SwiftUI应用中实现这个功能。\n\n首先，创建一个SwiftUI视图，其中包含一个按钮来触发字典查询：\n\n```swift\nimport SwiftUI\nimport UIKit\n\nstruct ContentView: View {\n    @State private var selectedWord: String = \"汉字\"\n\n    var body: some View {\n        VStack {\n            Text(\"点击下面的按钮查询汉字:\")\n                .padding()\n            Button(action: {\n                self.showDictionary(for: self.selectedWord)\n            }) {\n                Text(\"查询 \'\\(selectedWord)\'\")\n                    .padding()\n                    .background(Color.blue)\n                    .foregroundColor(.white)\n                    .cornerRadius(8)\n            }\n        }\n    }\n\n    private func showDictionary(for word: String) {\n        guard let url = URL(string: \"dict://\\(word)\") else { return }\n        if UIApplication.shared.canOpenURL(url) {\n            UIApplication.shared.open(url, options: [:], completionHandler: nil)\n        }\n    }\n}\n\nstruct ContentView_Previews: PreviewProvider {\n    static var previews: some View {\n        ContentView()\n    }\n}\n```\n\n### 说明：\n1. **按钮触发**：当用户点击按钮时，会调用 `showDictionary(for:)` 方法。\n2. **字典查询**：`showDictionary(for:)` 方法使用 `UIApplication.shared.open(_:options:completionHandler:)` 来打开字典应用。通过构造一个 URL，使用 `dict://` 协议来查询指定的汉字。\n\n### 注意事项：\n- 这种方法在模拟器中可能无法正常工作，因为模拟器不支持字典应用。\n- 确保在真实的设备上测试此功能。\n- 你可以根据需要修改 `selectedWord` 变量的值，以查询不同的汉字。\n\n这种方式简单且能有效地使用系统提供的字典功能来查询汉字。"
+        "在SwiftUI中，你可以使用 `UIReferenceLibraryViewController` 来调用设备的字典查询功能。下面是一个简单的示例，展示如何在SwiftUI应用中实现这个功能。\n\n首先，创建一个SwiftUI视图，其中包含一个按钮来触发字典查询：\n\n```swift\nimport SwiftUI\nimport UIKit\n\nstruct ContentView: View {\n    @State private var selectedWord: String = \"汉字\"\n\n    var body: some View {\n        VStack {\n            Text(\"点击下面的按钮查询汉字:\")\n                .padding()\n            Button(action: {\n                self.showDictionary(for: self.selectedWord)\n            }) {\n                Text(\"查询 \'\\(selectedWord)\'\")\n                    .padding()\n                    .background(Color.blue)\n                    .foregroundColor(.white)\n                    .cornerRadius(8)\n            }\n        }\n    }\n\n    private func showDictionary(for word: String) {\n        guard let url = URL(string: \"dict://\\(word)\") else { return }\n        if UIApplication.shared.canOpenURL(url) {\n            UIApplication.shared.open(url, options: [:], completionHandler: nil)\n        }\n    }\n}\n\nstruct ContentView_Previews: PreviewProvider {\n    static var previews: some View {\n        ContentView()\n    }\n}\n```\n\n### 说明：\n1. **按钮触发**：当用户点击按钮时，会调用 `showDictionary(for:)` 方法。\n2. **字典查询**：`showDictionary(for:)` 方法使用 `UIApplication.shared.open(_:options:completionHandler:)` 来打开字典应用。通过构造一个 URL，使用 `dict://` 协议来查询指定的汉字。\n\n### 注意事项：\n- 这种方法在模拟器中可能无法正常工作，因为模拟器不支持字典应用。\n- 确保在真实的设备上测试此功能。\n- 你可以根据需要修改 `selectedWord` 变量的值，以查询不同的汉字。\n\n这种方式简单且能有效地使用系统提供的字典功能来查询汉字。
         """
         }
     }
