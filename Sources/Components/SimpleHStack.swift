@@ -14,12 +14,8 @@ struct SimpleDualView<v1: View, v2: View>: View {
     var body: some View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
-                VStack(alignment: .center) {
-                    Spacer()
-                    content1()
-                    Spacer()
-                }
-                .frame(width: geometry.size.width / 2)
+                content1()
+                    .frame(width: geometry.size.width / 2)
 //                .background{Color.red}
                 
                 content2()
@@ -34,6 +30,20 @@ struct SimpleDualView<v1: View, v2: View>: View {
 
 #Preview("Dual") {
     NavigationStack {
+        SimpleDualView(
+            content1: {
+                GroupBox("按钮1") {
+                    Text("HHHHH")
+                }
+            },
+            content2: {
+                Button("按钮2"){}
+                    .buttonStyle(.bordered)
+            }
+        )
+        .frame(height: 60)
+        .padding(.top)
+        
         Form {
             SimpleDualView(
                 content1: {

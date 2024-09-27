@@ -20,6 +20,7 @@ struct SimpleText_iOS: UIViewRepresentable {
         textView.delegate = context.coordinator
         textView.isEditable = false
         textView.isSelectable = true
+        textView.textContainerInset = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
         textView.attributedText = NSAttributedString(attributedString)
         textView.backgroundColor = .clear
         return textView
@@ -77,3 +78,9 @@ struct SimpleText_iOS: UIViewRepresentable {
     }
 }
 #endif
+
+#Preview("poem") {
+    DemoSimpleText(
+        text: String.testText(.markdown01)
+    )
+}

@@ -26,7 +26,7 @@ struct SimpleText_mac: NSViewRepresentable {
         textView.isVerticallyResizable = true
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.backgroundColor = .clear
-        textView.textContainerInset = NSSize(width: 10, height: 10)
+        textView.textContainerInset = NSSize(width: 12, height: 10)
         textView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         textView.setContentHuggingPriority(.defaultLow, for: .vertical)
         return textView
@@ -71,3 +71,10 @@ struct SimpleText_mac: NSViewRepresentable {
     }
 }
 #endif
+
+#Preview("markdown") {
+    DemoSimpleText(
+        markdown: String.testText(.markdown02)
+    )
+    .frame(minWidth: 300, minHeight: 500)
+}

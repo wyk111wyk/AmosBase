@@ -82,30 +82,34 @@ public struct SimpleSelectableText: View {
     }
     
     public var body: some View {
-        Group {
+        GeometryReader { geometry in
             #if os(iOS)
             SimpleText_iOS(
                 attributedString: attributedString,
                 calculatedHeight: $textViewHeight,
                 selectTextCallback: selectTextCallback
             )
+            .frame(width: geometry.size.width,
+                   height: geometry.size.height)
             #elseif os(macOS)
-            SimpleText_mac(
-                attributedString: attributedString,
-                calculatedHeight: $textViewHeight,
-                selectTextCallback: selectTextCallback
-            )
+            ScrollView {
+                SimpleText_mac(
+                    attributedString: attributedString,
+                    calculatedHeight: $textViewHeight,
+                    selectTextCallback: selectTextCallback
+                )
+                .frame(width: geometry.size.width,
+                       height: textViewHeight)
+            }
             #endif
         }
-        .frame(height: textViewHeight)
     }
 }
 
 #Preview("poem") {
-    DemoSimpleText(
-        text: String.testText(.chinesePoem)
+    SimpleSelectableText(
+        text: String.testText(.chinesePoem) + String.testText(.chinesePoem) + String.testText(.chinesePoem)
     )
-    .frame(minWidth: 300, minHeight: 500)
 }
 
 #Preview("markdown") {

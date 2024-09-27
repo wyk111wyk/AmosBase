@@ -28,15 +28,12 @@ public struct DemoSimpleText: View {
     
     public var body: some View {
         NavigationStack {
-            ScrollView(showsIndicators: true) {
-                SimpleSelectableText(
-                    text: text,
-                    markdown: markdownText,
-                    attributedText: attributedText,
-                    selectTextCallback: selectTextCallback
-                )
-                    .padding()
-            }
+            SimpleSelectableText(
+                text: text,
+                markdown: markdownText,
+                attributedText: attributedText,
+                selectTextCallback: selectTextCallback
+            )
             .navigationTitle("可选文字")
         }
     }
