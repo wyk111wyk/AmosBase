@@ -16,7 +16,7 @@ public struct DemoSimpleText: View {
     
     public init(
         text: String = "",
-        markdown: String? = String.testText(.markdown02),
+        markdown: String? = nil,
         attributedText: AttributedString? = nil,
         selectTextCallback: @escaping (String) -> () = {_ in}
     ) {

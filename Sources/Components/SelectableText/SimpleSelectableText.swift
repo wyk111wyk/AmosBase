@@ -20,7 +20,11 @@ public struct SimpleSelectableText: View {
     let text: String
     let markdownText: String?
     let attributedText: AttributedString?
+    
+    var fontSize: CGFloat
+    var lineSpace: CGFloat
     var alignment: NSTextAlignment
+    var textColor: SFColor
     
     let selectTextCallback: (String) -> ()
     
@@ -28,14 +32,29 @@ public struct SimpleSelectableText: View {
         text: String = "",
         markdown: String? = nil,
         attributedText: AttributedString? = nil,
+        fontSize: CGFloat = 18,
+        lineSpace: CGFloat = 8,
         alignment: NSTextAlignment = .left,
+        textColor: SFColor? = nil,
         selectTextCallback: @escaping (String) -> () = {_ in}
     ) {
         self.text = text
         self.markdownText = markdown
         self.attributedText = attributedText
-        self.alignment = alignment
         self.selectTextCallback = selectTextCallback
+        
+        self.fontSize = fontSize
+        self.lineSpace = lineSpace
+        self.alignment = alignment
+        if let textColor {
+            self.textColor = textColor
+        }else {
+            #if os(iOS)
+            self.textColor = .label
+            #elseif os(macOS)
+            self.textColor = .labelColor
+            #endif
+        }
     }
 
     var attributedString: AttributedString {
@@ -44,16 +63,16 @@ public struct SimpleSelectableText: View {
         }else if let markdownText {
             return markdownText.markdown
         }else {
-            var attributedString = (try? AttributedString(markdown: text)) ?? AttributedString(text)
+            var attributedString = AttributedString(text)
             #if os(iOS)
-            attributedString.uiKit.foregroundColor = .label
+            attributedString.uiKit.foregroundColor = textColor
             #elseif os(macOS)
-            attributedString.appKit.foregroundColor = .labelColor
+            attributedString.appKit.foregroundColor = textColor
             #endif
-            attributedString.font = .systemFont(ofSize: 18)
+            attributedString.font = .systemFont(ofSize: fontSize)
             // 段落设置
             let paragraphStyle = NSMutableParagraphStyle()
-            paragraphStyle.lineSpacing = 8
+            paragraphStyle.lineSpacing = lineSpace
             paragraphStyle.alignment = alignment
             
             attributedString.paragraphStyle = paragraphStyle
@@ -82,7 +101,14 @@ public struct SimpleSelectableText: View {
     }
 }
 
-#Preview("Text") {
+#Preview("poem") {
+    DemoSimpleText(
+        text: String.testText(.chinesePoem)
+    )
+    .frame(minWidth: 300, minHeight: 500)
+}
+
+#Preview("markdown") {
     DemoSimpleText(
         markdown: String.testText(.markdown02)
     )

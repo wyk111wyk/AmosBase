@@ -144,7 +144,7 @@ public struct DemoContent<V: View>: View {
                 case 13: DemoSimpleUnit()
                 case 14: DemoSimpleData()
                 case 15: DemoSimpleLanguage()
-                case 16: DemoSimpleText()
+                case 16: DemoSimpleText(markdown: String.testText(.markdown02))
                 case 17: DemoSimpleLoad()
                 default: Text(selectedPage.title)
                 }
