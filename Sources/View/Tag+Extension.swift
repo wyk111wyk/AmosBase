@@ -14,7 +14,7 @@ public extension View {
     }
 }
 
-public struct SimpleTagConfig {
+public struct SimpleTagConfig: Hashable {
     // 边距
     let verticalPad: CGFloat
     let horizontalPad: CGFloat

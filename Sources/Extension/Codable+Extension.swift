@@ -85,15 +85,6 @@ public extension Data {
         }
     }
     
-    #if canImport(Foundation)
-    func jsonToObject<T>() -> T? {
-        guard let jsonData = try? JSONSerialization.jsonObject(with: self) as? T else {
-            return nil
-        }
-        return jsonData
-    }
-    #endif
-    
     @discardableResult
     func toJsonPrint() -> String {
         do {

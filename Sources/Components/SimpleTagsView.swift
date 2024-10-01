@@ -8,57 +8,62 @@
 import SwiftUI
 
 public struct SimpleTagViewItem: Identifiable, SimpleCardable {
-    public enum TagViewType {
-        case full, border
-        
-        @discardableResult
-        mutating func toggle() -> Self {
-            if self == .full { self = .border }
-            else { self = .full }
-            return self
-        }
-    }
-    
     public let id: UUID
-    var title: String
-    var icon: String?
-    var color: Color
-    var viewType: TagViewType
+    public var title: String
+    public var icon: String?
+    public var color: Color
+    public var note: String?
+    var viewType: SimpleTagConfig
     
     public init(
         id: UUID = .init(),
         title: String,
         icon: String? = nil,
         color: Color = .purple,
-        viewType: TagViewType = .full
+        note: String? = nil,
+        viewType: SimpleTagConfig = .full()
     ) {
         self.id = id
         self.title = title
         self.icon = icon
         self.color = color
+        self.note = note
         self.viewType = viewType
     }
 }
 
-public struct SimpleTagsView: View {
+public struct SimpleTagsView<V: View>: View {
     public enum TagType {
         case list, vstack
     }
     
     let tags: [SimpleTagViewItem]
+    let horizontalPadding: CGFloat
+    let verticalPadding: CGFloat
+    
     @State private var totalHeight: CGFloat
     let tagAction: (SimpleTagViewItem) -> Void
     
-    public init(tags: [SimpleTagViewItem],
-                type: TagType = .list,
-                tagAction: @escaping (SimpleTagViewItem) -> Void = {_ in}) {
+    let tagView: (SimpleTagViewItem) -> V
+    
+    public init(
+        tags: [SimpleTagViewItem],
+        type: TagType = .list,
+        horizontalPadding: CGFloat = 6,
+        verticalPadding: CGFloat = 4,
+        tagAction: @escaping (SimpleTagViewItem) -> Void = {_ in},
+        @ViewBuilder tagView: @escaping (SimpleTagViewItem) -> V = {_ in EmptyView()}
+    ) {
         self.tags = tags
+        self.horizontalPadding = horizontalPadding
+        self.verticalPadding = verticalPadding
         if type == .list {
             self._totalHeight = State(initialValue: CGFloat.zero)
         }else {
             self._totalHeight = State(initialValue: CGFloat.infinity)
         }
         self.tagAction = tagAction
+        self.tagView = tagView
     }
     
     public var body: some View {
@@ -76,32 +81,40 @@ public struct SimpleTagsView: View {
         var height = CGFloat.zero
         return ZStack(alignment: .topLeading) {
             ForEach(tags, id: \.self.id) { tag in
-                item(for: tag)
-                    .padding([.horizontal, .vertical], 4)
-                    .alignmentGuide(.leading, computeValue: { d in
-                        if (abs(width - d.width) > g.size.width) {
-                            width = 0
-                            height -= d.height
-                        }
-                        let result = width
-                        if tag.id == self.tags.last!.id {
-                            width = 0 //last item
-                        } else {
-                            width -= d.width
-                        }
-                        return result
-                    })
-                    .alignmentGuide(.top, computeValue: {d in
-                        let result = height
-                        if tag.id == self.tags.last!.id {
-                            height = 0 // last item
-                        }
-                        return result
-                    })
-                    .onTapGesture {
-                        tagAction(tag)
+                ZStack {
+                    if V.self == EmptyView.self {
+                        item(for: tag)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                tagAction(tag)
+                            }
+                    }else {
+                        tagView(tag)
+                            .contentShape(Rectangle())
                     }
-                    .contentShape(Rectangle())
+                }
+                .padding(.horizontal, horizontalPadding)
+                .padding(.vertical, verticalPadding)
+                .alignmentGuide(.leading, computeValue: { d in
+                    if (abs(width - d.width) > g.size.width) {
+                        width = 0
+                        height -= d.height
+                    }
+                    let result = width
+                    if tag.id == self.tags.last!.id {
+                        width = 0 //last item
+                    } else {
+                        width -= d.width
+                    }
+                    return result
+                })
+                .alignmentGuide(.top, computeValue: {d in
+                    let result = height
+                    if tag.id == self.tags.last!.id {
+                        height = 0 // last item
+                    }
+                    return result
+                })
             }
         }.background(viewHeightReader($totalHeight))
     }
@@ -113,23 +126,9 @@ public struct SimpleTagsView: View {
             }
             Text(tag.title)
         }
-            .simpleTag(tagConfig(for: tag))
+            .simpleTag(tag.viewType)
             .lineLimit(1)
             .frame(height: 22)
-    }
-    
-    private func tagConfig(for tag: SimpleTagViewItem) -> SimpleTagConfig {
-        switch tag.viewType {
-        case .full:
-                .full(bgColor: tag.color)
-        case .border:
-                .border(
-                    verticalPad: 5,
-                    horizontalPad: 10,
-                    cornerRadius: 6,
-                    contentColor: tag.color
-                )
-        }
     }
 
     private func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {
@@ -146,7 +145,7 @@ public struct SimpleTagsView: View {
 #Preview("TagView") {
     let example: [SimpleTagViewItem] = [
         .init(title: "simple", icon: "rectangle.portrait.and.arrow.right"),
-        .init(title: "tag", viewType: .border),
+        .init(title: "tag", viewType: .border()),
         .init(title: "view", icon: "pencil.slash"),
         .init(title: "with"),
         .init(title: "Go"),

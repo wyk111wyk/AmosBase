@@ -18,6 +18,8 @@ struct SimpleText_iOS: UIViewRepresentable {
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
         textView.delegate = context.coordinator
+        textView.attributedText = NSAttributedString(attributedString)
+        
         textView.isEditable = false
         textView.isSelectable = true
         textView.isScrollEnabled = true
@@ -25,8 +27,9 @@ struct SimpleText_iOS: UIViewRepresentable {
         textView.textContainer.lineBreakMode = .byWordWrapping
         textView.textContainer.widthTracksTextView = true
         textView.textContainerInset = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15)
-        textView.attributedText = NSAttributedString(attributedString)
+        
         textView.backgroundColor = .clear
+        
         return textView
     }
     
@@ -35,8 +38,8 @@ struct SimpleText_iOS: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UITextView, context: Context) {
-//        uiView.attributedText = NSAttributedString(attributedString)
-        SimpleText_iOS.recalculateHeight(
+//        uiView.sizeToFit()
+        Self.recalculateHeight(
             view: uiView,
             result: $calculatedHeight
         )
@@ -54,8 +57,12 @@ struct SimpleText_iOS: UIViewRepresentable {
         }
         
         func textViewDidChangeSelection(_ textView: UITextView) {
-            guard textView.selectedRange.length > 0 else { return }
 //            debugPrint("iOS - 文字选择改变")
+//            debugPrint(textView.selectedRange)
+            guard textView.selectedRange.length > 0 else {
+                parent.selectTextCallback("")
+                return
+            }
             if let range: Range = Range(textView.selectedRange, in: textView.text) {
 //                debugPrint(textView.text[range])
                 parent.selectTextCallback(String(textView.text[range]))
@@ -84,6 +91,17 @@ struct SimpleText_iOS: UIViewRepresentable {
 #endif
 
 #Preview("poem") {
+    ScrollView {
+        VStack {
+            DemoSimpleText(
+                text: String.testText(.chineseStory)
+            )
+            Text("Hello World")
+        }
+    }
+}
+
+#Preview("code") {
     DemoSimpleText(
         markdown: String.testText(.markdownCode)
     )

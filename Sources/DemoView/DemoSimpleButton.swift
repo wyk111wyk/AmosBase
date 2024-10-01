@@ -193,7 +193,7 @@ public struct DemoSimpleButton<V: View>: View {
                 var newTag = tag
                 newTag.color = .blue
                 newTag.icon = "medal"
-                newTag.viewType.toggle()
+                newTag.viewType = .border()
                 withAnimation {
                     tagCollectOne.removeById(newTag)
                     tagCollectTwo.appendOrReplace(newTag)
@@ -203,7 +203,7 @@ public struct DemoSimpleButton<V: View>: View {
                 var newTag = tag
                 newTag.color = .purple
                 newTag.icon = "person.wave.2.fill"
-                newTag.viewType.toggle()
+                newTag.viewType = .full()
                 withAnimation {
                     tagCollectTwo.removeById(newTag)
                     tagCollectOne.appendOrReplace(newTag)

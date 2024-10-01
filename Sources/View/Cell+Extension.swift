@@ -26,6 +26,7 @@ public struct SimpleCell<V: View>: View {
     let bundleImageName: String?
     let bundleImageNameDark: String?
     let bundleImageType: String?
+    let sfImage: SFImage?
     
     let contentSystemImage: String?
     let content: String?
@@ -52,6 +53,7 @@ public struct SimpleCell<V: View>: View {
         bundleImageName: String? = nil,
         bundleImageNameDark: String? = nil,
         bundleImageType: String? = nil,
+        sfImage: SFImage? = nil,
         imageSize: Double = 22,
         contentSystemImage: String? = nil,
         content: String? = nil,
@@ -80,6 +82,7 @@ public struct SimpleCell<V: View>: View {
         self.bundleImageName = bundleImageName
         self.bundleImageNameDark = bundleImageNameDark
         self.bundleImageType = bundleImageType
+        self.sfImage = sfImage
         
         self.imageSize = imageSize
         self.contentSpace = contentSpace
@@ -123,6 +126,11 @@ public struct SimpleCell<V: View>: View {
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize)
                     }
+                }else if let sfImage{
+                    Image(sfImage: sfImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: imageSize, height: imageSize)
                 }
                 // Title 和 Content
                 VStack(alignment: .leading, spacing: 5) {

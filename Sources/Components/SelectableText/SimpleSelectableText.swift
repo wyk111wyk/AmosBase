@@ -16,16 +16,18 @@ import AppKit
 public struct SimpleSelectableText: View {
     
     @State private var textViewHeight: CGFloat = 1200
+    @State private var viewHeight: CGFloat = 600
     
     let text: String
     let markdownText: String?
     let attributedText: AttributedString?
     
-    let isScrollEnabled: Bool
     var fontSize: CGFloat
     var lineSpace: CGFloat
     var alignment: NSTextAlignment
     var textColor: SFColor
+    
+    let isInScroll: Bool
     
     let selectTextCallback: (String) -> ()
     
@@ -33,11 +35,11 @@ public struct SimpleSelectableText: View {
         text: String = "",
         markdown: String? = nil,
         attributedText: AttributedString? = nil,
-        isScrollEnabled: Bool = true,
         fontSize: CGFloat = 18,
         lineSpace: CGFloat = 8,
         alignment: NSTextAlignment = .left,
         textColor: SFColor? = nil,
+        isInScroll: Bool = false,
         selectTextCallback: @escaping (String) -> () = {_ in}
     ) {
         self.text = text
@@ -45,7 +47,6 @@ public struct SimpleSelectableText: View {
         self.attributedText = attributedText
         self.selectTextCallback = selectTextCallback
         
-        self.isScrollEnabled = isScrollEnabled
         self.fontSize = fontSize
         self.lineSpace = lineSpace
         self.alignment = alignment
@@ -58,6 +59,8 @@ public struct SimpleSelectableText: View {
             self.textColor = .labelColor
             #endif
         }
+        
+        self.isInScroll = isInScroll
     }
 
     var attributedString: AttributedString {
@@ -86,12 +89,23 @@ public struct SimpleSelectableText: View {
     
     public var body: some View {
         #if os(iOS)
-        SimpleText_iOS(
-            attributedString: attributedString,
-            calculatedHeight: $textViewHeight,
-            selectTextCallback: selectTextCallback
-        )
-        .frame(maxHeight: textViewHeight)
+        GeometryReader { reader in
+            SimpleText_iOS(
+                attributedString: attributedString,
+                calculatedHeight: $textViewHeight,
+                selectTextCallback: selectTextCallback
+            )
+//            .frame(height: min(viewHeight, textViewHeight))
+//            .onChange(of: textViewHeight) { height in
+//                debugPrint("Text height changed")
+//                viewHeight = reader.size.height
+//                debugPrint("view height: \(reader.size.height)")
+//                debugPrint("view width: \(reader.size.width)")
+//                debugPrint("text: \(height)")
+//            }
+        }
+        .frameSet(isInScoll: isInScroll, height: textViewHeight)
+        .edgesIgnoringSafeArea(.bottom)
         #elseif os(macOS)
         ScrollView {
             SimpleText_mac(
@@ -105,15 +119,34 @@ public struct SimpleSelectableText: View {
     }
 }
 
+// 只要包裹在SwiftUI的ScrollView组件中，尺寸无法正确的读取，必需手动赋值
+private extension View {
+    @ViewBuilder
+    func frameSet(
+        isInScoll: Bool,
+        height: CGFloat
+    ) -> some View {
+        if isInScoll {
+            self.frame(height: height + 1)
+        }else {
+            self.frame(maxHeight: height)
+        }
+    }
+}
+
 #Preview("poem") {
-    VStack(spacing: 0) {
-        SimpleSelectableText(
-            text: String.testText(.chinesePoem)
-        )
-        Divider()
-        SimpleSelectableText(
-            text: String.testText(.chineseStory)
-        )
+    ScrollView {
+        VStack {
+            SimpleSelectableText(
+                text: String.testText(.chinesePoem),
+                isInScroll: true
+            )
+            Divider()
+            SimpleSelectableText(
+                text: String.testText(.chineseStory),
+                isInScroll: true
+            )
+        }
     }
 }
 

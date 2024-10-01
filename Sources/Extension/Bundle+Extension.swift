@@ -29,3 +29,23 @@ public extension Bundle {
         return loaded
     }
 }
+
+public extension String {
+    func decodeJSON<T: Codable>() -> T? {
+        guard let url = Bundle.main.url(forResource: self, withExtension: "json") else {
+            fatalError("Failed to locate \(self) in bundle.")
+        }
+        
+        guard let data = try? Data(contentsOf: url) else {
+            debugPrint("Failed to load data \(self).")
+            return nil
+        }
+        
+        guard let jsonObject: T = data.decode(type: T.self) else {
+            debugPrint("解析 JSON 文件失败")
+            return nil
+        }
+        
+        return jsonObject
+    }
+}

@@ -135,6 +135,16 @@ public extension String {
         UUID(uuidString: self) ?? UUID()
     }
     
+    /// 转换为 Int
+    func toInt() -> Int {
+        Int(self) ?? 0
+    }
+    
+    /// 转换为 Double
+    func toDouble() -> Double {
+        Double(self) ?? 0
+    }
+    
     /// 转换为 LocalizedStringKey
     func toLocalizedKey() -> LocalizedStringKey {
         LocalizedStringKey(self)
@@ -355,6 +365,19 @@ public extension String {
             let subString = String(self[firstIndex...])
             return subString
         }
+    }
+    
+    /// 去除数字外的其余部分
+    func removeNonDigits() -> String {
+        // 创建正则表达式，匹配所有非数字字符
+        let pattern = "[^0-9]"
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        
+        // 使用正则表达式替换所有非数字字符为空字符串
+        let range = NSRange(location: 0, length: self.utf16.count)
+        let result = regex.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "")
+        
+        return result
     }
     
     /// SwifterSwift: Safely subscript string with index.

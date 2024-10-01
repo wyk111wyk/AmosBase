@@ -48,7 +48,7 @@ extension SimpleWeb {
             try cacheHelper?.save(object: data, forKey: key)
             return image
         }else {
-            debugPrint("3.没有网络获取图片")
+//            debugPrint("3.没有网络获取图片")
             return nil
         }
     }
