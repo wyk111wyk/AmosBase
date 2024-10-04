@@ -89,7 +89,8 @@ public struct DemoSimpleButton<V: View>: View {
             }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
             SimpleCell(
                 String.randomChinese(short: true, medium: true),
-                systemImage: "person.wave.2.fill",
+                numberIcon: 28,
+                iconColor: .red,
                 content: String.randomChinese(medium: true, long: true)
             )
             SimpleCell(

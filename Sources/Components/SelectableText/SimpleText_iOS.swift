@@ -12,13 +12,34 @@ import UIKit
 
 struct SimpleText_iOS: UIViewRepresentable {
     var attributedString: AttributedString
+    @Binding var variedString: AttributedString?
+    
     @Binding var calculatedHeight: CGFloat
     let selectTextCallback: (String) -> ()
     
+    init(
+        attributedString: AttributedString,
+        variedString: Binding<AttributedString?> = .constant(nil),
+        calculatedHeight: Binding<CGFloat>,
+        selectTextCallback: @escaping (String) -> () = {_ in}
+    ) {
+        self.attributedString = attributedString
+        self._variedString = variedString
+        self._calculatedHeight = calculatedHeight
+        self.selectTextCallback = selectTextCallback
+    }
+    
     func makeUIView(context: Context) -> UITextView {
+        debugPrint("makeUIView")
         let textView = UITextView()
         textView.delegate = context.coordinator
-        textView.attributedText = NSAttributedString(attributedString)
+        
+        // 设置显示的文字
+        if let variedString {
+            textView.attributedText = NSAttributedString(variedString)
+        }else {
+            textView.attributedText = NSAttributedString(attributedString)
+        }
         
         textView.isEditable = false
         textView.isSelectable = true
@@ -38,11 +59,16 @@ struct SimpleText_iOS: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UITextView, context: Context) {
-//        uiView.sizeToFit()
+        debugPrint("updateUIView")
+        if let variedString {
+            uiView.attributedText = NSAttributedString(variedString)
+        }
         Self.recalculateHeight(
             view: uiView,
             result: $calculatedHeight
         )
+        debugPrint("View width: \(uiView.frame.size.width)")
+        debugPrint("New text height: \(calculatedHeight)")
     }
     
     class Coordinator: NSObject, UITextViewDelegate {
@@ -52,7 +78,7 @@ struct SimpleText_iOS: UIViewRepresentable {
         }
         
         func textViewDidChange(_ textView: UITextView) {
-//            debugPrint("iOS - textViewDidChange")
+            debugPrint("iOS - textViewDidChange")
 //            debugPrint(textView.text.wrapped)
         }
         

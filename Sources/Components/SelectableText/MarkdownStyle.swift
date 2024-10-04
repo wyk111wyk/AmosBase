@@ -175,7 +175,7 @@ extension AttributedString {
 
             switch block {
             case .generic, .paragraph:
-                inputString[intentRange].font = .systemFont(ofSize: 16, weight: .regular)
+                inputString[intentRange].font = .systemFont(ofSize: fontSize, weight: .regular)
             case .headline(let level):
                 switch level {
                 case 1:

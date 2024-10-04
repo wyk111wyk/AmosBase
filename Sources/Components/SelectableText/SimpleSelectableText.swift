@@ -21,6 +21,7 @@ public struct SimpleSelectableText: View {
     let text: String
     let markdownText: String?
     let attributedText: AttributedString?
+    @Binding var variedString: AttributedString?
     
     var fontSize: CGFloat
     var lineSpace: CGFloat
@@ -35,6 +36,7 @@ public struct SimpleSelectableText: View {
         text: String = "",
         markdown: String? = nil,
         attributedText: AttributedString? = nil,
+        variedString: Binding<AttributedString?> = .constant(nil),
         fontSize: CGFloat = 18,
         lineSpace: CGFloat = 8,
         alignment: NSTextAlignment = .left,
@@ -45,6 +47,7 @@ public struct SimpleSelectableText: View {
         self.text = text
         self.markdownText = markdown
         self.attributedText = attributedText
+        self._variedString = variedString
         self.selectTextCallback = selectTextCallback
         
         self.fontSize = fontSize
@@ -92,6 +95,7 @@ public struct SimpleSelectableText: View {
         GeometryReader { reader in
             SimpleText_iOS(
                 attributedString: attributedString,
+                variedString: $variedString,
                 calculatedHeight: $textViewHeight,
                 selectTextCallback: selectTextCallback
             )
@@ -132,6 +136,37 @@ private extension View {
             self.frame(maxHeight: height)
         }
     }
+}
+
+private enum TestText {
+    case md1, md2
+    var text: String {
+        switch self {
+        case .md1: .testText(.markdown01)
+        case .md2: .testText(.markdownCode)
+        }
+    }
+    mutating func toggle() {
+        switch self {
+        case .md1: self = .md2
+        case .md2: self = .md1
+        }
+    }
+}
+@available(iOS 17.0, macOS 14, watchOS 10, *)
+#Preview("Change") {
+    @Previewable @State var testText: TestText = .md1
+    @Previewable @State var mdText: AttributedString? = String.testText(.markdown01).markdown
+    Button("更改文字") {
+        testText.toggle()
+    }.buttonStyle(.borderedProminent)
+    SimpleSelectableText(
+        variedString: $mdText,
+        isInScroll: false
+    )
+        .onChange(of: testText) {
+            mdText = testText.text.markdown
+        }
 }
 
 #Preview("poem") {

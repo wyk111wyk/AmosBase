@@ -22,11 +22,12 @@ public struct SimpleCell<V: View>: View {
     
     let iconName: String?
     let systemImage: String?
-    let iconColor: Color?
     let bundleImageName: String?
     let bundleImageNameDark: String?
     let bundleImageType: String?
     let sfImage: SFImage?
+    let numberIcon: Int?
+    let iconColor: Color?
     
     let contentSystemImage: String?
     let content: String?
@@ -49,12 +50,13 @@ public struct SimpleCell<V: View>: View {
         titleColor: Color? = nil,
         iconName: String? = nil,
         systemImage: String? = nil,
-        iconColor: Color? = nil,
         bundleImageName: String? = nil,
         bundleImageNameDark: String? = nil,
         bundleImageType: String? = nil,
         sfImage: SFImage? = nil,
         imageSize: Double = 22,
+        numberIcon: Int? = nil,
+        iconColor: Color? = nil,
         contentSystemImage: String? = nil,
         content: String? = nil,
         contentLine: Int? = nil,
@@ -78,6 +80,7 @@ public struct SimpleCell<V: View>: View {
         self.contentColor = contentColor
         self.iconName = iconName
         self.systemImage = systemImage
+        self.numberIcon = numberIcon
         self.iconColor = iconColor
         self.bundleImageName = bundleImageName
         self.bundleImageNameDark = bundleImageNameDark
@@ -126,11 +129,20 @@ public struct SimpleCell<V: View>: View {
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize)
                     }
-                }else if let sfImage{
+                }else if let sfImage {
                     Image(sfImage: sfImage)
                         .resizable()
                         .scaledToFit()
                         .frame(width: imageSize, height: imageSize)
+                }else if let numberIcon {
+                    ZStack {
+                        Circle().stroke(iconColor ?? .primary)
+                        Text(numberIcon.toString())
+                            .minimumScaleFactor(0.6)
+                            .padding(3)
+                    }
+                    .frame(width: imageSize, height: imageSize)
+                    .foregroundColor(iconColor)
                 }
                 // Title 和 Content
                 VStack(alignment: .leading, spacing: 5) {
