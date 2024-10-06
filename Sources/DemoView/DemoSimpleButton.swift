@@ -87,12 +87,16 @@ public struct DemoSimpleButton<V: View>: View {
                         .simpleTag(.full(bgColor: .blue.opacity(0.9)))
                 }
             }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
-            SimpleCell(
-                String.randomChinese(short: true, medium: true),
-                numberIcon: 28,
-                iconColor: .red,
-                content: String.randomChinese(medium: true, long: true)
-            )
+            Button {
+                
+            } label: {
+                SimpleCell(
+                    String.randomChinese(short: true, medium: true),
+                    numberIcon: 28,
+                    iconColor: .red,
+                    content: String.randomChinese(medium: true, long: true)
+                )
+            }
             SimpleCell(
                 String.randomChinese(short: true),
                 systemImage: "person.wave.2.fill",

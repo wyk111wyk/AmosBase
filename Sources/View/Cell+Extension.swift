@@ -136,7 +136,8 @@ public struct SimpleCell<V: View>: View {
                         .frame(width: imageSize, height: imageSize)
                 }else if let numberIcon {
                     ZStack {
-                        Circle().stroke(iconColor ?? .primary)
+                        Circle()
+                            .stroke(lineWidth: 1)
                         Text(numberIcon.toString())
                             .minimumScaleFactor(0.6)
                             .padding(3)

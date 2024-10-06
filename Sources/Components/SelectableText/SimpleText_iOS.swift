@@ -30,7 +30,7 @@ struct SimpleText_iOS: UIViewRepresentable {
     }
     
     func makeUIView(context: Context) -> UITextView {
-        debugPrint("makeUIView")
+//        debugPrint("makeUIView")
         let textView = UITextView()
         textView.delegate = context.coordinator
         
@@ -59,7 +59,7 @@ struct SimpleText_iOS: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UITextView, context: Context) {
-        debugPrint("updateUIView")
+//        debugPrint("updateUIView")
         if let variedString {
             uiView.attributedText = NSAttributedString(variedString)
         }
@@ -67,8 +67,8 @@ struct SimpleText_iOS: UIViewRepresentable {
             view: uiView,
             result: $calculatedHeight
         )
-        debugPrint("View width: \(uiView.frame.size.width)")
-        debugPrint("New text height: \(calculatedHeight)")
+//        debugPrint("View width: \(uiView.frame.size.width)")
+//        debugPrint("New text height: \(calculatedHeight)")
     }
     
     class Coordinator: NSObject, UITextViewDelegate {
@@ -78,7 +78,7 @@ struct SimpleText_iOS: UIViewRepresentable {
         }
         
         func textViewDidChange(_ textView: UITextView) {
-            debugPrint("iOS - textViewDidChange")
+//            debugPrint("iOS - textViewDidChange")
 //            debugPrint(textView.text.wrapped)
         }
         
