@@ -105,6 +105,22 @@ public extension String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
+    /// 删除句子中重复的文字
+    func removeDuplicates() -> String {
+        var seenCharacters = Set<Character>()
+        var result = ""
+
+        for character in self {
+            // 检查字符是否已经出现过
+            if !seenCharacters.contains(character) {
+                seenCharacters.insert(character)
+                result.append(character)
+            }
+        }
+
+        return result
+    }
+    
     /// SwifterSwift: Reverse string.
     @discardableResult
     mutating func reverse() -> String {
@@ -534,7 +550,7 @@ public extension String {
         }
         
         public var content: String {
-            testText(.chineseAndEngish)
+            testText(self)
         }
     }
     

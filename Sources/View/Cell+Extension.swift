@@ -17,6 +17,7 @@ public struct SimpleCell<V: View>: View {
     let isDisplay: Bool // 是否展示
     
     let title: String
+    let titleLine: Int?
     let titleFont: Font
     let titleColor: Color?
     
@@ -46,6 +47,7 @@ public struct SimpleCell<V: View>: View {
     
     public init(
         _ title: String,
+        titleLine: Int? = nil,
         titleFont: Font = .body,
         titleColor: Color? = nil,
         iconName: String? = nil,
@@ -71,6 +73,7 @@ public struct SimpleCell<V: View>: View {
     ) {
         self.isDisplay = isDisplay
         self.title = title
+        self.titleLine = titleLine
         self.titleFont = titleFont
         self.titleColor = titleColor
         self.contentSystemImage = contentSystemImage
@@ -139,7 +142,7 @@ public struct SimpleCell<V: View>: View {
                         Circle()
                             .stroke(lineWidth: 1)
                         Text(numberIcon.toString())
-                            .minimumScaleFactor(0.6)
+                            .minimumScaleFactor(0.5)
                             .padding(3)
                     }
                     .frame(width: imageSize, height: imageSize)
@@ -150,6 +153,7 @@ public struct SimpleCell<V: View>: View {
                     Text(LocalizedStringKey(title), bundle: localizationBundle)
                         .font(titleFont)
                         .foregroundColor(titleColor)
+                        .lineLimit(titleLine)
                         .multilineTextAlignment(.leading)
                     Group {
                         if let content = content, !content.isEmpty,

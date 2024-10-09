@@ -8,11 +8,11 @@
 import Foundation
 
 public enum SimpleError: Error, Equatable, LocalizedError {
-    case customError(msg: String)
+    case customError(title: String = "", msg: String)
     
     public var errorDescription: String? {
         switch self {
-        case .customError(let msg):
+        case .customError(_, let msg):
             return msg.localized()
         }
     }

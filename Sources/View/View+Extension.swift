@@ -26,6 +26,8 @@ public extension Binding {
         )
     }
 }
+
+extension GeometryProxy: @unchecked @retroactive Sendable {}
         
 #if !os(watchOS)
 // 拖拽内容 Drop

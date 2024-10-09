@@ -285,11 +285,21 @@ public extension View{
         error: Binding<Error?>,
         displayMode: ToastView.DisplayMode = .topToast
     ) -> some View {
-        self.simpleErrorToast(
-            presentState: .isOptionalPresented(error),
-            displayMode: displayMode,
-            title: error.wrappedValue?.localizedDescription ?? "发生错误"
-        )
+        if let simpleError = error.wrappedValue as? SimpleError,
+            case let .customError(title, msg) = simpleError {
+            self.simpleErrorToast(
+                presentState: .isOptionalPresented(error),
+                displayMode: displayMode,
+                title: title,
+                subtitle: msg
+            )
+        }else {
+            self.simpleErrorToast(
+                presentState: .isOptionalPresented(error),
+                displayMode: displayMode,
+                title: error.wrappedValue?.localizedDescription ?? "发生错误"
+            )
+        }
     }
     
     /// 简单UI组件 - 顶部错误提示（可进一步定制）

@@ -60,6 +60,7 @@ struct SimpleText_iOS: UIViewRepresentable {
 
     func updateUIView(_ uiView: UITextView, context: Context) {
 //        debugPrint("updateUIView")
+//        debugPrint(uiView)
         if let variedString {
             uiView.attributedText = NSAttributedString(variedString)
         }

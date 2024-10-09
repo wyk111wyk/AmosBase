@@ -18,8 +18,8 @@ public class SimpleLanguage {
         let recognizer = NLLanguageRecognizer()
         recognizer.processString(sourceText)
         
-        let allLanguage = recognizer.languageHypotheses(withMaximum: 3)
-        debugPrint("所有可能的语言: \(allLanguage)")
+//        let allLanguage = recognizer.languageHypotheses(withMaximum: 3)
+//        debugPrint("所有可能的语言: \(allLanguage)")
         
         guard let language = recognizer.dominantLanguage else { return nil }
         debugPrint("文档的语言: \(language.rawValue)")
