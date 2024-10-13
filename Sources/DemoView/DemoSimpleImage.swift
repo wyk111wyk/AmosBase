@@ -43,7 +43,7 @@ public struct DemoSimpleImage: View {
                 Toggle(isOn: $resizeImage.animation()) {
                     Text("缩放图片（宽300）")
                 }
-                .onChange(of: resizeImage) { _ in
+                .onChange(of: resizeImage) {
                     adjustImageSize()
                 }
                 SimpleCell("图片尺寸") {
@@ -114,7 +114,7 @@ extension DemoSimpleImage {
             originalImage: $originalImage,
             adjustedImage: $adjustedImage
         )
-        .onChange(of: originalImage) { _ in
+        .onChange(of: originalImage) {
             adjustImageSize()
         }
     }

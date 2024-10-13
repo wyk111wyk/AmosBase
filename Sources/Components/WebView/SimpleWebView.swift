@@ -63,9 +63,9 @@ public struct SimpleWebView: View {
             model: model
         )
         .ignoresSafeArea()
-        .onChange(of: url) { new in
+        .onChange(of: url) {
 //            debugPrint("URL改变：\(new.absoluteString)")
-            model.loadRequest(.init(url: new))
+            model.loadRequest(.init(url: url))
         }
         .simpleErrorToast(
             presentState: $showErrorAlert,

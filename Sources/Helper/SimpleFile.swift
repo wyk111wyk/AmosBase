@@ -116,7 +116,8 @@ public class SimpleFileHelper {
     public func filePath(
         _ fileName: String,
         folderName: String? = "audioFile",
-        suffix: String? = "wav"
+        suffix: String? = "wav",
+        isCreateWhenEmpty: Bool = true
     ) -> URL? {
         // 获取文档目录路径
         guard let folderDirectory = folderPath(folderName) else {
@@ -130,11 +131,15 @@ public class SimpleFileHelper {
         
         let finalFilePath = folderDirectory.appendingPathComponent(fullFileName)
         if !file.fileExists(atPath: finalFilePath.path()) {
-            file.createFile(
-                atPath: finalFilePath.path(),
-                contents: nil,
-                attributes: nil
-            )
+            if isCreateWhenEmpty {
+                file.createFile(
+                    atPath: finalFilePath.path(),
+                    contents: nil,
+                    attributes: nil
+                )
+            }else {
+                return finalFilePath
+            }
         }
         
         // 返回文件路径的字符串表示
@@ -179,6 +184,18 @@ public class SimpleFileHelper {
         }catch {
             debugPrint("获取文件列表错误：\(error)")
             return []
+        }
+    }
+    
+    /// 移动文件
+    @discardableResult
+    public func moveFile(from startUrl: URL, to endUrl: URL) -> Bool {
+        do {
+            try file.moveItem(at: startUrl, to: endUrl)
+            return true
+        } catch {
+            debugPrint("移动文件失败：\(error)")
+            return false
         }
     }
     

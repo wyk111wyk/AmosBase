@@ -100,11 +100,11 @@ public struct SimpleImagePicker<V: View>: View {
                 }
             }
             #endif
-            .onChange(of: selectedItem) { newItem in
-                if let newItem {
+            .onChange(of: selectedItem) {
+                if let selectedItem {
                     Task {
                         if #available(macOS 14.0, iOS 16.0, watchOS 9.0, *) {
-                            let newImage = try? await newItem.loadTransferable(type: SFImage.self)
+                            let newImage = try? await selectedItem.loadTransferable(type: SFImage.self)
                             adjustImage(for: newImage)
                         }
                     }

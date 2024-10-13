@@ -100,7 +100,7 @@ public struct DemoSimpleUpload: View {
             adjustWidth: isCrop ? newWidth.toCGFloat : nil,
             adjustRatio: isCrop ? ratio : nil
         )
-        .onChange(of: originalImage) { _ in
+        .onChange(of: originalImage) {
             timeStampName = Date().timeIntervalSince1970.toString()
         }
     }
@@ -108,7 +108,7 @@ public struct DemoSimpleUpload: View {
     @ViewBuilder
     private func clipImageView() -> some View {
         Toggle("压缩图片", isOn: $isCrop.animation())
-            .onChange(of: isCrop) { newValue in
+            .onChange(of: isCrop) {
                 adjustShowImage()
             }
         if isCrop {
@@ -116,8 +116,8 @@ public struct DemoSimpleUpload: View {
                 TextField("", value: $newWidth, format: .number)
                     .multilineTextAlignment(.trailing)
             }
-            .onChange(of: newWidth) { newValue in
-                if newValue > 0 {
+            .onChange(of: newWidth) {
+                if newWidth > 0 {
                     adjustShowImage()
                 }
             }
@@ -129,7 +129,7 @@ public struct DemoSimpleUpload: View {
                 }
                 Slider(value: $ratio, in: 0.1...1, step: 0.1)
             }
-            .onChange(of: ratio) { newValue in
+            .onChange(of: ratio) {
                 adjustShowImage()
             }
         }

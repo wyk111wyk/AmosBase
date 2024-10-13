@@ -179,16 +179,16 @@ extension DemoSimpleCloud {
         Section("Network") {
             SimpleCell("网络情况") {
                 if let isNetworkAvailable {
-                    Text(isNetworkAvailable ? "可用" : "未连接")
+                    Text(isNetworkAvailable ? "正常" : "未连接")
                         .simpleTag(.border(contentColor: isNetworkAvailable ? .green : .red))
                 }else {
                     Text("未知")
                         .foregroundStyle(.secondary)
                 }
             }
-            SimpleCell("iCloud情况") {
+            SimpleCell("设备iCloud状态", systemImage: "icloud") {
                 if let isICloudAvailable {
-                    Text(isICloudAvailable ? "可用" : "不可用")
+                    Text(isICloudAvailable ? "正常" : "不可用")
                         .simpleTag(.border(contentColor: isICloudAvailable ? .green : .red))
                 }else {
                     Text("未知")
@@ -275,7 +275,7 @@ extension DemoSimpleCloud {
     
     private func imageUpload(isData: Bool = false) -> some View {
         SimpleImagePicker(adjustedImage: $uploadImage, adjustWidth: 800)
-            .onChange(of: uploadImage) { image in
+            .onChange(of: uploadImage) {
                 if saveType.recordType() == "Data" {
                     uploadData = uploadImage?.jpegImageData()
                 }

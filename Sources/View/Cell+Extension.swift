@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+/*
+ 使用方式：在任何页面添加：
+ typealias SimpleCell = _SimpleCell
+ */
+public typealias _SimpleCell = SimpleCell
 
 /// 简单UI组件 -  多样的表格Cell
 ///

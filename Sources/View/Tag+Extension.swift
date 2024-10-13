@@ -112,5 +112,6 @@ struct TagBorder: ViewModifier {
                         .foregroundStyle(bgColor)
                 }
             }
+            .contentShape(Rectangle())
     }
 }

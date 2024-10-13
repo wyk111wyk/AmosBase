@@ -329,8 +329,8 @@ extension SimpleColorPicker {
             SimpleCell("Color Hex", systemImage: "hexagon", localizationBundle: .module) {
                 TextField("", text: $hexString, prompt: Text("Color Hex"))
                     .multilineTextAlignment(.trailing)
-                    .onChange(of: hexString) { newHex in
-                        if let newColor = Color(hex: newHex) {
+                    .onChange(of: hexString) {
+                        if let newColor = Color(hex: hexString) {
                             selectedColor = newColor
                         }else {
                             hexString = selectedColor.hexString

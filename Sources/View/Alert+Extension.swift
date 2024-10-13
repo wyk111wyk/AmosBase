@@ -23,13 +23,49 @@ public extension View {
         confirmTap: @escaping () -> Void = {},
         cancelTap: @escaping () -> Void = {}
     ) -> some View {
-        modifier(SimpleAlert(title: title,
-                             message: message,
-                             type: type,
-                             isPresented: isPresented,
-                             confirmTap: confirmTap,
-                             cancelTap: cancelTap))
+        modifier(
+            SimpleAlert(
+                title: title,
+                message: message,
+                type: type,
+                isPresented: isPresented,
+                confirmTap: confirmTap,
+                cancelTap: cancelTap
+            )
+        )
     }
+    
+    /// 简单UI组件 -  Alert错误提醒
+    func simpleErrorAlert(
+        error: Binding<Error?>,
+        confirmTap: @escaping () -> Void = {}
+    ) -> some View {
+        if let simpleError = error.wrappedValue as? SimpleError,
+            case let .customError(title, msg) = simpleError {
+            return modifier(
+                SimpleAlert(
+                    title: title,
+                    message: msg.toLocalizedKey(),
+                    type: .singleConfirm,
+                    isPresented: .isPresented(error),
+                    confirmTap: confirmTap,
+                    cancelTap: {}
+                )
+            )
+        }else {
+            return modifier(
+                SimpleAlert(
+                    title: error.wrappedValue.debugDescription,
+                    message: nil,
+                    type: .singleConfirm,
+                    isPresented: .isPresented(error),
+                    confirmTap: confirmTap,
+                    cancelTap: {}
+                )
+            )
+        }
+    }
+        
     
     /// 简单UI组件 -  Confirmation提醒，有四种形式，默认确认键取消
     ///
@@ -42,12 +78,16 @@ public extension View {
         confirmTap: @escaping () -> Void = {},
         cancelTap: @escaping () -> Void = {}
     ) -> some View {
-        modifier(SimpleConfirmation(title: title,
-                                    message: message,
-                                    type: type,
-                                    isPresented: isPresented,
-                                    confirmTap: confirmTap,
-                                    cancelTap: cancelTap))
+        modifier(
+            SimpleConfirmation(
+                title: title,
+                message: message,
+                type: type,
+                isPresented: isPresented,
+                confirmTap: confirmTap,
+                cancelTap: cancelTap
+            )
+        )
     }
 }
 

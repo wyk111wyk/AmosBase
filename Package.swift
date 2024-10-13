@@ -7,7 +7,7 @@ let package = Package(
     name: "AmosBase",
     defaultLocalization: "en",
     platforms: [ // 本 Package 适用的平台
-        .iOS(.v16),
+        .iOS(.v17),
         .macOS(.v13),
         .watchOS(.v9)
     ],

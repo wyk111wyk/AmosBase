@@ -18,6 +18,20 @@ public struct SimpleMapMarker: Hashable {
     public let place: MKPlacemark?
     
     public init(
+        title: String = "Pin",
+        systemIcon: String? = nil,
+        color: Color = .red,
+        location: CLLocation
+    ) {
+        self.title = title
+        self.systemIcon = systemIcon
+        self.color = color
+        self.lat = location.coordinate.latitude
+        self.long = location.coordinate.longitude
+        self.place = nil
+    }
+    
+    public init(
         title: String,
         systemIcon: String?,
         color: Color,

@@ -277,6 +277,42 @@ extension SimpleCloudHelper{
         }
     }
     
+    public func fetchSingleValuePath(
+        dataType: DataType,
+        zoneType: ZoneType = .privateType,
+        idKey: String?,
+        predicate: NSPredicate? = nil,
+        customKey: String? = nil,
+        customRecord: String? = nil
+    ) async throws -> URL? {
+        guard let result = try await fetchSingleObject(
+            dataType: dataType,
+            zoneType: zoneType,
+            customRecord: customRecord,
+            idKey: idKey,
+            predicate: predicate
+        )else {
+            return nil
+        }
+        
+        switch result {
+        case .success(let record):
+            let key = dataType.valueType(customKey)
+            if let asset = record.value(forKey: key) as? CKAsset,
+               let fileURL = asset.fileURL {
+                debugPrint("从iCloud获取数据的缓存地址：\(fileURL)")
+                return fileURL
+            }
+            
+            return nil
+        case .failure(let error):
+            if isDebuging {
+                debugPrint("转换数据失败：\(error)")
+            }
+            throw error
+        }
+    }
+    
     public func fetchSingleData(
         zoneType: ZoneType = .privateType,
         idKey: String?,

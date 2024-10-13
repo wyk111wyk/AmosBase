@@ -88,6 +88,25 @@ public extension Int64 {
     }
 }
 
+public extension TimeInterval {
+    /// 转换为 00:00 格式的时间显示
+    func toTime(allowedUnits: NSCalendar.Unit = [.hour, .minute, .second]) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.minute, .second]
+        formatter.zeroFormattingBehavior = .pad
+        formatter.unitsStyle = .positional
+        if let formattedString = formatter.string(from: self) {
+            return formattedString
+        } else {
+            return "0:00" // 默认返回
+        }
+    }
+    
+    var toDouble: Double {
+        Double(self)
+    }
+}
+
 public extension CGFloat {
     var toInt: Int {
         Int(self)

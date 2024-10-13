@@ -70,25 +70,12 @@ public struct DemoSimpleDevice: View {
                 .disabled(location.currentLocation == nil)
             }
             .sheet(item: $mapLocation) { location in
-                mapContentPage(location)
+                SimpleMap(pinMarker: .init(location: location.toLocation()))
             }
             #endif
         }
         .formStyle(.grouped)
         .navigationTitle(title)
-    }
-    
-    private func mapContentPage(_ location: CLLocationCoordinate2D) -> some View {
-        Map(
-            coordinateRegion: .constant(.init(center: location, span: .init(latitudeDelta: 0.01, longitudeDelta: 0.01))),
-            showsUserLocation: true,
-            annotationItems: [location]
-        ) {
-            MapMarker(coordinate: $0)
-        }
-            .buttonCirclePage(role: .cancel) {
-                dismissPage()
-            }
     }
     
     @ViewBuilder
