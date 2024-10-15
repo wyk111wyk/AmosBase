@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 struct DemoSimpleCard: View {
     @State private var allCardItems: [any SimpleCardable]
     @State private var currentPositionID: UUID?
@@ -160,7 +159,6 @@ struct DemoSimpleCard: View {
     }
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview {
     DemoSimpleCard()
         .environment(\.locale, .zhHans)

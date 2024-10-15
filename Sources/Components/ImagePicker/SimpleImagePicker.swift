@@ -186,7 +186,6 @@ extension SimpleImagePicker {
     }
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview {
     @Previewable @State var originalImage: SFImage?
     @Previewable @State var adjustedImage: SFImage?

@@ -86,7 +86,7 @@ public struct DemoSimpleButton<V: View>: View {
                     Text(String.randomChinese(word: true))
                         .simpleTag(.full(bgColor: .blue.opacity(0.9)))
                 }
-            }.simpleSwipe(hasEdit: true, hasFavor: true, isFavor: false)
+            }.simpleSwipe(isFavor: false, favorAction: {})
             Button {
                 
             } label: {
@@ -99,6 +99,8 @@ public struct DemoSimpleButton<V: View>: View {
             }
             SimpleCell(
                 String.randomChinese(short: true),
+                titleSystemImage: "star.fill",
+                titleImageColor: .yellow,
                 systemImage: "person.wave.2.fill",
                 content: String.randomChinese(medium: true),
                 stateText: String.randomChinese(short: true)

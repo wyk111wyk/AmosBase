@@ -96,7 +96,7 @@ public class SimpleFileHelper {
         }
         
         guard file.fileExists(atPath: folderDirectory.path()) else {
-            debugPrint("文件夹:\(folderName.wrapped) 不存在")
+//            debugPrint("文件夹:\(folderName.wrapped) 不存在")
             return false
         }
         

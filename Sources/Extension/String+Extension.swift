@@ -740,6 +740,9 @@ public extension String {
 }
 
 // MARK: - 让Text显示多样式内容
+/*
+ Text("我已经阅读并同意遵守\("《AK23会员协议》", color: .orange)")
+ */
 public extension LocalizedStringKey.StringInterpolation {
     mutating func appendInterpolation(bold value: LocalizedStringKey){
         appendInterpolation(Text(value).bold())
@@ -756,6 +759,10 @@ public extension LocalizedStringKey.StringInterpolation {
     /// Text("注意：支付成功后请点击\("\"返回商家\"", color: .green)跳转")
     mutating func appendInterpolation(_ value: LocalizedStringKey, color: Color?) {
         appendInterpolation(Text(value).bold().foregroundColor(color))
+    }
+    
+    mutating func appendInterpolation(_ image: Image, color: Color?) {
+        appendInterpolation(Text(image).foregroundColor(color))
     }
     
     mutating func appendInterpolation(bold value: LocalizedStringKey, color: Color?){

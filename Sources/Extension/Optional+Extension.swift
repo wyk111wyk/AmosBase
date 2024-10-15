@@ -37,8 +37,29 @@ public extension Optional {
     func toString() -> String? {
         if self.isString() {
             return self as? String
+        }else if self.isType(Int.self),
+                 let int = self as? Int {
+            return String(int)
+        }else if self.isType(Double.self),
+                 let double = self as? Double {
+            return double.toString(digit: 2)
         }else {
             return nil
+        }
+    }
+    
+    func toInt() -> Int {
+        if self.isString(),
+           let string = self as? String {
+            return string.toInt()
+        }else if self.isType(Int.self),
+                 let int = self as? Int {
+            return int
+        }else if self.isType(Double.self),
+                 let double = self as? Double {
+            return double.toInt
+        }else {
+            return 0
         }
     }
     

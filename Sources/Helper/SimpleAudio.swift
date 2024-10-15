@@ -20,8 +20,13 @@ public class SimpleAudioSuper: NSObject {
 
 @Observable
 public class SimpleAudioHelper: SimpleAudioSuper {
+    public enum PlayState {
+        case stop, isPlaying, isPausing
+    }
+    
     var cancellable: AnyCancellable?
     public var currentTime: TimeInterval = 0
+    public var playState: PlayState = .stop
     
     public override init(_ filePath: URL) {
         super.init(filePath)
@@ -40,16 +45,19 @@ public class SimpleAudioHelper: SimpleAudioSuper {
                 self.currentTime = self.audioPlayer?.currentTime ?? 0
             }
         // 播放
+        playState = .isPlaying
         return audioPlayer?.play() ?? false
     }
     
     public func pause() {
+        playState = .isPausing
         audioPlayer?.pause()
     }
     
     public func stop() {
         audioPlayer?.stop()
         audioPlayer?.currentTime = 0
+        playState = .stop
         currentTime = 0
         cancellable?.cancel()
     }
@@ -60,10 +68,7 @@ public class SimpleAudioHelper: SimpleAudioSuper {
         }else {
             audioPlayer?.play()
         }
-    }
-    
-    public func isPlaying() -> Bool {
-        audioPlayer?.isPlaying ?? false
+        playState = .isPlaying
     }
     
     public static func playSoundFromBundle(sound: String, type: String) {
@@ -77,17 +82,13 @@ extension SimpleAudioHelper: AVAudioPlayerDelegate {
     public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         debugPrint("音频文件播放完成")
         currentTime = 0
+        playState = .stop
         cancellable?.cancel()
     }
 }
 
 public struct SimpleAudioPlayBar: View {
-    enum PlayState {
-        case stop, isPlaying, isPausing
-    }
-    
     @State private var audioHelper: SimpleAudioHelper?
-    @State private var state: PlayState = .stop
     
     let title: String?
     @Binding var isPresenting: Bool
@@ -197,37 +198,37 @@ public struct SimpleAudioPlayBar: View {
         .onAppear {
             play()
         }
-        .onChange(of: audioHelper?.currentTime) {
-            if state == .isPlaying, audioHelper?.currentTime == 0 {
-                state = .stop
-            }
+        .onDisappear {
+            stop()
         }
     }
     
     @ViewBuilder
     private func controlButton() -> some View {
-        HStack(spacing: 15) {
-            switch state {
-            case .stop:
-                Button(action: play, label: {
-                    playButton()
-                }).buttonStyle(.plain)
-            case .isPlaying:
-                // 播放时
-                Button(action: pause, label: {
-                    pauseButton()
-                }).buttonStyle(.plain)
-                Button(action: stop, label: {
-                    stopButton()
-                }).buttonStyle(.plain)
-            case .isPausing:
-                // 暂停时
-                Button(action: play, label: {
-                    playButton()
-                }).buttonStyle(.plain)
-                Button(action: stop, label: {
-                    stopButton()
-                }).buttonStyle(.plain)
+        if let audioHelper = audioHelper {
+            HStack(spacing: 15) {
+                switch audioHelper.playState {
+                case .stop:
+                    Button(action: play, label: {
+                        playButton()
+                    }).buttonStyle(.plain)
+                case .isPlaying:
+                    // 播放时
+                    Button(action: pause, label: {
+                        pauseButton()
+                    }).buttonStyle(.plain)
+                    Button(action: stop, label: {
+                        stopButton()
+                    }).buttonStyle(.plain)
+                case .isPausing:
+                    // 暂停时
+                    Button(action: play, label: {
+                        playButton()
+                    }).buttonStyle(.plain)
+                    Button(action: stop, label: {
+                        stopButton()
+                    }).buttonStyle(.plain)
+                }
             }
         }
     }
@@ -236,25 +237,19 @@ public struct SimpleAudioPlayBar: View {
 extension SimpleAudioPlayBar {
     private func play() {
         withAnimation {
-            if audioHelper?.playSound() == true {
-                state = .isPlaying
-            }else {
-                state = .stop
-            }
+            let _ = audioHelper?.playSound()
         }
     }
     
     private func pause() {
         withAnimation {
             audioHelper?.pause()
-            state = .isPausing
         }
     }
     
     private func stop() {
         withAnimation {
             audioHelper?.stop()
-            state = .stop
         }
     }
     

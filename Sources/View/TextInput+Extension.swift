@@ -341,7 +341,6 @@ public struct SimpleTokenTextField: View {
     ){_ in}
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview("Form") {
     @Previewable @State var input01: String = ""
     @Previewable @State var input02: String = ""

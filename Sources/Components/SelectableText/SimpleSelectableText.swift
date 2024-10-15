@@ -153,7 +153,6 @@ private enum TestText {
         }
     }
 }
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview("Change") {
     @Previewable @State var testText: TestText = .md1
     @Previewable @State var mdText: AttributedString? = String.testText(.markdown01).markdown

@@ -186,6 +186,36 @@ public extension Array where Element: Equatable {
         }
     }
     
+    /// 根据ID批量删除数组内的元素
+    @discardableResult
+    func removeMutil(indices: [Int]) -> [Element] {
+        var tempArr = self
+        let uniqueIndices = Set(indices).filter {
+            $0 >= 0 && $0 < tempArr.count
+        }
+        for index in uniqueIndices.sorted(by: >) {
+            tempArr.remove(at: index)
+        }
+        return tempArr
+    }
+    
+    /// 批量根据ID将元素移动到最前方
+    func moveElementsToFront(indices: [Int]) -> [Element] {
+        var tempArr = self
+        // 确保索引是唯一且有效的
+        let uniqueIndices = Set(indices).filter { $0 >= 0 && $0 < tempArr.count }
+        
+        // 提取要移动的元素
+        var elementsToMove: [Element] = []
+        for index in uniqueIndices.sorted(by: >) { // 从后向前移除元素，避免索引错误
+            elementsToMove.append(tempArr[index])
+            tempArr.remove(at: index)
+        }
+        
+        // 将移动的元素添加到数组的前面
+        return elementsToMove + tempArr
+    }
+    
     /// SwifterSwift: 删除数组中的空值。
     ///
     /// - Returns: self after removing all instances of item.

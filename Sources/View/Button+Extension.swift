@@ -207,7 +207,6 @@ public struct SimpleTriggerButton<V: View>: View {
     }
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview(
     "Button",
     body: {

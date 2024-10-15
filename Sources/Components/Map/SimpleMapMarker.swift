@@ -8,7 +8,6 @@
 import SwiftUI
 import MapKit
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 public struct SimpleMapMarker: Hashable {
     public let title: String
     public let systemIcon: String?
@@ -94,7 +93,6 @@ public struct SimpleMapMarker: Hashable {
     }
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 public extension MKMapItem {
     func toMarker(
         systemIcon: String? = nil,

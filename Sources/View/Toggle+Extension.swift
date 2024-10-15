@@ -90,7 +90,6 @@ struct LabelToggleStyle: ToggleStyle {
     }
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview(body: {
     @Previewable @State var isOn1: Bool = true
     @Previewable @State var isOn2: Bool = true

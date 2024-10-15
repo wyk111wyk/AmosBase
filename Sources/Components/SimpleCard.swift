@@ -11,7 +11,6 @@ public protocol SimpleCardable: Identifiable, Hashable {
     var id: UUID { get }
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 public struct SimpleCard<
     Content: View,
     Background: View,
@@ -116,7 +115,6 @@ public struct SimpleCard<
     }
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview {
     @Previewable @State var allCardItems: [any SimpleCardable] = (0...10).map {
         SimpleTagViewItem(title: $0.toString().addSubfix("张"))

@@ -21,6 +21,8 @@ public struct SimpleCell<V: View>: View {
     
     let isDisplay: Bool // 是否展示
     
+    let titleSystemImage: String?
+    let titleImageColor: Color?
     let title: String
     let titleLine: Int?
     let titleFont: Font
@@ -52,6 +54,8 @@ public struct SimpleCell<V: View>: View {
     
     public init(
         _ title: String,
+        titleSystemImage: String? = nil,
+        titleImageColor: Color? = nil,
         titleLine: Int? = nil,
         titleFont: Font = .body,
         titleColor: Color? = nil,
@@ -78,6 +82,8 @@ public struct SimpleCell<V: View>: View {
     ) {
         self.isDisplay = isDisplay
         self.title = title
+        self.titleSystemImage = titleSystemImage
+        self.titleImageColor = titleImageColor
         self.titleLine = titleLine
         self.titleFont = titleFont
         self.titleColor = titleColor
@@ -116,6 +122,8 @@ public struct SimpleCell<V: View>: View {
                         .frame(width: imageSize, height: imageSize)
                 }else if let systemImage = systemImage {
                     Image(systemName: systemImage)
+                        .resizable()
+                        .scaledToFit()
                         .frame(width: imageSize, height: imageSize)
                         .foregroundColor(iconColor)
                 }else if let bundleImageName, let bundleImageType {
@@ -155,7 +163,13 @@ public struct SimpleCell<V: View>: View {
                 }
                 // Title 和 Content
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(LocalizedStringKey(title), bundle: localizationBundle)
+                    Group {
+                        if let titleSystemImage {
+                            Text("\(Image(systemName: titleSystemImage), color: titleImageColor)\(title.localized(bundle: localizationBundle))")
+                        }else {
+                            Text(LocalizedStringKey(title), bundle: localizationBundle)
+                        }
+                    }
                         .font(titleFont)
                         .foregroundColor(titleColor)
                         .lineLimit(titleLine)

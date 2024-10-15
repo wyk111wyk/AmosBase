@@ -8,7 +8,6 @@
 import SwiftUI
 import MapKit
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 public struct SimpleMap: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismissPage
@@ -166,7 +165,6 @@ public struct SimpleMap: View {
 
 #if !os(watchOS)
 // MARK: - 搜索内容相关
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 extension SimpleMap {
     private func srartSearchItem() {
         searchResults = []
@@ -361,7 +359,6 @@ extension SimpleMap {
 }
 #endif
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview {
     NavigationStack {
         SimpleMap(

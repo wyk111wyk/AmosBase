@@ -427,7 +427,6 @@ public struct SimpleStarSlider: View {
     }
 }
 
-@available(iOS 17.0, macOS 14, watchOS 10, *)
 #Preview {
     @Previewable @State var starValue: Int = 1
     @Previewable @State var value01: CGFloat = 1

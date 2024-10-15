@@ -16,13 +16,10 @@ public extension View {
         edge: HorizontalEdge = .trailing,
         allowsFullSwipe: Bool = false,
         hasContextMenu: Bool = true,
-        hasDelete: Bool = true,
-        hasEdit: Bool = false,
-        hasFavor: Bool = false,
         isFavor: Bool? = nil,
-        deleteAction: @escaping () -> Void = {},
-        editAction: @escaping () -> Void = {},
-        favorAction: @escaping () -> Void = {},
+        deleteAction: (() -> Void)? = nil,
+        editAction: (() -> Void)? = nil,
+        favorAction: (() -> Void)? = nil,
         @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }) -> some View {
             modifier(
                 SimpleSwipeModify(
@@ -30,9 +27,6 @@ public extension View {
                     edge: edge,
                     allowsFullSwipe: allowsFullSwipe,
                     hasContextMenu: hasContextMenu,
-                    hasDelete: hasDelete,
-                    hasEdit: hasEdit,
-                    hasFavor: hasFavor,
                     isFavor: isFavor,
                     deleteAction: deleteAction,
                     editAction: editAction,
@@ -50,15 +44,12 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
     let allowsFullSwipe: Bool
     
     let hasContextMenu: Bool
-    
-    let hasDelete: Bool
-    let hasEdit: Bool
-    let hasFavor: Bool
+    // 收藏类别区分
     var isFavor: Bool?
     
-    let deleteAction: () -> Void
-    let editAction: () -> Void
-    let favorAction: () -> Void
+    let deleteAction: (() -> Void)?
+    let editAction: (() -> Void)?
+    let favorAction: (() -> Void)?
     @ViewBuilder let buttonView: () -> V
     
     init(
@@ -66,22 +57,16 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
         edge: HorizontalEdge = .trailing,
         allowsFullSwipe: Bool = false,
         hasContextMenu: Bool = true,
-        hasDelete: Bool = true,
-        hasEdit: Bool = false,
-        hasFavor: Bool = false,
         isFavor: Bool? = nil,
-        deleteAction: @escaping () -> Void = {},
-        editAction: @escaping () -> Void = {},
-        favorAction: @escaping () -> Void = {},
+        deleteAction: (() -> Void)? = nil,
+        editAction: (() -> Void)? = nil,
+        favorAction: (() -> Void)? = nil,
         @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }
     ) {
         self.hasSwipe = hasSwipe
         self.edge = edge
         self.allowsFullSwipe = allowsFullSwipe
         self.hasContextMenu = hasContextMenu
-        self.hasDelete = hasDelete
-        self.hasEdit = hasEdit
-        self.hasFavor = hasFavor
         self.isFavor = isFavor
         self.deleteAction = deleteAction
         self.editAction = editAction
@@ -93,9 +78,9 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
         content
             .swipeActions(edge: edge, allowsFullSwipe: allowsFullSwipe) {
                 if hasSwipe {
-                    if hasDelete { deleteButton() }
-                    if hasEdit { editButton() }
-                    if hasFavor { favorButton() }
+                    if let deleteAction { deleteButton(deleteAction) }
+                    if let editAction { editButton(editAction) }
+                    if let favorAction { favorButton(favorAction) }
                     buttonView()
                 }
             }
@@ -103,28 +88,28 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
             .contextMenu {
                 if hasContextMenu {
                     buttonView()
-                    if hasEdit { editButton() }
-                    if hasFavor { favorButton() }
-                    if hasDelete { deleteButton() }
+                    if let favorAction { favorButton(favorAction) }
+                    if let editAction { editButton(editAction) }
+                    if let deleteAction { deleteButton(deleteAction) }
                 }
             }
         #endif
     }
     
-    func deleteButton() -> some View {
-        Button(role: .destructive, action: deleteAction, label: {
+    func deleteButton(_ action: @escaping () -> Void) -> some View {
+        Button(role: .destructive, action: action, label: {
             SimpleCell("Delete", systemImage: "trash", localizationBundle: .module)
         })
     }
     
-    func editButton() -> some View {
-        Button(action: editAction, label: {
+    func editButton(_ action: @escaping () -> Void) -> some View {
+        Button(action: action, label: {
             SimpleCell("Edit", systemImage: "square.and.pencil", localizationBundle: .module)
         }).tint(.blue)
     }
     
-    func favorButton() -> some View {
-        Button(action: favorAction,
+    func favorButton(_ action: @escaping () -> Void) -> some View {
+        Button(action: action,
                label: {
             SimpleCell(
                 isFavor == true ? "Unfavor":"Favor",
