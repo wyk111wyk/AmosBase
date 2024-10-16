@@ -51,10 +51,7 @@ public extension View {
     
     /// 拖拽接收 Text 内容
     func onDropText(textReceive: @escaping (String) -> Void) -> some View {
-        self.onDrop(of: [UTType.utf8PlainText.identifier, UTType.utf16PlainText.identifier],
-                    isTargeted: nil,
-                    perform: {
-            providers in
+        self.onDrop(of: [.text, .plainText, .utf8PlainText, .utf16PlainText], isTargeted: nil) { providers in
             if let provider = providers.first {
                 provider.loadDataRepresentation(forTypeIdentifier: UTType.utf8PlainText.identifier) { (data, error) in
                     if let data,
@@ -72,12 +69,12 @@ public extension View {
                 }
             }
             return true
-        })
+        }
     }
     
     /// 拖拽接收 Image 内容
     func onDropImage(imageReceive: @escaping (SFImage) -> Void) -> some View {
-        self.onDrop(of: [UTType.image.identifier], isTargeted: nil, perform: { providers in
+        self.onDrop(of: [.image], isTargeted: nil, perform: { providers in
             if let provider = providers.first {
                 provider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) { (data, error) in
                     if let data, let image = SFImage(data: data) {

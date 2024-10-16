@@ -44,7 +44,7 @@ public struct DemoSimpleUpload: View {
                 }
                 Section {
                     Button {
-                        imageUpload()
+                        uploadImage()
                     } label: {
                         SimpleCell(
                             "Upload to Github",
@@ -174,7 +174,7 @@ extension DemoSimpleUpload {
         }
     }
     
-    private func imageUpload() {
+    private func uploadImage() {
         guard let imageData = adjustedImage?.jpegImageData(quality: 1.0) else
         { return }
         

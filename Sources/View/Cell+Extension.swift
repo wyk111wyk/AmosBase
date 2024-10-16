@@ -20,14 +20,17 @@ public struct SimpleCell<V: View>: View {
     @Environment(\.colorScheme) private var colorScheme
     
     let isDisplay: Bool // 是否展示
-    
+    // Title
     let titleSystemImage: String?
     let titleImageColor: Color?
     let title: String
     let titleLine: Int?
     let titleFont: Font
     let titleColor: Color?
-    
+    // SubTitle
+    let subtitle: String?
+    let subtitleLine: Int?
+    // Icon
     let iconName: String?
     let systemImage: String?
     let bundleImageName: String?
@@ -36,19 +39,17 @@ public struct SimpleCell<V: View>: View {
     let sfImage: SFImage?
     let numberIcon: Int?
     let iconColor: Color?
-    
+    let imageSize: Double
+    // content
     let contentSystemImage: String?
     let content: String?
     let contentLine: Int?
     let contentFont: Font
     let contentColor: Color?
-    
-    let imageSize: Double
     let contentSpace: Double
-    
+    // state
     let stateText: String?
     @ViewBuilder let stateView: () -> V
-    let stateWidth: CGFloat
     
     public let localizationBundle: Bundle
     
@@ -59,6 +60,8 @@ public struct SimpleCell<V: View>: View {
         titleLine: Int? = nil,
         titleFont: Font = .body,
         titleColor: Color? = nil,
+        subtitle: String? = nil,
+        subtitleLine: Int? = 1,
         iconName: String? = nil,
         systemImage: String? = nil,
         bundleImageName: String? = nil,
@@ -76,7 +79,6 @@ public struct SimpleCell<V: View>: View {
         isDisplay: Bool = true,
         contentSpace: Double = 12,
         stateText: String? = nil,
-        stateWidth: CGFloat = 100,
         localizationBundle: Bundle = .main,
         @ViewBuilder stateView: @escaping () -> V = { EmptyView() }
     ) {
@@ -87,6 +89,8 @@ public struct SimpleCell<V: View>: View {
         self.titleLine = titleLine
         self.titleFont = titleFont
         self.titleColor = titleColor
+        self.subtitle = subtitle
+        self.subtitleLine = subtitleLine
         self.contentSystemImage = contentSystemImage
         self.content = content
         self.contentLine = contentLine
@@ -104,7 +108,6 @@ public struct SimpleCell<V: View>: View {
         self.imageSize = imageSize
         self.contentSpace = contentSpace
         self.stateText = stateText
-        self.stateWidth = stateWidth
         self.stateView = stateView
         
         self.localizationBundle = localizationBundle
@@ -163,17 +166,28 @@ public struct SimpleCell<V: View>: View {
                 }
                 // Title 和 Content
                 VStack(alignment: .leading, spacing: 5) {
-                    Group {
-                        if let titleSystemImage {
-                            Text("\(Image(systemName: titleSystemImage), color: titleImageColor)\(title.localized(bundle: localizationBundle))")
-                        }else {
-                            Text(LocalizedStringKey(title), bundle: localizationBundle)
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Group {
+                            if let titleSystemImage {
+                                Text("\(Image(systemName: titleSystemImage), color: titleImageColor)\(title.localized(bundle: localizationBundle))")
+                            }else {
+                                Text(LocalizedStringKey(title), bundle: localizationBundle)
+                            }
                         }
-                    }
                         .font(titleFont)
                         .foregroundColor(titleColor)
                         .lineLimit(titleLine)
                         .multilineTextAlignment(.leading)
+                        
+                        if let subtitle {
+                            Text(LocalizedStringKey(subtitle), bundle: localizationBundle)
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(subtitleLine)
+                                .multilineTextAlignment(.leading)
+                        }
+                    }
+                    
                     Group {
                         if let content = content, !content.isEmpty,
                            let contentSystemImage = contentSystemImage, contentSystemImage.count > 0 {
