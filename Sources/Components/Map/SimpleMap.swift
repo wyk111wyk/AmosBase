@@ -17,9 +17,9 @@ public struct SimpleMap: View {
     @State private var position: MapCameraPosition
     @State private var currentRegion: MKCoordinateRegion? = nil
     
-    @AppStorage("isRegionPin") private var isRegionPin: Bool = false
-    @AppStorage("isAddress") private var isAddress: Bool = false
-    @AppStorage("isShowsTraffic") private var isShowsTraffic: Bool = false
+    @SimpleSetting(.map_isRegionPin) var isRegionPin
+    @SimpleSetting(.map_isAddress) var isAddress
+    @SimpleSetting(.map_isShowsTraffic) var isShowsTraffic
     
     @State private var query: String = ""
     @FocusState private var searchbarFocused: Bool
@@ -166,6 +166,11 @@ public struct SimpleMap: View {
 #if !os(watchOS)
 // MARK: - 搜索内容相关
 extension SimpleMap {
+    @MainActor
+    private func loadingChange(_ isOn: Bool = true) {
+        isLoading = isOn
+    }
+    
     private func srartSearchItem() {
         searchResults = []
         displayIndex = 0
@@ -180,7 +185,7 @@ extension SimpleMap {
             request.region = currentRegion
         }
         Task {
-            isLoading = true
+            loadingChange()
             let search = MKLocalSearch(request: request)
             do {
                 let response = try await search.start()
@@ -189,10 +194,10 @@ extension SimpleMap {
                     position = .camera(.init(centerCoordinate: first.coordinate, distance: 1800))
                     selectedMarker = first
                 }
-                isLoading = false
+                loadingChange(false)
             }catch {
                 debugPrint("搜索poi失败：\(error)")
-                isLoading = false
+                loadingChange(false)
             }
         }
     }

@@ -103,6 +103,7 @@ public struct DemoSimpleButton<V: View>: View {
                 titleImageColor: .yellow,
                 systemImage: "person.wave.2.fill",
                 content: String.randomChinese(medium: true),
+                contentSystemImage: "tray",
                 stateText: String.randomChinese(short: true)
             )
         } header: {

@@ -28,6 +28,46 @@ import WatchKit
 #endif
 
 public class SimpleDevice: NSObject {
+    public static func playSuccessHaptic() {
+#if os(iOS)
+        playNotificationHaptic(.success)
+#elseif os(watchOS)
+        playWatchHaptic(.success)
+#endif
+    }
+    
+    public static func playFailureHaptic() {
+#if os(iOS)
+        playNotificationHaptic(.error)
+#elseif os(watchOS)
+        playWatchHaptic(.failure)
+#endif
+    }
+    
+    public static func playHeavyHaptic() {
+#if os(iOS)
+        playFeedbackHaptic(.heavy)
+#elseif os(watchOS)
+        playWatchHaptic(.notification)
+#endif
+    }
+    
+    public static func playMediumHaptic() {
+#if os(iOS)
+        playFeedbackHaptic(.medium)
+#elseif os(watchOS)
+        playWatchHaptic(.retry)
+#endif
+    }
+    
+    public static func playLightHaptic() {
+#if os(iOS)
+        playFeedbackHaptic(.light)
+#elseif os(watchOS)
+        playWatchHaptic(.click)
+#endif
+    }
+    
     #if os(iOS)
     /// 设备进行震动 -  成功、失败
     ///

@@ -10,19 +10,13 @@ import SwiftUI
 public struct SimpleColorPicker: View {
     enum ShowType: String {
         case small, big, side
-        
-        mutating func toggle() {
-            if self == .small { self = .big }
-            else if self == .big { self = .side }
-            else { self = .small }
-        }
     }
     @Environment(\.dismiss) private var dismissPage
     @State public var selectedColor: Color {
         didSet { hexString = selectedColor.hexString }
     }
     @State private var hexString: String
-    @AppStorage("DisplayType") private var type: ShowType = .side
+    @SimpleSetting(.colorDisplayType) var type
     
     @State private var isShowSystemColor = true
     @State private var isShowCustomGradient = true
@@ -70,8 +64,10 @@ public struct SimpleColorPicker: View {
                         systemColor(SimpleColorModel.allSwiftUI)
                     }
                 } header: {
-                    colorHeader(title: "System color",
-                                isPresent: $isShowSystemColor)
+                    colorHeader(
+                        title: "System color",
+                        isPresent: $isShowSystemColor
+                    )
                 }
                 Section {
                     if isShowCustomGradient {
@@ -82,8 +78,10 @@ public struct SimpleColorPicker: View {
                         systemColor(SimpleColorModel.allGradient_Purple)
                     }
                 } header: {
-                    colorHeader(title: "Custom gradient color",
-                                isPresent: $isShowCustomGradient)
+                    colorHeader(
+                        title: "Custom gradient color",
+                        isPresent: $isShowCustomGradient
+                    )
                 }
                 Section {
                     if isShowCustomColor {
@@ -95,8 +93,10 @@ public struct SimpleColorPicker: View {
                         systemColor(SimpleColorModel.allYellow)
                     }
                 } header: {
-                    colorHeader(title: "Custom single color",
-                                isPresent: $isShowCustomColor)
+                    colorHeader(
+                        title: "Custom single color",
+                        isPresent: $isShowCustomColor
+                    )
                 }
             }
             .formStyle(.grouped)
@@ -116,12 +116,12 @@ public struct SimpleColorPicker: View {
                 edge: .bottom,
                 spacing: 12
             ) {
-                if type == .big {
-                    bigDisplay()
-                }else if type == .small {
-                    smallDisplay()
-                }else {
-                    sideDisplay()
+                if let showType = ShowType(rawValue: type) {
+                    switch showType {
+                    case .big: bigDisplay()
+                    case .small: smallDisplay()
+                    case .side: sideDisplay()
+                    }
                 }
             }
             #endif
@@ -152,7 +152,10 @@ public struct SimpleColorPicker: View {
 
 extension SimpleColorPicker {
     private func switchDisplay() {
-        type.toggle()
+        let showType = ShowType(rawValue: type)
+        if showType == .small { type = "big" }
+        else if showType == .big { type = "side" }
+        else { type = "small" }
     }
     
     private func sideDisplay() -> some View {

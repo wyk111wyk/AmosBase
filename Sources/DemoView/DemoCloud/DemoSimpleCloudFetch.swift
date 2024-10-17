@@ -89,9 +89,14 @@ public struct DemoSimpleCloudFetch<T: Hashable>: View {
         }
     }
     
+    @MainActor
+    private func loadingChange(_ isOn: Bool = true) {
+        isLoading = isOn
+    }
+    
     private func fetchValue() async {
         guard let cloudHelper else { return }
-        isLoading = true
+        loadingChange()
         do {
             let allValues: [SimpleCloudValue<T>] = try await cloudHelper.fetchCloudTypeValue(dataType: dataType)
                 .sorted { $0.creationDate ?? .now > $1.creationDate ?? .now }
@@ -100,13 +105,13 @@ public struct DemoSimpleCloudFetch<T: Hashable>: View {
             errorMsg = error.localizedDescription
             debugPrint(error)
         }
-        isLoading = false
+        loadingChange(false)
     }
     
     private func deleteValue(_ value: SimpleCloudValue<T>) {
         guard let cloudHelper else { return }
         Task {
-            isLoading = true
+            loadingChange()
             do {
                 try await cloudHelper.deleteSingleValue(
                     dataType: value.dataType,
@@ -118,7 +123,7 @@ public struct DemoSimpleCloudFetch<T: Hashable>: View {
                 errorMsg = error.localizedDescription
                 debugPrint(error)
             }
-            isLoading = false
+            loadingChange(false)
         }
     }
 }

@@ -88,11 +88,16 @@ public struct DemoSimpleCloud: View {
 
 // MARK: - 方法 Methods
 extension DemoSimpleCloud {
+    @MainActor
+    private func loadingChange(_ isOn: Bool = true) {
+        isLoading = isOn
+    }
+    
     private func startUpload() {
         guard let cloudHelper else { return }
         Task {
             loadingMsg = "上传中"
-            isLoading = true
+            loadingChange()
             if let saveData = saveType.create(
                 image: uploadImage,
                 data: uploadData,
@@ -117,7 +122,7 @@ extension DemoSimpleCloud {
                     debugPrint(error)
                     errorMsg = error.localizedDescription
                 }
-                isLoading = false
+                loadingChange(false)
             }
         }
     }
@@ -126,7 +131,7 @@ extension DemoSimpleCloud {
         guard let cloudHelper else { return }
         Task {
             loadingMsg = "正在删除"
-            isLoading = true
+            loadingChange()
             do {
                 let deleteCount = try await cloudHelper.deleteCloudValue()
                 successMsg = "成功删除\(deleteCount)条数据"
@@ -134,7 +139,7 @@ extension DemoSimpleCloud {
                 errorMsg = error.localizedDescription
                 debugPrint(error)
             }
-            isLoading = false
+            loadingChange(false)
         }
     }
     

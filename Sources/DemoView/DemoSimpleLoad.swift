@@ -10,8 +10,8 @@ import SwiftUI
 import CoreLocation
 
 struct DemoSimpleLoad: View {
-    @AppStorage("googleKey") private var googleKey = ""
-    @AppStorage("amapKey") private var amapKey = ""
+    @SimpleSetting(.library_amapKey) var amapKey
+    @SimpleSetting(.library_googleKey) var googleKey
     
     let webHelper = SimpleWeb()
     @State private var isLoading = false
@@ -136,21 +136,26 @@ struct DemoSimpleLoad: View {
 }
 
 extension DemoSimpleLoad {
+    @MainActor
+    private func loadingChange(_ isOn: Bool = true) {
+        isLoading = isOn
+    }
+    
     private func fetchElevation() {
         guard let coordinate = currentLocation?.coordinate else {
             return
         }
         Task {
             do {
-                isLoading = true
+                loadingChange()
                 elevation = try await webHelper.google_fetchElevation(
                     coordinate: coordinate,
                     googleKey: googleKey
                 )?.elevation
-                isLoading = false
+                loadingChange(false)
             } catch {
                 currentError = error
-                isLoading = false
+                loadingChange(false)
             }
         }
     }
@@ -161,17 +166,17 @@ extension DemoSimpleLoad {
         }
         Task {
             do {
-                isLoading = true
+                loadingChange()
                 amapAddress = try await webHelper.amap_fetchAddress(
                     amapKey: amapKey,
                     coordinate: coordinate,
                     resultType: .base
                 )
                 cityCode = amapAddress?.addressComponent.citycode
-                isLoading = false
+                loadingChange(false)
             } catch {
                 currentError = error
-                isLoading = false
+                loadingChange(false)
             }
         }
     }
@@ -182,15 +187,15 @@ extension DemoSimpleLoad {
         }
         Task {
             do {
-                isLoading = true
+                loadingChange()
                 liveWeather = try await webHelper.amap_fetchLiveWeather(
                     amapKey: amapKey,
                     areaCode: cityCode
                 )
-                isLoading = false
+                loadingChange(false)
             } catch {
                 currentError = error
-                isLoading = false
+                loadingChange(false)
             }
         }
     }
@@ -201,15 +206,15 @@ extension DemoSimpleLoad {
         }
         Task {
             do {
-                isLoading = true
+                loadingChange()
                 weatherForecast = try await webHelper.amap_fetchWeatherForecast(
                     amapKey: amapKey,
                     areaCode: cityCode
                 )
-                isLoading = false
+                loadingChange(false)
             } catch {
                 currentError = error
-                isLoading = false
+                loadingChange(false)
             }
         }
     }
@@ -220,16 +225,16 @@ extension DemoSimpleLoad {
         }
         Task {
             do {
-                isLoading = true
+                loadingChange()
                 amapPOIs = try await webHelper.amap_fetchPoi(
                     amapKey: amapKey,
                     keyword: searchKey,
                     region: cityCode
                 )
-                isLoading = false
+                loadingChange(false)
             } catch {
                 currentError = error
-                isLoading = false
+                loadingChange(false)
             }
         }
     }

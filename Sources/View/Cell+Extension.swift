@@ -71,11 +71,11 @@ public struct SimpleCell<V: View>: View {
         imageSize: Double = 22,
         numberIcon: Int? = nil,
         iconColor: Color? = nil,
-        contentSystemImage: String? = nil,
         content: String? = nil,
         contentLine: Int? = nil,
         contentFont: Font = .caption,
         contentColor: Color? = .secondary,
+        contentSystemImage: String? = nil,
         isDisplay: Bool = true,
         contentSpace: Double = 12,
         stateText: String? = nil,
@@ -167,17 +167,18 @@ public struct SimpleCell<V: View>: View {
                 // Title 和 Content
                 VStack(alignment: .leading, spacing: 5) {
                     HStack(alignment: .firstTextBaseline, spacing: 8) {
-                        Group {
+                        HStack(alignment: .top, spacing: 6) {
                             if let titleSystemImage {
-                                Text("\(Image(systemName: titleSystemImage), color: titleImageColor)\(title.localized(bundle: localizationBundle))")
-                            }else {
-                                Text(LocalizedStringKey(title), bundle: localizationBundle)
+                                Image(systemName: titleSystemImage)
+                                    .foregroundColor(titleImageColor)
+                                    .font(.body)
                             }
+                            Text(LocalizedStringKey(title), bundle: localizationBundle)
+                                .font(titleFont)
+                                .foregroundColor(titleColor)
+                                .lineLimit(titleLine)
+                                .multilineTextAlignment(.leading)
                         }
-                        .font(titleFont)
-                        .foregroundColor(titleColor)
-                        .lineLimit(titleLine)
-                        .multilineTextAlignment(.leading)
                         
                         if let subtitle {
                             Text(LocalizedStringKey(subtitle), bundle: localizationBundle)
@@ -188,18 +189,20 @@ public struct SimpleCell<V: View>: View {
                         }
                     }
                     
-                    Group {
-                        if let content = content, !content.isEmpty,
-                           let contentSystemImage = contentSystemImage, contentSystemImage.count > 0 {
-                            Text("\(Image(systemName: contentSystemImage))\(content.localized(bundle: localizationBundle))")
-                        } else if let content = content, content.count > 0 {
+                    HStack(alignment: .top, spacing: 4) {
+                        if let content = content, !content.isEmpty {
+                            if let contentSystemImage {
+                                Image(systemName: contentSystemImage)
+                                    .foregroundColor(contentColor)
+                                    .font(.footnote)
+                            }
                             Text(LocalizedStringKey(content), bundle: localizationBundle)
+                                .foregroundColor(contentColor)
+                                .font(contentFont)
+                                .lineLimit(contentLine)
+                                .multilineTextAlignment(.leading)
                         }
                     }
-                    .foregroundColor(contentColor)
-                    .font(contentFont)
-                    .lineLimit(contentLine)
-                    .multilineTextAlignment(.leading)
                 }
                 
                 if V.self != EmptyView.self || stateText != nil {

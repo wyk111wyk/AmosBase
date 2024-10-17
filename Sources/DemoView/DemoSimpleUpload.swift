@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 
 public struct DemoSimpleUpload: View {
-    @AppStorage("gitToken") private var gitToken: String = ""
+    @SimpleSetting(.library_gitToken) var gitToken
     @State private var showGithubKey = false
     
     @State private var originalImage: SFImage?
@@ -174,12 +174,17 @@ extension DemoSimpleUpload {
         }
     }
     
+    @MainActor
+    private func loadingChange(_ isOn: Bool = true) {
+        isLoading = isOn
+    }
+    
     private func uploadImage() {
         guard let imageData = adjustedImage?.jpegImageData(quality: 1.0) else
         { return }
         
         Task {
-            isLoading = true
+            loadingChange()
             do {
                 let content = imageData.base64EncodedString()
                 if let _ = try await picBed.uploadFile(
@@ -194,7 +199,7 @@ extension DemoSimpleUpload {
             }catch {
                 self.error = error
             }
-            isLoading = false
+            loadingChange(false)
         }
     }
 }

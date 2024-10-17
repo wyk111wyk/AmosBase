@@ -155,13 +155,18 @@ public struct SimplePicList: View {
         }
     }
     
+    @MainActor
+    private func loadingChange(_ isOn: Bool = true) {
+        isLoading = isOn
+    }
+    
     private func fetchImageList() async {
         guard gitToken.isNotEmpty else {
             error = SimpleError.customError(msg: "请先设置Github密钥")
             return
         }
         
-        isLoading = true
+        loadingChange()
         do {
             allImage.removeAll()
             allImageList = try await picBed.fetchFileList(path: uploadPath.path)
@@ -184,12 +189,12 @@ public struct SimplePicList: View {
         }catch {
             self.error = error
         }
-        isLoading = false
+        loadingChange(false)
     }
     
     private func deleteFile(_ gitImage: GithubRepoFileListModel) {
         Task {
-            isLoading = true
+            loadingChange()
             do {
                 if try await picBed.deleteFile(for: gitImage) {
                     allImageList.removeById(gitImage)
@@ -200,7 +205,7 @@ public struct SimplePicList: View {
             }catch {
                 self.error = error
             }
-            isLoading = false
+            loadingChange(false)
         }
     }
 }

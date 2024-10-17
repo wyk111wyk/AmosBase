@@ -144,9 +144,9 @@ public struct SimplePicker<Value: SimplePickerItem>: View {
                             titleColor: titleColor(value),
                             iconName: value.iconName,
                             systemImage: isDisabled(value) ? "xmark.circle" : value.systemImage,
-                            contentSystemImage: value.contentSystemImage,
                             content: value.content,
-                            contentColor: hasSelected(value) ? .primary : .secondary
+                            contentColor: hasSelected(value) ? .primary : .secondary,
+                            contentSystemImage: value.contentSystemImage
                         ) {
                             if hasSelected(value) {
                                 Image(systemName: "checkmark.circle.fill")
