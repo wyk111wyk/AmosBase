@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct SimpleTagViewItem: Identifiable, SimpleCardable {
+public struct SimpleTagViewItem: SimpleCardable {
     public let id: UUID
     public var title: String
     public var icon: String?

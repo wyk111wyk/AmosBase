@@ -7,26 +7,26 @@
 
 import SwiftUI
 
-public protocol SimpleCardable: Identifiable, Hashable {
-    var id: UUID { get }
-}
+public protocol SimpleCardable: Identifiable, Hashable {}
 
 public struct SimpleCard<
+    H: Hashable,
+    S: SimpleCardable,
     Content: View,
     Background: View,
     BottomView: View
 >: View {
-    @Binding var allCardItems: [any SimpleCardable]
-    @Binding var currentPositionID: UUID?
-    @ViewBuilder let content: (any SimpleCardable) -> Content
-    @ViewBuilder let background: (any SimpleCardable) -> Background
+    @Binding var allCardItems: [S]
+    @Binding var currentPositionID: H?
+    @ViewBuilder let content: (S) -> Content
+    @ViewBuilder let background: (S) -> Background
     @ViewBuilder let bottomView: () -> BottomView
     
     public init(
-        allCardItems: Binding<[any SimpleCardable]>,
-        currentPositionID: Binding<UUID?>,
-        content: @escaping (any SimpleCardable) -> Content,
-        background: @escaping (any SimpleCardable) -> Background,
+        allCardItems: Binding<[S]>,
+        currentPositionID: Binding<H?>,
+        content: @escaping (S) -> Content,
+        background: @escaping (S) -> Background,
         bottomView: @escaping () -> BottomView = { EmptyView() }
     ) {
         self._allCardItems = allCardItems
@@ -41,8 +41,8 @@ public struct SimpleCard<
             let width: CGFloat = geometry.size.width
             #if !os(watchOS)
             let height: CGFloat = min(
-                geometry.size.height * 0.85,
-                width * 3 / 2
+                geometry.size.height * 0.9,
+                width * 3.4 / 2
             )
             #else
             let height: CGFloat = geometry.size.height
@@ -52,10 +52,7 @@ public struct SimpleCard<
                 ScrollView(.horizontal,
                            showsIndicators: false) {
                     LazyHStack(spacing: 0) {
-                        ForEach(
-                            allCardItems,
-                            id: \.self.id
-                        ) { card in
+                        ForEach(allCardItems){ card in
                             cardView(
                                 card,
                                 width: width,
@@ -97,7 +94,7 @@ public struct SimpleCard<
     
     @ViewBuilder
     private func cardView(
-        _ item: any SimpleCardable,
+        _ item: S,
         width: CGFloat,
         height: CGFloat
     ) -> some View {
@@ -116,7 +113,7 @@ public struct SimpleCard<
 }
 
 #Preview {
-    @Previewable @State var allCardItems: [any SimpleCardable] = (0...10).map {
+    @Previewable @State var allCardItems: [SimpleTagViewItem] = (0...10).map {
         SimpleTagViewItem(title: $0.toString().addSubfix("张"))
     }
     @Previewable @State var currentPositionID: UUID? = nil
@@ -124,13 +121,9 @@ public struct SimpleCard<
     NavigationStack {
         SimpleCard(allCardItems: $allCardItems,
                    currentPositionID: $currentPositionID) { card in
-            Group {
-                if let item = card as? SimpleTagViewItem {
-                    Text(item.title)
-                        .font(.largeTitle)
-                        .foregroundStyle(.white)
-                }
-            }
+            Text(card.title)
+                .font(.largeTitle)
+                .foregroundStyle(.white)
         } background: { _ in
             RoundedRectangle(cornerRadius: 20)
                 .foregroundStyle(.blue.gradient)

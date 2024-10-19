@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DemoSimpleCard: View {
-    @State private var allCardItems: [any SimpleCardable]
+    @State private var allCardItems: [SimpleTagViewItem]
     @State private var currentPositionID: UUID?
     
     init() {
@@ -26,13 +26,9 @@ struct DemoSimpleCard: View {
                     allCardItems: $allCardItems,
                     currentPositionID: $currentPositionID
                 ) { card in
-                    Group {
-                        if let item = card as? SimpleTagViewItem {
-                            Text(item.title)
-                                .font(.largeTitle)
-                                .foregroundStyle(.white)
-                        }
-                    }
+                    Text(card.title)
+                        .font(.largeTitle)
+                        .foregroundStyle(.white)
                 } background: { _ in
                     RoundedRectangle(cornerRadius: 20)
                         .foregroundStyle(.green.gradient)
@@ -69,7 +65,9 @@ struct DemoSimpleCard: View {
             debugPrint("ID改变：\(String(describing: currentPositionID))")
         }
     }
-    
+}
+
+extension DemoSimpleCard {
     private func buttonView() -> some View {
         HStack {
             Button {

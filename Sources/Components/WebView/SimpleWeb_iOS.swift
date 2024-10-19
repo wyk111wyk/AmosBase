@@ -94,6 +94,10 @@ struct SimpleWeb_iOS: UIViewRepresentable {
             parent.isLoading = true
         }
         
+        func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+//            debugPrint("收到了 Redirect 信息：\(navigation.debugDescription)")
+        }
+        
         func webView(
             _ webView: WKWebView,
             didFinish navigation: WKNavigation!

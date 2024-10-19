@@ -63,7 +63,7 @@ public extension Image {
             .resizable()
             .aspectRatio(contentMode: .fit)
             .foregroundStyle(color ?? Color.primary)
-            .frame(maxWidth: length ?? .infinity, maxHeight: length ?? .infinity, alignment: .center)
+            .frame(width: length ?? .infinity, height: length ?? .infinity)
     }
 }
 

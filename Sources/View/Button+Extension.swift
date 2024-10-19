@@ -7,6 +7,57 @@
 
 import SwiftUI
 
+public struct PlainButton<V: View>: View {
+    let label: () -> V
+    let tapAction: () -> Void
+    
+    public init(
+        tapAction: @escaping () -> Void,
+        @ViewBuilder label: @escaping () -> V
+    ) {
+        self.label = label
+        self.tapAction = tapAction
+    }
+    
+    public var body: some View {
+        Button(action: tapAction, label: label)
+            .buttonStyle(.plain)
+    }
+}
+
+public struct SimpleStageButton<V: View>: View {
+    let label: () -> V
+    let holdAction: (Bool) -> Void
+    let tapAction: () -> Void
+    
+    public init(
+        tapAction: @escaping () -> Void,
+        holdAction: @escaping (Bool) -> Void,
+        @ViewBuilder label: @escaping () -> V
+    ) {
+        self.label = label
+        self.tapAction = tapAction
+        self.holdAction = holdAction
+    }
+    
+    public var body: some View {
+        Button(action: tapAction, label: label)
+            .buttonStyle(StageButtonModifier(holdAction: holdAction))
+    }
+}
+
+private struct StageButtonModifier: ButtonStyle {
+    let holdAction: (Bool) -> Void
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.8 : 1)
+            .onChange(of: configuration.isPressed) {
+                holdAction(configuration.isPressed)
+            }
+    }
+}
+
 /// 简单UI组件 -  文字居中的按钮
 ///
 /// 可定制按钮类型，文字颜色为app主要色
