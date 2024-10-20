@@ -194,6 +194,26 @@ extension SimpleDevice {
         deviceName()
     }
     
+    public enum DeviceSize {
+        case small, medium, large
+    }
+    /// 获取 iPhone 的尺寸级别
+    public static func deviceSize() -> DeviceSize {
+        let deviceName = deviceName()
+        if deviceName.contains("iPhone") {
+            if deviceName.contains("SE") || deviceName.contains("mini") {
+                return .small
+            }else if deviceName.contains("Max") {
+                return .large
+            }else {
+                return .medium
+            }
+        }else if deviceName.contains("Watch") {
+            return .small
+        }
+        return .large
+    }
+    
     ///获取总磁盘 931.5 GB
     public static func getDiskTotalSize() -> String {
         return fileSizeToString(fileSize: getTotalDiskSize())
@@ -304,7 +324,7 @@ extension SimpleDevice {
     
     
     ///获取设备名称 
-    ///https://www.theiphonewiki.com/wiki/Models#iPhone
+    ///https://gist.github.com/adamawolf/3048717
     private static func deviceName() -> String {
         var systemInfo = utsname()
         uname(&systemInfo)
@@ -367,6 +387,10 @@ extension SimpleDevice {
         case "iPhone15,5":                          return "iPhone 15 Plus"
         case "iPhone16,1":                          return "iPhone 15 Pro"
         case "iPhone16,2":                          return "iPhone 15 Pro Max"
+        case "iPhone17,1":                          return "iPhone 16 Pro"
+        case "iPhone17,2":                          return "iPhone 16 Pro Max"
+        case "iPhone17,3":                          return "iPhone 16"
+        case "iPhone17,4":                          return "iPhone 16 Plus"
             
             ///iPad
         case "iPad1,1":                             return "iPad"
@@ -394,6 +418,8 @@ extension SimpleDevice {
         case "iPad11,3","iPad11,4":                 return "iPad Air 3"
         case "iPad13,1","iPad13,2":                 return "iPad Air 4"
         case "iPad13,16","iPad13,17":               return "iPad Air 5"
+        case "iPad14,8","iPad14,9":                 return "iPad Air 6"
+        case "iPad14,10","iPad14,11":               return "iPad Air 7"
             
         case "iPad2,5":                             return "iPad Mini (WiFi)"
         case "iPad2,6":                             return "iPad Mini"
@@ -414,6 +440,7 @@ extension SimpleDevice {
         case "iPad8,9","iPad8,10":                              return "iPad Pro 11 2nd"
         case "iPad13,4","iPad13,5","iPad13,6","iPad13,7":       return "iPad Pro 11 3rd"
         case "iPad14,3","iPad14,4":                             return "iPad Pro 11 4th"
+        case "iPad16,3","iPad16,4":                             return "iPad Pro 11 5th"
             
         case "iPad6,7", "iPad6,8":                              return "iPad Pro 12.9"
         case "iPad7,1":                                         return "iPad Pro 12.9 2nd (WiFi)"
@@ -422,6 +449,7 @@ extension SimpleDevice {
         case "iPad8,11","iPad8,12":                             return "iPad Pro 12.9 4th"
         case "iPad13,8","iPad13,9","iPad13,10","iPad13,11":     return "iPad Pro 12.9 5th"
         case "iPad14,5","iPad14,6":                             return "iPad Pro 12.9 6th"
+        case "iPad16,5","iPad16,6":                             return "iPad Pro 12.9 7th"
             
             //Apple Watch
         case "Watch1,1","Watch1,2":                             return "Apple Watch (1st generation)"
@@ -434,9 +462,14 @@ extension SimpleDevice {
         case "Watch6,1","Watch6,2","Watch6,3","Watch6,4":       return "Apple Watch Series 6"
         case "Watch6,6","Watch6,7","Watch6,8","Watch6,9":       return "Apple Watch Series 7"
         case "Watch6,10","Watch6,11","Watch6,12","Watch6,13":   return "Apple Watch SE 2"
-        case "Watch6,14","Watch6,15","Watch6,16","Watch6,17":   return "Apple Watch Series 8"
+        case "Watch6,14","Watch6,16":               return "Apple Watch Series 8 41mm"
+        case "Watch6,15","Watch6,17":               return "Apple Watch Series 8 45mm"
+        case "Watch7,1","Watch7,3":                 return "Apple Watch Series 9 41mm"
+        case "Watch7,2","Watch7,4":                 return "Apple Watch Series 9 45mm"
+        case "Watch7,6","Watch7,8":                 return "Apple Watch Series 10 42mm"
+        case "Watch7,7","Watch7,9":                 return "Apple Watch Series 10 46mm"
+            
         case "Watch6,18":                                       return "Apple Watch Ultra"
-        case "Watch7,1","Watch7,2","Watch7,3","Watch7,4":       return "Apple Watch Series 9"
         case "Watch7,5":                                        return "Apple Watch Ultra 2"
             
             ///AppleTV

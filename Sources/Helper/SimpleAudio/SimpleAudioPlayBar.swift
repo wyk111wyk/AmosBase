@@ -118,6 +118,19 @@ public struct SimpleAudioPlayBar: View {
         }
         .padding(.top)
         .padding(.horizontal)
+        .onChange(of: audioHelper?.playState) {
+            guard let state = audioHelper?.playState else {
+                isDismissButtonOn = true
+                return
+            }
+            withAnimation {
+                switch state {
+                case .stop: isDismissButtonOn = true
+                case .isPlaying: isDismissButtonOn = false
+                case .isPausing: isDismissButtonOn = true
+                }
+            }
+        }
         .onAppear {
             play()
         }
@@ -159,24 +172,15 @@ public struct SimpleAudioPlayBar: View {
 
 extension SimpleAudioPlayBar {
     private func play() {
-        withAnimation {
-            let _ = audioHelper?.playSound()
-            isDismissButtonOn = false
-        }
+        let _ = audioHelper?.playSound()
     }
     
     private func pause() {
-        withAnimation {
-            audioHelper?.pause()
-            isDismissButtonOn = true
-        }
+        audioHelper?.pause()
     }
     
     private func stop() {
-        withAnimation {
-            audioHelper?.stop()
-            isDismissButtonOn = true
-        }
+        audioHelper?.stop()
     }
     
     private var buttonCircle: some View {
