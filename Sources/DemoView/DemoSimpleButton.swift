@@ -62,14 +62,15 @@ public struct DemoSimpleButton<V: View>: View {
             .navigationTitle("UI元素")
             .buttonCircleNavi(role: .destructive)
 #if !os(watchOS)
-            .sheet(isPresented: $showInput, content: {
+            .sheet(isPresented: $showInput) {
                 SimpleTextInputView(
                     pageName: "输入短文字",
                     title: input,
                     showContent: false) { result in
                         input = result.title
-                    }.presentationDetents([.height(200)])
-            })
+                    }
+                .presentationDetents([.height(200)])
+            }
 #endif
         }
     }
@@ -92,7 +93,7 @@ public struct DemoSimpleButton<V: View>: View {
             } label: {
                 SimpleCell(
                     String.randomChinese(short: true, medium: true),
-                    numberIcon: 28,
+                    numberIcon: 368,
                     iconColor: .red,
                     content: String.randomChinese(medium: true, long: true)
                 )

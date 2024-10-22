@@ -195,7 +195,7 @@ extension SimpleDevice {
     }
     
     public enum DeviceSize {
-        case small, medium, large
+        case small, medium, large, iPad
     }
     /// 获取 iPhone 的尺寸级别
     public static func deviceSize() -> DeviceSize {
@@ -210,6 +210,8 @@ extension SimpleDevice {
             }
         }else if deviceName.contains("Watch") {
             return .small
+        }else if deviceName.contains("iPad") {
+            return .iPad
         }
         return .large
     }

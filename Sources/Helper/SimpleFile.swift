@@ -78,7 +78,7 @@ public class SimpleFileHelper {
     public func fileExists(
         _ fileName: String,
         folderName: String? = "audioFile",
-        suffix: String? = "wav"
+        suffix: String? = "mp3"
     ) -> Bool {
         // 获取文档目录路径
         guard let documentsDirectory = file.urls(
@@ -116,7 +116,7 @@ public class SimpleFileHelper {
     public func filePath(
         _ fileName: String,
         folderName: String? = "audioFile",
-        suffix: String? = "wav",
+        suffix: String? = "mp3",
         isCreateWhenEmpty: Bool = true
     ) -> URL? {
         // 获取文档目录路径

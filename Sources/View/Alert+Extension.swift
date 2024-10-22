@@ -35,6 +35,26 @@ public extension View {
         )
     }
     
+    func simpleAlert<V: Identifiable>(
+        type: SimpleAlertType = .singleConfirm,
+        title: String?,
+        message: LocalizedStringKey? = nil,
+        item: Binding<V?>,
+        confirmTap: @escaping (V?) -> Void = {_ in},
+        cancelTap: @escaping () -> Void = {}
+    ) -> some View {
+        modifier(
+            SimpleAlertItem(
+                title: title,
+                message: message,
+                type: type,
+                item: item,
+                confirmTap: confirmTap,
+                cancelTap: cancelTap
+            )
+        )
+    }
+    
     /// 简单UI组件 -  Alert错误提醒
     func simpleErrorAlert(
         error: Binding<Error?>,
@@ -244,6 +264,94 @@ struct SimpleAlert: ViewModifier {
                     #endif
                 case .destructiveCancel:
                     Button(role: .destructive, action: confirmTap, label: {
+                        Text("Confirm", bundle: .module)
+                    })
+                    #if !os(watchOS)
+                    .keyboardShortcut(.return)
+                    #endif
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
+                    #if !os(watchOS)
+                    .keyboardShortcut(.escape)
+                    #endif
+                }
+            } message: {
+                if let message {
+                    Text(message, bundle: messageBundle)
+                }
+            }
+    }
+}
+
+struct SimpleAlertItem<V: Identifiable>: ViewModifier {
+    let title: String
+    let message: LocalizedStringKey?
+    let type: SimpleAlertType
+    let messageBundle: Bundle
+    @Binding var item: V?
+    let passItem: V?
+    
+    let confirmTap: (V?) -> Void
+    let cancelTap: () -> Void
+    
+    init(title: String?,
+         message: LocalizedStringKey?,
+         type: SimpleAlertType,
+         messageBundle: Bundle = .main,
+         item: Binding<V?>,
+         confirmTap: @escaping (V?) -> Void,
+         cancelTap: @escaping () -> Void) {
+        self.title = title ?? "N/A"
+        self.message = message
+        self.type = type
+        self.messageBundle = messageBundle
+        self._item = item
+        self.passItem = item.wrappedValue
+        self.confirmTap = confirmTap
+        self.cancelTap = cancelTap
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .alert(title.localized(bundle: messageBundle),
+                   isPresented: .isPresented($item)) {
+                switch type {
+                case .singleCancel:
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
+                    #if !os(watchOS)
+                        .keyboardShortcut(.escape)
+                    #endif
+                case .singleConfirm:
+                    Button(role: .cancel, action: {
+                        cancelTap()
+                    }, label: {
+                        Text("Confirm", bundle: .module)
+                    })
+                    #if !os(watchOS)
+                        .keyboardShortcut(.return)
+                    #endif
+                case .confirmCancel:
+                    Button(role: .none, action: {
+                        confirmTap(passItem)
+                    }, label: {
+                        Text("Confirm", bundle: .module)
+                    })
+                    #if !os(watchOS)
+                        .keyboardShortcut(.return)
+                    #endif
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
+                    #if !os(watchOS)
+                        .keyboardShortcut(.escape)
+                    #endif
+                case .destructiveCancel:
+                    Button(role: .destructive, action: {
+                        confirmTap(passItem)
+                    }, label: {
                         Text("Confirm", bundle: .module)
                     })
                     #if !os(watchOS)

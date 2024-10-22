@@ -13,7 +13,6 @@ public struct SimpleTextField<
     S: TextFieldStyle
 >: View {
     @Binding var inputText: String
-    @FocusState private var focused: Bool
     
     let title: String
     let prompt: String
@@ -22,7 +21,7 @@ public struct SimpleTextField<
     let endLine: Int
     let tintColor: Color
     let style: S
-    let isFocused: Bool
+//    let isFocused: Bool
     let canClear: Bool
     // 长按清空按钮的更多按钮
     let moreMenus: () -> Menus
@@ -36,7 +35,6 @@ public struct SimpleTextField<
         endLine: Int = 10,
         tintColor: Color = .accentColor,
         style: S = .plain,
-        isFocused: Bool = false,
         canClear: Bool = true,
         @ViewBuilder moreMenus: @escaping () -> Menus = { EmptyView() }
     ) {
@@ -53,7 +51,6 @@ public struct SimpleTextField<
         }
         self.style = style
         self.tintColor = tintColor
-        self.isFocused = isFocused
         self.canClear = canClear
         self.moreMenus = moreMenus
     }
@@ -71,9 +68,8 @@ public struct SimpleTextField<
         .font(.body)
         .scrollDismissesKeyboard(.automatic)
         .textFieldStyle(.plain)
-        .focused($focused)
         .tint(tintColor)
-        .padding(.bottom, endLine > 1 ? 28 : 0)
+        .padding(.bottom, (endLine > 1 && (canClear || systemImage != nil)) ? 28 : 0)
         #if os(iOS)
         .overlay(alignment: .trailing) {
             if endLine == 1 {
@@ -95,51 +91,50 @@ public struct SimpleTextField<
         #if !os(watchOS)
         .onDropText() { text in inputText = text }
         .overlay(alignment: .bottom) {
-            HStack {
-                if let systemImage, inputText.isNotEmpty {
-                    HStack(spacing: 6) {
-                        Image(systemName: systemImage)
-                        Text(prompt)
-                            .lineLimit(1)
+            if canClear || systemImage != nil {
+                HStack {
+                    if let systemImage, inputText.isNotEmpty {
+                        HStack(spacing: 6) {
+                            Image(systemName: systemImage)
+                            Text(prompt)
+                                .lineLimit(1)
+                        }
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                     }
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                }
-            
-                Spacer()
-                if endLine > 1 && canClear {
-                    Menu {
-                        moreMenus()
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text("\(inputText.count) 字")
-                                .font(.footnote)
-                            if !inputText.isEmpty {
-                                Image(systemName: "xmark.circle.fill")
-                                    .imageScale(.small)
-                                    .opacity(0.9)
+                    
+                    if endLine > 1 && canClear {
+                        Spacer()
+                        Menu {
+                            moreMenus()
+                        } label: {
+                            HStack(spacing: 4) {
+                                Text("\(inputText.count) 字")
+                                    .font(.footnote)
+                                if !inputText.isEmpty {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .imageScale(.small)
+                                        .opacity(0.9)
+                                }
                             }
+                            .foregroundColor(.white)
+                            .padding(.vertical, 2.6)
+                            .padding(.horizontal, 6)
+                            .background {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .foregroundStyle(.secondary)
+                                    .opacity(0.5)
+                            }
+                        } primaryAction: {
+                            inputText = ""
                         }
-                        .foregroundColor(.white)
-                        .padding(.vertical, 2.6)
-                        .padding(.horizontal, 6)
-                        .background {
-                            RoundedRectangle(cornerRadius: 15)
-                                .foregroundStyle(.secondary)
-                                .opacity(0.5)
-                        }
-                    } primaryAction: {
-                        inputText = ""
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
+                .offset(y: 2)
             }
-            .offset(y: 2)
         }
         #endif
-        .onAppear {
-            focused = isFocused
-        }
     }
 }
 

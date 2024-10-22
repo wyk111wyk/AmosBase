@@ -95,8 +95,7 @@ public struct SimpleTextInputView: View {
                                 prompt: titlePrompt,
                                 startLine: 1,
                                 endLine: 3,
-                                tintColor: tintColor,
-                                isFocused: showTitle && !showContent
+                                tintColor: tintColor
                             )
                             .padding()
                             .background {
@@ -119,8 +118,7 @@ public struct SimpleTextInputView: View {
                                 systemImage: "note.text",
                                 startLine: contentStartLine,
                                 endLine: contentEndLine,
-                                tintColor: tintColor,
-                                isFocused: !showTitle && showContent
+                                tintColor: tintColor
                             )
                             .padding()
                             .background {
