@@ -30,13 +30,15 @@ struct SimpleWeb_mac: NSViewRepresentable {
         var request: URLRequest = .init(url: url)
         
         if let account = account {
+            // 客户端信息
             let clientInfo = SimpleDevice.getFullModel()
-            let clientVersion = SimpleDevice.getAppVersion() ?? ""
-            let osVersion = SimpleDevice.getSystemName() + " " + SimpleDevice.getSystemVersion()
+            // 客户端版本号
+            let clientVersion = SimpleDevice.getAppVersion().wrapped
+            // 操作系统
+            let os = SimpleDevice.getSystemName() + " " + SimpleDevice.getSystemVersion()
+            let customInfo = "weixin:\(account.weixin) email:\(account.email)"
             
-            // 接入兔小巢需要传入open_id, nickname, avatar, 如果少了其中任何一个，登录态的构建的都会失败，其他都是额外数据
-            // 兔小巢只将 openid 作为用户身份的唯一标识，故在构造 openid 时需要考虑其唯一性
-            let login: String = "nickname=\(account.nickName)&avatar=\(account.avatar)&openid=\(account.openid)&clientInfo=\(clientInfo)&clientVersion=\(clientVersion)&os=\(osVersion)"
+            let login: String = "nickname=\(account.nickName)&avatar=\(account.avatar)&openid=\(account.openid)&clientInfo=\(clientInfo)&clientVersion=\(clientVersion)&os=\(os)&customInfo=\(customInfo)"
             
             request.httpMethod = "POST"
             request.httpBody = login.data(using: .utf8)

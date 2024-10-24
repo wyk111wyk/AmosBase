@@ -91,7 +91,6 @@ public struct SimpleAudioPlayBar: View {
                     .progressViewStyle(.linear)
                 }
             }
-            .frame(minWidth: 300)
             .padding()
             .background {
                 RoundedRectangle(cornerRadius: 8)
@@ -225,17 +224,9 @@ extension SimpleAudioPlayBar {
 
 #Preview {
     NavigationStack {
-        VStack {
-            Spacer()
-            HStack {
-                Spacer()
-                Text("Hello world")
-                Spacer()
-            }
-            Spacer()
-        }
-        .overlay(alignment: .top) {
+        VStack(spacing: 20) {
             SimpleAudioPlayBar(audioFilePath: nil)
+            Text("Hello world")
         }
     }
 }

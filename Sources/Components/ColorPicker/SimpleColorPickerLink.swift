@@ -46,6 +46,7 @@ public struct SimpleColorPickerLink: View {
                 circleView(pickColor)
             }
         }
+        .buttonStyle(.plain)
     }
     
     private func circleView(_ color: Color) -> some View {

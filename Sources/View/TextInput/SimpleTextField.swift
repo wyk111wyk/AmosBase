@@ -67,7 +67,6 @@ public struct SimpleTextField<
         .lineSpacing(4)
         .font(.body)
         .scrollDismissesKeyboard(.automatic)
-        .textFieldStyle(.plain)
         .tint(tintColor)
         .padding(.bottom, (endLine > 1 && (canClear || systemImage != nil)) ? 28 : 0)
         #if os(iOS)

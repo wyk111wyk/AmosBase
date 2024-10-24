@@ -93,9 +93,6 @@ public struct DemoContent<V: View>: View {
                 
                 SimpleCommonAbout(
                     txcId: "123",
-                    userId: "123",
-                    nickName: "Amos",
-                    avatarUrl: "123",
                     appStoreId: "123",
                     headerView: {
                     Text("About - 关于")

@@ -15,27 +15,32 @@ struct SimpleWeb_iOS: UIViewRepresentable {
     @Binding var showErrorAlert: Bool?
     @State private var urlRequest: URLRequest
     @ObservedObject var model: SimpleWebModel
+    let webType: SimpleWebView.WebType
     
     init(
         url: URL,
         isloading: Binding<Bool>,
         showErrorAlert: Binding<Bool?>,
         account: SimpleFeedbackModel?,
-        model: SimpleWebModel
+        model: SimpleWebModel,
+        webType: SimpleWebView.WebType = .mobile
     ) {
         self._isLoading = isloading
         self._showErrorAlert = showErrorAlert
         self.model = model
+        self.webType = webType
         var request: URLRequest = .init(url: url)
         
         if let account = account {
+            // 客户端信息
             let clientInfo = SimpleDevice.getFullModel()
-            let clientVersion = SimpleDevice.getAppVersion() ?? ""
-            let osVersion = SimpleDevice.getSystemName() + " " + SimpleDevice.getSystemVersion()
+            // 客户端版本号
+            let clientVersion = SimpleDevice.getAppVersion().wrapped
+            // 操作系统
+            let os = SimpleDevice.getSystemName() + " " + SimpleDevice.getSystemVersion()
+            let customInfo = "weixin:\(account.weixin) email:\(account.email)"
             
-            // 接入兔小巢需要传入open_id, nickname, avatar, 如果少了其中任何一个，登录态的构建的都会失败，其他都是额外数据
-            // 兔小巢只将 openid 作为用户身份的唯一标识，故在构造 openid 时需要考虑其唯一性
-            let login: String = "nickname=\(account.nickName)&avatar=\(account.avatar)&openid=\(account.openid)&clientInfo=\(clientInfo)&clientVersion=\(clientVersion)&os=\(osVersion)"
+            let login: String = "nickname=\(account.nickName)&avatar=\(account.avatar)&openid=\(account.openid)&clientInfo=\(clientInfo)&clientVersion=\(clientVersion)&os=\(os)&customInfo=\(customInfo)"
             
             request.httpMethod = "POST"
             request.httpBody = login.data(using: .utf8)
@@ -52,12 +57,18 @@ struct SimpleWeb_iOS: UIViewRepresentable {
     func makeUIView(
         context: Context
     ) -> WKWebView {
-        let webview = model.webView
-        webview.allowsBackForwardNavigationGestures = true
-        webview.navigationDelegate = context.coordinator
-        webview.load(self.urlRequest)
+        let webView = model.webView
+        webView.allowsBackForwardNavigationGestures = true
+        switch webType {
+        case .mobile:
+            webView.customUserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1"
+        case .desktop:
+            webView.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15"
+        }
+        webView.navigationDelegate = context.coordinator
+        webView.load(self.urlRequest)
         
-        return webview
+        return webView
     }
     
     func updateUIView(
@@ -126,8 +137,7 @@ struct SimpleWeb_iOS: UIViewRepresentable {
 
 #Preview {
     SimpleWebView(
-        url: URL(string: "https://www.baidu.com")!,
-        pushIn: false
+        url: URL(string: "https://www.baidu.com")!
     )
 }
 #endif

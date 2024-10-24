@@ -16,7 +16,6 @@ import AppKit
 public struct SimpleSelectableText: View {
     
     @State private var textViewHeight: CGFloat = 1200
-    @State private var viewHeight: CGFloat = 600
     
     let text: String
     let markdownText: String?
@@ -31,6 +30,7 @@ public struct SimpleSelectableText: View {
     let isInScroll: Bool
     
     let selectTextCallback: (String) -> ()
+    let contentHeightCallback: (CGFloat) -> ()
     
     public init(
         text: String = "",
@@ -42,13 +42,15 @@ public struct SimpleSelectableText: View {
         alignment: NSTextAlignment = .left,
         textColor: SFColor? = nil,
         isInScroll: Bool = false,
-        selectTextCallback: @escaping (String) -> () = {_ in}
+        selectTextCallback: @escaping (String) -> () = {_ in},
+        contentHeightCallback: @escaping (CGFloat) -> () = {_ in}
     ) {
         self.text = text
         self.markdownText = markdown
         self.attributedText = attributedText
         self._variedString = variedString
         self.selectTextCallback = selectTextCallback
+        self.contentHeightCallback = contentHeightCallback
         
         self.fontSize = fontSize
         self.lineSpace = lineSpace
@@ -99,14 +101,9 @@ public struct SimpleSelectableText: View {
                 calculatedHeight: $textViewHeight,
                 selectTextCallback: selectTextCallback
             )
-//            .frame(height: min(viewHeight, textViewHeight))
-//            .onChange(of: textViewHeight) { height in
-//                debugPrint("Text height changed")
-//                viewHeight = reader.size.height
-//                debugPrint("view height: \(reader.size.height)")
-//                debugPrint("view width: \(reader.size.width)")
-//                debugPrint("text: \(height)")
-//            }
+            .onChange(of: textViewHeight) {
+                contentHeightCallback(textViewHeight)
+            }
         }
         .frameSet(isInScoll: isInScroll, height: textViewHeight)
         .edgesIgnoringSafeArea(.bottom)
@@ -118,6 +115,9 @@ public struct SimpleSelectableText: View {
                 selectTextCallback: selectTextCallback
             )
             .frame(height: textViewHeight)
+        }
+        .onChange(of: textViewHeight) {
+            contentHeightCallback(textViewHeight)
         }
         #endif
     }

@@ -23,8 +23,9 @@ public struct SimpleTagConfig: Hashable {
     let contentColor: Color
     // 外观
     let cornerRadius: CGFloat
-    let borderColor: Color
+    let borderColor: Color?
     let bgColor: Color?
+    let isMaterial: Bool
     // Tag
     let lineWidth: CGFloat
     
@@ -35,8 +36,9 @@ public struct SimpleTagConfig: Hashable {
         lineWidth: CGFloat = 1,
         contentFont: Font = .caption,
         contentColor: Color = .blue,
-        borderColor: Color = .blue,
-        bgColor: Color? = nil
+        borderColor: Color? = .blue,
+        bgColor: Color? = nil,
+        isMaterial: Bool = false
     ) {
         self.verticalPad = verticalPad
         self.horizontalPad = horizontalPad
@@ -46,6 +48,7 @@ public struct SimpleTagConfig: Hashable {
         self.borderColor = borderColor
         self.lineWidth = lineWidth
         self.bgColor = bgColor
+        self.isMaterial = isMaterial
     }
     
     public static func border(
@@ -86,6 +89,28 @@ public struct SimpleTagConfig: Hashable {
               borderColor: bgColor,
               bgColor: bgColor)
     }
+    
+    public static func bg(
+        verticalPad: CGFloat = 2,
+        horizontalPad: CGFloat = 8,
+        cornerRadius: CGFloat = 6,
+        lineWidth: CGFloat = 1,
+        contentFont: Font = .caption,
+        contentColor: Color = .blue,
+        borderColor: Color? = nil,
+        bgColor: Color? = .blue,
+        isMaterial: Bool = true
+    ) -> Self {
+        .init(verticalPad: verticalPad,
+              horizontalPad: horizontalPad,
+              cornerRadius: cornerRadius,
+              lineWidth: lineWidth,
+              contentFont: contentFont,
+              contentColor: contentColor,
+              borderColor: borderColor,
+              bgColor: bgColor,
+              isMaterial: isMaterial)
+    }
 }
 
 struct TagBorder: ViewModifier {
@@ -102,16 +127,33 @@ struct TagBorder: ViewModifier {
             .padding(.horizontal, config.horizontalPad)
             .foregroundStyle(config.contentColor)
             .background {
-                RoundedRectangle(cornerRadius: config.cornerRadius)
-                    .stroke(config.borderColor,
-                            lineWidth: config.lineWidth)
-            }
-            .background {
-                if let bgColor = config.bgColor {
-                    RoundedRectangle(cornerRadius: config.cornerRadius)
-                        .foregroundStyle(bgColor)
+                ZStack {
+                    if let bgColor = config.bgColor {
+                        RoundedRectangle(cornerRadius: config.cornerRadius)
+                            .foregroundStyle(bgColor)
+                            .opacity(config.isMaterial ? 0.4 : 1)
+                    }
+                    if config.isMaterial {
+                        RoundedRectangle(cornerRadius: config.cornerRadius)
+                            .foregroundStyle(.ultraThickMaterial)
+                    }
+                    if let borderColor = config.borderColor {
+                        RoundedRectangle(cornerRadius: config.cornerRadius)
+                            .stroke(
+                                borderColor,
+                                lineWidth: config.lineWidth
+                            )
+                    }
                 }
             }
             .contentShape(Rectangle())
     }
 }
+
+#Preview("Tag", body: {
+    VStack(spacing: 15) {
+        Text("Full").simpleTag(.full(contentFont: .title))
+        Text("Border").simpleTag(.border(contentFont: .title))
+        Text("Material").simpleTag(.bg(contentFont: .title))
+    }
+})

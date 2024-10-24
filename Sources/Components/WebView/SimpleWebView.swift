@@ -14,6 +14,10 @@ import WebKit
 ///
 /// 可传入有效的url进行载入，已适配兔小巢用户留言功能
 public struct SimpleWebView: View {
+    public enum WebType {
+        case mobile, desktop
+    }
+    
     @Environment(\.dismiss) private var dismissPage
     @StateObject private var model = SimpleWebModel()
     
@@ -22,19 +26,22 @@ public struct SimpleWebView: View {
     let account: SimpleFeedbackModel?
     let isPushIn: Bool
     let showReloadButton: Bool
+    let webType: WebType
     
     @State private var isLoading = false
     @State private var showErrorAlert: Bool? = false
     
     public init(
         url: URL,
-        pushIn: Bool = false,
+        isPushIn: Bool = false,
         showReloadButton: Bool = true,
+        webType: WebType = .mobile,
         account: SimpleFeedbackModel? = nil
     ) {
         self.url = url
-        self.isPushIn = pushIn
+        self.isPushIn = isPushIn
         self.showReloadButton = showReloadButton
+        self.webType = webType
         self.account = account
     }
     
@@ -60,9 +67,10 @@ public struct SimpleWebView: View {
             isloading: $isLoading,
             showErrorAlert: $showErrorAlert,
             account: account,
-            model: model
+            model: model,
+            webType: webType
         )
-        .ignoresSafeArea()
+        .ignoresSafeArea(.container, edges: .bottom)
         .onChange(of: url) {
 //            debugPrint("URL改变：\(new.absoluteString)")
             model.loadRequest(.init(url: url))

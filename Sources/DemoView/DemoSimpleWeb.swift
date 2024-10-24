@@ -25,7 +25,7 @@ public struct DemoSimpleWeb: View {
     
     public var body: some View {
         NavigationStack {
-            SimpleWebView(url: page.url, pushIn: true)
+            SimpleWebView(url: page.url, isPushIn: true)
                 #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
                 #endif
