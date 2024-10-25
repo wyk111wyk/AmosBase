@@ -15,12 +15,34 @@ extension NSFont: @unchecked @retroactive Sendable {}
 
 struct SimpleText_mac: NSViewRepresentable {
     var attributedString: AttributedString
+    @Binding var variedString: AttributedString?
+    
     @Binding var calculatedHeight: CGFloat
     let selectTextCallback: (String) -> ()
 
+    init(
+        attributedString: AttributedString,
+        variedString: Binding<AttributedString?> = .constant(nil),
+        calculatedHeight: Binding<CGFloat>,
+        selectTextCallback: @escaping (String) -> () = {_ in}
+    ) {
+        self.attributedString = attributedString
+        self._variedString = variedString
+        self._calculatedHeight = calculatedHeight
+        self.selectTextCallback = selectTextCallback
+    }
+    
     func makeNSView(context: Context) -> NSTextView {
         let textView = NSTextView()
         textView.delegate = context.coordinator
+        
+        // 设置显示的文字
+        if let variedString {
+            textView.textStorage?.setAttributedString( NSAttributedString(variedString))
+        }else {
+            textView.textStorage?.setAttributedString( NSAttributedString(attributedString))
+        }
+        
         textView.isEditable = false
         textView.isSelectable = true
         textView.isVerticallyResizable = true
@@ -37,7 +59,9 @@ struct SimpleText_mac: NSViewRepresentable {
     }
 
     func updateNSView(_ nsView: NSTextView, context: Context) {
-        nsView.textStorage?.setAttributedString(NSAttributedString(attributedString))
+        if let variedString {
+            nsView.textStorage?.setAttributedString( NSAttributedString(variedString))
+        }
         updateHeight(textView: nsView)
     }
     
@@ -48,14 +72,14 @@ struct SimpleText_mac: NSViewRepresentable {
         }
         
         func textViewDidChangeSelection(_ notification: Notification) {
-            if let textView = notification.object as? NSTextView {
-                if textView.selectedRange().length > 0 {
-                    debugPrint("Mac - 文字选择改变")
-                    if let range: Range = Range(textView.selectedRange(), in: textView.string) {
-                        debugPrint(textView.string[range])
-                        parent.selectTextCallback(String(textView.string[range]))
-                    }
-                }
+            guard let textView = notification.object as? NSTextView,
+                  textView.selectedRange().length > 0 else {
+                parent.selectTextCallback("")
+                return
+            }
+            if let range: Range = Range(textView.selectedRange(), in: textView.string) {
+                debugPrint(textView.string[range])
+                parent.selectTextCallback(String(textView.string[range]))
             }
         }
     }

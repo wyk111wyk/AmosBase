@@ -109,6 +109,26 @@ public extension View {
             )
         )
     }
+    
+    func simpleConfirmation<V: Identifiable>(
+        type: SimpleAlertType = .singleConfirm,
+        title: String?,
+        message: LocalizedStringKey? = nil,
+        item: Binding<V?>,
+        confirmTap: @escaping (V?) -> Void = {_ in},
+        cancelTap: @escaping () -> Void = {}
+    ) -> some View {
+        modifier(
+            SimpleConfirmationItem(
+                title: title,
+                message: message,
+                type: type,
+                item: item,
+                confirmTap: confirmTap,
+                cancelTap: cancelTap
+            )
+        )
+    }
 }
 
 // MARK: - Confirmation
@@ -180,6 +200,94 @@ struct SimpleConfirmation: ViewModifier {
 #endif
                 case .destructiveCancel:
                     Button(role: .destructive, action: confirmTap, label: {
+                        Text("Confirm", bundle: .module)
+                    })
+#if !os(watchOS)
+    .keyboardShortcut(.return)
+#endif
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
+#if !os(watchOS)
+    .keyboardShortcut(.escape)
+#endif
+                }
+            } message: {
+                if let message {
+                    Text(message, bundle: messageBundle)
+                }
+            }
+    }
+}
+
+struct SimpleConfirmationItem<V: Identifiable>: ViewModifier {
+    let title: String
+    let message: LocalizedStringKey?
+    let type: SimpleAlertType
+    let messageBundle: Bundle
+    @Binding var item: V?
+    let passItem: V?
+    
+    let confirmTap: (V?) -> Void
+    let cancelTap: () -> Void
+    
+    init(title: String?,
+         message: LocalizedStringKey?,
+         type: SimpleAlertType,
+         messageBundle: Bundle = .main,
+         item: Binding<V?>,
+         confirmTap: @escaping (V?) -> Void,
+         cancelTap: @escaping () -> Void) {
+        self.title = title ?? "N/A"
+        self.message = message
+        self.type = type
+        self.messageBundle = messageBundle
+        self._item = item
+        self.passItem = item.wrappedValue
+        self.confirmTap = confirmTap
+        self.cancelTap = cancelTap
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .confirmationDialog(
+                title.localized(bundle: messageBundle),
+                isPresented: .isPresented($item),
+                titleVisibility: .visible
+            ) {
+                switch type {
+                case .singleCancel:
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
+#if !os(watchOS)
+    .keyboardShortcut(.escape)
+#endif
+                case .singleConfirm:
+                    Button(role: .cancel, action: {
+                        cancelTap()
+                        confirmTap(passItem)
+                    }, label: {
+                        Text("Confirm", bundle: .module)
+                    })
+#if !os(watchOS)
+    .keyboardShortcut(.return)
+#endif
+                case .confirmCancel:
+                    Button(role: .none, action: {confirmTap(passItem)}, label: {
+                        Text("Confirm", bundle: .module)
+                    })
+#if !os(watchOS)
+    .keyboardShortcut(.return)
+#endif
+                    Button(role: .cancel, action: cancelTap, label: {
+                        Text("Cancel", bundle: .module)
+                    })
+#if !os(watchOS)
+    .keyboardShortcut(.escape)
+#endif
+                case .destructiveCancel:
+                    Button(role: .destructive, action: {confirmTap(passItem)}, label: {
                         Text("Confirm", bundle: .module)
                     })
 #if !os(watchOS)
@@ -314,8 +422,10 @@ struct SimpleAlertItem<V: Identifiable>: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .alert(title.localized(bundle: messageBundle),
-                   isPresented: .isPresented($item)) {
+            .alert(
+                title.localized(bundle: messageBundle),
+                isPresented: .isPresented($item)
+            ) {
                 switch type {
                 case .singleCancel:
                     Button(role: .cancel, action: cancelTap, label: {

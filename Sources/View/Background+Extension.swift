@@ -32,7 +32,7 @@ public extension View {
                         }
                     }else {
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .foregroundStyle(.regularMaterial)
+                            .foregroundStyle(.background.secondary)
                             .shadow(radius: shadowRadius)
                     }
                 }else if let color {
@@ -45,7 +45,7 @@ public extension View {
                     }
                 }else {
                     RoundedRectangle(cornerRadius: cornerRadius)
-                        .foregroundStyle(.regularMaterial)
+                        .foregroundStyle(.background.secondary)
                         .opacity(0.9)
                 }
             }

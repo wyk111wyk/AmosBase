@@ -45,6 +45,7 @@ public struct SimpleColorPickerLink: View {
             ) {
                 circleView(pickColor)
             }
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }

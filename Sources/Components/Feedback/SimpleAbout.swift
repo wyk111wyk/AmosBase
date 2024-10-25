@@ -108,7 +108,7 @@ extension SimpleCommonAbout {
     
     @ViewBuilder
     private func feedbackSection() -> some View {
-        if let url = URL(string: feedbackLink) {
+        if feedbackLink != nil {
             // 支持用户反馈
             PlainButton {
                 startFeedback()
@@ -132,7 +132,7 @@ extension SimpleCommonAbout {
             }
             #if os(iOS)
             .sheet(isPresented: $showFeedback) {
-                if let account {
+                if let account, let url = URL(string: feedbackLink) {
                     SimpleWebView(url: url, account: account)
                 }
             }

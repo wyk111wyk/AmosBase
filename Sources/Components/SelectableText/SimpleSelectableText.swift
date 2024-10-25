@@ -111,6 +111,7 @@ public struct SimpleSelectableText: View {
         ScrollView {
             SimpleText_mac(
                 attributedString: attributedString,
+                variedString: $variedString,
                 calculatedHeight: $textViewHeight,
                 selectTextCallback: selectTextCallback
             )
@@ -156,6 +157,7 @@ private enum TestText {
 #Preview("Change") {
     @Previewable @State var testText: TestText = .md1
     @Previewable @State var mdText: AttributedString? = String.testText(.markdown01).markdown
+    
     Button("更改文字") {
         testText.toggle()
     }.buttonStyle(.borderedProminent)

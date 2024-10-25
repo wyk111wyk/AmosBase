@@ -109,7 +109,9 @@ public struct SimpleAudioPlayBar: View {
                             Image(systemName: "xmark")
                             Text("关闭")
                         }
+                        #if os(iOS)
                         .simpleTag(.border(verticalPad: 4, horizontalPad: 8, cornerRadius: 15, contentColor: .secondary))
+                        #endif
                     }
                     .padding(.trailing, 6)
                 }
