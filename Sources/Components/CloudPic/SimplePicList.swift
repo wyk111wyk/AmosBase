@@ -9,6 +9,7 @@ import SwiftUI
 
 public struct SimplePicList: View {
     @Environment(\.dismiss) private var dismissPage
+    
     @State private var uploadPath: PicBedPath
     @State private var isLoading = false
     @State private var allImageList: [GithubRepoFileListModel] = []
@@ -144,15 +145,11 @@ public struct SimplePicList: View {
                 await fetchImageList()
             }
         }
-        .confirmationDialog("删除图片", isPresented: .isPresented($deleteImage), titleVisibility: .visible) {
-            if let deleteImage {
-                Button(role: .destructive) {
-                    deleteFile(deleteImage)
-                } label: {
-                    Text("删除\(deleteImage.name)")
-                }
+        .simpleConfirmation(type: .destructiveCancel, title: "删除图片", item: $deleteImage, confirmTap: { item in
+            if let deleteImage = item {
+                deleteFile(deleteImage)
             }
-        }
+        })
     }
     
     @MainActor
@@ -197,10 +194,12 @@ public struct SimplePicList: View {
             loadingChange()
             do {
                 if try await picBed.deleteFile(for: gitImage) {
-                    allImageList.removeById(gitImage)
-                    allImage.removeAll(where: {
-                        $0.id == gitImage.id
-                    })
+                    withAnimation {
+                        allImageList.removeById(gitImage)
+                        allImage.removeAll(where: {
+                            $0.id == gitImage.id
+                        })
+                    }
                 }
             }catch {
                 self.error = error
