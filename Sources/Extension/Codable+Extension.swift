@@ -63,7 +63,7 @@ public extension Data {
             let decoded = try decoder.decode(T.self, from: self)
             return decoded
         } catch let DecodingError.dataCorrupted(context) {
-            debugPrint("Data corrupted: \(context)")
+            debugPrint("Data 损坏: \(context)")
             debugPrint(String(describing: T.self))
             return nil
         } catch let DecodingError.keyNotFound(key, context) {

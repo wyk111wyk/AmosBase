@@ -98,7 +98,7 @@ extension SimpleWeb {
                                     debugPrint("网络请求错误：\(error)")
                                     contionuation.resume(throwing: error)
                                 }else {
-                                    data?.toJsonPrint()
+//                                    data?.toJsonPrint()
                                     contionuation.resume(returning: (data, response))
                                 }
                             }

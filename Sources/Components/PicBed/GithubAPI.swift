@@ -66,11 +66,16 @@ extension GithubAPI {
     }
     
     // Put
-    public func gh_put(path: String, parameters: [String : String]? = nil, body: Data?) async throws -> Data? {
+    public func gh_put(
+        path: String,
+        parameters: [String : String]? = nil,
+        body: Data?
+    ) async throws -> Data? {
         let result = try await SimpleWeb().request(
             method: .PUT,
             url: fullUrl(path),
             parameters: parameters,
+            headers: headers,
             body: body
         )
         

@@ -175,18 +175,10 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
         
         // 结束Toast的任务
         let dismissToastTask = DispatchWorkItem {
-            if #available(iOS 17.0, watchOS 10.0, macOS 14.0, *) {
-                withAnimation {
-                    showToast = false
-                    workItem = nil
-                } completion: {
-                    dismissBackground()
-                }
-            } else {
-                withAnimation(Animation.spring()){
-                    showToast = false
-                    workItem = nil
-                }
+            withAnimation {
+                showToast = false
+                workItem = nil
+            } completion: {
                 dismissBackground()
             }
         }

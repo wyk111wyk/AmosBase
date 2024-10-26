@@ -50,9 +50,10 @@ public struct DemoSimpleUpload: View {
                             "Upload to Github",
                             systemImage: "square.and.arrow.up",
                             localizationBundle: .module
-                        )
-                        if isLoading {
-                            ProgressView()
+                        ) {
+                            if isLoading {
+                                ProgressView()
+                            }
                         }
                     }
                     .disabled(isLoading || adjustedImage == nil || gitToken.isEmpty)
@@ -82,6 +83,9 @@ public struct DemoSimpleUpload: View {
             .navigationTitle("上传图床")
         }
         .simpleErrorToast(error: $error)
+        .task {
+            gitToken = "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"
+        }
     }
     
     private func tokenSection() -> some View {

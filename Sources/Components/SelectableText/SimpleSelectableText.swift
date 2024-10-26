@@ -62,6 +62,8 @@ public struct SimpleSelectableText: View {
             self.textColor = .label
             #elseif os(macOS)
             self.textColor = .labelColor
+            #else
+            self.textColor = .black
             #endif
         }
         

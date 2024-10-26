@@ -315,8 +315,6 @@ extension DemoSimpleCloud {
         Toggle("布尔值", isOn: $uploadBool)
     }
     
-    
-    @available(watchOS 10.0, *)
     @ViewBuilder
     private func dateUpload() -> some View {
         DatePicker("日期选择", selection: $uploadDate, displayedComponents: .date)

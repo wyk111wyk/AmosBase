@@ -145,7 +145,6 @@ extension Color: SimpleDefaults.Serializable {
 	public static let bridge = SimpleDefaults.ColorBridge()
 }
 
-@available(macOS 14.0, iOS 17.0, tvOS 17.0, watchOS 10.0, visionOS 1.0, *)
 extension Color.Resolved: SimpleDefaults.Serializable {}
 
 extension Range: SimpleDefaults.RangeSerializable where Bound: SimpleDefaults.Serializable {

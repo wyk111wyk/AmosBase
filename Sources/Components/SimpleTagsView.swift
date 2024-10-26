@@ -21,7 +21,7 @@ public struct SimpleTagViewItem: SimpleCardable {
         icon: String? = nil,
         color: Color = .purple,
         note: String? = nil,
-        viewType: SimpleTagConfig = .full()
+        viewType: SimpleTagConfig = .bg()
     ) {
         self.id = id
         self.title = title

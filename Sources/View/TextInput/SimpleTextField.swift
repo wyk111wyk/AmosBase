@@ -26,6 +26,8 @@ public struct SimpleTextField<
     // 长按清空按钮的更多按钮
     let moreMenus: () -> Menus
     
+    @State private var isTargeted: Bool = false
+    
     public init(
         _ inputText: Binding<String>,
         title: String = "",
@@ -88,7 +90,7 @@ public struct SimpleTextField<
         }
         #endif
         #if !os(watchOS)
-        .onDropText() { text in inputText = text }
+        .onDropText(isTargeted: $isTargeted) { text in inputText = text }
         .overlay(alignment: .bottom) {
             if canClear || systemImage != nil {
                 HStack {
@@ -192,11 +194,12 @@ public struct SimpleTokenTextField: View {
             SimpleTextField($input01, title: "New TextField")
             SimpleTextField($input02, title: "New TextField", endLine: 1)
             SimpleTokenTextField($input03)
-            
+            #if !os(watchOS)
             TextEditor(text: $input03)
                 .frame(minHeight: 150)
                 .font(.body)
                 .lineSpacing(4)
+            #endif
         }
         .formStyle(.grouped)
     }

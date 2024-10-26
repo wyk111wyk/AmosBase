@@ -5,9 +5,9 @@
 //  Created by AmosFitness on 2024/9/10.
 //
 
+#if canImport(UIKit) && !os(watchOS)
 import SwiftUI
 
-#if os(iOS)
 struct SimpleCamera: UIViewControllerRepresentable {
     
     @Environment(\.presentationMode) var isPresented

@@ -33,7 +33,9 @@ struct SimpleFeedbackAccount: View {
                             Text("男性").tag("male")
                             Text("女性").tag("female")
                         }
+                        #if !os(watchOS)
                         .pickerStyle(.segmented)
+                        #endif
                     }
                     SimpleCell("邮箱", systemImage: "envelope") {
                         TextField("", text: $account.email, prompt: Text("填写邮箱（选填）"))

@@ -212,7 +212,7 @@ public struct DemoSimpleButton<V: View>: View {
                 var newTag = tag
                 newTag.color = .purple
                 newTag.icon = "person.wave.2.fill"
-                newTag.viewType = .full()
+                newTag.viewType = .bg()
                 withAnimation {
                     tagCollectTwo.removeById(newTag)
                     tagCollectOne.appendOrReplace(newTag)

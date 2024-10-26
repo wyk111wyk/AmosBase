@@ -396,15 +396,11 @@ fileprivate struct BackgroundColorModifier: ViewModifier {
                     bgColor
                 }
         }else{
-            if #available(watchOS 10.0, *) {
-                content
-                    .background(.regularMaterial,
-                                in: RoundedRectangle(cornerRadius: 12))
-            }else {
-                content
-                    .background(.gray.opacity(0.7),
-                                in: RoundedRectangle(cornerRadius: 12))
-            }
+            content
+                .background(
+                    .regularMaterial,
+                    in: RoundedRectangle(cornerRadius: 12)
+                )
         }
     }
 }

@@ -12,6 +12,8 @@ import PhotosUI
  想要使用摄像头需要进行配置：
  1. 在xcode的Signing & Capabilities中，选择App Sandbox，打开Camera选项
  2. 在plist中加入Privacy - Camera Usage Description
+ 想使用从文件夹读取需要配置：
+ 1. 选择App Sandbox，将文件写入\读取权限打开
  */
 public struct SimpleImagePicker<V: View>: View {
     public enum PickerType {
@@ -19,10 +21,13 @@ public struct SimpleImagePicker<V: View>: View {
     }
     
     @State private var showLibrary = false
+    @State private var showFolder = false
     @State private var showCamera = false
-    @State private var showMenu = false
+    
+    @State private var isTargeted = false
     @State private var selectedItem: PhotosPickerItem?
     @State private var errorMsg: String?
+    
     
     @Binding var originalImage: SFImage?
     @Binding var adjustedImage: SFImage?
@@ -58,23 +63,31 @@ public struct SimpleImagePicker<V: View>: View {
         Group {
             #if os(watchOS)
             Button {
-                showLibrary = true
+                showPhotoLibrary()
             } label: {
                 Image(systemName: "photo.on.rectangle.angled")
                 Text("Photo album", bundle: .module)
             }
             .buttonStyle(.plain)
-            #else
+            #elseif os(iOS)
             Menu {
-                if pickerType == .both && SimpleDevice.hasCamera() {
+                if pickerType != .carmera {
                     Button {
-                        showLibrary = true
+                        showPhotoLibrary()
                     } label: {
                         Image(systemName: "photo.on.rectangle.angled")
                         Text("Photo album", bundle: .module)
                     }
                     Button {
-                        showCamera = true
+                        showImageFolder()
+                    } label: {
+                        Image(systemName: "folder.badge.plus")
+                        Text("From folder", bundle: .module)
+                    }
+                }
+                if pickerType != .library {
+                    Button {
+                        showCarmera()
                     } label: {
                         Image(systemName: "camera")
                         Text("Camera", bundle: .module)
@@ -84,10 +97,45 @@ public struct SimpleImagePicker<V: View>: View {
                 photoView()
             }
             .buttonStyle(.plain)
-            .onTapGesture {
-                selectImage()
+            .onDropImage(isTargeted: $isTargeted) { newImage in
+                adjustImage(for: newImage)
             }
-            .onDropImage { newImage in
+            .fileImporter(
+                isPresented: $showFolder,
+                allowedContentTypes: [.image],
+                allowsMultipleSelection: false,
+                onCompletion: { result in
+                switch result {
+                case .success(let allUrls):
+                    if let url = allUrls.first {
+                        if let data = try? Data(contentsOf: url),
+                           let newImage = SFImage(data: data) {
+                            adjustImage(for: newImage)
+                        }
+                    }
+                case .failure(let error):
+                    debugPrint("获取文件错误: \(error)")
+                }
+            })
+            #elseif os(macOS)
+            Menu {
+                Button {
+                    showPhotoLibrary()
+                } label: {
+                    Image(systemName: "photo.on.rectangle.angled")
+                    Text("Photo album", bundle: .module)
+                }
+                Button {
+                    selectImage_mac()
+                } label: {
+                    Image(systemName: "folder.badge.plus")
+                    Text("From folder", bundle: .module)
+                }
+            } label: {
+                photoView()
+            }
+            .buttonStyle(.plain)
+            .onDropImage(isTargeted: $isTargeted) { newImage in
                 adjustImage(for: newImage)
             }
             #endif
@@ -103,10 +151,8 @@ public struct SimpleImagePicker<V: View>: View {
             .onChange(of: selectedItem) {
                 if let selectedItem {
                     Task {
-                        if #available(macOS 14.0, iOS 16.0, watchOS 9.0, *) {
-                            let newImage = try? await selectedItem.loadTransferable(type: SFImage.self)
-                            adjustImage(for: newImage)
-                        }
+                        let newImage = try? await selectedItem.loadTransferable(type: SFImage.self)
+                        adjustImage(for: newImage)
                     }
                 }
             }
@@ -115,25 +161,39 @@ public struct SimpleImagePicker<V: View>: View {
 }
 
 extension SimpleImagePicker {
+    private func showPhotoLibrary() {
+        showLibrary = true
+    }
     
-#if !os(watchOS)
-    private func selectImage() {
-        switch pickerType {
-        case .library:
-            showLibrary = true
-        case .carmera:
-            if SimpleDevice.hasCamera() {
-                showCamera = true
-            }else {
-                errorMsg = "cameraError".localized(bundle: .module)
-            }
-        case .both:
-            if !SimpleDevice.hasCamera() {
-                showLibrary = true
+    #if !os(watchOS)
+    private func showCarmera() {
+        if SimpleDevice.hasCamera() {
+            showCamera = true
+        }else {
+            errorMsg = "cameraError".localized(bundle: .module)
+        }
+    }
+    #endif
+    
+    private func showImageFolder() {
+        showFolder = true
+    }
+    
+    #if os(macOS)
+    // mac 从文件夹选取文件
+    func selectImage_mac() {
+        let dialog = NSOpenPanel()
+        dialog.title = "Choose an image".localized(bundle: .module)
+        dialog.allowedContentTypes = [.image]
+        
+        if dialog.runModal() == .OK {
+            if let url = dialog.url,
+               let newImage: SFImage = .init(contentsOf: url) {
+                adjustImage(for: newImage)
             }
         }
     }
-#endif
+    #endif
     
     private func adjustImage(for image: SFImage?) {
         guard let image else { return }

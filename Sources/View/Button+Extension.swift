@@ -855,32 +855,18 @@ struct ButtonCircleBackground: ViewModifier {
     }
     
     func body(content: Content) -> some View {
-        if #available(iOS 17.0, watchOS 10.0, macOS 14.0, *) {
-#if os(iOS)
-            content
-                .foregroundStyle(labelColor ?? Color.accentColor)
-                .fontWeight(.medium)
-                .buttonBorderShape(.circle)
-                .buttonStyle(.bordered)
-#elseif os(watchOS)
-            content
-                .foregroundStyle(labelColor ?? Color.accentColor)
-#elseif os(macOS)
-            content
-                .buttonStyle(.bordered)
-#endif
-        }
-        else {
-            content
-                .labelStyle(.iconOnly)
-                .padding(6)
-                .background {
-                    if #available(watchOS 10.0, *) {
-                        Circle().foregroundStyle(.regularMaterial)
-                    }else {
-                        Circle().foregroundStyle(.gray.opacity(0.7))
-                    }
-                }
-        }
+        #if os(iOS)
+        content
+            .foregroundStyle(labelColor ?? Color.accentColor)
+            .fontWeight(.medium)
+            .buttonBorderShape(.circle)
+            .buttonStyle(.bordered)
+        #elseif os(watchOS)
+        content
+            .foregroundStyle(labelColor ?? Color.accentColor)
+        #elseif os(macOS)
+        content
+            .buttonStyle(.bordered)
+        #endif
     }
 }

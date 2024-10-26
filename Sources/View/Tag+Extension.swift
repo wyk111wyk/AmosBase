@@ -52,9 +52,9 @@ public struct SimpleTagConfig: Hashable {
     }
     
     public static func border(
-        verticalPad: CGFloat = 2,
-        horizontalPad: CGFloat = 6,
-        cornerRadius: CGFloat = 4,
+        verticalPad: CGFloat = 5,
+        horizontalPad: CGFloat = 8,
+        cornerRadius: CGFloat = 6,
         lineWidth: CGFloat = 1,
         contentFont: Font = .caption,
         contentColor: Color = .blue,
@@ -73,7 +73,7 @@ public struct SimpleTagConfig: Hashable {
     
     public static func full(
         verticalPad: CGFloat = 5,
-        horizontalPad: CGFloat = 10,
+        horizontalPad: CGFloat = 8,
         cornerRadius: CGFloat = 6,
         lineWidth: CGFloat = 0,
         contentFont: Font = .caption,
@@ -91,7 +91,7 @@ public struct SimpleTagConfig: Hashable {
     }
     
     public static func bg(
-        verticalPad: CGFloat = 2,
+        verticalPad: CGFloat = 5,
         horizontalPad: CGFloat = 8,
         cornerRadius: CGFloat = 6,
         lineWidth: CGFloat = 1,
