@@ -17,6 +17,7 @@ struct DemoSimpleLoad: View {
     @State private var isLoading = false
     @State private var currentError: Error?
     
+    @ObservedObject var location = SimpleLocationHelper()
     @State private var currentLocation: CLLocation?
     @State private var currentAddress: String?
     
@@ -44,9 +45,9 @@ struct DemoSimpleLoad: View {
                         prompt: "高德地图密钥"
                     )
                 }
-                if #available(iOS 17, macOS 14, watchOS 10, *) {
-                    locationPicker()
-                }
+                
+                locationPicker()
+                
                 Section {
                     Button {
                         fetchElevation()
@@ -99,17 +100,20 @@ struct DemoSimpleLoad: View {
                     }
                     .disabled(amapKey.isEmpty)
                     .buttonStyle(.borderless)
+                } header: {
+                    Text("服务测试")
                 }
                 Section {
-                    SimpleTextField(
-                        $searchKey,
-                        prompt: "输入关键词搜索地点",
-                        endLine: 1
-                    )
-                    Button("🔍 搜索") {
-                        fetchAmapTips()
+                    HStack(spacing: 8) {
+                        TextField("搜索", text: $searchKey, prompt: Text("输入关键词搜索地点"))
+                            .onSubmit {
+                                fetchAmapTips()
+                            }
+                        Button("🔍 搜索") {
+                            fetchAmapTips()
+                        }
+                        .disabled(amapKey.isEmpty)
                     }
-                    .disabled(amapKey.isEmpty)
                     if let amapPOIs {
                         ForEach(amapPOIs) { poi in
                             Button {
@@ -125,12 +129,18 @@ struct DemoSimpleLoad: View {
                             .buttonStyle(.borderless)
                         }
                     }
+                } header: {
+                    Text("地点搜索")
                 }
             }
             .formStyle(.grouped)
             .navigationTitle("网络传输 - Fetch")
             .simpleHud(isLoading: isLoading, title: "正在获取数据")
             .simpleErrorToast(error: $currentError)
+        }
+        .onChange(of: location.currentLocation) {
+            currentLocation = location.currentLocation?.toLocation()
+            currentAddress = location.currentPlace?.toFullAddress()
         }
     }
 }
@@ -239,7 +249,6 @@ extension DemoSimpleLoad {
         }
     }
     
-    @available(iOS 17, macOS 14, watchOS 10, *)
     private var pin: SimpleMapMarker? {
         if let currentLocation {
             return SimpleMapMarker(
@@ -254,7 +263,6 @@ extension DemoSimpleLoad {
         }
     }
     
-    @available(iOS 17, macOS 14, watchOS 10, *)
     private func locationPicker() -> some View {
         Section {
             NavigationLink {
@@ -276,6 +284,13 @@ extension DemoSimpleLoad {
             .buttonStyle(.borderless)
             if let currentAddress {
                 Text(currentAddress)
+            }
+        } header: {
+            HStack {
+                Text("已选地址")
+                if location.isLoading {
+                    ProgressView()
+                }
             }
         }
     }

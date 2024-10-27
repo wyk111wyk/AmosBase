@@ -152,7 +152,7 @@ public class SimpleDevice: NSObject {
         if let interfaces = CNCopySupportedInterfaces() as NSArray? {
             for interface in interfaces {
                 if let interfaceInfo = CNCopyCurrentNetworkInfo(interface as! CFString) as NSDictionary? {
-                    print(interfaceInfo)
+                    debugPrint(interfaceInfo)
                     return interfaceInfo["SSID"] as? String
                 }
             }

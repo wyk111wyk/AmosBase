@@ -12,8 +12,6 @@ public struct SimpleMap: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismissPage
     
-    let location = SimpleLocationHelper()
-    
     @State private var position: MapCameraPosition
     @State private var currentRegion: MKCoordinateRegion? = nil
     

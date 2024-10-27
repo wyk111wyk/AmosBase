@@ -14,16 +14,13 @@ public struct SimpleWelcome<V: View>: View {
         case action(action: () -> Void)
     }
     
-    @Environment(\.openURL) private var openURL
     @Environment(\.dismiss) private var dismissPage
-    @Environment(\.colorScheme) private var colorScheme
     
     let allIntroItems: [SimpleWelcomeItem]
     
     let appName: String
     let buttonName: String?
     let privacyPolicyUrl: URL
-    let appUrl: URL
     
     let continueType: ContinueType
     
@@ -32,30 +29,31 @@ public struct SimpleWelcome<V: View>: View {
         appName: String,
         buttonName: String? = nil,
         privacyPolicyUrl: URL = URL(string: "https://amostime.notion.site/Privacy-Policy-cc1f5c8dfdc141fd94770cf19f190fed")!,
-        appUrl: URL = URL(string: "https://www.amosstudio.com.cn")!,
         continueType: ContinueType
     ) {
         self.allIntroItems = allIntroItems
         self.appName = appName
         self.buttonName = buttonName
         self.privacyPolicyUrl = privacyPolicyUrl
-        self.appUrl = appUrl
         self.continueType = continueType
     }
     
     public var body: some View {
-        ScrollView {
-            VStack {
-                headerView()
-                VStack(alignment: .leading) {
-                    ForEach(allIntroItems) { item in
-                        contentCell(item)
+        NavigationStack {
+            ScrollView {
+                VStack {
+                    headerView()
+                    VStack(alignment: .leading) {
+                        ForEach(allIntroItems) { item in
+                            contentCell(item)
+                        }
                     }
                 }
             }
-        }
-        .safeAreaInset(edge: .bottom) {
-            footerView()
+            .scrollIndicators(.hidden)
+            .safeAreaInset(edge: .bottom) {
+                footerView()
+            }
         }
     }
 }
@@ -89,16 +87,18 @@ extension SimpleWelcome {
                     .imageModify(length: 50)
                     .padding(.trailing)
             }
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 6) {
                 Text(LocalizedStringKey(item.title))
-                    .font(.title3)
+                    .font(.title2)
+                    .fontWeight(.medium)
                     .foregroundColor(.primary)
                 Text(LocalizedStringKey(item.content))
                     .font(.body)
                     .foregroundColor(.secondary)
             }
+            .offset(y:-3)
         }
-        .padding(.vertical, 8)
+        .padding(.vertical, 12)
         .padding(.horizontal, 28)
     }
 }
@@ -109,8 +109,10 @@ extension SimpleWelcome {
             Spacer()
             VStack(spacing: 10) {
                 buttonView()
+                #if !os(watchOS)
                 privateLink()
-                logoView()
+                #endif
+                SimpleLogoView()
                     .padding(.vertical, 8)
             }
             Spacer()
@@ -152,47 +154,17 @@ extension SimpleWelcome {
             )
     }
     
+    #if !os(watchOS)
     private func privateLink() -> some View {
-        Button(action: {
-            openURL(privacyPolicyUrl)
-        }) {
+        NavigationLink {
+            SimpleWebView(url: privacyPolicyUrl, isPushIn: true)
+        } label: {
             Text("Privacy Policy", bundle: .module)
                 .font(.footnote)
         }
         .buttonStyle(.borderless)
     }
-    
-    private var logoImage: SFImage {
-        colorScheme == .dark ? .logoNameWhite : .logoNameBlack
-    }
-    
-    private func logoView() -> some View {
-        Button(action: {
-            openURL(appUrl)
-        }) {
-            HStack {
-                VStack(spacing: 1) {
-                    Image(sfImage: logoImage)
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundColor(.primary)
-                        .frame(width: 130)
-                    Text("slogen", bundle: .module)
-                        .font(
-                            .system(
-                                size: 11,
-                                weight: .light,
-                                design: .default
-                            )
-                        )
-                        .foregroundColor(.secondary)
-                        .layoutPriority(1)
-                        .lineLimit(nil)
-                }
-            }
-        }
-        .buttonStyle(.borderless)
-    }
+    #endif
 }
 
 #Preview("Action") {
@@ -210,14 +182,12 @@ extension SimpleWelcome {
 }
 
 #Preview("LinkPage") {
-    NavigationStack {
-        SimpleWelcome(
-            allIntroItems: .allExamples,
-            appName: "AmosBase",
-            continueType: .link(page: {
-                Text("Next Page")
-            })
-        )
-    }
+    SimpleWelcome(
+        allIntroItems: .allExamples,
+        appName: "AmosBase",
+        continueType: .link(page: {
+            Text("Next Page")
+        })
+    )
     .environment(\.locale, .zhHans)
 }

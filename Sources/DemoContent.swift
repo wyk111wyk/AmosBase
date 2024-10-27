@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-@available(iOS 16, macOS 13, watchOS 10, *)
 public struct DemoContent<V: View>: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
@@ -235,7 +234,6 @@ struct Page: Identifiable, Equatable, Hashable {
     }
 }
 
-@available(iOS 16, macOS 13, watchOS 10, *)
 #Preview {
     DemoContent()
 }

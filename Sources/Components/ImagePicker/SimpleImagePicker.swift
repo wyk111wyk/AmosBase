@@ -108,9 +108,16 @@ public struct SimpleImagePicker<V: View>: View {
                 switch result {
                 case .success(let allUrls):
                     if let url = allUrls.first {
-                        if let data = try? Data(contentsOf: url),
-                           let newImage = SFImage(data: data) {
-                            adjustImage(for: newImage)
+                        if url.startAccessingSecurityScopedResource() {
+                            do {
+                                let data = try Data(contentsOf: url)
+                                if let newImage = UIImage(data: data) {
+                                    adjustImage(for: newImage)
+                                }
+                            } catch {
+                                debugPrint("Error loading image: \(error.localizedDescription)")
+                            }
+                            url.stopAccessingSecurityScopedResource()
                         }
                     }
                 case .failure(let error):

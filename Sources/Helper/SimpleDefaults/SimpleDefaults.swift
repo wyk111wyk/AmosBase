@@ -6,25 +6,63 @@ public enum SimpleDefaults {
 	Access stored values.
 
 	```swift
+    // 如何使用
 	import SimpleDefaults
 
 	extension SimpleDefaults.Keys {
 	 static let quality = Key<Double>("quality", default: 0.8)
 	}
+     
+    @SimpleSetting(.quality) var quality
 
-	// …
+	// 1. 不需要进行初始化，可以直接进行使用
 
 	SimpleDefaults[.quality]
 	//=> 0.8
 
 	SimpleDefaults[.quality] = 0.5
 	//=> 0.5
+     
+    // 2. 可以使用Enum
+     enum DurationKeys: String, SimpleDefaults.Serializable {
+         case tenMinutes = "10 Minutes"
+         case halfHour = "30 Minutes"
+         case oneHour = "1 Hour"
+     }
 
-	SimpleDefaults[.quality] += 0.1
-	//=> 0.6
+     extension SimpleDefaults.Keys {
+         static let defaultDuration = Key<DurationKeys>("defaultDuration", default: .oneHour)
+     }
 
-	SimpleDefaults[.quality] = "🦄"
-	//=> [Cannot assign value of type 'String' to type 'Double']
+     SimpleDefaults[.defaultDuration].rawValue
+     //=> "1 Hour"
+     
+     // 3. 可以直接使用Model
+     struct User: Codable, SimpleDefaults.Serializable {
+         let name: String
+         let age: String
+     }
+
+     extension SimpleDefaults.Keys {
+         static let user = Key<User>("user", default: .init(name: "Hello", age: "24"))
+     }
+
+     SimpleDefaults[.user].name
+     //=> "Hello"
+     
+     // 4. 直接绑定Toggle使用
+     SimpleDefaults.Toggle("Show All-Day Events", key: .showAllDayEvents)
+     
+     // 5. 将数值恢复默认
+     SimpleDefaults.reset(.isUnicornMode)
+     
+     // 6. Shared UserDefaults
+     let extensionDefaults = UserDefaults(suiteName: "com.unicorn.app")!
+
+     extension SimpleDefaults.Keys {
+         static let isUnicorn = Key<Bool>("isUnicorn", default: true, suite: extensionDefaults)
+     }
+     
 	```
 	*/
 	public static subscript<Value: Serializable>(key: Key<Value>) -> Value {

@@ -14,6 +14,7 @@ public struct DemoSimpleButton<V: View>: View {
     
     @State private var input = ""
     @State private var showInput = false
+    @State private var isFavor = false
     
     @State private var confirmShowPage = false
     @State private var showPage = false
@@ -79,6 +80,8 @@ public struct DemoSimpleButton<V: View>: View {
         Section {
             SimpleCell(
                 "划动测试",
+                titleSystemImage: isFavor ? "star.fill" : nil,
+                titleImageColor: .yellow,
                 bundleImageName: "LAL_r",
                 bundleImageType: "png",
                 content: String.randomChinese(medium: true)
@@ -87,7 +90,9 @@ public struct DemoSimpleButton<V: View>: View {
                     Text(String.randomChinese(word: true))
                         .simpleTag(.full(bgColor: .blue.opacity(0.9)))
                 }
-            }.simpleSwipe(isFavor: false, favorAction: {})
+            }.simpleSwipe(allowsFullSwipe: true, isFavor: isFavor, favorAction: {
+                isFavor.toggle()
+            })
             Button {
                 
             } label: {
@@ -125,12 +130,9 @@ public struct DemoSimpleButton<V: View>: View {
     @ViewBuilder
     private func buttonSection() -> some View {
         Section {
-#if os(iOS) || targetEnvironment(macCatalyst)
-            SimpleMiddleButton("普通中央按钮", role: .none) {
+            SimpleMiddleButton("普通中央按钮", role: .none, rowVisibility: .hidden) {
                 confirmShowPage = true }
             .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
-#endif
-            SimpleMiddleButton("重要中央按钮", systemImageName: "person.wave.2.fill", role: .destructive) {}
         } header: {
             Text("Button", bundle: .module)
         }
@@ -228,10 +230,8 @@ public struct DemoSimpleButton<V: View>: View {
     
     private func sliderSection() -> some View {
         Section {
-            SimpleSlider(value: $sliderValue, range: 0...150, color: .blue)
             SimpleSlider(value: $sliderValue, range: 0...150, cornerScale: 2, color: .red, textType: .value)
             SimpleButtonSlider(value: $sliderValue, range: 0...150, color: .green, minText: "0", maxText: "150")
-            SimpleButtonSlider(value: $sliderValue, range: 0...150, buttonWidth: 60, cornerScale: 2, color: .brown, textColor: .white, textType: .value)
             SimpleStarSlider(currentRating: $starValue,
                              systemIcon: "externaldrive.fill",
                              state: starValue.toString())

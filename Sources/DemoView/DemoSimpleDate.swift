@@ -64,14 +64,14 @@ public struct DemoSimpleDate: View {
                     SimpleCell("是否今天", stateText: theDate.isToday().toString())
                 }
                 Section("转换为文字") {
-                    SimpleCell(theDate.toDateKey())
-                    SimpleCell(theDate.toString_Time())
-                    SimpleCell(theDate.toString_Date())
-                    SimpleCell(theDate.toString_DateTime())
-                    SimpleCell(theDate.toString_YearDate())
-                    SimpleCell(theDate.toString_YearDateTime())
-                    SimpleCell(theDate.toString_YearDateWeekTime())
-                    SimpleCell(theDate.toString_ISO8601())
+                    SimpleCell(theDate.toDateKey(), content: "YYYY-MM-dd")
+                    SimpleCell(theDate.toString_Time(), content: "H:mm")
+                    SimpleCell(theDate.toString_Date(), content: ".dateTime.month().day()")
+                    SimpleCell(theDate.toString_DateTime(), content: ".month().day().hour().minute()")
+                    SimpleCell(theDate.toString_YearDate(), content: ".year().month().day()")
+                    SimpleCell(theDate.toString_YearDateTime(), content: ".year().month().day().hour().minute()")
+                    SimpleCell(theDate.toString_YearDateWeekTime(), content: ".month().day().hour().minute().weekday()")
+                    SimpleCell(theDate.toString_ISO8601(), content: "ISO8601Format")
                 }
                 Section("获取时间") {
                     SimpleCell("今天初始", stateText: theDate.toStartOfDay().toString_DateTime())

@@ -13,6 +13,7 @@ public struct DemoSimpleCollection: View {
         self.title = title
     }
     
+    
     let baseArray: [Int] = [1,2,3,3,4,4,4,5,6,7,8]
     @State private var answerArr: [Int: [Int]] = [:]
     let arrTitles = [

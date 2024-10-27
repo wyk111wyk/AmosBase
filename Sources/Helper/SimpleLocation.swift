@@ -28,9 +28,11 @@ public class SimpleLocationHelper: NSObject, ObservableObject {
     public override init() {
         super.init()
         manager.delegate = self
+        currentLocation = manager.location?.coordinate
+        
         if manager.authorizationStatus.rawValue < 3 {
             manager.requestWhenInUseAuthorization()
-        }else {
+        }else if currentLocation == nil {
             startLocation()
         }
     }

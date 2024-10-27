@@ -339,6 +339,11 @@ public struct SimplePlaceholder<V: View>: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
+                .onTapGesture {
+                    withAnimation {
+                        isHiden = true
+                    }
+                }
                 
                 if V.self != EmptyView.self {
                     buttonView()

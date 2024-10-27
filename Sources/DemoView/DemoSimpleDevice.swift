@@ -37,8 +37,6 @@ public struct DemoSimpleDevice: View {
                 SimpleCell("应用版本", stateText: SimpleDevice.getAppVersion())
             }
             
-            hapticSection()
-            
             #if !os(macOS)
             Section("位置信息") {
                 SimpleCell("Wifi名称", stateText: wifiName)
@@ -69,13 +67,23 @@ public struct DemoSimpleDevice: View {
                 }
                 .disabled(location.currentLocation == nil)
             }
-            .sheet(item: $mapLocation) { location in
-                SimpleMap(pinMarker: .init(location: location.toLocation()))
-            }
             #endif
+            
+            hapticSection()
         }
         .formStyle(.grouped)
         .navigationTitle(title)
+        .sheet(item: $mapLocation) { location in
+            SimpleMap(
+                isPushin: false,
+                pinMarker: .init(location: location.toLocation())
+            )
+        }
+        .task {
+            #if os(iOS)
+            wifiName = SimpleDevice.wifiInfo()
+            #endif
+        }
     }
     
     @ViewBuilder

@@ -41,14 +41,28 @@ public class SimpleFileHelper {
         }
     }
     
+    /*
+     1. 临时文件可以存放在 cachesDirectory 或者是 temporaryDirectory 文件夹
+     2. 如果是应用相关的重要文件，可以存放在 applicationSupportDirectory 目录，内容会自动备份到 iCloud 上，同时不会出现在“文件” App 内
+     - applicationDirectory (/Applications)
+     - developerApplicationDirectory (/Developer/Applications)
+     - libraryDirectory (/Library)
+     - developerDirectory (/Developer)
+     - userDirectory (/Users)
+     - cachesDirectory (Library/Caches)
+     - desktopDirectory (/desktop)
+     - downloadsDirectory (/downloads)
+     - applicationSupportDirectory (Library/Application Support)
+     */
     /// 获取（创建）文件夹路径URL
     public func folderPath(
         _ folderName: String? = "audioFile",
+        directory: FileManager.SearchPathDirectory = .documentDirectory,
         isCreate: Bool = true
     ) -> URL? {
         // 获取文档目录路径
         guard let documentsDirectory = file.urls(
-            for: .documentDirectory,
+            for: directory,
             in: .userDomainMask
         ).first else {
             return nil
@@ -78,11 +92,12 @@ public class SimpleFileHelper {
     public func fileExists(
         _ fileName: String,
         folderName: String? = "audioFile",
-        suffix: String? = "mp3"
+        suffix: String? = "mp3",
+        directory: FileManager.SearchPathDirectory = .documentDirectory
     ) -> Bool {
         // 获取文档目录路径
         guard let documentsDirectory = file.urls(
-            for: .documentDirectory,
+            for: directory,
             in: .userDomainMask
         ).first else {
             debugPrint("获取文档目录路径失败")
@@ -117,10 +132,11 @@ public class SimpleFileHelper {
         _ fileName: String,
         folderName: String? = "audioFile",
         suffix: String? = "mp3",
+        directory: FileManager.SearchPathDirectory = .documentDirectory,
         isCreateWhenEmpty: Bool = true
     ) -> URL? {
         // 获取文档目录路径
-        guard let folderDirectory = folderPath(folderName) else {
+        guard let folderDirectory = folderPath(folderName, directory: directory) else {
             return nil
         }
         

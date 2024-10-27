@@ -168,7 +168,7 @@ extension SimpleCommonAbout {
                     bundleImageName: "AmosLogoB",
                     bundleImageNameDark: "AmosLogoW",
                     bundleImageType: "png",
-                    imageSize: 20,
+                    imageSize: 22,
                     content: "Other Apps from us, equally concise and practical.",
                     localizationBundle: .module
                 )
@@ -195,6 +195,9 @@ extension SimpleCommonAbout {
                 }
             }
             footerView()
+            
+            SimpleLogoView()
+                .padding(.top)
         }
         .padding(.vertical, 8)
     }
