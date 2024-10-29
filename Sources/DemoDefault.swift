@@ -19,6 +19,7 @@ extension SimpleDefaults.Keys {
     static let map_isShowsTraffic = Key<Bool>("Library_Map_IsShowsTraffic", default: false)
     
     static let feedback_account = Key<SimpleFeedbackModel?>("Feedback_Account", iCloud: true)
+    static let feedback_hasShowReviewRequest = Key<Bool>("Feedback_HasShowReviewRequest", default: false)
 }
 
 extension SimpleFeedbackModel: SimpleDefaults.Serializable {

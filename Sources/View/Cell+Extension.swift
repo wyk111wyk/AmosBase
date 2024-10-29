@@ -159,7 +159,7 @@ public struct SimpleCell<V: View>: View {
                             .stroke(lineWidth: 1)
                         Text(numberIcon.toString())
                             .minimumScaleFactor(0.5)
-                            .padding(1)
+                            .padding(2)
                     }
                     .frame(width: imageSize, height: imageSize)
                     .foregroundColor(iconColor)

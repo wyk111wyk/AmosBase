@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import StoreKit
 
 /*
  兔小巢的App管理
@@ -16,14 +17,19 @@ import SwiftUI
 
 public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     @Environment(\.openURL) private var openURL
+    @Environment(\.requestReview) private var requestReview
+    
     @SimpleSetting(.feedback_account) var account
+    @SimpleSetting(.feedback_hasShowReviewRequest) var hasShowReviewRequest
     
     @State private var showAccountSetting = false
     @State private var showFeedback = false
+    @State private var showSubscribe = false
     
     let introWebLink = "https://www.amosstudio.com.cn/"
     let feedbackLink: String?
     let appStoreLink: String?
+    let isShowSubscribe: Bool
     let showAppVersion: Bool
     
     let headerView: () -> Header
@@ -32,6 +38,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     public init(
         txcId: String? = nil,
         appStoreId: String? = nil,
+        isShowSubscribe: Bool = false,
         showAppVersion: Bool = true,
         @ViewBuilder headerView: @escaping () -> Header = {EmptyView()},
         @ViewBuilder footerView: @escaping () -> Footer = {EmptyView()}
@@ -48,6 +55,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
             appStoreLink = nil
         }
         
+        self.isShowSubscribe = isShowSubscribe
         self.showAppVersion = showAppVersion
         self.headerView = headerView
         self.footerView = footerView
@@ -125,8 +133,8 @@ extension SimpleCommonAbout {
                             .foregroundStyle(.secondary)
                     }else {
                         Text("配置账户")
-                            .font(.callout)
-                            .foregroundStyle(.blue)
+                            .font(.footnote)
+                            .foregroundStyle(.blue_05)
                     }
                 }
             }
@@ -144,7 +152,12 @@ extension SimpleCommonAbout {
     private func appStoreSection() -> some View {
         if let url = URL(string: appStoreLink) {
             Button(action: {
-                openURL(url)
+                if hasShowReviewRequest {
+                    openURL(url)
+                }else {
+                    requestReview()
+                    hasShowReviewRequest = true
+                }
             }) {
                 SimpleCell(
                     "App Store Review",
@@ -154,6 +167,15 @@ extension SimpleCommonAbout {
                 )
             }
             .buttonStyle(.plain)
+        }
+        
+        if isShowSubscribe {
+            PlainButton {
+                showSubscribe = true
+            } label: {
+                SimpleCell("管理订阅", systemImage: "cart")
+            }
+            .manageSubscriptionsSheet(isPresented: $showSubscribe)
         }
     }
     
@@ -183,13 +205,8 @@ extension SimpleCommonAbout {
             if showAppVersion {
                 HStack {
                     Spacer()
-                    VStack(spacing: 4) {
-                        if let appName = SimpleDevice.getAppName() {
-                            Text(appName)
-                        }
-                        if let version = SimpleDevice.getAppVersion() {
-                            Text(version)
-                        }
+                    if let version = SimpleDevice.getAppVersion() {
+                        Text(version)
                     }
                     Spacer()
                 }
