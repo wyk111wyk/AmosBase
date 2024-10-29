@@ -851,6 +851,12 @@
     "Lon: %lf" : {
 
     },
+    "Map - 定位" : {
+
+    },
+    "Map - 导航" : {
+
+    },
     "Map Share" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -867,12 +873,6 @@
           }
         }
       }
-    },
-    "Map Share - 定位按钮" : {
-
-    },
-    "Map Share - 导航按钮" : {
-
     },
     "More Buttons" : {
 
@@ -1003,6 +1003,7 @@
       }
     },
     "Require iOS 17" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

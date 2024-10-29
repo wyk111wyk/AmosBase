@@ -93,6 +93,7 @@ public struct DemoContent<V: View>: View {
                 SimpleCommonAbout(
                     txcId: "123",
                     appStoreId: "123",
+                    isShowSubscribe: true,
                     headerView: {
                     Text("About - 关于")
                 })
@@ -108,12 +109,7 @@ public struct DemoContent<V: View>: View {
                 case 0: DemoSimpleToast()
                 case 1: DemoSimpleAlert()
                 case 2: DemoSimpleButton(stateView: stateView)
-                case 3:
-                    if #available(iOS 17.0, macOS 14, watchOS 10, *) {
-                        DemoSimpleCard()
-                    } else {
-                        Text("Require iOS 17", bundle: .module)
-                    }
+                case 3: DemoSimpleCard()
                 case 4:
                     #if !os(watchOS)
                     DemoSimpleWeb()
@@ -132,11 +128,7 @@ public struct DemoContent<V: View>: View {
                     #else
                     Text("Only for iOS")
                     #endif
-                case 12:
-                    SimpleColorPicker(
-                        selectedColor: .random(),
-                        isPush: true
-                    ) { _ in }
+                case 12: SimpleColorPicker(selectedColor: .random())
                 case 13: DemoSimpleUnit()
                 case 14: DemoSimpleData()
                 case 15: DemoSimpleLanguage()
@@ -159,7 +151,7 @@ public struct DemoContent<V: View>: View {
             Button {
                 showMapShare.toggle()
             } label: {
-                Label("Map Share - 导航按钮", systemImage: "map")
+                Label("Map - 导航", systemImage: "map")
             }
             .buttonStyle(.borderless)
             .confirmationDialog("Map Share", isPresented: $showMapShare) {
@@ -168,7 +160,7 @@ public struct DemoContent<V: View>: View {
             Button {
                 showPositionShare.toggle()
             } label: {
-                Label("Map Share - 定位按钮", systemImage: "mappin.circle")
+                Label("Map - 定位", systemImage: "mappin.circle")
             }
             .buttonStyle(.borderless)
             .confirmationDialog(

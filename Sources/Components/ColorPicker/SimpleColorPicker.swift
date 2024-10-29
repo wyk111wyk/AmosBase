@@ -35,7 +35,7 @@ public struct SimpleColorPicker: View {
     public init(
         selectedColor: Color? = nil,
         isPush: Bool = true,
-        saveColor: @escaping (Color) -> Void
+        saveColor: @escaping (Color) -> Void = {_ in}
     ) {
         if let selectedColor {
             self._selectedColor = State(initialValue: selectedColor)
