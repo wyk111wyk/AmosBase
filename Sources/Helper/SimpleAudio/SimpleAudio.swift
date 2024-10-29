@@ -88,11 +88,11 @@ extension SimpleAudioHelper: AVAudioPlayerDelegate {
 }
 
 extension SimpleAudioHelper {
-    static func playRightAudio() {
+    public static func playRightAudio() {
         SimpleAudioHelper.playSoundFromBundle(sound: "right", type: "wav", bundle: .module)
     }
     
-    static func playAlertAudio() {
+    public static func playAlertAudio() {
         SimpleAudioHelper.playSoundFromBundle(sound: "alert", type: "wav", bundle: .module)
     }
 }
