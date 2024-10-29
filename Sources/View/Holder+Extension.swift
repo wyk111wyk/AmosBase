@@ -114,12 +114,8 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
     }
 }
 
-public enum SimplePlaceholderType: String, Identifiable {
-    case listEmpty, favorEmpty, allDone, map
-    
-    static var allCases: [SimplePlaceholderType] {
-        [.listEmpty, .favorEmpty, .allDone, .map]
-    }
+public enum SimplePlaceholderType: String, Identifiable, CaseIterable {
+    case listEmpty, star, allDone, map, edit, alert, lock, bell, bookmark, clock, done, pencil, target, thumbUp
     
     public var id: String {
         self.rawValue
@@ -127,27 +123,39 @@ public enum SimplePlaceholderType: String, Identifiable {
     
     var image: Image {
         switch self {
-        case .listEmpty:
-            return .init(packageResource: "empty", ofType: "png")
-        case .favorEmpty:
-            return .init(packageResource: "star", ofType: "png")
-        case .allDone:
-            return .init(packageResource: "allDone", ofType: "png")
-        case .map:
-            return .init(packageResource: "map", ofType: "png")
+        case .listEmpty: .init(packageResource: "empty", ofType: "heic")
+        case .star: .init(packageResource: "star", ofType: "heic")
+        case .allDone: .init(packageResource: "allDone", ofType: "heic")
+        case .map: .init(packageResource: "map", ofType: "heic")
+        case .edit: .init(packageResource: "edit", ofType: "heic")
+        case .alert: .init(packageResource: "alert", ofType: "heic")
+        case .lock: .init(packageResource: "lock", ofType: "heic")
+        case .bell: .init(packageResource: "bell", ofType: "heic")
+        case .bookmark: .init(packageResource: "bookmark", ofType: "heic")
+        case .clock: .init(packageResource: "clock", ofType: "heic")
+        case .done: .init(packageResource: "done", ofType: "heic")
+        case .pencil: .init(packageResource: "edit2", ofType: "heic")
+        case .target: .init(packageResource: "target", ofType: "heic")
+        case .thumbUp: .init(packageResource: "thumb", ofType: "heic")
         }
     }
     
     var title: String {
         switch self {
-        case .listEmpty:
-            "内容为空"
-        case .favorEmpty:
-            "收藏夹"
-        case .allDone:
-            "全部完成"
-        case .map:
-            "授权地点"
+        case .listEmpty: "内容为空"
+        case .star: "收藏夹"
+        case .allDone: "全部完成"
+        case .map: "授权地点"
+        case .edit: "编辑"
+        case .alert: "警告"
+        case .lock: "锁定"
+        case .bell: "通知"
+        case .bookmark: "收藏夹"
+        case .clock: "时钟"
+        case .done: "完成"
+        case .pencil: "编辑"
+        case .target: "目标"
+        case .thumbUp: "点赞"
         }
     }
 }
@@ -423,24 +431,8 @@ struct TapSystemIconAnimation: ViewModifier {
 }
 
 #Preview("Placeholder") {
-    NavigationStack {
-        VStack {
-            Text("")
-        }
-        .navigationTitle("Navi Title")
-    }
+    DemoSimplePlaceholder()
     #if os(macOS)
     .frame(minWidth: 500, minHeight: 400)
     #endif
-    .simplePlaceholder(
-        isPresent: true,
-        type: .favorEmpty,
-        systemImageName: "list.clipboard",
-        title: "Title Title",
-        subtitle: "Subtitle Subtitle Subtitle",
-        content: "content content content content content content content"
-    ) {
-        Button("Button") {}
-            .buttonStyle(.borderedProminent)
-    }
 }

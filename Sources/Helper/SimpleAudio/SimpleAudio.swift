@@ -71,8 +71,8 @@ public class SimpleAudioHelper: SimpleAudioSuper {
         playState = .isPlaying
     }
     
-    public static func playSoundFromBundle(sound: String, type: String) {
-        if let path = Bundle.main.path(forResource: sound, ofType: type) {
+    public static func playSoundFromBundle(sound: String, type: String, bundle: Bundle = .main) {
+        if let path = bundle.path(forResource: sound, ofType: type) {
             SimpleAudioHelper(URL(fileURLWithPath: path)).playSound()
         }
     }
@@ -84,5 +84,15 @@ extension SimpleAudioHelper: AVAudioPlayerDelegate {
         currentTime = 0
         playState = .stop
         cancellable?.cancel()
+    }
+}
+
+extension SimpleAudioHelper {
+    static func playRightAudio() {
+        SimpleAudioHelper.playSoundFromBundle(sound: "right", type: "wav", bundle: .module)
+    }
+    
+    static func playAlertAudio() {
+        SimpleAudioHelper.playSoundFromBundle(sound: "alert", type: "wav", bundle: .module)
     }
 }

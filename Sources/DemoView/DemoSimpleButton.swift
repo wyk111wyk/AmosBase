@@ -94,20 +94,19 @@ public struct DemoSimpleButton<V: View>: View {
                 isFavor.toggle()
             })
             Button {
-                
+                SimpleAudioHelper.playRightAudio()
             } label: {
                 SimpleCell(
                     String.randomChinese(short: true, medium: true),
-                    numberIcon: 368,
-                    iconColor: .red,
+                    systemImage: "play.circle",
                     content: String.randomChinese(medium: true, long: true)
                 )
             }
             SimpleCell(
                 String.randomChinese(short: true),
-                titleSystemImage: "star.fill",
+                titleSystemImage: isFavor ? "star.fill" : nil,
                 titleImageColor: .yellow,
-                systemImage: "person.wave.2.fill",
+                numberIcon: 368,
                 content: String.randomChinese(medium: true),
                 contentSystemImage: "tray",
                 stateText: String.randomChinese(short: true)

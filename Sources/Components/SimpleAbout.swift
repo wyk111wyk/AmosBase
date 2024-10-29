@@ -17,7 +17,9 @@ import StoreKit
 
 public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     @Environment(\.openURL) private var openURL
+    #if !os(watchOS)
     @Environment(\.requestReview) private var requestReview
+    #endif
     
     @SimpleSetting(.feedback_account) var account
     @SimpleSetting(.feedback_hasShowReviewRequest) var hasShowReviewRequest
@@ -150,6 +152,7 @@ extension SimpleCommonAbout {
     
     @ViewBuilder
     private func appStoreSection() -> some View {
+        #if !os(watchOS)
         if let url = URL(string: appStoreLink) {
             Button(action: {
                 if hasShowReviewRequest {
@@ -168,7 +171,9 @@ extension SimpleCommonAbout {
             }
             .buttonStyle(.plain)
         }
+        #endif
         
+        #if os(iOS)
         if isShowSubscribe {
             PlainButton {
                 showSubscribe = true
@@ -177,6 +182,7 @@ extension SimpleCommonAbout {
             }
             .manageSubscriptionsSheet(isPresented: $showSubscribe)
         }
+        #endif
     }
     
     @ViewBuilder
