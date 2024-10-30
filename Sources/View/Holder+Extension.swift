@@ -302,6 +302,7 @@ public struct SimplePlaceholder<V: View>: View {
         }
         #else
         placeHolderContent()
+            .ignoresSafeArea(.keyboard)
         #endif
     }
     
