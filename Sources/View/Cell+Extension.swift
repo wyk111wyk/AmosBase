@@ -208,8 +208,11 @@ public struct SimpleCell<V: View>: View {
                     }
                 }
                 
+                if isPushButton || V.self != EmptyView.self || stateText != nil {
+                    Spacer()
+                }
+                
                 if V.self != EmptyView.self || stateText != nil {
-                    Spacer(minLength: 0)
                     Group {
                         if let stateText = stateText {
                             Text(LocalizedStringKey(stateText), bundle: localizationBundle)
@@ -223,6 +226,8 @@ public struct SimpleCell<V: View>: View {
                 
                 if isPushButton {
                     Image(systemName: "chevron.right")
+                        .imageScale(.small)
+                        .fontWeight(.medium)
                         .foregroundStyle(.secondary)
                 }
             }
