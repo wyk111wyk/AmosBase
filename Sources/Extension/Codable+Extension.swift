@@ -57,7 +57,7 @@ public extension Encodable {
 }
 
 public extension Data {
-    func decode<T: Codable>(type: T.Type) -> T? {
+    func decode<T: Codable>(type: T.Type) throws -> T? {
         do {
             let decoder = JSONDecoder()
             let decoded = try decoder.decode(T.self, from: self)
@@ -65,23 +65,23 @@ public extension Data {
         } catch let DecodingError.dataCorrupted(context) {
             debugPrint("Data 损坏: \(context)")
             debugPrint(String(describing: T.self))
-            return nil
+            throw DecodingError.dataCorrupted(context)
         } catch let DecodingError.keyNotFound(key, context) {
             debugPrint("Key '\(key)' not found:", context.debugDescription)
             debugPrint(String(describing: T.self))
-            return nil
+            throw DecodingError.keyNotFound(key, context)
         } catch let DecodingError.valueNotFound(value, context) {
             debugPrint("Value '\(value)' not found:", context.debugDescription)
             debugPrint(String(describing: T.self))
-            return nil
+            throw DecodingError.valueNotFound(value, context)
         } catch let DecodingError.typeMismatch(valueType, context)  {
             debugPrint("Type '\(valueType)' mismatch:", context.debugDescription)
             debugPrint(String(describing: T.self))
-            return nil
+            throw DecodingError.typeMismatch(valueType, context)
         } catch {
             debugPrint("encode error: ", error)
             debugPrint(String(describing: T.self))
-            return nil
+            throw error
         }
     }
     
