@@ -99,7 +99,8 @@ public struct DemoSimpleButton<V: View>: View {
                 SimpleCell(
                     String.randomChinese(short: true, medium: true),
                     systemImage: "play.circle",
-                    content: String.randomChinese(medium: true, long: true)
+                    content: String.randomChinese(medium: true, long: true),
+                    isPushButton: true
                 )
             }
             SimpleCell(

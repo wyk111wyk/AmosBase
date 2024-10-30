@@ -20,6 +20,7 @@ public struct SimpleCell<V: View>: View {
     @Environment(\.colorScheme) private var colorScheme
     
     let isDisplay: Bool // 是否展示
+    let isPushButton: Bool // 是否是Navi
     // Title
     let titleSystemImage: String?
     let titleImageColor: Color?
@@ -77,12 +78,14 @@ public struct SimpleCell<V: View>: View {
         contentColor: Color? = .secondary,
         contentSystemImage: String? = nil,
         isDisplay: Bool = true,
+        isPushButton: Bool = false,
         contentSpace: Double = 12,
         stateText: String? = nil,
         localizationBundle: Bundle = .main,
         @ViewBuilder stateView: @escaping () -> V = { EmptyView() }
     ) {
         self.isDisplay = isDisplay
+        self.isPushButton = isPushButton
         self.title = title
         self.titleSystemImage = titleSystemImage
         self.titleImageColor = titleImageColor
@@ -216,6 +219,11 @@ public struct SimpleCell<V: View>: View {
                             stateView()
                         }
                     }
+                }
+                
+                if isPushButton {
+                    Image(systemName: "chevron.right")
+                        .foregroundStyle(.secondary)
                 }
             }
             #if !os(watchOS)
