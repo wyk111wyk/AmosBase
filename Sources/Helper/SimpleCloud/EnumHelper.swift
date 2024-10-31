@@ -9,9 +9,7 @@ import Foundation
 import CoreLocation
 import CloudKit
 
-extension NSPredicate: @unchecked @retroactive Sendable {
-    
-}
+extension NSPredicate: @unchecked @retroactive Sendable {}
 
 extension SimpleCloudHelper{
     public enum ZoneType {
@@ -132,6 +130,13 @@ extension SimpleCloudHelper{
             }
         }
     }
+}
+
+public enum AccountStatus: Hashable {
+    /// Account status is normal
+    case available
+    /// Abnormal (states other than available)
+    case notAvailable(CKAccountStatus)
 }
 
 public extension CKAccountStatus {

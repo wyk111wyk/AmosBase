@@ -17,7 +17,7 @@ import SwiftUI
 
 public class SimpleCloudHelper {
     
-    let contain: CKContainer
+    let container: CKContainer
     let privateDatabase: CKDatabase
     let publicDatabase: CKDatabase
     
@@ -44,14 +44,14 @@ public class SimpleCloudHelper {
         self.cacheHelper = try? SimpleCache(isDebuging: isDebuging)
         // 工程自定义的云端库的id，格式为"iCloud.com.AmosStudio.AmosFundation"
         if let identifier {
-            self.contain = CKContainer(identifier: identifier)
+            self.container = CKContainer(identifier: identifier)
         }else {
-            self.contain = CKContainer.default()
+            self.container = CKContainer.default()
         }
         
         if isDebuging {
-            debugPrint("iCloud Identifier: \(self.contain.containerIdentifier ?? "N/A")")
-            self.contain.accountStatus { status, error in
+            debugPrint("iCloud Identifier: \(self.container.containerIdentifier ?? "N/A")")
+            self.container.accountStatus { status, error in
                 if let error {
                     debugPrint("iCloud Container Error: \(error)")
                 }else {
@@ -60,12 +60,30 @@ public class SimpleCloudHelper {
             }
         }
         
-        self.privateDatabase = contain.privateCloudDatabase
-        self.publicDatabase = contain.publicCloudDatabase
+        self.privateDatabase = container.privateCloudDatabase
+        self.publicDatabase = container.publicCloudDatabase
     }
     
     public func accountStatus() async throws -> CKAccountStatus {
-        try await contain.accountStatus()
+        try await container.accountStatus()
+    }
+    
+    /// 检查 iCloud Account 是否处在 available 状态
+    @discardableResult
+    public func validateICloudAvailability(
+        onUnavailable: @Sendable (AccountStatus, Error?) async -> Void = {_,_  in}
+    ) async -> AccountStatus? {
+        do {
+            let accountStatus = try await container.accountStatus()
+            guard accountStatus == .available else {
+                await onUnavailable(.notAvailable(accountStatus), nil)
+                return .notAvailable(accountStatus)
+            }
+        } catch {
+            await onUnavailable(.notAvailable(.couldNotDetermine), error)
+            return nil
+        }
+        return .available
     }
     
     internal func cloudDataBase(_ zoneType: ZoneType) -> CKDatabase {

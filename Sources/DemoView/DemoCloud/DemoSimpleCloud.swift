@@ -203,7 +203,7 @@ extension DemoSimpleCloud {
         }
         .task {
             isNetworkAvailable = try? await SimpleWeb().isNetworkAvailable()
-            isICloudAvailable = cloudHelper != nil
+            isICloudAvailable = await cloudHelper?.validateICloudAvailability() == .available
         }
     }
     
@@ -257,9 +257,7 @@ extension DemoSimpleCloud {
         case .date:
             dateUpload()
         case .location:
-            if #available(iOS 17, macOS 14, watchOS 10, *) {
-                locationUpload()
-            }
+            locationUpload()
         case .array:
             arrayUpload()
         }
@@ -327,7 +325,6 @@ extension DemoSimpleCloud {
         #endif
     }
     
-    @available(iOS 17, macOS 14, watchOS 10, *)
     private func locationUpload() -> some View {
         NavigationLink {
             SimpleMap(
