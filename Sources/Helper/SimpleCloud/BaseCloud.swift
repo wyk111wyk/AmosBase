@@ -71,16 +71,16 @@ public class SimpleCloudHelper {
     /// 检查 iCloud Account 是否处在 available 状态
     @discardableResult
     public func validateICloudAvailability(
-        onUnavailable: @Sendable (AccountStatus, Error?) async -> Void = {_,_  in}
+        onUnavailable: @Sendable (CKAccountStatus, Error?) async -> Void = {_,_  in}
     ) async -> AccountStatus? {
         do {
             let accountStatus = try await container.accountStatus()
             guard accountStatus == .available else {
-                await onUnavailable(.notAvailable(accountStatus), nil)
+                await onUnavailable(accountStatus, nil)
                 return .notAvailable(accountStatus)
             }
         } catch {
-            await onUnavailable(.notAvailable(.couldNotDetermine), error)
+            await onUnavailable(.couldNotDetermine, error)
             return nil
         }
         return .available
