@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DemoSimplePlaceholder: View {
+    @Environment(\.dismiss) private var dismissPage
     @State private var selectedItem: SimplePlaceholderType?
     
     var body: some View {
@@ -39,8 +40,9 @@ struct DemoSimplePlaceholder: View {
             content: "content content content content content content content content content content content content content content content content"
         ) {
             Button("Button") {
-                
-            }.buttonStyle(.borderedProminent)
+                dismissPage()
+            }
+            .buttonStyle(.borderedProminent)
         }
     }
 }

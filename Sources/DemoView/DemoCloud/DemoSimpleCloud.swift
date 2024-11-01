@@ -182,7 +182,7 @@ extension DemoSimpleCloud {
     @ViewBuilder
     private func statusView() -> some View {
         Section("Network") {
-            SimpleCell("网络情况") {
+            SimpleCell("网络情况", systemImage: "network") {
                 if let isNetworkAvailable {
                     Text(isNetworkAvailable ? "正常" : "未连接")
                         .simpleTag(.border(contentColor: isNetworkAvailable ? .green : .red))

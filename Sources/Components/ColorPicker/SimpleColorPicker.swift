@@ -412,17 +412,20 @@ extension SimpleColorPicker {
     
     @ViewBuilder
     private func darkenSection() -> some View {
-        ScrollView(.horizontal) {
-            HStack(spacing: 6) {
-                Image(systemName: "arrow.down.circle.fill")
-                Text("Darken", bundle: .module)
-                Spacer()
-                darkenDemo("10%", rate: 0.1)
-                darkenDemo("20%", rate: 0.2)
-                darkenDemo("30%", rate: 0.3)
-                darkenDemo("40%", rate: 0.4)
-                darkenDemo("50%", rate: 0.5)
-                darkenDemo("60%", rate: 0.6)
+        SimpleCell(
+            "Darken",
+            systemImage: "arrow.down.circle.fill",
+            localizationBundle: .module
+        ) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 6) {
+                    darkenDemo("10%", rate: 0.1)
+                    darkenDemo("20%", rate: 0.2)
+                    darkenDemo("30%", rate: 0.3)
+                    darkenDemo("40%", rate: 0.4)
+                    darkenDemo("50%", rate: 0.5)
+                    darkenDemo("60%", rate: 0.6)
+                }
             }
         }
     }
@@ -445,17 +448,20 @@ extension SimpleColorPicker {
     
     @ViewBuilder
     private func lightenSection() -> some View {
-        ScrollView(.horizontal) {
-            HStack(spacing: 6) {
-                Image(systemName: "arrow.up.circle")
-                Text("Lighten", bundle: .module)
-                Spacer()
-                lightenDemo("10%", rate: 0.1)
-                lightenDemo("20%", rate: 0.2)
-                lightenDemo("30%", rate: 0.3)
-                lightenDemo("40%", rate: 0.4)
-                lightenDemo("50%", rate: 0.5)
-                lightenDemo("60%", rate: 0.6)
+        SimpleCell(
+            "Lighten",
+            systemImage: "arrow.up.circle",
+            localizationBundle: .module
+        ) {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 6) {
+                    lightenDemo("10%", rate: 0.1)
+                    lightenDemo("20%", rate: 0.2)
+                    lightenDemo("30%", rate: 0.3)
+                    lightenDemo("40%", rate: 0.4)
+                    lightenDemo("50%", rate: 0.5)
+                    lightenDemo("60%", rate: 0.6)
+                }
             }
         }
     }

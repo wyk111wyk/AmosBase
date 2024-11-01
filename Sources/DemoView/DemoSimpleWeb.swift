@@ -14,7 +14,7 @@ public struct DemoSimpleWeb: View {
         var url: URL {
             switch self {
             case .hupu:
-                return URL(string: "https://www.hupu.com/nba")!
+                return URL(string: "https://m.hupu.com/nba")!
             case .nba:
                 return URL(string: "https://china.nba.cn/index")!
             }
@@ -25,7 +25,11 @@ public struct DemoSimpleWeb: View {
     
     public var body: some View {
         NavigationStack {
-            SimpleWebView(url: page.url, isPushIn: true)
+            SimpleWebView(
+                url: page.url,
+                isPushIn: true,
+                webType: .mobile
+            )
                 #if os(iOS)
                 .navigationBarTitleDisplayMode(.inline)
                 #endif
