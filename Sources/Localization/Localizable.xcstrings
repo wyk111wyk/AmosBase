@@ -104,6 +104,9 @@
         }
       }
     },
+    "Alert 系统提醒" : {
+
+    },
     "AMap" : {
       "extractionState" : "manual",
       "localizations" : {

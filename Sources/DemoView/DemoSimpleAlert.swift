@@ -14,9 +14,20 @@ public struct DemoSimpleAlert: View {
     
     @State private var showButtonsConfirmation = false
     
-    let title: String
+    let logger: SimpleLogger = .console()
+    
     public init(_ title: String = "Alert 系统提醒") {
-        self.title = title
+        logger.debug("debug")
+        logger.debug("debug", title: "title")
+        logger.info("info")
+        logger.info("info", title: "title")
+        logger.warning("warning")
+        logger.warning("warning", title: "title")
+        let error = SimpleError.customError(title: "title", msg: "error")
+        logger.error(error)
+        logger.error(error)
+        logger.error(nil, message: "custom error")
+        logger.error(nil, message: "custom error", title: "custom title")
     }
     
     public var body: some View {
@@ -72,7 +83,7 @@ public struct DemoSimpleAlert: View {
             }
         }
         .formStyle(.grouped)
-        .navigationTitle(title)
+        .navigationTitle("Alert 系统提醒")
     }
 }
 

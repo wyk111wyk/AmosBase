@@ -82,7 +82,7 @@ public struct SimpleSetting<Value: SimpleDefaults.Serializable>: DynamicProperty
 
 	private let key: SimpleDefaults.Key<Value>
 
-	@StateObject private var observable: SimpleDefaults.Observable<Value>
+	@ObservedObject private var observable: SimpleDefaults.Observable<Value>
 
 	/**
 	Get/set a `Defaults` item and also have the view be updated when the value changes. This is similar to `@State`.

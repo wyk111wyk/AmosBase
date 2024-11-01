@@ -22,7 +22,8 @@ public protocol LoggerBackend: Sendable {
     ///
     /// - Parameters:
     ///   - level: The log level.
+    ///   - title: The title to log.
     ///   - message: The message to log.
     ///   - metadata: The metadata to log.
-    func log(level: LogLevel, message: String, metadata: [String: String]?)
+    func log(level: LogLevel, message: String, title: String?, metadata: [String: String]?)
 }

@@ -12,20 +12,22 @@
 import Foundation
 
 /*
- let logger: LoggerManagerProtocol = .default(subsystem: "com.yourapp", category: "networking")
- let logger: LoggerManagerProtocol = .console()
+ 使用方式：在任何页面添加：
+ typealias SimpleLogger = _SimpleLogger
+ 
+ let logger: SimpleLogger = .console()
  
  logger.debug("This is a debug message")
  logger.info("This is an info message")
  logger.warning("This is a warning message")
  logger.error("This is an error message")
  
- Disabling Logs
+ 关闭Log
  ProcessInfo.processInfo.environment["DisableLogger"] = "true"
  */
 
 /// A logger manager that logs messages to a backend.
-public final class LoggerManager: LoggerManagerProtocol, @unchecked Sendable {
+public final class LoggerManager: SimpleLogger, @unchecked Sendable {
     let backend: LoggerBackend
     let queue: DispatchQueue
 
@@ -52,6 +54,7 @@ public final class LoggerManager: LoggerManagerProtocol, @unchecked Sendable {
     ///   - line: The line number.
     public func log(
         _ message: String,
+        title: String? = nil,
         level: LogLevel = .debug,
         file: String = #file,
         function: String = #function,
@@ -63,7 +66,7 @@ public final class LoggerManager: LoggerManagerProtocol, @unchecked Sendable {
                 "function": function,
                 "line": String(line),
             ]
-            self.backend.log(level: level, message: message, metadata: metadata)
+            self.backend.log(level: level, message: message, title: title, metadata: metadata)
         }
     }
 }

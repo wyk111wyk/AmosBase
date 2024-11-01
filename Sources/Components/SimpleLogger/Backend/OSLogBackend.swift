@@ -46,8 +46,9 @@ public final class OSLogBackend: LoggerBackend {
     /// - Parameters:
     ///   - level: The log level.
     ///   - message: The message to log.
+    ///   - title: The title to log.
     ///   - metadata: The metadata to log.
-    public func log(level: LogLevel, message: String, metadata: [String: String]?) {
+    public func log(level: LogLevel, message: String, title: String?, metadata: [String: String]?) {
         let osLogType: OSLogType = {
             switch level {
             case .debug: return .debug
@@ -58,13 +59,13 @@ public final class OSLogBackend: LoggerBackend {
         }()
 
         guard loggerEnabled else { return }
-
+        let title: String = if let title { title + ": "} else {""}
         #if DEBUG
-            let fullMessage = "\(message) in \(metadata?["function"] ?? "") at \(metadata?["file"] ?? ""):\(metadata?["line"] ?? "")"
+            let fullMessage = "\(title)\(message) in \(metadata?["function"] ?? "") at \(metadata?["file"] ?? ""):\(metadata?["line"] ?? "")"
             logger.log(level: osLogType, "\(fullMessage)")
         #else
             if level > .debug {
-                logger.log(level: osLogType, "\(message)")
+                logger.log(level: osLogType, "\(title)\(message)")
             }
         #endif
     }
