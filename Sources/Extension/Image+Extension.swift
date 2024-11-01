@@ -114,22 +114,6 @@ public extension SFImage {
         SFImage(packageResource: "photoProcess", ofType: "png")!
     }
     
-    static var emptyImage: SFImage {
-        SFImage(packageResource: "empty", ofType: "png")!
-    }
-    
-    static var starImage: SFImage {
-        SFImage(packageResource: "star", ofType: "png")!
-    }
-    
-    static var mapImage: SFImage {
-        SFImage(packageResource: "map", ofType: "png")!
-    }
-    
-    static var allDoneImage: SFImage {
-        SFImage(packageResource: "allDone", ofType: "png")!
-    }
-    
     static var logoBlack: SFImage {
         SFImage(packageResource: "AmosLogoB", ofType: "png")!
     }
@@ -152,6 +136,18 @@ public extension SFImage {
     
     static var lady02Image: SFImage {
         SFImage(packageResource: "IMG_5153", ofType: "jpeg")!
+    }
+    
+    static var dimond: SFImage {
+        SFImage(packageResource: "dimond", ofType: "png")!
+    }
+    
+    static var premium: SFImage {
+        SFImage(packageResource: "premium", ofType: "png")!
+    }
+    
+    static var sale: SFImage {
+        SFImage(packageResource: "sale", ofType: "png")!
     }
 }
 
