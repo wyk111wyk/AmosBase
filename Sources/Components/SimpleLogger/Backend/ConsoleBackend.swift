@@ -88,16 +88,16 @@ public final class ConsoleLogBackend: LoggerBackend {
         let category: String = if category.isEmpty { "" } else { "[\(category)]" }
         let subsystem: String = if subsystem == "Console" { "" } else { "<\(subsystem)\(category)> " }
         let message: String =
-        "==> \(timestamp) [\(device)_\(level.rawValue.uppercased())] " + subsystem +
+        "[\(device)_\(level.rawValue.uppercased())] " + subsystem +
         "\(title)\(message)"
         let position: String = if showPosition || level == .error {
             "\n" + "position: \(metadata?["function"] ?? "") at \(metadata?["file"] ?? ""):\(metadata?["line"] ?? "")"
         }else { "" }
-        let fullMessage = message + position
         
         if isPreviewCondition {
-            print(fullMessage)
+            print("==> \(timestamp)" + message + position)
         }else {
+            let fullMessage = message + position
             switch level {
             case .debug:
                 logger.debug("\(fullMessage)")
