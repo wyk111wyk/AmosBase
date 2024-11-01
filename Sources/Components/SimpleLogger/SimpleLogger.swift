@@ -132,6 +132,15 @@ extension SimpleLogger {
                 function: function,
                 line: line
             )
+        }else if let error {
+            log(
+                error.localizedDescription,
+                title: title,
+                level: .error,
+                file: file,
+                function: function,
+                line: line
+            )
         }else if let message {
             log(
                 message,
