@@ -16,7 +16,7 @@ import SwiftUI
  */
 
 public class SimpleCloudHelper {
-    
+    let logger: SimpleLogger = .console(subsystem: "SimpleCloud")
     let container: CKContainer
     let privateDatabase: CKDatabase
     let publicDatabase: CKDatabase
@@ -50,7 +50,7 @@ public class SimpleCloudHelper {
         }
         
         if isDebuging {
-            debugPrint("iCloud Identifier: \(self.container.containerIdentifier ?? "N/A")")
+            logger.debug(self.container.containerIdentifier ?? "N/A", title: "iCloud Identifier")
             self.container.accountStatus { status, error in
                 if let error {
                     debugPrint("iCloud Container Error: \(error)")

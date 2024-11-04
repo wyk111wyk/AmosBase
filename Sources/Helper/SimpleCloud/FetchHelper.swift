@@ -11,13 +11,13 @@ import SwiftUI
 
 // MARK: - 私人方法
 extension SimpleCloudHelper{
-    /// 私人：直接获取所有的云端 Records
-    internal func fetchCloudObjects(
+    /// 获取所有符合条件的的云端记录
+    public func fetchCloudObjects(
         zoneType: ZoneType = .privateType,
         customRecord: String? = nil,
         predicate: NSPredicate,
         resultsLimit: Int = CKQueryOperation.maximumResults
-    ) async throws -> [(CKRecord.ID, Result<CKRecord, any Error>)] {
+    ) async throws -> [(recordId: CKRecord.ID, result: Result<CKRecord, any Error>)] {
         let query = CKQuery(
             recordType: customRecord ?? defaultRecordName,
             predicate: predicate
@@ -29,7 +29,7 @@ extension SimpleCloudHelper{
             resultsLimit: resultsLimit
         ).matchResults
         if isDebuging {
-            debugPrint("从 iCloud 获取：\(allResults.count) 条数据")
+            logger.debug("成功获取：\(allResults.count) 条数据")
         }
         return allResults
     }
@@ -55,9 +55,9 @@ extension SimpleCloudHelper{
             return nil
         }
         
-        let result = onlyResult.1
+        let result = onlyResult.result
         if isDebuging {
-            debugPrint("从 iCloud 获取 Record：\(result)")
+            logger.debug("成功获取：\(result)", title: "从 iCloud 获取记录")
         }
         return result
     }
@@ -87,7 +87,7 @@ extension SimpleCloudHelper{
             return nil
         case .failure(let error):
             if isDebuging {
-                debugPrint("转换数据失败：\(error)")
+                logger.error(error, title: "转换数据失败")
             }
             throw error
         }
@@ -161,11 +161,11 @@ extension SimpleCloudHelper{
         var allData: [SimpleCloudValue<T>] = []
         for result in allResults {
             if let valueData = try transfer(
-                from: result.1,
+                from: result.result,
                 dataType: dataType,
                 type: T.self
             ), let value = createSimpleValue(
-                from: result.1,
+                from: result.result,
                 dataType: dataType,
                 value: valueData
             ) {
@@ -211,10 +211,10 @@ extension SimpleCloudHelper{
         if withCache, let idKey, cacheHelper?.exists(forKey: idKey) == true {
             switch dataType {
             case .image:
-                if isDebuging { debugPrint("在Cache中获取 Image: \(idKey)") }
+                if isDebuging { logger.debug(idKey, title: "在Cache中获取 Image") }
                 return try cacheHelper?.loadImage(forKey: idKey) as? T
             case .data:
-                if isDebuging { debugPrint("在Cache中获取 Data: \(idKey)") }
+                if isDebuging { logger.debug(idKey, title: "在Cache中获取 Data") }
                 return try cacheHelper?.load(forKey: idKey) as? T
             default: break
             }
@@ -269,7 +269,7 @@ extension SimpleCloudHelper{
             customRecord: customRecord
         ), let value = data.decode(type: T.self) {
             if isDebuging {
-                debugPrint("从 iCloud 获取 Codable：\(value)")
+                logger.debug("\(value)", title: "从 iCloud 获取 Codable")
             }
             return value
         }else {
@@ -300,14 +300,14 @@ extension SimpleCloudHelper{
             let key = dataType.valueType(customKey)
             if let asset = record.value(forKey: key) as? CKAsset,
                let fileURL = asset.fileURL {
-                debugPrint("从iCloud获取数据的缓存地址：\(fileURL)")
+                logger.debug(fileURL.path(), title: "从iCloud获取数据的缓存地址")
                 return fileURL
             }
             
             return nil
         case .failure(let error):
             if isDebuging {
-                debugPrint("转换数据失败：\(error)")
+                logger.error(error, title: "转换数据失败")
             }
             throw error
         }
@@ -328,7 +328,7 @@ extension SimpleCloudHelper{
             customRecord: customRecord
         ) {
             if isDebuging {
-                debugPrint("从 iCloud 获取 Data：\(dataValue)")
+                logger.debug("\(dataValue)", title: "从 iCloud 获取 Data")
             }
             return dataValue
         }
@@ -352,7 +352,7 @@ extension SimpleCloudHelper{
             customRecord: customRecord
         ) {
             if isDebuging {
-                debugPrint("从 iCloud 获取 Image：\(imageValue)")
+                logger.debug("\(imageValue)", title: "从 iCloud 获取 Image")
             }
             return imageValue
         }

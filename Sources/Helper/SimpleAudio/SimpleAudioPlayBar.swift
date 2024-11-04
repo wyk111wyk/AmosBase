@@ -68,6 +68,14 @@ public struct SimpleAudioPlayBar: View {
         }else { "正在播放" }
     }
     
+    @MainActor
+    private func dismissBar() {
+        stop()
+        withAnimation {
+            isPresenting = false
+        }
+    }
+    
     public var body: some View {
         VStack(spacing: 10) {
             HStack(spacing: 15) {
@@ -78,11 +86,13 @@ public struct SimpleAudioPlayBar: View {
                             .lineLimit(2)
                             .font(.footnote)
                             .foregroundStyle(.secondary)
+                            .layoutPriority(1)
                         Spacer()
                         Text(currentTime + " / " + duration)
                             .lineLimit(1)
                             .font(.footnote)
                             .foregroundStyle(.secondary)
+                            .layoutPriority(2)
                     }
                     ProgressView(
                         value: audioHelper?.audioPlayer?.currentTime ?? 0,
@@ -102,8 +112,7 @@ public struct SimpleAudioPlayBar: View {
                 HStack {
                     Spacer()
                     Button {
-                        stop()
-                        isPresenting = false
+                        dismissBar()
                     } label: {
                         HStack(spacing: 4) {
                             Image(systemName: "xmark")
@@ -133,7 +142,7 @@ public struct SimpleAudioPlayBar: View {
             }
         }
         .onAppear {
-            play()
+            if isPlay { play() }
         }
         .onDisappear {
             stop()
@@ -227,7 +236,7 @@ extension SimpleAudioPlayBar {
 #Preview {
     NavigationStack {
         VStack(spacing: 20) {
-            SimpleAudioPlayBar(audioFilePath: nil)
+            SimpleAudioPlayBar(title: "我是一个很长的标题我是一个很长的标题我是一个很长的标题", audioFilePath: nil)
             Text("Hello world")
         }
     }

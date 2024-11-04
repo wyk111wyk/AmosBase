@@ -122,7 +122,7 @@ public class SimpleFileHelper {
         let finalFilePath = folderDirectory.appendingPathComponent(fullFileName)
         
         let isFileExist = file.fileExists(atPath: finalFilePath.path())
-//        debugPrint("文件:\(fileName) 是否存在：\(isFileExist.toString())")
+        debugPrint("文件:\(fileName) 是否存在：\(isFileExist.toString())")
         
         return isFileExist
     }
