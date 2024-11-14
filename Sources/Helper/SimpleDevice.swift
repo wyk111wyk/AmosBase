@@ -68,6 +68,21 @@ public class SimpleDevice: NSObject {
 #endif
     }
     
+    /// 打开系统设置 -  本App的页面
+    ///
+    /// 使用 UIApplication.shared.open(url)
+    public static func openSystemSetting() {
+        #if os(iOS)
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url)
+        }
+        #elseif os(macOS)
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.general") {
+            NSWorkspace.shared.open(url)
+        }
+        #endif
+    }
+    
     #if os(iOS)
     /// 设备进行震动 -  成功、失败
     ///
@@ -95,14 +110,6 @@ public class SimpleDevice: NSObject {
     #endif
     
     #if os(iOS)
-    /// 打开系统设置 -  本App的页面
-    ///
-    /// 使用 UIApplication.shared.open(url)
-    public static func openSystemSetting() {
-        if let url = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(url)
-        }
-    }
     
     ///获取设备类型 iPhone
     public static func getModel() -> String {
@@ -239,6 +246,20 @@ extension SimpleDevice {
     /// 应用版本
     public static func getAppVersion() -> String? {
         appVersion()
+    }
+    
+    /// 设备标识码
+    public static func getDeviceIdentifier() -> String? {
+        #if os(iOS)
+        UIDevice.current.identifierForVendor?.uuidString
+        #elseif os(macOS)
+        guard let bundleID = Bundle.main.bundleIdentifier else {
+            return nil
+        }
+        return bundleID
+        #else
+        return nil
+        #endif
     }
     
     #if !os(watchOS)

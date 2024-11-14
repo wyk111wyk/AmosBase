@@ -139,15 +139,27 @@ public extension SFImage {
     }
     
     static var dimond: SFImage {
-        SFImage(packageResource: "dimond", ofType: "png")!
+        SFImage(packageResource: "dimond", ofType: "heic")!
     }
     
     static var premium: SFImage {
-        SFImage(packageResource: "premium", ofType: "png")!
+        SFImage(packageResource: "premium", ofType: "heic")!
+    }
+    
+    static var dimond_w: SFImage {
+        SFImage(packageResource: "dimond-w", ofType: "heic")!
+    }
+    
+    static var premium_w: SFImage {
+        SFImage(packageResource: "premium-w", ofType: "heic")!
     }
     
     static var sale: SFImage {
         SFImage(packageResource: "sale", ofType: "png")!
+    }
+    
+    static var lock: SFImage {
+        SFImage(packageResource: "lock", ofType: "heic")!
     }
 }
 

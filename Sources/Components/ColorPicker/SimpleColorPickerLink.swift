@@ -12,7 +12,7 @@ public struct SimpleColorPickerLink: View {
     public let systemImage: String?
     public let content: String?
     
-    @State private var pickColor: Color
+    public let pickColor: Color
     public let colorAction: (Color) -> Void
     
     public init(
@@ -34,7 +34,6 @@ public struct SimpleColorPickerLink: View {
             SimpleColorPicker(
                 selectedColor: pickColor
             ) { newColor in
-                pickColor = newColor
                 colorAction(newColor)
             }
         } label: {

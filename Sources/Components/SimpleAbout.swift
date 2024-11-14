@@ -29,6 +29,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     @State private var showSubscribe = false
     
     let introWebLink = "https://www.amosstudio.com.cn/"
+    let appIntroWebLink: String?
     let feedbackLink: String?
     let appStoreLink: String?
     let isShowSubscribe: Bool
@@ -38,6 +39,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     let footerView: () -> Footer
     
     public init(
+        appWebExt: String? = nil,
         txcId: String? = nil,
         appStoreId: String? = nil,
         isShowSubscribe: Bool = false,
@@ -61,6 +63,11 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
         self.showAppVersion = showAppVersion
         self.headerView = headerView
         self.footerView = footerView
+        if let appWebExt {
+            appIntroWebLink = "https://www.amosstudio.com.cn/\(appWebExt).html"
+        }else {
+            appIntroWebLink = nil
+        }
     }
     
     public var body: some View {
@@ -109,6 +116,7 @@ extension SimpleCommonAbout {
             SimpleCell(
                 "System Setting",
                 systemImage: "gear",
+                content: "切换应用内语言，开启和关闭各类权限",
                 localizationBundle: .module
             )
         })
@@ -154,14 +162,14 @@ extension SimpleCommonAbout {
     private func appStoreSection() -> some View {
         #if !os(watchOS)
         if let url = URL(string: appStoreLink) {
-            Button(action: {
+            PlainButton {
                 if hasShowReviewRequest {
                     openURL(url)
                 }else {
                     requestReview()
                     hasShowReviewRequest = true
                 }
-            }) {
+            } label: {
                 SimpleCell(
                     "App Store Review",
                     systemImage: "star",
@@ -169,7 +177,6 @@ extension SimpleCommonAbout {
                     localizationBundle: .module
                 )
             }
-            .buttonStyle(.plain)
         }
         #endif
         
@@ -187,8 +194,20 @@ extension SimpleCommonAbout {
     
     @ViewBuilder
     private func amosStudioIntroSction() -> some View {
+        if let appIntroWebLink,
+           let appUrl = URL(string: appIntroWebLink) {
+            PlainButton {
+                openURL(appUrl)
+            } label: {
+                SimpleCell(
+                    "查看介绍",
+                    systemImage: "info.square",
+                    content: "跳转应用官方网页，了解特性与介绍等"
+                )
+            }
+        }
         if let url = URL(string: introWebLink) {
-            Button {
+            PlainButton {
                 openURL(url)
             } label: {
                 SimpleCell(
@@ -201,7 +220,6 @@ extension SimpleCommonAbout {
                     localizationBundle: .module
                 )
             }
-            .buttonStyle(.plain)
         }
     }
     
@@ -229,6 +247,7 @@ extension SimpleCommonAbout {
 #Preview {
     Form {
         SimpleCommonAbout(
+            appWebExt: "amospoem",
             txcId: "673644",
             appStoreId: "123"
         )

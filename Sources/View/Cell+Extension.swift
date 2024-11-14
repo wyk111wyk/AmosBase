@@ -21,6 +21,7 @@ public struct SimpleCell<V: View>: View {
     
     let isDisplay: Bool // 是否展示
     let isPushButton: Bool // 是否是Navi
+    let isPremium: Bool // 是否是Premium
     // Title
     let titleSystemImage: String?
     let titleImageColor: Color?
@@ -79,6 +80,7 @@ public struct SimpleCell<V: View>: View {
         contentSystemImage: String? = nil,
         isDisplay: Bool = true,
         isPushButton: Bool = false,
+        isPremium: Bool = false,
         contentSpace: Double = 12,
         stateText: String? = nil,
         localizationBundle: Bundle = .main,
@@ -86,6 +88,8 @@ public struct SimpleCell<V: View>: View {
     ) {
         self.isDisplay = isDisplay
         self.isPushButton = isPushButton
+        self.isPremium = isPremium
+        
         self.title = title
         self.titleSystemImage = titleSystemImage
         self.titleImageColor = titleImageColor
@@ -175,12 +179,20 @@ public struct SimpleCell<V: View>: View {
                                 Image(systemName: titleSystemImage)
                                     .foregroundColor(titleImageColor)
                                     .font(.body)
+                                    .layoutPriority(1)
                             }
-                            Text(LocalizedStringKey(title), bundle: localizationBundle)
-                                .font(titleFont)
-                                .foregroundColor(titleColor)
-                                .lineLimit(titleLine)
-                                .multilineTextAlignment(.leading)
+                            HStack(alignment: .center, spacing: 6) {
+                                Text(LocalizedStringKey(title), bundle: localizationBundle)
+                                    .font(titleFont)
+                                    .foregroundColor(titleColor)
+                                    .lineLimit(titleLine)
+                                    .multilineTextAlignment(.leading)
+                                    .layoutPriority(1)
+                                if isPremium {
+                                    SimplePremiumLogo()
+                                        .layoutPriority(2)
+                                }
+                            }
                         }
                         
                         if let subtitle {

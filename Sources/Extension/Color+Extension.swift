@@ -91,6 +91,10 @@ public extension Color {
         SFColor(self).hexString
     }
     
+    static func hexColor(_ hex: String) -> Color {
+        Color(hex: hex) ?? .primary
+    }
+    
     /// 随机颜色
     static func random() -> Color {
         var generator: RandomNumberGenerator = SystemRandomNumberGenerator()

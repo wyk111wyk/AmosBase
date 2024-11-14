@@ -14,7 +14,9 @@ public extension View {
         horizontalPadding: CGFloat? = nil,
         cornerRadius: CGFloat = 12,
         shadowRadius: CGFloat? = nil,
-        color: Color? = nil
+        shadowY: CGFloat = 0,
+        color: Color? = nil,
+        withMaterial: Bool = true
     ) -> some View {
         self
             .padding(.vertical, verticalPadding)
@@ -22,26 +24,37 @@ public extension View {
             .background {
                 if let shadowRadius {
                     if let color {
+                        if withMaterial {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .foregroundStyle(color)
+                                    .opacity(0.6)
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .foregroundStyle(.ultraThickMaterial)
+                                    .shadow(radius: shadowRadius, y: shadowY)
+                            }
+                        }else {
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .foregroundStyle(color)
+                                .shadow(radius: shadowRadius, y: shadowY)
+                        }
+                    }else {
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .foregroundStyle(.background.secondary)
+                            .shadow(radius: shadowRadius, y: shadowY)
+                    }
+                }else if let color {
+                    if withMaterial {
                         ZStack {
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .foregroundStyle(color)
                                 .opacity(0.6)
                             RoundedRectangle(cornerRadius: cornerRadius)
                                 .foregroundStyle(.ultraThickMaterial)
-                                .shadow(radius: shadowRadius)
                         }
                     }else {
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .foregroundStyle(.background.secondary)
-                            .shadow(radius: shadowRadius)
-                    }
-                }else if let color {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: cornerRadius)
                             .foregroundStyle(color)
-                            .opacity(0.6)
-                        RoundedRectangle(cornerRadius: cornerRadius)
-                            .foregroundStyle(.ultraThickMaterial)
                     }
                 }else {
                     RoundedRectangle(cornerRadius: cornerRadius)
@@ -59,7 +72,7 @@ public extension View {
         Text("Color")
             .contentBackground(color: .blue)
         Text("Shadow")
-            .contentBackground(shadowRadius: 5)
+            .contentBackground(shadowRadius: 20)
         Text("Shadow")
             .contentBackground(shadowRadius: 5, color: .green)
     }

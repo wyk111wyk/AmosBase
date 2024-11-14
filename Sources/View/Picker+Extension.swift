@@ -16,14 +16,18 @@ public protocol SimplePickerItem: Identifiable, Hashable {
     var content: String? { get }
 }
 
-public struct SimplePicker<Value: SimplePickerItem>: View {
+public struct SimplePicker<Value: SimplePickerItem, V: View>: View {
     @Environment(\.dismiss) private var dismissPage
     // Picker属性
     let title: String
     let maxSelectCount: Int
     let themeColor: Color
-    let dismissAfterTap: Bool // 点击就退出
-    let isPushin: Bool // 是否使用费Link进入
+    // 点击就退出
+    let dismissAfterTap: Bool
+    // 点击就保存
+    let saveAfterTap: Bool
+    
+    let isPushin: Bool
     // 选择范围
     let allValue: [Value]
     let disabledValues: [Value]
@@ -32,6 +36,8 @@ public struct SimplePicker<Value: SimplePickerItem>: View {
     // 保存值的回调（并不直接保存结果）
     let singleSaveAction: (Value) -> Void
     let multipleSaveAction: (Set<Value>) -> Void
+    // 自定义Cell的样式
+    @ViewBuilder let customCell: (any SimplePickerItem) -> V
     
     @State private var searchKey = ""
     
@@ -40,12 +46,14 @@ public struct SimplePicker<Value: SimplePickerItem>: View {
         maxSelectCount: Int? = 1,
         themeColor: Color = .green,
         dismissAfterTap: Bool = false,
+        saveAfterTap: Bool = false,
         isPushin: Bool = true,
         allValue: [Value],
         disabledValues: [Value] = [],
         selectValues: Set<Value>,
         singleSaveAction: @escaping (Value) -> Void = {_ in},
-        multipleSaveAction: @escaping (Set<Value>) -> Void = {_ in}
+        multipleSaveAction: @escaping (Set<Value>) -> Void = {_ in},
+        @ViewBuilder customCell: @escaping (any SimplePickerItem) -> V = {_ in EmptyView()}
     ) {
         self.title = title
         if let maxSelectCount {
@@ -58,9 +66,11 @@ public struct SimplePicker<Value: SimplePickerItem>: View {
         self.isPushin = isPushin
         self.allValue = allValue
         self.disabledValues = disabledValues
+        self.saveAfterTap = saveAfterTap
         self._selectValues = State(initialValue: selectValues)
         self.singleSaveAction = singleSaveAction
         self.multipleSaveAction = multipleSaveAction
+        self.customCell = customCell
     }
     
     public var body: some View {
@@ -109,6 +119,11 @@ public struct SimplePicker<Value: SimplePickerItem>: View {
                 singleSaveAction(first)
                 dismissPage()
             }
+        }else if saveAfterTap {
+            if let first = selectValues.first,
+               selectValues.count == maxSelectCount {
+                singleSaveAction(first)
+            }
         }
     }
     
@@ -139,22 +154,35 @@ public struct SimplePicker<Value: SimplePickerItem>: View {
                     Button {
                         select(value)
                     } label: {
-                        SimpleCell(
-                            value.title,
-                            titleColor: titleColor(value),
-                            iconName: value.iconName,
-                            systemImage: isDisabled(value) ? "xmark.circle" : value.systemImage,
-                            content: value.content,
-                            contentColor: hasSelected(value) ? .primary : .secondary,
-                            contentSystemImage: value.contentSystemImage
-                        ) {
-                            if hasSelected(value) {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .imageScale(.large)
-                                    .foregroundStyle(themeColor)
+                        if V.self == EmptyView.self {
+                            SimpleCell(
+                                value.title,
+                                titleColor: titleColor(value),
+                                iconName: value.iconName,
+                                systemImage: isDisabled(value) ? "xmark.circle" : value.systemImage,
+                                content: value.content,
+                                contentColor: hasSelected(value) ? .primary : .secondary,
+                                contentSystemImage: value.contentSystemImage
+                            ) {
+                                if hasSelected(value) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .imageScale(.large)
+                                        .foregroundStyle(themeColor)
+                                }
                             }
+                            .contentShape(Rectangle())
+                        }else {
+                            HStack {
+                                customCell(value)
+                                Spacer()
+                                if hasSelected(value) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .imageScale(.large)
+                                        .foregroundStyle(themeColor)
+                                }
+                            }
+                            .contentShape(Rectangle())
                         }
-                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }

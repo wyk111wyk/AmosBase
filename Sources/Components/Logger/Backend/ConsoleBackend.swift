@@ -95,7 +95,7 @@ public final class ConsoleLogBackend: LoggerBackend {
         }else { "" }
         
         if isPreviewCondition {
-            print("==> \(timestamp)" + message + position)
+            print("==> \(timestamp) " + message + position)
         }else {
             let fullMessage = message + position
             switch level {

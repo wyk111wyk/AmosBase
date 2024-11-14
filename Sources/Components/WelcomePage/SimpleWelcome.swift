@@ -45,7 +45,7 @@ public struct SimpleWelcome<V: View>: View {
                     headerView()
                     VStack(alignment: .leading) {
                         ForEach(allIntroItems) { item in
-                            contentCell(item)
+                            SimpleWelcome.contentCell(item)
                         }
                     }
                 }
@@ -73,7 +73,7 @@ extension SimpleWelcome {
         .padding(.bottom, 20)
     }
     
-    private func contentCell(_ item: SimpleWelcomeItem) -> some View {
+    public static func contentCell(_ item: SimpleWelcomeItem) -> some View {
         HStack(alignment: .top) {
             if let systemImage = item.systemImage {
                 Image(systemName: systemImage)

@@ -61,6 +61,25 @@ public extension Date {
     func isDate(_ date: Date) -> Bool {
         return Calendar.current.isDate(self, inSameDayAs: date)
     }
+    
+    enum DayPeriod {
+        case morning, noon, afternoon, evening, night, midnight, dawn
+    }
+    
+    /// 获取当前处于一天中的时段（上午、下午）
+    func getDayPeriod() -> DayPeriod {
+        let hour = Calendar.current.component(.hour, from: self)
+        switch hour {
+        case 6..<11: return .morning
+        case 11..<13: return .noon
+        case 13..<17: return .afternoon
+        case 17..<19: return .evening
+        case 19..<22: return .night
+        case 22..<5: return .midnight
+        case 5..<6: return .dawn
+        default: return .morning
+        }
+    }
 }
 
 // MARK: - 转换为文字
@@ -140,12 +159,14 @@ public extension Date {
 
 // MARK: - 转换时间形式
 public extension Date {
-    func add(second: Int = 0,
-             minute: Int = 0,
-             hour: Int = 0,
-             day: Int = 0,
-             month: Int = 0,
-             year: Int = 0) -> Date {
+    func add(
+        second: Int = 0,
+        minute: Int = 0,
+        hour: Int = 0,
+        day: Int = 0,
+        month: Int = 0,
+        year: Int = 0
+    ) -> Date {
         let daySeconds = 60 * 60 * 24
         let passed = TimeInterval(60 * 60 * hour + daySeconds * day + daySeconds * 30 * month + daySeconds * 365 * year + 60 * minute + second)
         return self.addingTimeInterval(passed)
@@ -241,11 +262,13 @@ public extension Date {
         minute: Int = 0
     ) -> Date {
         let now = Date()
-        let components = DateComponents(year: year ?? now.getYear(),
-                                        month: month ?? now.getMonth(),
-                                        day: day ?? now.getDay(),
-                                        hour: hour,
-                                        minute: minute)
+        let components = DateComponents(
+            year: year ?? now.getYear(),
+            month: month ?? now.getMonth(),
+            day: day ?? now.getDay(),
+            hour: hour,
+            minute: minute
+        )
         if let date = Calendar.current.date(from: components) {
             return date
         } else {
@@ -264,32 +287,38 @@ public extension Date {
     /// 判断：是否已经过了相应时间
     ///
     /// 例子：传入5分钟，判断当前时间是否大于传入时间后5分钟
-    func hasPassed(second: Int = 0,
-                   minute: Int = 0,
-                   hour: Int = 0,
-                   day: Int = 0,
-                   month: Int = 0,
-                   year: Int = 0) -> Bool {
+    func hasPassed(
+        second: Int = 0,
+        minute: Int = 0,
+        hour: Int = 0,
+        day: Int = 0,
+        month: Int = 0,
+        year: Int = 0
+    ) -> Bool {
         self.add(second: second, minute: minute, hour: hour, day: day, month: month, year: year) < Date()
     }
     
     /// 判断：是否还没有进过相应时间
     ///
     /// 例子：传入5分钟，判断当前时间是否未经过5分钟
-    func notPassed(second: Int = 0,
-                   minute: Int = 0,
-                   hour: Int = 0,
-                   day: Int = 0,
-                   month: Int = 0,
-                   year: Int = 0) -> Bool {
+    func notPassed(
+        second: Int = 0,
+        minute: Int = 0,
+        hour: Int = 0,
+        day: Int = 0,
+        month: Int = 0,
+        year: Int = 0
+    ) -> Bool {
         self.add(second: second, minute: minute, hour: hour, day: day, month: month, year: year) > Date()
     }
     
     /// 计算两个日期之间的间隔时间 -  单位默认：天
     ///
     /// 结果是Int
-    func distance(start date: Date = Date().toStartOfDay(),
-                  component: Calendar.Component = .day) -> Int {
+    func distance(
+        start date: Date = Date().toStartOfDay(),
+        component: Calendar.Component = .day
+    ) -> Int {
         let dateComponents = Calendar.current.dateComponents([component], from: date, to: self)
         let distance = dateComponents.value(for: component) ?? 0
         return distance
@@ -298,7 +327,10 @@ public extension Date {
     /// 生成随机时间
     ///
     /// 需要传入开始时间和时长（秒数）
-    static func random(start: Date, seconds: Int) -> Date {
+    static func random(
+        start: Date,
+        seconds: Int
+    ) -> Date {
         let startTime = Int(start.timeIntervalSince1970)
         let timeStamp = TimeInterval(Int.random(in: startTime...(startTime+seconds)))
         let date = Date(timeIntervalSince1970: timeStamp)
@@ -306,11 +338,13 @@ public extension Date {
     }
     
     /// 两个时间之差的自然语义描述
-    func toString_Relative(to date: Date = .now,
-                           locale: Locale = .current,
-                           timeStyle: RelativeDateTimeFormatter.DateTimeStyle = .named,
-                           style: RelativeDateTimeFormatter.UnitsStyle = .abbreviated,
-                           context: Formatter.Context = .dynamic) -> String {
+    func toString_Relative(
+        to date: Date = .now,
+        locale: Locale = .current,
+        timeStyle: RelativeDateTimeFormatter.DateTimeStyle = .named,
+        style: RelativeDateTimeFormatter.UnitsStyle = .abbreviated,
+        context: Formatter.Context = .dynamic
+    ) -> String {
         let formatterState = RelativeDateTimeFormatter()
         formatterState.dateTimeStyle = timeStyle
         formatterState.unitsStyle = style
