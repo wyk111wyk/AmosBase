@@ -195,6 +195,47 @@ public extension String {
         #endif
     }
     
+    /// 将文本生成QRCode
+    func generateCode() -> SFImage? {
+        let imageData = self.data(using: .utf8)
+        
+        let qrFilter = CIFilter(name: "CIQRCodeGenerator")
+        qrFilter?.setValue(imageData, forKey: "inputMessage")
+        qrFilter?.setValue("H", forKey: "inputCorrectionLevel")
+        
+        let colorFilter = CIFilter(name: "CIFalseColor")
+        colorFilter?.setDefaults()
+        colorFilter?.setValuesForKeys(
+            [
+                "inputImage" : (qrFilter?.outputImage)!,
+                "inputColor0":CIColor.init(cgColor: SFColor.black.cgColor),
+                "inputColor1":CIColor.init(cgColor: SFColor.white.cgColor)
+            ]
+        )
+        
+        let qrImage = colorFilter?.outputImage
+        let cgImage = CIContext(options: nil).createCGImage(qrImage!, from: (qrImage?.extent)!)
+        
+        #if canImport(UIKit)
+        UIGraphicsBeginImageContext(CGSize(width: 300, height: 300))
+        let context = UIGraphicsGetCurrentContext()
+        context!.interpolationQuality = .none
+        context!.scaleBy(x: 1.0, y: -1.0)
+        if let cgImage {
+            context?.draw(cgImage, in: (context?.boundingBoxOfClipPath)!)
+            guard let codeImage = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
+            UIGraphicsEndImageContext()
+            return codeImage
+        }
+        #elseif canImport(AppKit)
+        if let cgImage {
+            return NSImage(cgImage: cgImage, size: NSSize(width: 300, height: 300))
+        }
+        #endif
+        
+        return nil
+    }
+    
 #if canImport(Foundation)
     /// SwifterSwift: Returns a localized string, with an optional comment for translators.
     ///

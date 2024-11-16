@@ -205,7 +205,7 @@ public struct SimplePicker<Value: SimplePickerItem, V: View>: View {
         }
         .formStyle(.grouped)
         .navigationTitle(title)
-        .simpleSearch(text: $searchKey, displayMode: .automatic)
+        .simpleSearch(text: $searchKey, isAlwaysShow: false)
         .searchable(text: $searchKey, placement: .automatic)
         #if !os(macOS)
         .buttonCircleNavi(role: .cancel, isPresent: !isPushin) {dismissPage()}

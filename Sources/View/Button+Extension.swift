@@ -303,11 +303,7 @@ public struct SimpleTriggerButton<V: View>: View {
                 Section {
                     SimpleAsyncButton {
                         isLoading = true
-                        do {
-                            isNetworkWording = try await SimpleWeb().isNetworkAvailable()
-                        }catch {
-                            debugPrint(error)
-                        }
+                        isNetworkWording = await SimpleWeb().isNetworkAvailable()
                         isLoading = false
                     } label: {
                         SimpleCell("多线程任务") {

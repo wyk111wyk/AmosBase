@@ -35,14 +35,14 @@ public extension View {
     func simpleSearch(
         text: Binding<String>,
         prompt: String? = nil,
-        displayMode: SearchFieldPlacement.NavigationBarDrawerDisplayMode = .always
+        isAlwaysShow: Bool = true
     ) -> some View {
         let promptText: Text? =
         if let prompt { Text(prompt) } else { nil }
         #if os(iOS)
         return self.searchable(
                 text: text,
-                placement: .navigationBarDrawer(displayMode: displayMode),
+                placement: .navigationBarDrawer(displayMode: isAlwaysShow ? .always : .automatic),
                 prompt: promptText
             )
             .searchDictationBehavior(.inline(activation: .onLook))
