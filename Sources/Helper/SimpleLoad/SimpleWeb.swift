@@ -23,8 +23,8 @@ extension SimpleWeb {
     /// 检查网络是否可用
     public func isNetworkAvailable(
         url: URL = URL(string: "https://www.baidu.com")!
-    ) async throws -> Bool {
-        let result = try await loadData(from: url)
+    ) async -> Bool {
+        let result = try? await loadData(from: url)
         if let result {
             debugPrint(result.count.toDouble.toStorage())
             return true

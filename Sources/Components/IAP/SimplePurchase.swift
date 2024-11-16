@@ -42,6 +42,7 @@ public struct SimplePurchaseConfig {
 public struct SimplePurchaseView: View {
     @Environment(\.dismiss) private var dismissPage
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     @State private var showPrivacySheet: Bool = false
     let allItem: [SimplePurchaseItem]
@@ -73,7 +74,7 @@ public struct SimplePurchaseView: View {
             ScrollView {
                 VStack(spacing: 6) {
                     topLogoContent()
-//                    largeImage()
+                    largeImage()
                     compareTable()
                     introContent()
                     policyContent()
@@ -187,7 +188,7 @@ extension SimplePurchaseView {
                 }
                 Spacer()
             }
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 5) {
                 PlainButton {
                     
                 } label: {
@@ -198,7 +199,7 @@ extension SimplePurchaseView {
                             .font(.headline)
                             .foregroundStyle(.white)
                     }
-                    .frame(width: 260, height: 46)
+                    .frame(width: 260, height: 40)
                 }
                 Text("·支持与家人共享（最多6人）")
                 Text("·订阅和试用随时可以取消")
@@ -207,6 +208,7 @@ extension SimplePurchaseView {
             .foregroundStyle(.secondary)
         }
         .padding(.top)
+        .padding(.bottom, 8)
         #if !os(watchOS)
         .background{
             if colorScheme == .light {
@@ -242,7 +244,7 @@ extension SimplePurchaseView {
                     .padding(.top, 8)
             }
         }
-        .padding(.vertical, 16)
+        .padding(.vertical, 12)
         .padding(.horizontal, 11)
         .background {
             RoundedRectangle(cornerRadius: 12)
@@ -254,18 +256,18 @@ extension SimplePurchaseView {
             }
         }
         .padding(3)
-        .padding(.top, 21)
+        .padding(.top, 18)
         .background {
             if isSelected {
                 ZStack(alignment: .top) {
                     RoundedRectangle(cornerRadius: 12)
                         .foregroundStyle(colorScheme == .light ? .black : .white)
                     Text("推荐")
-                        .font(.callout)
+                        .font(.footnote)
                         .fontWeight(.medium)
                         .lineLimit(1)
                         .foregroundStyle(colorScheme == .light ? .white : .black)
-                        .offset(y: 2)
+                        .offset(y: 2.5)
                 }
             }
         }
@@ -313,16 +315,20 @@ extension SimplePurchaseView {
         let height: CGFloat = 93*allItem.count+40
         GeometryReader { proxy in
             let titleWidth: CGFloat = 100
-            let contentWidth: CGFloat = min(230, proxy.size.width * 3 / 8)
+            let contentWidth: CGFloat = min(230, proxy.size.width * 3 / 9)
             VStack(alignment: .leading, spacing: 15) {
                 HStack(spacing: 0) {
                     Spacer()
+                    Divider()
                     Text("普通版")
                         .font(.callout)
                         .fontWeight(.light)
                         .foregroundStyle(.secondary)
                         .frame(width: contentWidth)
                         .padding(.trailing, 6)
+                    if horizontalSizeClass == .regular {
+                        Divider()
+                    }
                     ZStack {
                         premiumImage
                             .frame(height: 14)
@@ -362,15 +368,20 @@ extension SimplePurchaseView {
                         .font(.callout)
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)
+                        .minimumScaleFactor(0.8)
                 }
             }
             Spacer()
+            Divider()
             Text(item.regular)
                 .font(.callout)
                 .fontWeight(.light)
                 .foregroundStyle(.secondary)
                 .frame(width: contentWidth)
                 .padding(.trailing, 6)
+            if horizontalSizeClass == .regular {
+                Divider()
+            }
             ZStack {
                 Text(item.premium)
                     .simpleTag(.border(verticalPad: 6, horizontalPad: 6, cornerRadius: 6, contentFont: .callout.weight(.medium), contentColor: .primary))
@@ -382,10 +393,9 @@ extension SimplePurchaseView {
     @ViewBuilder
     private func introContent() -> some View {
         if let devNote = config.devNote {
-            let bgColor: Color = Color(hue: 0.53, saturation: 0.57, brightness: 0.54, opacity: 1.00)
-            let lightText: Color = Color(hue: 0.57, saturation: 0.74, brightness: 0.11, opacity: 1.00)
-            let darkText: Color = Color(hue: 0.17, saturation: 0.00, brightness: 1.00, opacity: 1.00)
-            let textColor: Color = colorScheme == .light ? lightText : darkText
+            let textColor: Color = .hexColor("f1f2f4")
+            let bgColor: Color = .hexColor("367098")
+            let shadowColor: Color = .hexColor("78abaf")
             Text(devNote)
                 .allowsTightening(true)
                 .lineSpacing(6)
@@ -397,10 +407,8 @@ extension SimplePurchaseView {
                 .background {
                     ZStack(alignment: .topLeading) {
                         RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(bgColor.opacity(0.8))
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.ultraThickMaterial)
-                            .shadow(color: bgColor.opacity(0.8), radius: 0, x: 8, y: 8)
+                            .foregroundStyle(bgColor.opacity(0.9))
+                            .shadow(color: shadowColor.opacity(0.9), radius: 0, x: 10, y: 10)
                         HStack {
                             Text("“")
                                 .font(.system(size: 100))
@@ -461,8 +469,8 @@ extension SimplePurchaseView {
         allItem: allItem,
         config: .init(
             title: "体验完整文学魅力",
-            titleImage_w: Image(sfImage: .lady01Image),
-            titleImage_b: Image(sfImage: .lady02Image),
+            titleImage_w: Image(sfImage: .placeHolder),
+            titleImage_b: Image(sfImage: .placeHolder),
             imageCaption: "单次购买 · 多端同享",
             devNote: "我们的愿景是希望用App解决生活中的“小问题”。这意味着对日常用户而言，免费版本也必须足够好用。\n10万诗词文章离线可查，核心的阅读、检索、学习体验完整而简洁，加上现代化的设计和全平台的体验完全开放。\n而高级版本又将解锁一系列新的特性。让诗词赏析的体验进一步提升，更私人、更灵活、更智能、更值得。"
         )

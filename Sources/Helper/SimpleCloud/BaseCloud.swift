@@ -68,24 +68,6 @@ public class SimpleCloudHelper {
         try await container.accountStatus()
     }
     
-    /// 检查 iCloud Account 是否处在 available 状态
-    @discardableResult
-    public func validateICloudAvailability(
-        onUnavailable: @Sendable (CKAccountStatus, Error?) async -> Void = {_,_  in}
-    ) async -> AccountStatus? {
-        do {
-            let accountStatus = try await container.accountStatus()
-            guard accountStatus == .available else {
-                await onUnavailable(accountStatus, nil)
-                return .notAvailable(accountStatus)
-            }
-        } catch {
-            await onUnavailable(.couldNotDetermine, error)
-            return nil
-        }
-        return .available
-    }
-    
     internal func cloudDataBase(_ zoneType: ZoneType) -> CKDatabase {
         zoneType == .privateType ? privateDatabase : publicDatabase
     }

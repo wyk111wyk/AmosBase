@@ -132,13 +132,6 @@ extension SimpleCloudHelper{
     }
 }
 
-public enum AccountStatus: Hashable {
-    /// Account status is normal
-    case available
-    /// Abnormal (states other than available)
-    case notAvailable(CKAccountStatus)
-}
-
 public extension CKAccountStatus {
     var title: String {
         switch self {

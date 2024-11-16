@@ -202,8 +202,8 @@ extension DemoSimpleCloud {
             }
         }
         .task {
-            isNetworkAvailable = try? await SimpleWeb().isNetworkAvailable()
-            isICloudAvailable = await cloudHelper?.validateICloudAvailability() == .available
+            isNetworkAvailable = await SimpleWeb().isNetworkAvailable()
+            isICloudAvailable = try? await cloudHelper?.accountStatus() == .available
         }
     }
     

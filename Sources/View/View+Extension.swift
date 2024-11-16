@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Translation
 import UniformTypeIdentifiers
 
 /// 判断是否处于 Preview 环境
@@ -30,6 +31,43 @@ public extension Binding {
 extension GeometryProxy: @unchecked @retroactive Sendable {}
         
 #if !os(watchOS)
+public extension View {
+    func simpleSearch(
+        text: Binding<String>,
+        prompt: String? = nil,
+        displayMode: SearchFieldPlacement.NavigationBarDrawerDisplayMode = .always
+    ) -> some View {
+        let promptText: Text? =
+        if let prompt { Text(prompt) } else { nil }
+        #if os(iOS)
+        return self.searchable(
+                text: text,
+                placement: .navigationBarDrawer(displayMode: displayMode),
+                prompt: promptText
+            )
+            .searchDictationBehavior(.inline(activation: .onLook))
+        #elseif os(macOS)
+        return self.searchable(
+                text: text,
+                placement: .toolbar,
+                prompt: promptText
+            )
+        #endif
+    }
+    
+    func translation(isPresented: Binding<Bool>, text: String) -> some View {
+        #if targetEnvironment(macCatalyst)
+        return self
+        #else
+        if #available(iOS 17.4, macOS 14.4, *) {
+            return self.translationPresentation(isPresented: isPresented, text: text)
+        } else {
+            return self
+        }
+        #endif
+    }
+}
+
 // 拖拽内容 Drop
 public extension View {
     @ViewBuilder func dragText(content: String?) -> some View {
@@ -40,7 +78,6 @@ public extension View {
         }
     }
     
-    @available(macOS 14.0, *)
     @ViewBuilder func dragImage(content: SFImage?) -> some View {
         if let content {
             self.draggable(content)
