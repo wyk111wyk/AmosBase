@@ -373,13 +373,18 @@ extension SimplePurchaseView {
             Divider()
             ZStack {
                 Text(item.regular)
-                    .simpleTag(.border(verticalPad: 6, horizontalPad: 6, cornerRadius: 6, contentFont: .callout.weight(.medium), contentColor: .secondary))
+                    .simpleTag(
+                        .border(
+                            verticalPad: 6,
+                            horizontalPad: 6,
+                            cornerRadius: 6,
+                            contentFont: .callout.weight(.regular),
+                            contentColor: .secondary
+                        )
+                    )
             }
                 .frame(width: contentWidth)
                 .padding(.horizontal, 6)
-            if horizontalSizeClass == .regular {
-                Divider()
-            }
             ZStack {
                 Text(item.premium)
                     .simpleTag(
@@ -434,9 +439,10 @@ extension SimplePurchaseView {
     }
     
     private func policyContent() -> some View {
-        VStack(spacing: 8) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text("你可以通过取消你的订阅来随时取消免费试用，方法是通过你的iTunes账户设置取消订阅，否则它将自动续订。必须在免费试用或任何订阅期结束前的24小时内完成此操作，以避免被收费。带有免费试用期的订阅将自动续订为付费订阅。请注意：在免费试用期间购买高级订阅时，任何未使用的免费试用期（如果提供）将被取消。订阅付款将在确认购买和每个续订期开始时收取到你的iTunes账户。\n假如您有任何的意见或者建议，可以在设置页面进行反馈。")
+        VStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("你可以通过取消你的订阅来随时取消免费试用，方法是通过你的iTunes账户设置取消订阅，否则它将自动续订。必须在免费试用或任何订阅期结束前的24小时内完成此操作，以避免被收费。带有免费试用期的订阅将自动续订为付费订阅。请注意：在免费试用期间购买高级订阅时，任何未使用的免费试用期（如果提供）将被取消。订阅付款将在确认购买和每个续订期开始时收取到你的iTunes账户。")
+                Text("·随时在论坛进行反馈交流")
                 Text("·支持与家人共享（最多6人）")
                 Text("·订阅和试用随时可以取消")
             }

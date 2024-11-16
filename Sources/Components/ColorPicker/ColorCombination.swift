@@ -10,12 +10,12 @@ import SwiftUI
 public struct ColorCombination: Identifiable {
     public var id: UUID = UUID()
     
-    let titleColor: Color
-    let authorColor: Color
-    let contentColor: Color
-    let backgroundColor: Color
-    let isShowMetrial: Bool
-    let bgBackgroundColor: Color
+    public let titleColor: Color
+    public let authorColor: Color
+    public let contentColor: Color
+    public let backgroundColor: Color
+    public let isShowMetrial: Bool
+    public let bgBackgroundColor: Color
     
     public init(
         titleColor: Color,

@@ -16,7 +16,8 @@ extension SimpleCloudHelper{
         zoneType: ZoneType = .privateType,
         customRecord: String? = nil,
         predicate: NSPredicate,
-        resultsLimit: Int = CKQueryOperation.maximumResults
+        resultsLimit: Int = CKQueryOperation.maximumResults,
+        desiredKeys: [String]? = nil
     ) async throws -> [(recordId: CKRecord.ID, result: Result<CKRecord, any Error>)] {
         let query = CKQuery(
             recordType: customRecord ?? defaultRecordName,
@@ -24,10 +25,13 @@ extension SimpleCloudHelper{
         )
         let dataBase = cloudDataBase(zoneType)
         
+        // 获取全部字段数据
         let allResults = try await dataBase.records(
             matching: query,
+            desiredKeys: desiredKeys,
             resultsLimit: resultsLimit
         ).matchResults
+        
         if isDebuging {
             logger.debug("成功获取：\(allResults.count) 条数据")
         }
