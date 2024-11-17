@@ -75,7 +75,7 @@ public extension Date {
         case 13..<17: return .afternoon
         case 17..<19: return .evening
         case 19..<22: return .night
-        case 22..<5: return .midnight
+        case 22..<24, 0..<5: return .midnight
         case 5..<6: return .dawn
         default: return .morning
         }

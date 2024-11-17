@@ -249,7 +249,7 @@ extension SimplePurchaseView {
                 .foregroundStyle(colorScheme == .light ? .white : .black)
             if !isSelected {
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(lineWidth: 2)
+                    .stroke(lineWidth: 1)
                     .foregroundStyle(.secondary)
             }
         }
