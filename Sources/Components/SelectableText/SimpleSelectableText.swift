@@ -190,6 +190,6 @@ private enum TestText {
 
 #Preview("markdown") {
     DemoSimpleText(
-        markdown: String.testText(.markdownCode)
+        markdown: String.testText(.debugTest)
     )
 }

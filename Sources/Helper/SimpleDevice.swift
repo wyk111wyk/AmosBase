@@ -225,17 +225,17 @@ extension SimpleDevice {
     
     ///获取总磁盘 931.5 GB
     public static func getDiskTotalSize() -> String {
-        return fileSizeToString(fileSize: getTotalDiskSize())
+        fileSizeToString(fileSize: getTotalDiskSize())
     }
     
     ///获取可用磁盘 282.0 GB
     public static func getAvalibleDiskSize() -> String {
-        return fileSizeToString(fileSize: getAvailableDiskSize())
+        fileSizeToString(fileSize: getAvailableDiskSize())
     }
     
     /// 获取当前设备IP
     public static func getDeviceIP() -> String? {
-        return deviceIP()
+        deviceIP()
     }
     
     /// 应用名称
@@ -260,6 +260,20 @@ extension SimpleDevice {
         #else
         return nil
         #endif
+    }
+    
+    /// 是否我自己的设备
+    public static func isAmosDevice() -> Bool {
+        guard let deviceIdentifier = getDeviceIdentifier() else {
+            return false
+        }
+        
+        let myDevice = [
+            "35138123-122A-4E76-AD0C-9394FD458D6F", //iPhone 15 Pro Max
+            "E520AEAA-ECFA-4504-841E-8592D5A3446D", //iPad Pro
+            "87AEB63A-35E2-5274-8A7D-5D51001F8579" //Mac mini
+        ]
+        return myDevice.contains(deviceIdentifier)
     }
     
     #if !os(watchOS)
@@ -444,15 +458,15 @@ extension SimpleDevice {
         case "iPad14,8","iPad14,9":                 return "iPad Air 6"
         case "iPad14,10","iPad14,11":               return "iPad Air 7"
             
-        case "iPad2,5":                             return "iPad Mini (WiFi)"
-        case "iPad2,6":                             return "iPad Mini"
-        case "iPad2,7":                             return "iPad Mini (GSM+CDMA)"
-        case "iPad4,4":                             return "iPad Mini 2 (WiFi)"
-        case "iPad4,5":                             return "iPad Mini 2 (Cellular)"
-        case "iPad4,6":                             return "iPad Mini 2"
-        case "iPad4,7","iPad4,8","iPad4,9":         return "iPad Mini 3"
-        case "iPad5,1":                             return "iPad Mini 4 (WiFi)"
-        case "iPad5,2":                             return "iPad Mini 4 (LTE)"
+        case "iPad2,5":                             return "iPad mini (WiFi)"
+        case "iPad2,6":                             return "iPad mini"
+        case "iPad2,7":                             return "iPad mini (GSM+CDMA)"
+        case "iPad4,4":                             return "iPad mini 2 (WiFi)"
+        case "iPad4,5":                             return "iPad mini 2 (Cellular)"
+        case "iPad4,6":                             return "iPad mini 2"
+        case "iPad4,7","iPad4,8","iPad4,9":         return "iPad mini 3"
+        case "iPad5,1":                             return "iPad mini 4 (WiFi)"
+        case "iPad5,2":                             return "iPad mini 4 (LTE)"
         case "iPad11,1","iPad11,2":                 return "iPad mini 5"
         case "iPad14,1","iPad14,2":                 return "iPad mini 6"
             

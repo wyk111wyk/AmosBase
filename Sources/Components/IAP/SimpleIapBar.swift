@@ -73,7 +73,7 @@ public struct SimpleIapStateBar: View {
             Text("状态未知").font(.callout).foregroundStyle(.secondary)
         case .cannotPurchase:
             Text("无法购买").font(.callout).foregroundStyle(.secondary)
-        case .regular:
+        case .nonePurchase:
             Text("免费版").simpleTag(.border(contentColor: .blue))
         case .lifePremium:
             Text("高级版").simpleTag(.border(contentColor: .primary))

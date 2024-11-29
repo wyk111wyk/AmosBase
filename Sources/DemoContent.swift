@@ -93,7 +93,7 @@ public struct DemoContent<V: View>: View {
                 SimpleCommonAbout(
                     txcId: "123",
                     appStoreId: "123",
-                    isShowSubscribe: true,
+                    hasSubscribe: true,
                     headerView: {
                     Text("About - 关于")
                 })

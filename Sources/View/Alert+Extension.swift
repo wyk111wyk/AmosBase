@@ -75,7 +75,7 @@ public extension View {
         }else {
             return modifier(
                 SimpleAlert(
-                    title: error.wrappedValue.debugDescription,
+                    title: error.wrappedValue?.localizedDescription ?? "N/A",
                     message: nil,
                     type: .singleConfirm,
                     isPresented: .isPresented(error),

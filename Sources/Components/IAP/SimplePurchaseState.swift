@@ -8,7 +8,7 @@
 import Foundation
 
 public enum SimplePurchaseState: String, CaseIterable, Identifiable {
-    case unknown, cannotPurchase, regular, lifePremium, periodPremium, flightTest, amos
+    case unknown, cannotPurchase, nonePurchase, lifePremium, periodPremium, flightTest, amos
     public var id: String { rawValue }
     
     public var isPremium: Bool {
@@ -21,7 +21,7 @@ public enum SimplePurchaseState: String, CaseIterable, Identifiable {
     
     public var needPromotion: Bool {
         switch self {
-        case .regular, .flightTest:
+        case .nonePurchase, .flightTest:
             return true
         default: return false
         }

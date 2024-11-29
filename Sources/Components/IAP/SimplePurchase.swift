@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 public struct SimplePurchaseItem: Identifiable {
     public let id: UUID = UUID()
@@ -29,13 +30,48 @@ public struct SimplePurchaseConfig {
     let titleImage_b: Image?
     let imageCaption: String?
     let devNote: String?
+    let allProductId: [String]
     
-    public init(title: String?, titleImage_w: Image, titleImage_b: Image? = nil, imageCaption: String? = nil, devNote: String? = nil) {
+    public init(title: String?, titleImage_w: Image, titleImage_b: Image? = nil, imageCaption: String? = nil, devNote: String? = nil, allProductId: [String] = []) {
         self.title = title
         self.titleImage_w = titleImage_w
         self.titleImage_b = titleImage_b
         self.imageCaption = imageCaption
         self.devNote = devNote
+        self.allProductId = allProductId
+    }
+}
+
+public extension StoreKit.Transaction {
+    var isPurchased: Bool {
+        (self.productType == .nonConsumable && self.revocationDate == nil) ||
+        (self.productType == .autoRenewable && self.expirationDate ?? .now > .now)
+    }
+}
+
+extension Product {
+    enum SimpleProductType {
+        case monthly, yearly, lifetime, unknow
+    }
+    
+    var type: SimpleProductType {
+        if id == "yearlyPremium" {
+            return .yearly
+        }else if id == "monthlyPremium" {
+            return .monthly
+        }else if id == "lifePremium" {
+            return .lifetime
+        }else {
+            return .unknow
+        }
+    }
+    
+    var isAvailable: Bool {
+        if self.type == .unknow {
+            return false
+        }else {
+            return true
+        }
     }
 }
 
@@ -45,15 +81,31 @@ public struct SimplePurchaseView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     @State private var showPrivacySheet: Bool = false
+    @State private var showRedeemSheet: Bool = false
+    @State private var showError: Error? = nil
+    @State private var isLoading: Bool = false
+    
+    let logger: SimpleLogger = .console(subsystem: "IAP")
     let allItem: [SimplePurchaseItem]
     let config: SimplePurchaseConfig
     
+    @State private var monthlyProduct: Product? = nil
+    @State private var yearlyProduct: Product? = nil
+    @State private var lifetimeProduct: Product? = nil
+    
+    let startPurchaseAction: (Product) -> Void
+    let recoverPurchaseAction: (StoreKit.Transaction) -> Void
+    
     public init(
         allItem: [SimplePurchaseItem],
-        config: SimplePurchaseConfig
+        config: SimplePurchaseConfig,
+        startPurchaseAction: @escaping (Product) -> Void = {_ in},
+        recoverPurchaseAction: @escaping (StoreKit.Transaction) -> Void = {_ in}
     ) {
         self.allItem = allItem
         self.config = config
+        self.startPurchaseAction = startPurchaseAction
+        self.recoverPurchaseAction = recoverPurchaseAction
     }
     
     var backgroundColor: Color {
@@ -88,12 +140,66 @@ public struct SimplePurchaseView: View {
         .buttonCirclePage(role: .cancel) {
             dismissPage()
         }
-        #if !os(watchOS)
+        .simpleHud(isLoading: isLoading, title: "请稍后...")
+        .offerCodeRedemption(isPresented: $showRedeemSheet) { result in
+            switch result {
+            case .success:
+                logger.debug("兑换Code成功")
+                dismissPage()
+            case .failure(let error):
+                showError = error
+            }
+        }
+        .simpleErrorAlert(error: $showError)
+#if !os(watchOS)
         .sheet(isPresented: $showPrivacySheet) {
             SimpleWebView(url: privacyPolicy, isPushIn: false)
         }
-        #endif
+#endif
+        .task {
+            await fetchProduct()
+        }
     }
+    
+    private func fetchProduct() async {
+        do {
+            let storeProducts = try await Product.products(for: config.allProductId)
+            for product in storeProducts {
+//                logger.debug(product.id, title: "获取商品")
+                switch product.type {
+                case .lifetime: lifetimeProduct = product
+                case .yearly: yearlyProduct = product
+                case .monthly: monthlyProduct = product
+                default: break
+                }
+            }
+        }catch {
+            logger.error(error)
+            showError = error
+        }
+    }
+}
+
+extension SimplePurchaseView {
+    @MainActor
+    private func recoverPurchase() async {
+        isLoading = true
+        for await result in Transaction.currentEntitlements {
+            if case .verified(let transaction) = result {
+                logger.debug(transaction.productID, title: "恢复购买的ID")
+                recoverPurchaseAction(transaction)
+            }
+        }
+        isLoading = false
+    }
+        
+    @MainActor
+    private func redeemPurchase() async {
+        
+    }
+}
+
+extension SimplePurchaseView {
     
     private var deviceImage: some View {
         if colorScheme == .light {
@@ -156,51 +262,59 @@ public struct SimplePurchaseView: View {
 extension SimplePurchaseView {
     private func bottomPurchase() -> some View {
         VStack(spacing: 12) {
-            HStack(spacing: 12) {
-                Spacer()
-                PlainButton {
-                    
-                } label: {
-                    productButton(
-                        title: "月度订阅",
-                        price: "$2.99/月",
-                        promotion: "$0.74/周"
-                    )
+            GeometryReader { proxy in
+                let width: CGFloat = min((proxy.size.width - 20*4) / 3, 110)
+                HStack(alignment: .center, spacing: 10) {
+                    Spacer()
+                    PlainButton {
+                        if let monthlyProduct {
+                            startPurchaseAction(monthlyProduct)
+                        }
+                    } label: {
+                        productButton(product: monthlyProduct, width: width)
+                    }
+                    .disabled(monthlyProduct == nil || monthlyProduct?.isAvailable == false)
+                    PlainButton {
+                        if let yearlyProduct {
+                            startPurchaseAction(yearlyProduct)
+                        }
+                    } label: {
+                        productButton(product: yearlyProduct, isRecommend: true, width: width)
+                    }
+                    .disabled(yearlyProduct == nil || yearlyProduct?.isAvailable == false)
+                    PlainButton {
+                        if let lifetimeProduct {
+                            startPurchaseAction(lifetimeProduct)
+                        }
+                    } label: {
+                        productButton(product: lifetimeProduct, width: width)
+                    }
+                    .disabled(lifetimeProduct == nil || lifetimeProduct?.isAvailable == false)
+                    Spacer()
                 }
-                PlainButton {
-                    
-                } label: {
-                    productButton(
-                        title: "年度订阅",
-                        price: "$9.99/年",
-                        promotion: "$0.20/周",
-                        isSelected: true
-                    )
-                }
-                PlainButton {
-                    
-                } label: {
-                    productButton(
-                        title: "永久买断",
-                        price: "$19.99",
-                        promotion: "无试用"
-                    )
-                }
-                Spacer()
             }
+            .frame(minHeight: 120, maxHeight: 140)
             VStack(alignment: .leading, spacing: 5) {
                 PlainButton {
-                    
+                    if let yearlyProduct {
+                        startPurchaseAction(yearlyProduct)
+                    }
                 } label: {
                     ZStack {
                         Capsule()
                             .foregroundStyle(.blue_06)
-                        Text("开始免费试用")
-                            .font(.headline)
-                            .foregroundStyle(.white)
+                        VStack(spacing: 2) {
+                            Text("开始免费试用")
+                                .font(.title3.bold())
+                                .foregroundStyle(.white)
+                            Text("7天试用·随时取消")
+                                .font(.caption)
+                                .foregroundStyle(.white)
+                        }
                     }
-                    .frame(width: 260, height: 40)
+                    .frame(width: 260, height: 48)
                 }
+                .disabled(yearlyProduct == nil || yearlyProduct?.isAvailable == false)
             }
             .font(.footnote)
             .foregroundStyle(.secondary)
@@ -220,34 +334,54 @@ extension SimplePurchaseView {
         #endif
     }
     
+    private func weekPromotion(_ product: Product?) -> String? {
+        if let product {
+            let price = NSDecimalNumber(decimal: product.price).doubleValue
+            switch product.type {
+            case .lifetime: return "终身"
+            case .yearly:
+                let weekPrice = price / 365 * 7
+                return String(format: "%.2f / 周", weekPrice)
+            case .monthly:
+                let weekPrice = price / 30 * 7
+                return String(format: "%.2f / 周", weekPrice)
+            default: return "-"
+            }
+        }else {
+            return "-"
+        }
+    }
+    
     private func productButton(
-        title: String,
-        price: String,
-        promotion: String?,
-        isSelected: Bool = false
+        product: Product?,
+        isRecommend: Bool = false,
+        width: CGFloat
     ) -> some View {
         VStack(spacing: 6) {
-            Text(title)
+            Text(product?.displayName ?? "-")
                 .font(.callout)
-                .lineLimit(1)
-            Text(price)
+                .minimumScaleFactor(0.8)
+                .lineLimit(2)
+            Text(product?.displayPrice ?? "-")
                 .font(.title2.weight(.medium))
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
-            if let promotion {
+            if let promotion = weekPromotion(product) {
                 Text(promotion)
                     .font(.callout.weight(.light))
                     .foregroundStyle(.secondary)
+                    .minimumScaleFactor(0.8)
                     .lineLimit(1)
-                    .padding(.top, 8)
+                    .padding(.top, 6)
             }
         }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 11)
+        .padding(.vertical, 8)
+        .padding(.horizontal, 4)
+        .frame(width: width)
         .background {
             RoundedRectangle(cornerRadius: 12)
                 .foregroundStyle(colorScheme == .light ? .white : .black)
-            if !isSelected {
+            if !isRecommend {
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(lineWidth: 1)
                     .foregroundStyle(.secondary)
@@ -256,7 +390,7 @@ extension SimplePurchaseView {
         .padding(3)
         .padding(.top, 18)
         .background {
-            if isSelected {
+            if isRecommend {
                 ZStack(alignment: .top) {
                     RoundedRectangle(cornerRadius: 12)
                         .foregroundStyle(colorScheme == .light ? .black : .white)
@@ -457,15 +591,25 @@ extension SimplePurchaseView {
                 }
                 Text("·").foregroundStyle(.secondary)
                 Button {
-                    
+                    Task {
+                        await recoverPurchase()
+                    }
                 } label: {
                     Text("恢复购买")
                         .foregroundStyle(.blue)
                 }
+                Text("·").foregroundStyle(.secondary)
+                Button {
+                    showRedeemSheet = true
+                } label: {
+                    Text("代码兑换")
+                        .foregroundStyle(.blue)
+                }
             }
             .font(.callout)
+            .padding(.top, 10)
             SimpleLogoView()
-                .padding(.top)
+                .padding(.top, 10)
         }
         .padding(.bottom)
     }
@@ -486,10 +630,11 @@ extension SimplePurchaseView {
         allItem: allItem,
         config: .init(
             title: "体验完整文学魅力",
-            titleImage_w: Image(sfImage: .placeHolder),
-            titleImage_b: Image(sfImage: .placeHolder),
+            titleImage_w: Image(sfImage: .logoNameBlack),
+            titleImage_b: Image(sfImage: .logoNameWhite),
             imageCaption: "单次购买 · 多端同享",
-            devNote: "我们的愿景是希望用App解决生活中的“小问题”。这意味着对日常用户而言，免费版本也必须足够好用。\n10万诗词文章离线可查，核心的阅读、检索、学习体验完整而简洁，加上现代化的设计和全平台的体验完全开放。\n而高级版本又将解锁一系列新的特性。让诗词赏析的体验进一步提升，更私人、更灵活、更智能、更值得。"
+            devNote: "我们的愿景是希望用App解决生活中的“小问题”。这意味着对日常用户而言，免费版本也必须足够好用。\n10万诗词文章离线可查，核心的阅读、检索、学习体验完整而简洁，加上现代化的设计和全平台的体验完全开放。\n而高级版本又将解锁一系列新的特性。让诗词赏析的体验进一步提升，更私人、更灵活、更智能、更值得。",
+            allProductId: ["lifePremium","monthlyPremium","yearlyPremium"]
         )
     )
 }

@@ -32,7 +32,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     let appIntroWebLink: String?
     let feedbackLink: String?
     let appStoreLink: String?
-    let isShowSubscribe: Bool
+    let hasSubscribe: Bool?
     let showAppVersion: Bool
     
     let headerView: () -> Header
@@ -42,7 +42,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
         appWebExt: String? = nil,
         txcId: String? = nil,
         appStoreId: String? = nil,
-        isShowSubscribe: Bool = false,
+        hasSubscribe: Bool? = nil,
         showAppVersion: Bool = true,
         @ViewBuilder headerView: @escaping () -> Header = {EmptyView()},
         @ViewBuilder footerView: @escaping () -> Footer = {EmptyView()}
@@ -59,7 +59,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
             appStoreLink = nil
         }
         
-        self.isShowSubscribe = isShowSubscribe
+        self.hasSubscribe = hasSubscribe
         self.showAppVersion = showAppVersion
         self.headerView = headerView
         self.footerView = footerView
@@ -119,6 +119,7 @@ extension SimpleCommonAbout {
                 content: "切换应用内语言，开启和关闭各类权限",
                 localizationBundle: .module
             )
+            .contentShape(Rectangle())
         })
         .buttonStyle(.plain)
         #endif
@@ -147,6 +148,7 @@ extension SimpleCommonAbout {
                             .foregroundStyle(.blue_05)
                     }
                 }
+                .contentShape(Rectangle())
             }
             #if os(iOS)
             .sheet(isPresented: $showFeedback) {
@@ -176,16 +178,28 @@ extension SimpleCommonAbout {
                     content: "Your support is very important to us.",
                     localizationBundle: .module
                 )
+                .contentShape(Rectangle())
             }
         }
         #endif
         
         #if os(iOS)
-        if isShowSubscribe {
+        if let hasSubscribe {
             PlainButton {
                 showSubscribe = true
             } label: {
-                SimpleCell("管理订阅", systemImage: "cart")
+                SimpleCell("管理订阅", systemImage: "cart") {
+                    if hasSubscribe {
+                        Text("已订阅")
+                            .font(.footnote)
+                            .foregroundStyle(.blue_05)
+                    }else {
+                        Text("未订阅")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .contentShape(Rectangle())
             }
             .manageSubscriptionsSheet(isPresented: $showSubscribe)
         }

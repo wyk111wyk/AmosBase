@@ -130,6 +130,6 @@ struct SimpleText_iOS: UIViewRepresentable {
 
 #Preview("code") {
     DemoSimpleText(
-        markdown: String.testText(.markdownCode)
+        markdown: String.testText(.debugTest)
     )
 }

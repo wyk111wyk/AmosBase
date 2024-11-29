@@ -1,6 +1,9 @@
 // MIT License © Sindre Sorhus
 import Foundation
 
+// Fathor library
+// https://github.com/sindresorhus/Defaults
+
 public enum SimpleDefaults {
 	/**
 	Access stored values.

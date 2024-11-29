@@ -90,7 +90,7 @@ public struct SimpleAudioPlayBar: View {
                         Spacer()
                         Text(currentTime + " / " + duration)
                             .lineLimit(1)
-                            .font(.footnote)
+                            .font(.footnote.monospacedDigit())
                             .foregroundStyle(.secondary)
                             .layoutPriority(2)
                     }
