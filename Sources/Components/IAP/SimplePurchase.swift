@@ -141,7 +141,12 @@ public struct SimplePurchaseView: View {
             dismissPage()
         }
         .simpleHud(isLoading: isLoading, title: "请稍后...")
-        .offerCodeRedemption(isPresented: $showRedeemSheet) { result in
+#if !os(watchOS)
+        .simpleErrorAlert(error: $showError)
+        .sheet(isPresented: $showPrivacySheet) {
+            SimpleWebView(url: privacyPolicy, isPushIn: false)
+        }
+        .codeRedemption(isPresented: $showRedeemSheet) { result in
             switch result {
             case .success:
                 logger.debug("兑换Code成功")
@@ -149,11 +154,6 @@ public struct SimplePurchaseView: View {
             case .failure(let error):
                 showError = error
             }
-        }
-        .simpleErrorAlert(error: $showError)
-#if !os(watchOS)
-        .sheet(isPresented: $showPrivacySheet) {
-            SimpleWebView(url: privacyPolicy, isPushIn: false)
         }
 #endif
         .task {
@@ -178,6 +178,18 @@ public struct SimplePurchaseView: View {
             showError = error
         }
     }
+}
+
+extension View {
+    #if !os(watchOS)
+    func codeRedemption(isPresented: Binding<Bool>, action: @escaping (Result<Void, any Error>) -> Void) -> some View {
+        if #available(macOS 15.0, *) {
+            self.offerCodeRedemption(isPresented: isPresented, onCompletion: action) as! Self
+        } else {
+            self
+        }
+    }
+    #endif
 }
 
 extension SimplePurchaseView {

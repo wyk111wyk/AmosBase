@@ -35,13 +35,13 @@ public struct DemoContent<V: View>: View {
                 Section("UI - 提醒") {
                     ForEach(Page.alertSection()) { page in
                         NavigationLink(value: page) {
-                            Label(page.title, systemImage: page.icon)
+                            SimpleCell(page.title, systemImage: page.icon)
                         }
                     }
                     Button {
                         showToastPage.toggle()
                     } label: {
-                        Label("Toast - Sheet页面", systemImage: "rectangle.portrait.bottomthird.inset.filled")
+                        SimpleCell("Toast - Sheet页面", systemImage: "rectangle.portrait.bottomthird.inset.filled")
                     }
                     .buttonStyle(.borderless)
                     .sheet(isPresented: $showToastPage) {
@@ -55,13 +55,19 @@ public struct DemoContent<V: View>: View {
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
                         NavigationLink(value: page) {
-                            Label(page.title, systemImage: page.icon)
+                            SimpleCell(page.title, systemImage: page.icon) {
+                                if page.isOn {
+                                    Circle()
+                                        .frame(width: 14, height: 14)
+                                        .foregroundStyle(.green)
+                                }
+                            }
                         }
                     }
                     Button {
                         showWelcomePage.toggle()
                     } label: {
-                        Label("Welcome - 欢迎页", systemImage: "list.bullet.below.rectangle")
+                        SimpleCell("Welcome - 欢迎页", systemImage: "list.bullet.below.rectangle")
                     }
                     .buttonStyle(.borderless)
                     .sheet(isPresented: $showWelcomePage) {
@@ -75,14 +81,14 @@ public struct DemoContent<V: View>: View {
                 Section("Web - 网络关联") {
                     ForEach(Page.webSection()) { page in
                         NavigationLink(value: page) {
-                            Label(page.title, systemImage: page.icon)
+                            SimpleCell(page.title, systemImage: page.icon)
                         }
                     }
                 }
                 Section("Data - 数据处理") {
                     ForEach(Page.dataSection()) { page in
                         NavigationLink(value: page) {
-                            Label(page.title, systemImage: page.icon)
+                            SimpleCell(page.title, systemImage: page.icon)
                         }
                     }
                 }
@@ -134,6 +140,9 @@ public struct DemoContent<V: View>: View {
                 case 15: DemoSimpleLanguage()
                 case 16: DemoSimpleText(markdown: String.testText(.markdown02))
                 case 17: DemoSimpleLoad()
+                #if os(iOS)
+                case 18: SimpleFamilyControl()
+                #endif
                 default: Text(selectedPage.title)
                 }
             }
@@ -151,7 +160,7 @@ public struct DemoContent<V: View>: View {
             Button {
                 showMapShare.toggle()
             } label: {
-                Label("Map - 导航", systemImage: "map")
+                SimpleCell("Map - 导航", systemImage: "map")
             }
             .buttonStyle(.borderless)
             .confirmationDialog("Map Share", isPresented: $showMapShare) {
@@ -160,7 +169,7 @@ public struct DemoContent<V: View>: View {
             Button {
                 showPositionShare.toggle()
             } label: {
-                Label("Map - 定位", systemImage: "mappin.circle")
+                SimpleCell("Map - 定位", systemImage: "mappin.circle")
             }
             .buttonStyle(.borderless)
             .confirmationDialog(
@@ -183,15 +192,18 @@ struct Page: Identifiable, Equatable, Hashable {
     let id: Int
     let title: String
     let icon: String
+    let isOn: Bool
     
     init(
         id: Int,
         title: String,
-        icon: String
+        icon: String,
+        isOn: Bool = false
     ) {
         self.id = id
         self.title = title
         self.icon = icon
+        self.isOn = isOn
     }
     
     static func alertSection() -> [Self] {
@@ -200,10 +212,18 @@ struct Page: Identifiable, Equatable, Hashable {
     }
     
     static func elementSection() -> [Self] {
+        var commonElements: [Self] =
         [.init(id: 2, title: "UI - 页面元素", icon: "uiwindow.split.2x1"),
          .init(id: 3, title: "Card - 卡片", icon: "rectangle.portrait.on.rectangle.portrait.angled"),
          .init(id: 5, title: "Device - 设备信息", icon: "iphone.gen3"),
-         .init(id: 6, title: "Holder - 占位符", icon: "doc.text.image")]
+         .init(id: 6, title: "Holder - 占位符", icon: "doc.text.image")
+         ]
+        #if os(iOS)
+        commonElements.append(contentsOf: [
+            .init(id: 18, title: "Controls - 应用管理", icon: "app.badge.clock", isOn: SimpleDefaults[.control_startRestriction])])
+        #endif
+        
+        return commonElements
     }
     
     static func webSection() -> [Self] {

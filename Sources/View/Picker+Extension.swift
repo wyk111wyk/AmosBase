@@ -205,9 +205,11 @@ public struct SimplePicker<Value: SimplePickerItem, V: View>: View {
         }
         .formStyle(.grouped)
         .navigationTitle(title)
+        #if !os(watchOS)
         .simpleSearch(text: $searchKey, isAlwaysShow: false)
-        .searchable(text: $searchKey, placement: .automatic)
-        #if !os(macOS)
+        .searchable(text: $searchKey, placement: SearchFieldPlacement.automatic)
+        #endif
+        #if os(iOS)
         .buttonCircleNavi(role: .cancel, isPresent: !isPushin) {dismissPage()}
         .buttonCircleNavi(
             role: .destructive,

@@ -143,7 +143,7 @@ extension SimpleDefaults {
 	Standard observation for `Defaults`.
 	The only class which handle the low level observation.
 	*/
-	final class DefaultsObservation: NSObject {
+    final class DefaultsObservation: NSObject, @unchecked Sendable {
 		typealias Callback = (SuiteKeyPair, BaseChange) -> Void
 
 		static var observationContext = 0

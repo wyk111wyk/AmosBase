@@ -195,6 +195,7 @@ public extension String {
         #endif
     }
     
+#if !os(watchOS)
     /// 将文本生成QRCode
     func generateCode() -> SFImage? {
         let imageData = self.data(using: .utf8)
@@ -235,6 +236,7 @@ public extension String {
         
         return nil
     }
+#endif
     
 #if canImport(Foundation)
     /// SwifterSwift: Returns a localized string, with an optional comment for translators.
