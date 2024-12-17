@@ -189,7 +189,8 @@ private enum TestText {
 }
 
 #Preview("markdown") {
-    DemoSimpleText(
-        markdown: String.testText(.debugTest)
+    SimpleSelectableText(
+        text: "",
+        markdown: "### 读音：zhāng\n\n<动>把弦安在弓上。**《韩非子·外储说左上》**：“夫工人之～弓……”\n\n<动>开弓。__《诗经·小雅·吉日》__：“既～我弓，既挟我矢。”\n\n### 读音：zhàng\n\n<形>骄傲自大。_《左传·桓公六年》_：“随～，必弃小国。”\n\n`<形>通“胀”，肚内膨胀。《左传·成公十年》：“(晋侯)将食，～，如厕。”`\n\n<动〉涨；布满。《赤壁之战》：“顷之，烟炎～天。”\n\n<名>通“帐”，帷帐。《荀子·正论》：“居则设～容，负依而坐。”【张本】预为布置，为将来的行事准备条件。【张目】睁大眼睛。助长声势。"
     )
 }

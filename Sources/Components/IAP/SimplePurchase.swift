@@ -141,12 +141,14 @@ public struct SimplePurchaseView: View {
             dismissPage()
         }
         .simpleHud(isLoading: isLoading, title: "请稍后...")
-#if !os(watchOS)
+        #if !os(watchOS)
         .simpleErrorAlert(error: $showError)
         .sheet(isPresented: $showPrivacySheet) {
             SimpleWebView(url: privacyPolicy, isPushIn: false)
         }
-        .codeRedemption(isPresented: $showRedeemSheet) { result in
+        #endif
+        #if os(iOS)
+        .offerCodeRedemption(isPresented: $showRedeemSheet) { result in
             switch result {
             case .success:
                 logger.debug("兑换Code成功")
@@ -155,7 +157,7 @@ public struct SimplePurchaseView: View {
                 showError = error
             }
         }
-#endif
+        #endif
         .task {
             await fetchProduct()
         }
@@ -178,18 +180,6 @@ public struct SimplePurchaseView: View {
             showError = error
         }
     }
-}
-
-extension View {
-    #if !os(watchOS)
-    func codeRedemption(isPresented: Binding<Bool>, action: @escaping (Result<Void, any Error>) -> Void) -> some View {
-        if #available(macOS 15.0, *) {
-            self.offerCodeRedemption(isPresented: isPresented, onCompletion: action) as! Self
-        } else {
-            self
-        }
-    }
-    #endif
 }
 
 extension SimplePurchaseView {
@@ -319,9 +309,11 @@ extension SimplePurchaseView {
                             Text("开始免费试用")
                                 .font(.title3.bold())
                                 .foregroundStyle(.white)
-                            Text("7天试用·随时取消")
-                                .font(.caption)
-                                .foregroundStyle(.white)
+                            if let yearlyProduct {
+                                Text("试用7天后 \(yearlyProduct.displayPrice)/年 续订")
+                                    .font(.caption)
+                                    .foregroundStyle(.white)
+                            }
                         }
                     }
                     .frame(width: 260, height: 48)
@@ -336,10 +328,10 @@ extension SimplePurchaseView {
         #if !os(watchOS)
         .background{
             if colorScheme == .light {
-                Color.white.opacity(0.92).shadow(radius: 5)
+                Color.blue_02.opacity(0.92).shadow(radius: 5)
                     .ignoresSafeArea(.all)
             }else {
-                Color.black.opacity(0.9).shadow(color: .white.opacity(0.4), radius: 5)
+                Color.blue_10.darken(by: 0.15).opacity(0.9).shadow(color: .blue.opacity(0.4), radius: 5)
                     .ignoresSafeArea(.all)
             }
         }
@@ -587,7 +579,21 @@ extension SimplePurchaseView {
     private func policyContent() -> some View {
         VStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 8) {
-                Text("你可以通过取消你的订阅来随时取消免费试用，方法是通过你的iTunes账户设置取消订阅，否则它将自动续订。必须在免费试用或任何订阅期结束前的24小时内完成此操作，以避免被收费。带有免费试用期的订阅将自动续订为付费订阅。请注意：在免费试用期间购买高级订阅时，任何未使用的免费试用期（如果提供）将被取消。订阅付款将在确认购买和每个续订期开始时收取到你的iTunes账户。")
+                Text(
+                """
+                【自动订阅服务说明】
+                1. 订阅服务：
+                A）高级服务连续包月（1个月）、高级服务连续包年（12个月)
+                B）高级服务买断（终身）
+                2. 订阅价格：
+                a）高级服务：连续包月产品为 \(monthlyProduct?.displayPrice ?? "12元")/月，连续包年产品为 \(yearlyProduct?.displayPrice ?? "68元")/年
+                c）高级服务：买断服务为 \(lifetimeProduct?.displayPrice ?? "98元")
+                3. 付款：用户确认购买并付款后计入iTunes账户
+                4. 自动续费：苹果iTunes 账户会在到期前 24小时内扣费，扣费成功后订阅周期顺延一个订阅周期
+                5. 关闭服务：您可以在苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击“Apple ID”，选择"查看 Apple ID"，进入"账户设置"页面，点击“订阅”，管理自动订阅服务，如需取消，每个计费周期结束前 24小时关闭即可，到期前 24小时内则不再扣费
+                6. 使用条款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/
+                7. 相关支持：
+                """)
                 Text("·随时在论坛进行反馈交流")
                 Text("·支持与家人共享（最多6人）")
                 Text("·订阅和试用随时可以取消")
@@ -610,6 +616,7 @@ extension SimplePurchaseView {
                     Text("恢复购买")
                         .foregroundStyle(.blue)
                 }
+                #if os(iOS)
                 Text("·").foregroundStyle(.secondary)
                 Button {
                     showRedeemSheet = true
@@ -617,6 +624,7 @@ extension SimplePurchaseView {
                     Text("代码兑换")
                         .foregroundStyle(.blue)
                 }
+                #endif
             }
             .font(.callout)
             .padding(.top, 10)
@@ -649,4 +657,5 @@ extension SimplePurchaseView {
             allProductId: ["lifePremium","monthlyPremium","yearlyPremium"]
         )
     )
+    .environment(\.locale, .zhHans)
 }

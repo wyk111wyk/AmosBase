@@ -75,6 +75,7 @@ extension AttributedString {
         for inlineIntent in inlineIntents {
 
             var sourceAttributeContainer = AttributeContainer()
+            sourceAttributeContainer.font = .body
             sourceAttributeContainer.inlinePresentationIntent = inlineIntent
 
             var targetAttributeContainer = AttributeContainer()
@@ -82,14 +83,18 @@ extension AttributedString {
             case .emphasized:
                 // 斜体字 *斜体* 或 _斜体_
                 #if os(iOS)
-                targetAttributeContainer.font = .italicSystemFont(ofSize: fontSize)
+                targetAttributeContainer.font = .system(size: fontSize, weight: .light)
                 #elseif os(macOS)
                 // mac无法实现斜体字，使用细体字代替
                 targetAttributeContainer.font = .systemFont(ofSize: fontSize, weight: .light, width: .standard)
                 #endif
             case .stronglyEmphasized:
                 // 加粗 **加粗** 或 __加粗__
+                #if os(iOS)
+                targetAttributeContainer.font = .system(size: fontSize, weight: .bold)
+                #elseif os(macOS)
                 targetAttributeContainer.font = .systemFont(ofSize: fontSize, weight: .bold)
+                #endif
             case .code:
                 // 行内代码 `代码`
                 targetAttributeContainer.font = .monospacedSystemFont(ofSize: fontSize, weight: .regular)
@@ -175,7 +180,7 @@ extension AttributedString {
 
             switch block {
             case .generic, .paragraph:
-                inputString[intentRange].font = .systemFont(ofSize: fontSize, weight: .regular)
+                break
             case .headline(let level):
                 switch level {
                 case 1:

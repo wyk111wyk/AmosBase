@@ -110,7 +110,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
 extension SimpleCommonAbout {
     @ViewBuilder
     private func settingSection() -> some View {
-        #if os(iOS)
+        #if os(iOS) && !targetEnvironment(macCatalyst)
         Link(destination: URL(string: UIApplication.openSettingsURLString)!,
              label: {
             SimpleCell(
@@ -217,7 +217,11 @@ extension SimpleCommonAbout {
                     "查看介绍",
                     systemImage: "info.square",
                     content: "跳转应用官方网页，了解特性与介绍等"
-                )
+                ) {
+                    Text("官网")
+                        .simpleTag()
+                }
+                .contentShape(Rectangle())
             }
         }
         if let url = URL(string: introWebLink) {
@@ -232,7 +236,11 @@ extension SimpleCommonAbout {
                     imageSize: 22,
                     content: "Other Apps from us, equally concise and practical.",
                     localizationBundle: .module
-                )
+                ) {
+                    Text("工作室")
+                        .simpleTag(.bg())
+                }
+                .contentShape(Rectangle())
             }
         }
     }

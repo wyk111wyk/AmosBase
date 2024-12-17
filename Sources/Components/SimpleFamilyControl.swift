@@ -54,6 +54,7 @@ public struct SimpleFamilyControl: View {
                     } label: {
                         Text("挑选应用")
                     }
+                    .disabled(isStartRestriction)
                 }
                 
                 if selectionApp.applications.isNotEmpty {
