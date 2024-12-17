@@ -10,37 +10,56 @@ import SwiftUI
 struct SimpleHud: ViewModifier {
     let isLoading: Bool
     let title: String?
+    // 0 - 1
+    let progress: Float?
+    
+    let width: CGFloat?
+    let height: CGFloat?
+    
+    init(
+        isLoading: Bool,
+        title: String? = nil,
+        progress: Float? = nil,
+        width: CGFloat? = 240,
+        height: CGFloat? = 140
+    ) {
+        self.isLoading = isLoading
+        self.title = title
+        self.progress = progress
+        self.width = width
+        self.height = height
+    }
     
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .center) {
                 if isLoading {
-                    VStack(spacing: 15) {
-                        ProgressView()
-                            #if os(iOS)
-                            .scaleEffect(1.5)
-                            #endif
-                        if let title {
-                            Text(title)
-                        }
-                    }
-                    .padding()
-                    .frame(width: 240, height: 140)
-                    .background {
-                        if #available(iOS 16.0, macOS 13, watchOS 10, *) {
-                            // 使用 regularMaterial
-                            RoundedRectangle(cornerRadius: 12)
-                                .foregroundStyle(.regularMaterial)
-                                .shadow(radius: 5, x: 2, y: 2)
-                        } else {
-                            // 使用其他替代方案
-                            RoundedRectangle(cornerRadius: 12)
-                                .foregroundStyle(.gray)
-                                .shadow(radius: 5, x: 2, y: 2)
-                        }
-                    }
+                    hudView()
+                        .transition(.scale(scale: 0.4).combined(with: .opacity))
                 }
             }
+    }
+    
+    private func hudView() -> some View {
+        VStack(spacing: 15) {
+            ProgressView()
+                #if os(iOS)
+                .scaleEffect(1.5)
+                #endif
+            if let title {
+                Text(title)
+            }
+            if let progress {
+                ProgressView(value: progress, total: 1)
+            }
+        }
+        .padding()
+        .frame(width: width, height: height)
+        .background {
+            RoundedRectangle(cornerRadius: 12)
+                .foregroundStyle(.regularMaterial)
+                .shadow(radius: 5, x: 2, y: 2)
+        }
     }
 }
 
@@ -72,5 +91,4 @@ extension View {
         }
     }
     .simpleHud(isLoading: isLoading, title: "我是Hud")
-    .frame(minWidth: 500, minHeight: 500)
 }
