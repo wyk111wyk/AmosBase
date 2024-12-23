@@ -123,20 +123,20 @@ public enum SimplePlaceholderType: String, Identifiable, CaseIterable {
     
     var image: Image {
         switch self {
-        case .listEmpty: .init(packageResource: "empty", ofType: "heic")
-        case .star: .init(packageResource: "star", ofType: "heic")
-        case .allDone: .init(packageResource: "allDone", ofType: "heic")
-        case .map: .init(packageResource: "map", ofType: "heic")
-        case .edit: .init(packageResource: "edit", ofType: "heic")
-        case .alert: .init(packageResource: "alert", ofType: "heic")
-        case .lock: .init(packageResource: "lock", ofType: "heic")
-        case .bell: .init(packageResource: "bell", ofType: "heic")
-        case .bookmark: .init(packageResource: "bookmark", ofType: "heic")
-        case .clock: .init(packageResource: "clock", ofType: "heic")
-        case .done: .init(packageResource: "done", ofType: "heic")
-        case .pencil: .init(packageResource: "edit2", ofType: "heic")
-        case .target: .init(packageResource: "target", ofType: "heic")
-        case .thumbUp: .init(packageResource: "thumb", ofType: "heic")
+        case .listEmpty: .init(bundle: .module, packageResource: "empty", ofType: "heic")
+        case .star: .init(bundle: .module, packageResource: "star", ofType: "heic")
+        case .allDone: .init(bundle: .module, packageResource: "allDone", ofType: "heic")
+        case .map: .init(bundle: .module, packageResource: "map", ofType: "heic")
+        case .edit: .init(bundle: .module, packageResource: "edit", ofType: "heic")
+        case .alert: .init(bundle: .module, packageResource: "alert", ofType: "heic")
+        case .lock: .init(bundle: .module, packageResource: "lock", ofType: "heic")
+        case .bell: .init(bundle: .module, packageResource: "bell", ofType: "heic")
+        case .bookmark: .init(bundle: .module, packageResource: "bookmark", ofType: "heic")
+        case .clock: .init(bundle: .module, packageResource: "clock", ofType: "heic")
+        case .done: .init(bundle: .module, packageResource: "done", ofType: "heic")
+        case .pencil: .init(bundle: .module, packageResource: "edit2", ofType: "heic")
+        case .target: .init(bundle: .module, packageResource: "target", ofType: "heic")
+        case .thumbUp: .init(bundle: .module, packageResource: "thumb", ofType: "heic")
         }
     }
     

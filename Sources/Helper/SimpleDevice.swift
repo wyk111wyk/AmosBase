@@ -244,8 +244,8 @@ extension SimpleDevice {
     }
     
     /// 应用版本
-    public static func getAppVersion() -> String? {
-        appVersion()
+    public static func getAppVersion(withBundle: Bool = true) -> String? {
+        appVersion(withBundle: withBundle)
     }
     
     /// 设备标识码
@@ -312,7 +312,7 @@ extension SimpleDevice {
     }
     
     ///获取应用的版本号
-    private static func appVersion() -> String? {
+    private static func appVersion(withBundle: Bool) -> String? {
         let infoDictionary = Bundle.main.infoDictionary
         var version = ""
         
@@ -321,10 +321,12 @@ extension SimpleDevice {
         }
         version += shortVersion
         
-        guard let bundleVersion = infoDictionary?["CFBundleVersion"] as? String else {
-            return nil
+        if withBundle {
+            guard let bundleVersion = infoDictionary?["CFBundleVersion"] as? String else {
+                return nil
+            }
+            version += ".\(bundleVersion)"
         }
-        version += "(\(bundleVersion))"
         
         return version
     }

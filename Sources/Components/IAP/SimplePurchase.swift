@@ -316,7 +316,7 @@ extension SimplePurchaseView {
                             }
                         }
                     }
-                    .frame(width: 260, height: 48)
+                    .frame(width: 260, height: 50)
                 }
                 .disabled(yearlyProduct == nil || yearlyProduct?.isAvailable == false)
             }
@@ -331,7 +331,7 @@ extension SimplePurchaseView {
                 Color.blue_02.opacity(0.92).shadow(radius: 5)
                     .ignoresSafeArea(.all)
             }else {
-                Color.blue_10.darken(by: 0.15).opacity(0.9).shadow(color: .blue.opacity(0.4), radius: 5)
+                Color.blue_10.darken(by: 0.15).opacity(0.94).shadow(color: .blue.opacity(0.4), radius: 5)
                     .ignoresSafeArea(.all)
             }
         }
@@ -592,7 +592,8 @@ extension SimplePurchaseView {
                 4. 自动续费：苹果iTunes 账户会在到期前 24小时内扣费，扣费成功后订阅周期顺延一个订阅周期
                 5. 关闭服务：您可以在苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击“Apple ID”，选择"查看 Apple ID"，进入"账户设置"页面，点击“订阅”，管理自动订阅服务，如需取消，每个计费周期结束前 24小时关闭即可，到期前 24小时内则不再扣费
                 6. 使用条款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/
-                7. 相关支持：
+                7. 隐私条款（Privacy policy）：https://www.amosstudio.com.cn/amosgym-privacydeal.html
+                8. 其他支持：
                 """)
                 Text("·随时在论坛进行反馈交流")
                 Text("·支持与家人共享（最多6人）")

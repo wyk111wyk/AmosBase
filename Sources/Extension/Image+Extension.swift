@@ -26,16 +26,16 @@ import VisionKit
 
 private let mylog = Logger(subsystem: "UIImage+Extension", category: "AmosBase")
 public extension Image {
-    init(packageResource name: String, ofType type: String) {
+    init(bundle: Bundle = .main, packageResource name: String, ofType type: String) {
         #if canImport(UIKit)
-        guard let path = Bundle.module.path(forResource: name, ofType: type),
+        guard let path = bundle.path(forResource: name, ofType: type),
               let image = UIImage(contentsOfFile: path) else {
             self.init(name)
             return
         }
         self.init(uiImage: image)
         #elseif canImport(AppKit)
-        guard let path = Bundle.module.path(forResource: name, ofType: type),
+        guard let path = bundle.path(forResource: name, ofType: type),
               let image = NSImage(contentsOfFile: path) else {
             self.init(name)
             return
@@ -111,69 +111,69 @@ extension SFImage: @retroactive Transferable {
 
 public extension SFImage {
     static var placeHolder: SFImage {
-        SFImage(packageResource: "photoProcess", ofType: "png")!
+        SFImage(bundle: .module, packageResource: "photoProcess", ofType: "png")!
     }
     
     static var logoBlack: SFImage {
-        SFImage(packageResource: "AmosLogoB", ofType: "png")!
+        SFImage(bundle: .module, packageResource: "AmosLogoB", ofType: "png")!
     }
     
     static var logoWhite: SFImage {
-        SFImage(packageResource: "AmosLogoW", ofType: "png")!
+        SFImage(bundle: .module, packageResource: "AmosLogoW", ofType: "png")!
     }
     
     static var logoNameWhite: SFImage {
-        SFImage(packageResource: "Logo-White", ofType: "png")!
+        SFImage(bundle: .module, packageResource: "Logo-White", ofType: "png")!
     }
     
     static var logoNameBlack: SFImage {
-        SFImage(packageResource: "Logo-Black", ofType: "png")!
+        SFImage(bundle: .module, packageResource: "Logo-Black", ofType: "png")!
     }
     
     static var lady01Image: SFImage {
-        SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
+        SFImage(bundle: .module, packageResource: "IMG_5151", ofType: "jpeg")!
     }
     
     static var lady02Image: SFImage {
-        SFImage(packageResource: "IMG_5153", ofType: "jpeg")!
+        SFImage(bundle: .module, packageResource: "IMG_5153", ofType: "jpeg")!
     }
     
     static var dimond: SFImage {
-        SFImage(packageResource: "dimond", ofType: "heic")!
+        SFImage(bundle: .module, packageResource: "dimond", ofType: "heic")!
     }
     
     static var premium: SFImage {
-        SFImage(packageResource: "premium", ofType: "heic")!
+        SFImage(bundle: .module, packageResource: "premium", ofType: "heic")!
     }
     
     static var dimond_w: SFImage {
-        SFImage(packageResource: "dimond-w", ofType: "heic")!
+        SFImage(bundle: .module, packageResource: "dimond-w", ofType: "heic")!
     }
     
     static var premium_w: SFImage {
-        SFImage(packageResource: "premium-w", ofType: "heic")!
+        SFImage(bundle: .module, packageResource: "premium-w", ofType: "heic")!
     }
     
     static var sale: SFImage {
-        SFImage(packageResource: "sale", ofType: "png")!
+        SFImage(bundle: .module, packageResource: "sale", ofType: "png")!
     }
     
     static var lock: SFImage {
-        SFImage(packageResource: "lock", ofType: "heic")!
+        SFImage(bundle: .module, packageResource: "lock", ofType: "heic")!
     }
 }
 
 public extension SFImage {
     
-    convenience init?(packageResource name: String, ofType type: String) {
+    convenience init?(bundle: Bundle = .main, packageResource name: String, ofType type: String) {
         #if canImport(UIKit)
-        guard let path = Bundle.module.path(forResource: name, ofType: type) else {
+        guard let path = bundle.path(forResource: name, ofType: type) else {
             self.init(named: name + "." + type)
             return
         }
         self.init(contentsOfFile: path)
         #elseif canImport(AppKit)
-        guard let path = Bundle.module.path(forResource: name, ofType: type) else {
+        guard let path = bundle.path(forResource: name, ofType: type) else {
             self.init(named: name + "." + type)
             return
         }

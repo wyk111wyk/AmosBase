@@ -35,11 +35,11 @@ public struct ColorCombination: Identifiable {
     
     public static var styleDefault: ColorCombination {
         ColorCombination(
-            titleColor: .primary,
-            authorColor: .secondary,
-            contentColor: .primary,
+            titleColor: .black,
+            authorColor: .gray,
+            contentColor: .black,
             backgroundColor: .white,
-            isShowMetrial: true,
+            isShowMetrial: false,
             bgBackgroundColor: .white
         )
     }

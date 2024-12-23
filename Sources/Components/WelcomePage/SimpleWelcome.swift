@@ -18,7 +18,7 @@ public struct SimpleWelcome<V: View>: View {
     
     let allIntroItems: [SimpleWelcomeItem]
     
-    let appName: String
+    let appName: String?
     let buttonName: String?
     let privacyPolicyUrl: URL
     
@@ -26,13 +26,17 @@ public struct SimpleWelcome<V: View>: View {
     
     public init(
         allIntroItems: [SimpleWelcomeItem],
-        appName: String,
+        appName: String? = nil,
         buttonName: String? = nil,
         privacyPolicyUrl: URL = URL(string: "https://amostime.notion.site/Privacy-Policy-cc1f5c8dfdc141fd94770cf19f190fed")!,
         continueType: ContinueType
     ) {
         self.allIntroItems = allIntroItems
-        self.appName = appName
+        if let appName {
+            self.appName = appName
+        }else {
+            self.appName = SimpleDevice.getAppName()
+        }
         self.buttonName = buttonName
         self.privacyPolicyUrl = privacyPolicyUrl
         self.continueType = continueType
@@ -60,15 +64,16 @@ public struct SimpleWelcome<V: View>: View {
 
 extension SimpleWelcome {
     private func headerView() -> some View {
-        VStack {
+        VStack(spacing: 12) {
             Text("Welcome to use", bundle: .module)
                 .font(.system(.largeTitle, design: .rounded))
-                .foregroundStyle(.gray_Space)
-            Text(SimpleDevice.getAppName() ?? appName.localized())
-                .font(.system(.title, design: .rounded))
-                .foregroundStyle(.primary)
+                .foregroundStyle(.gray)
+            if let appName {
+                Text(appName)
+                    .font(.system(.title, design: .rounded))
+                    .foregroundStyle(.primary)
+            }
         }
-        .foregroundColor(.primary)
         .padding(.top, 40)
         .padding(.bottom, 20)
     }

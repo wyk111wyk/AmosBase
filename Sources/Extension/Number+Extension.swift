@@ -189,7 +189,7 @@ public extension Double {
     /// 转换为文字
     ///
     /// 默认不带小数点，最多8位
-    func toString(digit: Int = 0) -> String {
+    func toString(digit: Int? = nil) -> String {
         if digit == 0 {
             return String(format: "%.0f", self)
         } else if digit == 1 {
@@ -207,7 +207,7 @@ public extension Double {
         } else if digit == 7 {
             return String(format: "%.7f", self)
         } else {
-            return String(format: "%.8f", self)
+            return String(self)
         }
     }
 }

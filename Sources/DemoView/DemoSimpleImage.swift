@@ -15,12 +15,10 @@ public struct DemoSimpleImage: View {
         self.title = title
     }
     
-    @State private var originalImage: SFImage? = SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
-    @State private var adjustedImage: SFImage? = SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
+    @State private var originalImage: SFImage? = .lady01Image
+    @State private var adjustedImage: SFImage? = .lady01Image
     
-    var defaultImage: SFImage {
-        SFImage(packageResource: "IMG_5151", ofType: "jpeg")!
-    }
+    var defaultImage: SFImage { .lady01Image }
     
     @State private var isSaveSuccessed: Bool? = nil
     

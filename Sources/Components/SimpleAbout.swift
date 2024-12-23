@@ -177,7 +177,11 @@ extension SimpleCommonAbout {
                     systemImage: "star",
                     content: "Your support is very important to us.",
                     localizationBundle: .module
-                )
+                ) {
+                    Image(systemName: "hand.thumbsup.circle")
+                        .imageScale(.large)
+                        .foregroundStyle(.secondary)
+                }
                 .contentShape(Rectangle())
             }
         }

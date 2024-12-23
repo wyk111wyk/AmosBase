@@ -19,12 +19,12 @@
     "“" : {
 
     },
-    "【自动订阅服务说明】\n1. 订阅服务：\nA）高级服务连续包月（1个月）、高级服务连续包年（12个月)\nB）高级服务买断（终身）\n2. 订阅价格：\na）高级服务：连续包月产品为 %@/月，连续包年产品为 %@/年\nc）高级服务：买断服务为 %@\n3. 付款：用户确认购买并付款后计入iTunes账户\n4. 自动续费：苹果iTunes 账户会在到期前 24小时内扣费，扣费成功后订阅周期顺延一个订阅周期\n5. 关闭服务：您可以在苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击“Apple ID”，选择\"查看 Apple ID\"，进入\"账户设置\"页面，点击“订阅”，管理自动订阅服务，如需取消，每个计费周期结束前 24小时关闭即可，到期前 24小时内则不再扣费\n6. 使用条款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/\n7. 相关支持：" : {
+    "【自动订阅服务说明】\n1. 订阅服务：\nA）高级服务连续包月（1个月）、高级服务连续包年（12个月)\nB）高级服务买断（终身）\n2. 订阅价格：\na）高级服务：连续包月产品为 %@/月，连续包年产品为 %@/年\nc）高级服务：买断服务为 %@\n3. 付款：用户确认购买并付款后计入iTunes账户\n4. 自动续费：苹果iTunes 账户会在到期前 24小时内扣费，扣费成功后订阅周期顺延一个订阅周期\n5. 关闭服务：您可以在苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击“Apple ID”，选择\"查看 Apple ID\"，进入\"账户设置\"页面，点击“订阅”，管理自动订阅服务，如需取消，每个计费周期结束前 24小时关闭即可，到期前 24小时内则不再扣费\n6. 使用条款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/\n7. 隐私条款（Privacy policy）：https://www.amosstudio.com.cn/amosgym-privacydeal.html\n8. 其他支持：" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "【自动订阅服务说明】\n1. 订阅服务：\nA）高级服务连续包月（1个月）、高级服务连续包年（12个月)\nB）高级服务买断（终身）\n2. 订阅价格：\na）高级服务：连续包月产品为 %1$@/月，连续包年产品为 %2$@/年\nc）高级服务：买断服务为 %3$@\n3. 付款：用户确认购买并付款后计入iTunes账户\n4. 自动续费：苹果iTunes 账户会在到期前 24小时内扣费，扣费成功后订阅周期顺延一个订阅周期\n5. 关闭服务：您可以在苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击“Apple ID”，选择\"查看 Apple ID\"，进入\"账户设置\"页面，点击“订阅”，管理自动订阅服务，如需取消，每个计费周期结束前 24小时关闭即可，到期前 24小时内则不再扣费\n6. 使用条款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/\n7. 相关支持："
+            "value" : "【自动订阅服务说明】\n1. 订阅服务：\nA）高级服务连续包月（1个月）、高级服务连续包年（12个月)\nB）高级服务买断（终身）\n2. 订阅价格：\na）高级服务：连续包月产品为 %1$@/月，连续包年产品为 %2$@/年\nc）高级服务：买断服务为 %3$@\n3. 付款：用户确认购买并付款后计入iTunes账户\n4. 自动续费：苹果iTunes 账户会在到期前 24小时内扣费，扣费成功后订阅周期顺延一个订阅周期\n5. 关闭服务：您可以在苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击“Apple ID”，选择\"查看 Apple ID\"，进入\"账户设置\"页面，点击“订阅”，管理自动订阅服务，如需取消，每个计费周期结束前 24小时关闭即可，到期前 24小时内则不再扣费\n6. 使用条款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/\n7. 隐私条款（Privacy policy）：https://www.amosstudio.com.cn/amosgym-privacydeal.html\n8. 其他支持："
           }
         }
       }

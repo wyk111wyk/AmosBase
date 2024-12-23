@@ -38,7 +38,7 @@ extension Array where Element == SimpleWelcomeItem {
             SimpleWelcomeItem(
                 title: .randomChinese(word: true),
                 content: .randomChinese(medium: true),
-                image: Image(packageResource: "LAL_r", ofType: "png"),
+                image: Image(bundle: .module, packageResource: "LAL_r", ofType: "png"),
                 systemImage: index == 1 ? "pencil.tip.crop.circle" : nil
             )
         }

@@ -85,7 +85,8 @@ public struct DemoSimpleButton<V: View>: View {
                 bundleImageName: "LAL_r",
                 bundleImageType: "png",
                 content: String.randomChinese(medium: true),
-                isPremium: true
+                isPremium: true,
+                localizationBundle: .module
             ) {
                 HStack {
                     Text(String.randomChinese(word: true))

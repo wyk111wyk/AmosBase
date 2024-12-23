@@ -30,8 +30,8 @@ public struct ImageStoreModel: SimpleImageStore, Identifiable {
     }
     
     static func examples() -> [ImageStoreModel] {
-        let images: [SFImage] = [.init(packageResource: "IMG_5151", ofType: "jpeg")!,
-                                 .init(packageResource: "IMG_5153", ofType: "jpeg")!]
+        let images: [SFImage] = [.init(bundle: .module, packageResource: "IMG_5151", ofType: "jpeg")!,
+                                 .init(bundle: .module, packageResource: "IMG_5153", ofType: "jpeg")!]
         let allImages:[ImageStoreModel] = images.compactMap {
             ImageStoreModel(image: $0, caption: "caption") }
         return allImages

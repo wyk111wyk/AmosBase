@@ -139,18 +139,18 @@ public struct SimpleCell<V: View>: View {
                 }else if let bundleImageName, let bundleImageType {
                     if let bundleImageNameDark {
                         if colorScheme == .dark {
-                            Image(packageResource: bundleImageNameDark, ofType: bundleImageType)
+                            Image(bundle: localizationBundle, packageResource: bundleImageNameDark, ofType: bundleImageType)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: imageSize, height: imageSize)
                         }else {
-                            Image(packageResource: bundleImageName, ofType: bundleImageType)
+                            Image(bundle: localizationBundle, packageResource: bundleImageName, ofType: bundleImageType)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: imageSize, height: imageSize)
                         }
                     }else {
-                        Image(packageResource: bundleImageName, ofType: bundleImageType)
+                        Image(bundle: localizationBundle, packageResource: bundleImageName, ofType: bundleImageType)
                             .resizable()
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize)
