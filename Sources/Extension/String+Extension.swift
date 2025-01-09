@@ -197,7 +197,7 @@ public extension String {
     
 #if !os(watchOS)
     /// 将文本生成QRCode
-    func generateCode() -> SFImage? {
+    func generateQRCode() -> SFImage? {
         let imageData = self.data(using: .utf8)
         
         let qrFilter = CIFilter(name: "CIQRCodeGenerator")
@@ -461,6 +461,13 @@ public extension String {
             randomString.append(base.randomElement()!)
         }
         return randomString
+    }
+    
+    /// 生成随机密钥
+    static func generateRandomKey(length: Int) -> Data {
+        var key = Data(count: length / 8)
+        _ = key.withUnsafeMutableBytes { bytes in SecRandomCopyBytes(kSecRandomDefault, length / 8, bytes.baseAddress!) }
+        return key
     }
     
     /// 生成随机手机号码 -  大陆13位

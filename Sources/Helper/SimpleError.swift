@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum SimpleError: Error, Equatable, LocalizedError {
+public enum SimpleError: Error, Equatable, LocalizedError, Sendable {
     case customError(title: String = "", msg: String)
     
     public var errorDescription: String? {

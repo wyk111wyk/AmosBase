@@ -136,13 +136,14 @@ public struct DemoContent<V: View>: View {
                     #endif
                 case 12: SimpleColorPicker(selectedColor: .random())
                 case 13: DemoSimpleUnit()
-                case 14: DemoSimpleData()
+                case 14: DemoSimpleCode()
                 case 15: DemoSimpleLanguage()
                 case 16: DemoSimpleText(markdown: String.testText(.markdown02))
-                case 17: DemoSimpleLoad()
+                case 17: DemoSimpleWebLoad()
                 #if os(iOS)
                 case 18: SimpleFamilyControl()
                 #endif
+                case 19: DemoSimpleCrypto()
                 default: Text(selectedPage.title)
                 }
             }
@@ -241,7 +242,8 @@ struct Page: Identifiable, Equatable, Hashable {
          .init(id: 13, title: "Units - 单位", icon: "gauge.with.dots.needle.33percent"),
          .init(id: 14, title: "Data - 编解码", icon: "externaldrive"),
          .init(id: 15, title: "NL - 自然语言", icon: "character.book.closed"),
-         .init(id: 16, title: "Text - 可选文字", icon: "richtext.page")
+         .init(id: 16, title: "Text - 可选文字", icon: "richtext.page"),
+         .init(id: 19, title: "AES - 加解密", icon: "lock.shield")
         ]
     }
 }

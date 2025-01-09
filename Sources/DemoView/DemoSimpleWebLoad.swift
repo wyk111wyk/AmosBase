@@ -9,7 +9,8 @@ import Foundation
 import SwiftUI
 import CoreLocation
 
-struct DemoSimpleLoad: View {
+// 网络传输 - Fetch
+struct DemoSimpleWebLoad: View {
     @SimpleSetting(.library_amapKey) var amapKey
     @SimpleSetting(.library_googleKey) var googleKey
     
@@ -145,7 +146,7 @@ struct DemoSimpleLoad: View {
     }
 }
 
-extension DemoSimpleLoad {
+extension DemoSimpleWebLoad {
     @MainActor
     private func loadingChange(_ isOn: Bool = true) {
         isLoading = isOn
@@ -297,5 +298,5 @@ extension DemoSimpleLoad {
 }
 
 #Preview {
-    DemoSimpleLoad()
+    DemoSimpleWebLoad()
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct DemoSimpleData: View {
+public struct DemoSimpleCode: View {
     @State private var encodeData: Data?
     @State private var encodeJson: String?
     
@@ -164,5 +164,5 @@ private struct DemoCodableModel: Codable {
 }
 
 #Preview {
-    DemoSimpleData()
+    DemoSimpleCode()
 }
