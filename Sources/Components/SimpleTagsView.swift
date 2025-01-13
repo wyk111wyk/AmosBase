@@ -163,7 +163,7 @@ public struct SimpleTagsView<V: View>: View {
     return NavigationStack {
         SimpleTagsView(tags: example, type: .vstack)
             .padding()
-            .background(content: {Color.gray})
+            .background(content: {Color(.systemGroupedBackground)})
         Form {
             SimpleTagsView(tags: example)
         }

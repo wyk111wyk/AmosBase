@@ -131,25 +131,25 @@ extension ShapeStyle where Self == Color {
     public static var red_Peach: Color { Color(r: 250, g: 194, b: 185) }
     
     // MARK: - Green
-    public static var green_01: Color { Color(r: 241, g: 252, b: 249) }
+    public static var green_01: Color { Color(r: 239, g: 251, b: 242) }
     
-    public static var green_02: Color { Color(r: 209, g: 246, b: 237) }
+    public static var green_02: Color { Color(r: 218, g: 249, b: 227) }
     
-    public static var green_03: Color { Color(r: 162, g: 237, b: 220) }
+    public static var green_03: Color { Color(r: 185, g: 240, b: 199) }
     
-    public static var green_04: Color { Color(r: 105, g: 219, b: 198) }
+    public static var green_04: Color { Color(r: 134, g: 228, b: 158) }
     
-    public static var green_05: Color { Color(r: 62, g: 195, b: 174) }
+    public static var green_05: Color { Color(r: 84, g: 205, b: 114) }
     
-    public static var green_06: Color { Color(r: 37, g: 167, b: 149) }
+    public static var green_06: Color { Color(r: 51, g: 176, b: 81) }
     
-    public static var green_07: Color { Color(r: 27, g: 134, b: 122) }
+    public static var green_07: Color { Color(r: 39, g: 141, b: 64) }
     
-    public static var green_08: Color { Color(r: 25, g: 108, b: 99) }
+    public static var green_08: Color { Color(r: 33, g: 108, b: 52) }
     
-    public static var green_09: Color { Color(r: 25, g: 86, b: 80) }
+    public static var green_09: Color { Color(r: 30, g: 84, b: 44) }
     
-    public static var green_10: Color { Color(r: 25, g: 72, b: 68) }
+    public static var green_10: Color { Color(r: 26, g: 69, b: 38) }
     
     public static var green_Pastel: Color { Color(red: 130/255, green: 219/255, blue: 136/255) }
     
@@ -232,10 +232,10 @@ extension ShapeStyle where Self == Color {
     
     return Form {
         Section("自定义渐变色") {
+            systemColor(SimpleColorModel.allGradient_Green)
             systemColor(SimpleColorModel.allGradient_Blue)
             systemColor(SimpleColorModel.allGradient_Red)
             systemColor(SimpleColorModel.allGradient_Pink)
-            systemColor(SimpleColorModel.allGradient_Green)
             systemColor(SimpleColorModel.allGradient_Purple)
         }
         Section("自定义颜色") {

@@ -46,12 +46,14 @@ public extension View{
     /// 简单UI组件 - 顶部错误提示（使用 Error）
     func simpleErrorToast(
         error: Binding<Error?>,
-        displayMode: ToastView.DisplayMode = .topToast
+        displayMode: ToastView.DisplayMode = .topToast,
+        duration: Double = 2.0
     ) -> some View {
         if let simpleError = error.wrappedValue as? SimpleError,
             case let .customError(title, msg) = simpleError {
             self.simpleErrorToast(
                 presentState: .isOptionalPresented(error),
+                duration: duration,
                 displayMode: displayMode,
                 title: title,
                 subtitle: msg
@@ -59,6 +61,7 @@ public extension View{
         }else {
             self.simpleErrorToast(
                 presentState: .isOptionalPresented(error),
+                duration: duration,
                 displayMode: displayMode,
                 title: error.wrappedValue?.localizedDescription ?? "发生错误"
             )
@@ -68,6 +71,7 @@ public extension View{
     /// 简单UI组件 - 顶部错误提示（可进一步定制）
     func simpleErrorToast<Item: Equatable>(
         presentState: Binding<Item?>,
+        duration: Double = 2.0,
         displayMode: ToastView.DisplayMode = .topToast,
         title: String? = nil,
         subtitle: String? = nil,
@@ -89,6 +93,7 @@ public extension View{
         return modifier(
             ToastModifier(
                 presentState: presentState,
+                duration: duration,
                 withHaptic: withHaptic,
                 isDebug: isDebug,
                 toast: {

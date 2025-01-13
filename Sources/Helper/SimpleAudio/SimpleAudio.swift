@@ -10,6 +10,10 @@ import AVFoundation
 import SwiftUI
 import Combine
 
+/*
+ 播放本地音频文件
+ */
+
 public class SimpleAudioSuper: NSObject {
     public var audioPlayer: AVAudioPlayer?
     public init(_ filePath: URL) {

@@ -9,6 +9,8 @@ import Foundation
 import CoreLocation
 
 public class SimpleWeb {
+    let logger: SimpleLogger = .console(subsystem: "SimpleWeb")
+    
     let cacheHelper: SimpleCache?
     var session: URLSession
     
@@ -26,7 +28,7 @@ extension SimpleWeb {
     ) async -> Bool {
         let result = try? await loadData(from: url)
         if let result {
-            debugPrint(result.count.toDouble.toStorage())
+            logger.debug(result.count.toDouble.toStorage(), title: "检查网络是否可用: \(url)")
             return true
         }else {
             return false
@@ -38,17 +40,17 @@ extension SimpleWeb {
         guard let url = URL(string: key) else { return nil }
         if cacheHelper?.exists(forKey: key) == true,
            let cacheImage = try cacheHelper?.loadImage(forKey: key) {
-            debugPrint("1.从缓存获取图片：\(key)")
+            logger.debug(key, title: "1.从缓存获取图片")
             return cacheImage
         }
         
         if let data = try await loadData(from: url),
            let image = SFImage(data: data) {
-            debugPrint("2.从网络获取图片：\(data.count.toDouble.toStorage())")
+            logger.debug(data.count.toDouble.toStorage(), title: "2.从网络获取图片")
             try cacheHelper?.save(object: data, forKey: key)
             return image
         }else {
-//            debugPrint("3.没有网络获取图片")
+            logger.debug("3.无法从网络或缓存获取图片")
             return nil
         }
     }
@@ -60,7 +62,7 @@ extension SimpleWeb {
             let (data, _) = try await session.data(from: url)
             return data
         }catch {
-            debugPrint("下载 Data 错误：\(error)")
+            logger.error(error, title: "下载 Data 错误")
             throw error
         }
     }
@@ -110,6 +112,37 @@ extension SimpleWeb {
                 }
             })
     }
+    
+    /// 请求网络数据并根据格式解码
+    /// <调试> 将 type 设置为 String.self 将返回 data 的 JSON 格式
+    public func request<T: Codable>(
+        method: SimpleRequestMethod,
+        url: URLConvertible,
+        parameters: [String: String]? = nil,
+        headers: [String: String] = [:],
+        body: Data? = nil,
+        callbackQueue: DispatchQueue = .main,
+        type: T.Type
+    ) async throws -> T? {
+        let result = try await request(
+            method: method,
+            url: url,
+            parameters: parameters,
+            headers: headers,
+            body: body,
+            callbackQueue: callbackQueue
+        )
+        
+        guard let data = result.data else {
+            throw SimpleError.customError(title: "网络请求错误", msg: "无法获取到数据 Data")
+        }
+        
+        if type.self == String.self {
+            return data.toJsonPrint() as? T
+        }else {
+            return data.decode(type: T.self)
+        }
+    }
 }
 
 // MARK: - 一些常用的网络请求
@@ -136,6 +169,7 @@ extension SimpleWeb {
         }
     }
     
+    // MARK: - Google Map
     /// 根据经纬度坐标获取当地海拔(正和负)
     /// - Parameter completion: 获取海拔信息
     public func google_fetchElevation(
@@ -163,6 +197,7 @@ extension SimpleWeb {
     public enum AmapExtensionsType: String {
         case all, base
     }
+    
     // https://lbs.amap.com/api/webservice/guide/api/inputtips
     // MARK: - 高德地图
     /// 通过 经纬度 获取 详细地址信息 和 附近兴趣点(可选)

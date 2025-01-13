@@ -8,6 +8,10 @@
 import Foundation
 import NaturalLanguage
 
+/*
+ 使用NaturalLanguage框架，检测主要语言、根据拆分词性等拆分、进行文字情感分析等
+ */
+
 public class SimpleLanguage {
     public typealias tagResult = [(range: Range<String.Index>, tag: NLTag)]
     

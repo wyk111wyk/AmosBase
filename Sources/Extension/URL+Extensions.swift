@@ -14,6 +14,9 @@ import UIKit
 #endif
 
 // MARK: - Properties
+extension URL: @retroactive Identifiable {
+    public var id: String { self.path() }
+}
 
 public extension URL {
     /// SwifterSwift: Dictionary of the URL's query parameters that have values.

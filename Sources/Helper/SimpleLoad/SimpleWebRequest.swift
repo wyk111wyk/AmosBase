@@ -9,6 +9,8 @@ import Foundation
 
 internal class SimpleWebRequest {
     
+    let logger: SimpleLogger = .console(subsystem: "SimpleWebRequest")
+    
     public let url: URLConvertible
     public let method: SimpleRequestMethod
     public let parameters: [String : String]?
@@ -34,7 +36,7 @@ internal class SimpleWebRequest {
         if let encodedUrlString = stringUrl.addingPercentEncoding(
             withAllowedCharacters: .urlFragmentAllowed
         ), let url = URL(string: encodedUrlString) {
-            debugPrint("进行网络请求的url：\(encodedUrlString)")
+            logger.debug(encodedUrlString, title: "进行网络请求的url")
             var request = URLRequest(url: url)
             if let headers = headers {
                 for (key, value) in headers {
@@ -45,10 +47,9 @@ internal class SimpleWebRequest {
             request.httpBody = body
             return request
         } else {
-            throw NSError(
-                domain:"Unable to create URL from string \(stringUrl)",
-                code:9999,
-                userInfo:nil
+            throw SimpleError.customError(
+                title: "URLrequest创建失败",
+                msg: "Unable to create URL from string \(stringUrl)"
             )
         }
     }

@@ -47,7 +47,7 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
     @Binding var presentState: Item?
     
     ///Duration time to display the alert
-    @State var duration: Double = 1.7
+    var duration: Double = 1.7
     
     ///Tap to dismiss alert
     @State var tapToDismiss: Bool = true
@@ -68,6 +68,34 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
     
     @State private var workItem: DispatchWorkItem?
     @State private var showToast = false
+    
+    public init(
+        presentState: Binding<Item?>,
+        duration: Double = 1.7,
+        tapToDismiss: Bool = true,
+        tapBackgroundToDismiss: Bool = false,
+        offsetY: CGFloat = 0,
+        transition: AnyTransition? = nil,
+        withHaptic: Bool = true,
+        isDebug: Bool = false,
+        @ViewBuilder toast: @escaping () -> ToastView?,
+        onTap: (() -> ())? = nil,
+        backgroundTap: (() -> ())? = nil,
+        completion: (() -> ())? = nil
+    ) {
+        self._presentState = presentState
+        self.duration = duration
+        self.tapToDismiss = tapToDismiss
+        self.tapBackgroundToDismiss = tapBackgroundToDismiss
+        self.offsetY = offsetY
+        self.transition = transition
+        self.withHaptic = withHaptic
+        self.isDebug = isDebug
+        self.toast = toast
+        self.onTap = onTap
+        self.backgroundTap = backgroundTap
+        self.completion = completion
+    }
     
     @ViewBuilder
     public func main() -> some View{
