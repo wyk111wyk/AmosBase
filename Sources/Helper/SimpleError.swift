@@ -10,6 +10,13 @@ import Foundation
 public enum SimpleError: Error, Equatable, LocalizedError, Sendable {
     case customError(title: String = "", msg: String)
     
+    public var message: String {
+        switch self {
+        case .customError(let title, let msg):
+            title + ": " + msg
+        }
+    }
+    
     public var errorDescription: String? {
         switch self {
         case .customError(_, let msg):

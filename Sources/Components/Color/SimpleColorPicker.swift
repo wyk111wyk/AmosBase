@@ -13,7 +13,12 @@ public struct SimpleColorPicker: View {
     }
     @Environment(\.dismiss) private var dismissPage
     @State public var selectedColor: Color {
-        didSet { hexString = selectedColor.hexString }
+        didSet {
+            hexString = selectedColor.hexString
+            if chooseAsPick {
+                saveColor(selectedColor)
+            }
+        }
     }
     @State private var hexString: String
     @SimpleSetting(.colorDisplayType) var type
@@ -31,10 +36,13 @@ public struct SimpleColorPicker: View {
     #endif
     public let saveColor: (Color) -> Void
     
-    public let isPush: Bool
+    let isPush: Bool
+    // 选择颜色即代表更改属性（mac等有时无法点击确定按钮）
+    let chooseAsPick: Bool
     public init(
         selectedColor: Color? = nil,
         isPush: Bool = true,
+        chooseAsPick: Bool = false,
         saveColor: @escaping (Color) -> Void = {_ in}
     ) {
         if let selectedColor {
@@ -45,6 +53,7 @@ public struct SimpleColorPicker: View {
             self.hexString = Color.accentColor.hexString
         }
         self.isPush = isPush
+        self.chooseAsPick = chooseAsPick
         self.saveColor = saveColor
     }
     

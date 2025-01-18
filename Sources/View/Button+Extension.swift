@@ -181,7 +181,6 @@ public struct SimpleAsyncButton<V: View>: View {
                 }
             }
         }
-        .buttonStyle(.borderless)
     }
 }
 

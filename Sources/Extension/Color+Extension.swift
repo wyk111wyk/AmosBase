@@ -131,6 +131,14 @@ public extension Color {
     var textColor: Color {
         self.isLight() ? .black : .white
     }
+    
+    static var background: Color {
+        #if canImport(UIKit)
+        Color(uiColor: .systemGroupedBackground)
+        #elseif canImport(AppKit)
+        Color(nsColor: .textBackgroundColor)
+        #endif
+    }
 }
 
 public extension SFColor {

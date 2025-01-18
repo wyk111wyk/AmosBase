@@ -149,10 +149,8 @@ public struct SimpleImagePicker<V: View>: View {
         }
             .photosPicker(isPresented: $showLibrary, selection: $selectedItem, matching: .images)
             #if os(iOS)
-            .sheet(isPresented: $showCamera) {
-                SimpleCamera() { newPhoto in
-                    adjustImage(for: newPhoto)
-                }
+            .showSimpleCamera(showCamera: $showCamera){ newPhoto in
+                adjustImage(for: newPhoto)
             }
             #endif
             .onChange(of: selectedItem) {

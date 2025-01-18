@@ -8,6 +8,18 @@
 #if canImport(UIKit) && !os(watchOS)
 import SwiftUI
 
+extension View {
+    /// The app's Info.plist must contain an NSCameraUsageDescription key
+    public func showSimpleCamera(
+        showCamera: Binding<Bool>,
+        capureCallback: @escaping (SFImage) -> Void
+    ) -> some View {
+        self.sheet(isPresented: showCamera) {
+            SimpleCamera(capureCallback: capureCallback)
+        }
+    }
+}
+
 struct SimpleCamera: UIViewControllerRepresentable {
     
     @Environment(\.presentationMode) var isPresented
