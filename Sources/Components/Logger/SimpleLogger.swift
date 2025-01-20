@@ -135,7 +135,7 @@ extension SimpleLogger {
         }else if let error {
             log(
                 error.localizedDescription,
-                title: title,
+                title: title ?? "" + "(\(type(of: error))",
                 level: .error,
                 file: file,
                 function: function,

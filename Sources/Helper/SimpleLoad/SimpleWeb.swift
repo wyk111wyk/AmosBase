@@ -72,6 +72,54 @@ extension SimpleWeb {
 extension SimpleWeb {
     public typealias WebResult = (data: Data?, response: URLResponse?)
     
+    /// 已知URLRequest，进行网络请求
+    public func request(
+        urlRequest: URLRequest,
+        callbackQueue: DispatchQueue = .main
+    ) async throws -> WebResult {
+        return try await withCheckedThrowingContinuation(
+            { contionuation in
+                let task = session.dataTask(
+                    with: urlRequest
+                ) { (data, response, error) in
+                    callbackQueue.async {
+                        if let error {
+                            debugPrint("网络请求错误：\(error)")
+                            contionuation.resume(throwing: error)
+                        }else {
+//                          data?.toJsonPrint()
+                            contionuation.resume(returning: (data, response))
+                        }
+                    }
+                }
+                task.resume()
+            }
+        )
+    }
+    
+    /// 已知URLRequest，进行网络请求
+    /// <调试> 将 type 设置为 String.self 将返回 data 的 JSON 格式
+    public func request<T: Codable>(
+        urlRequest: URLRequest,
+        callbackQueue: DispatchQueue = .main,
+        type: T.Type
+    ) async throws -> T? {
+        let result = try await request(
+            urlRequest: urlRequest,
+            callbackQueue: callbackQueue
+        )
+        
+        guard let data = result.data else {
+            throw SimpleError.customError(title: "网络请求错误(\(urlRequest))", msg: "无法获取到数据 Data")
+        }
+        
+        if type.self == String.self {
+            return data.toJsonPrint() as? T
+        }else {
+            return try data.decodeWithError(type: T.self)
+        }
+    }
+    
     /// 从网络请求数据等基础操作
     public func request(
         method: SimpleRequestMethod,
@@ -140,7 +188,7 @@ extension SimpleWeb {
         if type.self == String.self {
             return data.toJsonPrint() as? T
         }else {
-            return data.decode(type: T.self)
+            return try data.decodeWithError(type: T.self)
         }
     }
 }

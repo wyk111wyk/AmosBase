@@ -65,27 +65,51 @@ public extension Data {
         } catch let DecodingError.dataCorrupted(context) {
             debugPrint("Data 损坏: \(context)")
             debugPrint(String(describing: T.self))
-//            throw DecodingError.dataCorrupted(context)
             return nil
         } catch let DecodingError.keyNotFound(key, context) {
             debugPrint("Key '\(key)' not found:", context.debugDescription)
             debugPrint(String(describing: T.self))
-//            throw DecodingError.keyNotFound(key, context)
             return nil
         } catch let DecodingError.valueNotFound(value, context) {
             debugPrint("Value '\(value)' not found:", context.debugDescription)
             debugPrint(String(describing: T.self))
-//            throw DecodingError.valueNotFound(value, context)
             return nil
         } catch let DecodingError.typeMismatch(valueType, context)  {
             debugPrint("Type '\(valueType)' mismatch:", context.debugDescription)
             debugPrint(String(describing: T.self))
-//            throw DecodingError.typeMismatch(valueType, context)
             return nil
         } catch {
             debugPrint("encode error: ", error)
             debugPrint(String(describing: T.self))
             return nil
+        }
+    }
+    
+    func decodeWithError<T: Codable>(type: T.Type) throws -> T {
+        do {
+            let decoder = JSONDecoder()
+            let decoded = try decoder.decode(T.self, from: self)
+            return decoded
+        } catch let DecodingError.dataCorrupted(context) {
+            debugPrint("Data 损坏: \(context)")
+            debugPrint(String(describing: T.self))
+            throw DecodingError.dataCorrupted(context)
+        } catch let DecodingError.keyNotFound(key, context) {
+            debugPrint("Key '\(key)' not found:", context.debugDescription)
+            debugPrint(String(describing: T.self))
+            throw DecodingError.keyNotFound(key, context)
+        } catch let DecodingError.valueNotFound(value, context) {
+            debugPrint("Value '\(value)' not found:", context.debugDescription)
+            debugPrint(String(describing: T.self))
+            throw DecodingError.valueNotFound(value, context)
+        } catch let DecodingError.typeMismatch(valueType, context)  {
+            debugPrint("Type '\(valueType)' mismatch:", context.debugDescription)
+            debugPrint(String(describing: T.self))
+            throw DecodingError.typeMismatch(valueType, context)
+        } catch {
+            debugPrint("encode error: ", error)
+            debugPrint(String(describing: T.self))
+            throw error
         }
     }
     
