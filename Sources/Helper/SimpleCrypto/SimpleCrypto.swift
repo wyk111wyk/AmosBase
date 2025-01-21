@@ -88,7 +88,7 @@ open class SimpleAESCrypto {
             iv: ivData
         )
         let decryptedText = String(data: decryptedData, encoding: .utf8)
-        logger.debug(decryptedText ?? "", title: "decryptedText")
+//        logger.debug(decryptedText ?? "", title: "decryptedText")
         return decryptedText
     }
     
