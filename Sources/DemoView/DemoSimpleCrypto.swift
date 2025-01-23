@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DemoSimpleCrypto: View {
-    @State private var inputText: String = "xai-TDFTaQA02cHlwDJ2XJuBcbxuDlkKJgrWfVjltopEPP55xISKEOg6nXetOjGYN4AEiNPIwipcWuCtF6QM"
+    @State private var inputText: String = ""
     @State private var key: String = "ynfeIgYdEufkkyet"
     @State private var iv: String = "I8xD9VKiRAkcW0W1"
     
