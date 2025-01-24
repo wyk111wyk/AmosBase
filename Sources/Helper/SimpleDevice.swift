@@ -16,6 +16,7 @@ import CoreLocation
 import UIKit
 #elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
+import IOKit
 #endif
 #if canImport(WatchKit)
 import WatchKit
@@ -253,10 +254,27 @@ extension SimpleDevice {
         #if os(iOS)
         UIDevice.current.identifierForVendor?.uuidString
         #elseif os(macOS)
-        guard let bundleID = Bundle.main.bundleIdentifier else {
+        let platformExpert = IOServiceGetMatchingService(
+            kIOMainPortDefault,
+            IOServiceMatching("IOPlatformExpertDevice")
+        )
+            
+        guard platformExpert != 0 else {
             return nil
         }
-        return bundleID
+        
+        guard let uuid = IORegistryEntryCreateCFProperty(
+            platformExpert,
+            kIOPlatformUUIDKey as CFString,
+            kCFAllocatorDefault,
+            0
+        )?.takeRetainedValue() as? String else {
+            IOObjectRelease(platformExpert)
+            return nil
+        }
+        
+        IOObjectRelease(platformExpert)
+        return uuid
         #else
         return nil
         #endif
@@ -268,13 +286,12 @@ extension SimpleDevice {
             return false
         }
         
-        debugPrint(deviceIdentifier)
+//        debugPrint("deviceIdentifier: " + deviceIdentifier)
         
         let myDevice = [
             "35138123-122A-4E76-AD0C-9394FD458D6F", //iPhone 15 Pro Max
             "E520AEAA-ECFA-4504-841E-8592D5A3446D", //iPad Pro
-            "87AEB63A-35E2-5274-8A7D-5D51001F8579", //Mac mini M2
-            "A606251B-6B23-570B-AF50-DB95A1CF5453" //Mac mini M4
+            "ECA17554-E72E-5FE4-A2F0-99897557EB1A" //Mac mini M4
         ]
         return myDevice.contains(deviceIdentifier)
     }

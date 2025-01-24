@@ -195,13 +195,12 @@ extension SimpleWeb {
 
 // MARK: - 请求异步连续的网络指令
 extension SimpleWeb {
-    public func requestStream<T: Codable>(
-        urlRequest: URLRequest,
-        type: T.Type
-    ) -> AsyncThrowingStream<T, Error> {
+    public func requestStream(
+        urlSession: URLSession = .shared,
+        urlRequest: URLRequest
+    ) -> AsyncThrowingStream<UInt8, Error> {
         return AsyncThrowingStream { continuation in
             Task {
-                let urlSession = URLSession.shared
                 let stream: URLSession.AsyncBytes
                 let rawResponse: URLResponse
                 do {
@@ -210,12 +209,10 @@ extension SimpleWeb {
                     continuation.finish(throwing: error)
                     return
                 }
-                
                 // Verify the status code is 200
                 guard let response = rawResponse as? HTTPURLResponse else {
                     logger.debug("Response was not an HTTP response.", title: "Invalid response")
                     continuation.finish(throwing: SimpleError.networkError(msg: "Response was not an HTTP response."))
-                    
                     return
                 }
                 
@@ -228,41 +225,13 @@ extension SimpleWeb {
                     }
                     
                     continuation.finish(throwing: SimpleError.networkError(msg: responseBody))
-                    
                     return
                 }
                 
-                // Received lines that are not server-sent events (SSE); these are not prefixed with "data:"
-                var extraLines: String = ""
-                for try await line in stream.lines {
-//                    logger.debug(line, title: "Stream response")
-                    
-                    if line.hasPrefix("data:") {
-                        // We can assume 5 characters since it's utf-8 encoded, removing `data:`.
-                        let jsonText = String(line.dropFirst(5))
-                        
-                        guard let data: Data = jsonText.data(using: .utf8) else {
-                            continuation.finish(throwing: SimpleError.customError(title: "Convert error", msg: "Could not parse response as UTF8."))
-                            return
-                        }
-                        
-                        // Handle the content.
-                        if let content = data.decode(type: T.self) {
-                            continuation.yield(content)
-                        }else {
-                            continuation.finish()
-                            return
-                        }
-                    } else {
-                        extraLines += line
-                    }
+                for try await byte in stream {
+                    continuation.yield(byte)
                 }
-                
-                if extraLines.count > 0 {
-                    continuation.finish(throwing: SimpleError.customError(title: "Extra lines", msg: "Received lines that are not server-sent events (SSE); these are not prefixed with \"data:\": \(extraLines)"))
-                    return
-                }
-                
+
                 continuation.finish()
             }
         }

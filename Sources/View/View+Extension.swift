@@ -30,6 +30,16 @@ public extension Binding {
 
 extension GeometryProxy: @unchecked @retroactive Sendable {}
         
+public extension View {
+    func sectionSpacing(_ spacing: CGFloat = 15) -> some View {
+        #if os(iOS)
+        self.listSectionSpacing(spacing)
+        #else
+        self
+        #endif
+    }
+}
+
 #if !os(watchOS)
 public extension View {
     func simpleSearch(
