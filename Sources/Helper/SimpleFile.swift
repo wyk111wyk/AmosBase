@@ -161,6 +161,19 @@ public class SimpleFileHelper {
         // 返回文件路径的字符串表示
         return finalFilePath
     }
+    
+    /// 创建一个临时路径
+    public func tempPath(
+        _ name: String? = nil,
+        extensionName: String? = nil
+    ) -> URL {
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let extensionName: String =
+        if let extensionName { "." + extensionName }
+        else { "" }
+        let tempFileURL = tempDirectory.appendingPathComponent("\(name ?? UUID().uuidString)\(extensionName)")
+        return tempFileURL
+    }
 
     /// 获取文件夹内所有文件的URL路径
     public func fetchFileURL(_ folderPath: URL) -> [URL] {

@@ -70,6 +70,7 @@ private struct StageButtonModifier: ButtonStyle {
 public struct SimpleMiddleButton: View {
     let title: LocalizedStringKey
     let systemImageName: String?
+    let isLoading: Bool
     let role: ButtonRole?
     let rowVisibility: Visibility
     let bundle: Bundle
@@ -80,6 +81,7 @@ public struct SimpleMiddleButton: View {
     public init(
         _ title: LocalizedStringKey,
         systemImageName: String? = nil,
+        isLoading: Bool = false,
         role: ButtonRole? = nil,
         rowVisibility: Visibility = .hidden,
         bundle: Bundle = .main,
@@ -87,6 +89,7 @@ public struct SimpleMiddleButton: View {
     ) {
         self.title = title
         self.systemImageName = systemImageName
+        self.isLoading = isLoading
         self.role = role
         
         self.rowVisibility = rowVisibility
@@ -99,6 +102,7 @@ public struct SimpleMiddleButton: View {
     public init(
         _ title: LocalizedStringKey,
         systemImageName: String? = nil,
+        isLoading: Bool = false,
         role: ButtonRole? = nil,
         rowVisibility: Visibility = .visible,
         bundle: Bundle = .main,
@@ -108,6 +112,7 @@ public struct SimpleMiddleButton: View {
     ) {
         self.title = title
         self.systemImageName = systemImageName
+        self.isLoading = isLoading
         self.role = role
         
         self.bundle = bundle
@@ -122,7 +127,9 @@ public struct SimpleMiddleButton: View {
         Button(role: role, action: action) {
             HStack(spacing: 8) {
                 Spacer()
-                if let systemImageName {
+                if isLoading {
+                    ProgressView()
+                }else if let systemImageName {
                     Image(systemName: systemImageName)
                 }
                 Text(title, bundle: bundle)
