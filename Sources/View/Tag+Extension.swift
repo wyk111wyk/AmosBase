@@ -9,8 +9,12 @@ import SwiftUI
 
 public extension View {
     /// 将视图转换为 Tag 的显示形式
-    @ViewBuilder func simpleTag(_ config: SimpleTagConfig = .full()) -> some View {
-        self.modifier(TagBorder(config: config))
+    @ViewBuilder func simpleTag(_ config: SimpleTagConfig? = .full()) -> some View {
+        if let config {
+            self.modifier(TagBorder(config: config))
+        }else {
+            self
+        }
     }
 }
 

@@ -19,7 +19,8 @@ public extension Toggle {
         selectLabelColor: Color = .primary,
         deselectLabelColor: Color = .secondary,
         iconColor: Color = .green,
-        space: Double = 8
+        space: Double = 8,
+        tagConfig: SimpleTagConfig? = nil
     ) -> some View {
         self.toggleStyle(
             LabelToggleStyle(
@@ -27,7 +28,8 @@ public extension Toggle {
                 selectLabelColor: selectLabelColor,
                 deselectLabelColor: deselectLabelColor,
                 iconColor: iconColor,
-                space: space
+                space: space,
+                tagConfig: tagConfig
             )
         )
     }
@@ -59,17 +61,22 @@ struct LabelToggleStyle: ToggleStyle {
     let deselectLabelColor: Color
     let iconColor: Color
     let space: Double
+    let tagConfig: SimpleTagConfig?
     
-    init(font: Font,
-         selectLabelColor: Color,
-         deselectLabelColor: Color,
-         iconColor: Color,
-         space: Double) {
+    init(
+        font: Font,
+        selectLabelColor: Color,
+        deselectLabelColor: Color,
+        iconColor: Color,
+        space: Double,
+        tagConfig: SimpleTagConfig? = nil
+    ) {
         self.selectLabelColor = selectLabelColor
         self.deselectLabelColor = deselectLabelColor
         self.iconColor = iconColor
         self.font = font
         self.space = space
+        self.tagConfig = tagConfig
     }
     
     func makeBody(configuration: Configuration) -> some View {
@@ -85,6 +92,7 @@ struct LabelToggleStyle: ToggleStyle {
                     .foregroundColor(configuration.isOn ? selectLabelColor : deselectLabelColor)
             }
             .font(font)
+            .simpleTag(tagConfig)
         }
         .buttonStyle(.plain)
     }
@@ -97,7 +105,7 @@ struct LabelToggleStyle: ToggleStyle {
         Toggle("Confirm", isOn: $isOn1)
             .confirmStyle()
         Toggle("Label", isOn: $isOn2)
-            .labelStyle()
+            .labelStyle(tagConfig: .bg())
     }
     .formStyle(.grouped)
 })

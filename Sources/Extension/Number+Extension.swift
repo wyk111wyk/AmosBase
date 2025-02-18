@@ -22,13 +22,16 @@ public extension Int {
     ///
     /// 可自定义是否带逗号
     func toString(
-        withComma: Bool = false
+        withComma: Bool = false,
+        prefix: String? = nil,
+        suxfix: String? = nil
     ) -> String {
-        if withComma {
-            return "\(self)"
-        }else {
-            return String(self)
-        }
+        var result = ""
+        if withComma { result =  "\(self)"
+        }else { result = String(self) }
+        if let prefix { result = "\(prefix)\(result)" }
+        if let suxfix { result = "\(result)\(suxfix)" }
+        return result
     }
     
     var toBool: Bool? {
