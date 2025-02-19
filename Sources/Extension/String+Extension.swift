@@ -450,6 +450,48 @@ public extension String {
         return self[self.index(startIndex, offsetBy: index)]
     }
     
+    /// 分割文章
+    func splitArticle(
+        targetWordsPerParagraph: Int = 500
+    ) -> [String] {
+        var paragraphs: [String] = []
+        var currentParagraph: String = ""
+        var currentWordCount: Int = 0
+        let words = self.components(
+            separatedBy: .whitespacesAndNewlines
+        ).filter { !$0.isEmpty } // 使用空白字符和换行符分割
+
+        for word in words {
+            currentWordCount += 1
+            currentParagraph += word + " " // 添加空格以保持单词之间的分隔
+            
+            if currentWordCount >= targetWordsPerParagraph {
+                // 尝试寻找更好的断句点
+                if let range = currentParagraph.rangeOfCharacter(from: CharacterSet(charactersIn: ".?!。？！"), options: .backwards, range: nil) {
+                    let splitIndex = currentParagraph.distance(from: currentParagraph.startIndex, to: range.upperBound)
+                    let betterParagraph = String(currentParagraph.prefix(splitIndex))
+                    let remainingText = String(currentParagraph.suffix(from: currentParagraph.index(currentParagraph.startIndex, offsetBy: splitIndex)))
+
+                    paragraphs.append(betterParagraph.trimmingCharacters(in: .whitespaces)) // 添加到结果中
+                    currentParagraph = remainingText
+                    currentWordCount = remainingText.components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }.count
+                } else {
+                    // 没有找到合适的断句点，直接切分
+                    paragraphs.append(currentParagraph.trimmingCharacters(in: .whitespaces))
+                    currentParagraph = ""
+                    currentWordCount = 0
+                }
+            }
+        }
+
+        // 处理剩余的文本
+        if !currentParagraph.isEmpty {
+            paragraphs.append(currentParagraph.trimmingCharacters(in: .whitespaces))
+        }
+
+        return paragraphs
+    }
+    
     /// 生成随机文字 -  大小写字母+数字
     ///
     /// 可设置文字长度，默认32位

@@ -33,10 +33,9 @@ internal class SimpleWebRequest {
     
     public func request() throws -> URLRequest? {
         let stringUrl = self.urlWithParameters()
-        if let encodedUrlString = stringUrl.addingPercentEncoding(
-            withAllowedCharacters: .urlFragmentAllowed
-        ), let url = URL(string: encodedUrlString) {
-            logger.debug(encodedUrlString, title: "进行网络请求的url")
+//        let encodedUrlString = stringUrl.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)
+        if let url = URL(string: stringUrl) {
+            logger.debug(stringUrl, title: "进行网络请求的url")
             var request = URLRequest(url: url)
             if let headers = headers {
                 for (key, value) in headers {
