@@ -61,7 +61,7 @@ public extension View {
         confirmTap: @escaping () -> Void = {}
     ) -> some View {
         if let simpleError = error.wrappedValue as? SimpleError,
-            case let .customError(title, msg) = simpleError {
+            case let .customError(title, msg, _) = simpleError {
             return modifier(
                 SimpleAlert(
                     title: title,

@@ -123,7 +123,7 @@ extension SimpleLogger {
         line: Int = #line
     ) {
         if let simpleError = error as? SimpleError,
-           case let .customError(title, msg) = simpleError {
+           case let .customError(title, msg, _) = simpleError {
             log(
                 msg,
                 title: title,

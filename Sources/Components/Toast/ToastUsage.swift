@@ -50,7 +50,7 @@ public extension View{
         duration: Double = 2.0
     ) -> some View {
         if let simpleError = error.wrappedValue as? SimpleError,
-            case let .customError(title, msg) = simpleError {
+            case let .customError(title, msg, _) = simpleError {
             self.simpleErrorToast(
                 presentState: .isOptionalPresented(error),
                 duration: duration,

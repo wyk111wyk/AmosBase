@@ -212,19 +212,29 @@ extension SimpleWeb {
                 // Verify the status code is 200
                 guard let response = rawResponse as? HTTPURLResponse else {
                     logger.debug("Response was not an HTTP response.", title: "Invalid response")
-                    continuation.finish(throwing: SimpleError.networkError(msg: "Response was not an HTTP response."))
+                    continuation.finish(
+                        throwing: SimpleError.networkError(
+                            msg: "Response was not an HTTP response."
+                        )
+                    )
                     return
                 }
                 
+                logger.debug(response.statusCode.toString(), title: "Stream UrlRequest StatusCode")
                 // Verify the status code is 200
                 guard response.statusCode == 200 else {
-//                    logger.debug("The server responded with an error: \(response)", title: "Invalid server")
+                    
                     var responseBody = ""
                     for try await line in stream.lines {
                         responseBody += line + "\n"
                     }
                     
-                    continuation.finish(throwing: SimpleError.networkError(msg: responseBody))
+                    continuation.finish(
+                        throwing: SimpleError.networkError(
+                            msg: responseBody,
+                            statusCode: response.statusCode
+                        )
+                    )
                     return
                 }
                 
