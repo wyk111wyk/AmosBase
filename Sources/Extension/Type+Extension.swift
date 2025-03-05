@@ -16,4 +16,8 @@ public extension UTType {
     static let pptx = UTType(importedAs: "com.microsoft.powerpoint.pptx")
     
     static let xlsx = UTType(importedAs: "com.microsoft.excel.xlsx")
+    
+    var isImage:Bool {
+        self == .image || self == .png || self == .jpeg || self == .heic
+    }
 }
