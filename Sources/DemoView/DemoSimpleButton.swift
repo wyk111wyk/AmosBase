@@ -19,6 +19,12 @@ public struct DemoSimpleButton<V: View>: View {
     @State private var confirmShowPage = false
     @State private var showPage = false
     
+    @State private var randomWord01: String = .randomChinese(word: true)
+    @State private var randomTitle01: String = .randomChinese(short: true)
+    @State private var randomTitle02: String = .randomChinese(short: true)
+    @State private var randomContent01: String = .randomChinese(medium: true)
+    @State private var randomContent02: String = .randomChinese(medium: true)
+    
     let allPickerContent = DemoPickerModel.allContent
     @State private var singleValue: DemoPickerModel
     @State private var mutipleValue: Set<DemoPickerModel>
@@ -84,12 +90,12 @@ public struct DemoSimpleButton<V: View>: View {
                 titleImageColor: .yellow,
                 bundleImageName: "LAL_r",
                 bundleImageType: "png",
-                content: String.randomChinese(medium: true),
+                content: randomContent01,
                 isPremium: true,
                 localizationBundle: .module
             ) {
                 HStack {
-                    Text(String.randomChinese(word: true))
+                    Text(randomWord01)
                         .simpleTag(.full(bgColor: .blue.opacity(0.9)))
                 }
             }.simpleSwipe(allowsFullSwipe: true, isFavor: isFavor, favorAction: {
@@ -99,27 +105,29 @@ public struct DemoSimpleButton<V: View>: View {
                 SimpleAudioHelper.playRightAudio()
             } label: {
                 SimpleCell(
-                    String.randomChinese(short: true, medium: true),
+                    randomTitle01,
                     systemImage: "play.circle",
-                    content: String.randomChinese(medium: true, long: true),
+                    content: randomContent01,
                     isPushButton: true
                 )
             }
             SimpleCell(
-                String.randomChinese(short: true),
+                randomTitle02,
                 titleSystemImage: isFavor ? "star.fill" : nil,
                 titleImageColor: .yellow,
                 numberIcon: 368,
-                content: String.randomChinese(medium: true),
+                content: randomContent02,
                 contentSystemImage: "tray",
-                stateText: String.randomChinese(short: true)
+                stateText: randomTitle02
             )
         } header: {
             HStack {
                 Text("Cell", bundle: .module)
                 Spacer()
                 Button {
-                    cellId = Date().timeIntervalSince1970.toInt
+                    withAnimation {
+                        randomText()
+                    }
                 } label: {
                     Text("随机文字")
                         .font(.caption)
@@ -127,6 +135,14 @@ public struct DemoSimpleButton<V: View>: View {
             }
         }
         .id(cellId)
+    }
+    
+    private func randomText() {
+        randomWord01 = .randomChinese(word: true)
+        randomTitle01 = .randomChinese(short: true)
+        randomTitle02 = .randomChinese(short: true)
+        randomContent01 = .randomChinese(medium: true, long: true)
+        randomContent02 = .randomChinese(medium: true)
     }
     
     @ViewBuilder
@@ -202,7 +218,7 @@ public struct DemoSimpleButton<V: View>: View {
     
     private func tagSection() -> some View {
         Section {
-            SimpleTagsView(tags: tagCollectOne) { tag in
+            SimpleTagsView(tags: tagCollectOne, tagType: .list) { tag in
                 var newTag = tag
                 newTag.color = .blue
                 newTag.icon = "medal"
@@ -212,7 +228,7 @@ public struct DemoSimpleButton<V: View>: View {
                     tagCollectTwo.appendOrReplace(newTag)
                 }
             }
-            SimpleTagsView(tags: tagCollectTwo) { tag in
+            SimpleTagsView(tags: tagCollectTwo, tagType: .list) { tag in
                 var newTag = tag
                 newTag.color = .purple
                 newTag.icon = "person.wave.2.fill"

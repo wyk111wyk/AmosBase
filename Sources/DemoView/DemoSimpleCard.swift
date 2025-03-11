@@ -62,7 +62,9 @@ struct DemoSimpleCard: View {
             }
         }
         .onChange(of: currentPositionID) {
-            debugPrint("ID改变：\(String(describing: currentPositionID))")
+            if let currentPositionID {
+                debugPrint("选择卡片ID：\(String(describing: currentPositionID))")
+            }
         }
     }
 }

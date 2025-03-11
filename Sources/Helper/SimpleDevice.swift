@@ -291,7 +291,8 @@ extension SimpleDevice {
         let myDevice = [
             "35138123-122A-4E76-AD0C-9394FD458D6F", //iPhone 15 Pro Max
             "E520AEAA-ECFA-4504-841E-8592D5A3446D", //iPad Pro
-            "ECA17554-E72E-5FE4-A2F0-99897557EB1A" //Mac mini M4
+            "ECA17554-E72E-5FE4-A2F0-99897557EB1A", //Mac mini M4
+            "9B0B1092-30C7-45BF-B8CE-99FCE5B581C4" //Aurora 13 mini
         ]
         return myDevice.contains(deviceIdentifier)
     }

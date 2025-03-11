@@ -7,11 +7,9 @@
 
 import SwiftUI
 
-public protocol SimpleCardable: Identifiable, Hashable {}
-
 public struct SimpleCard<
     H: Hashable,
-    S: SimpleCardable,
+    S: Identifiable,
     Content: View,
     Background: View,
     BottomView: View

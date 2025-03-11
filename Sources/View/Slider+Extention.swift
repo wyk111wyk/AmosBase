@@ -140,7 +140,7 @@ public struct SimpleSlider: View {
                     .foregroundStyle(gradientColor)
                     .frame(width: totalWidth * currentValue.wrappedValue,
                            height: barHeight)
-                    
+                
                 Text(textContent)
                     .lineLimit(1)
                     .frame(width: textWidth, alignment: isTextFront ? .leading : .trailing)

@@ -18,7 +18,7 @@ public extension View {
     }
 }
 
-public struct SimpleTagConfig: Hashable {
+public struct SimpleTagConfig {
     // 边距
     let verticalPad: CGFloat
     let horizontalPad: CGFloat
@@ -51,7 +51,7 @@ public struct SimpleTagConfig: Hashable {
         self.cornerRadius = cornerRadius
         self.borderColor = borderColor
         self.lineWidth = lineWidth
-        self.bgColor = bgColor
+        self.bgColor = bgColor ?? contentColor
         self.isMaterial = isMaterial
     }
     
@@ -135,11 +135,11 @@ struct TagBorder: ViewModifier {
                     if let bgColor = config.bgColor {
                         RoundedRectangle(cornerRadius: config.cornerRadius)
                             .foregroundStyle(bgColor)
-                            .opacity(config.isMaterial ? 0.4 : 1)
+                            .opacity(config.isMaterial ? 0.5 : 1)
                     }
                     if config.isMaterial {
                         RoundedRectangle(cornerRadius: config.cornerRadius)
-                            .foregroundStyle(.ultraThickMaterial)
+                            .foregroundStyle(.ultraThickMaterial.opacity(0.92))
                     }
                     if let borderColor = config.borderColor {
                         RoundedRectangle(cornerRadius: config.cornerRadius)
