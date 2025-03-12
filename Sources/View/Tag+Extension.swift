@@ -51,7 +51,7 @@ public struct SimpleTagConfig {
         self.cornerRadius = cornerRadius
         self.borderColor = borderColor
         self.lineWidth = lineWidth
-        self.bgColor = bgColor ?? contentColor
+        self.bgColor = bgColor
         self.isMaterial = isMaterial
     }
     
@@ -112,7 +112,7 @@ public struct SimpleTagConfig {
               contentFont: contentFont,
               contentColor: contentColor,
               borderColor: borderColor,
-              bgColor: bgColor,
+              bgColor: bgColor ?? contentColor,
               isMaterial: isMaterial)
     }
 }
