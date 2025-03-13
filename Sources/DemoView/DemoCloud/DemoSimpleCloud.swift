@@ -183,22 +183,10 @@ extension DemoSimpleCloud {
     private func statusView() -> some View {
         Section("Network") {
             SimpleCell("网络情况", systemImage: "network") {
-                if let isNetworkAvailable {
-                    Text(isNetworkAvailable ? "正常" : "未连接")
-                        .simpleTag(.border(contentColor: isNetworkAvailable ? .green : .red))
-                }else {
-                    Text("未知")
-                        .foregroundStyle(.secondary)
-                }
+                isNetworkAvailable.statusSign()
             }
             SimpleCell("设备iCloud状态", systemImage: "icloud") {
-                if let isICloudAvailable {
-                    Text(isICloudAvailable ? "正常" : "不可用")
-                        .simpleTag(.border(contentColor: isICloudAvailable ? .green : .red))
-                }else {
-                    Text("未知")
-                        .foregroundStyle(.secondary)
-                }
+                isICloudAvailable.statusSign()
             }
         }
         .task {

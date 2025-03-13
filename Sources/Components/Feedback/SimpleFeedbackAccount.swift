@@ -60,9 +60,7 @@ struct SimpleFeedbackAccount: View {
                 dismissPage()
             }
             .navigationTitle("反馈信息填写")
-            #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
+            .inlineTitleForNavigationBar()
         }
     }
 }

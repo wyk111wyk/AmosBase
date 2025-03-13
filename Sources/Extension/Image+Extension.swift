@@ -308,6 +308,17 @@ public extension SFImage {
         #endif
     }
     
+    /// 对图片进行渲染
+    func effect(filter: CIEffectType) -> SFImage? {
+        #if !os(watchOS) && canImport(UIKit)
+        return effect_ios(filter: filter)
+        #elseif os(macOS)
+        return effect_mac(filter: filter)
+        #else
+        return nil
+        #endif
+    }
+    
     #if !os(watchOS)
     /// 用户可以将一张照片放入相册，使用前要先在 plist 中添加权限描述：
     /// NSPhotoLibraryUsageDescription（完全访问）
@@ -597,6 +608,32 @@ public extension SFImage {
 }
 #endif
 
+public enum CIEffectType {
+    case blur_Box, blur_Disc, blur_Gaussian, blur_MotionBlur, blur_Zoom
+    case color_Clamp, color_Invert
+    case photo_Chrome, photo_Fade, photo_Instant, photo_Mono, Photo_Noir, Photo_Process, Photo_Tonal, Photo_Transfer
+    
+    func name() -> String {
+        switch self {
+        case .blur_Box: "CIBoxBlur" // 盒子模糊
+        case .blur_Disc: "CIDiscBlur" // 圆盘模糊
+        case .blur_Gaussian: "CIGaussianBlur" // 高斯模糊
+        case .blur_MotionBlur: "CIMotionBlur" // 运动模糊
+        case .blur_Zoom: "CIZoomBlur" // 缩放模糊
+        case .color_Clamp: "CIColorClamp" // 颜色钳制
+        case .color_Invert: "CIColorInvert" // 颜色反转
+        case .photo_Chrome: "CIPhotoEffectChrome" // 怀旧效果
+        case .photo_Fade: "CIPhotoEffectFade" // 褪色效果
+        case .photo_Instant: "CIPhotoEffectInstant" // 快速冲印效果
+        case .photo_Mono: "CIPhotoEffectMono" // 单色效果
+        case .Photo_Noir: "CIPhotoEffectNoir" // 黑色效果
+        case .Photo_Process: "CIPhotoEffectProcess" // 处理效果
+        case .Photo_Tonal: "CIPhotoEffectTonal" // 色调效果
+        case .Photo_Transfer: "CIPhotoEffectTransfer" // 转移效果
+        }
+    }
+}
+
 #if !os(watchOS) && canImport(UIKit)
 
 // MARK: - 对图片添加滤镜等效果
@@ -642,51 +679,10 @@ public extension UIImage {
         )
     }
     
-    enum CIEffectType {
-        case blur_Box, blur_Disc, blur_Gaussian, blur_MotionBlur, blur_Zoom
-        case color_Clamp, color_Invert
-        case photo_Chrome, photo_Fade, photo_Instant, photo_Mono, Photo_Noir, Photo_Process, Photo_Tonal, Photo_Transfer
-        
-        func name() -> String {
-            switch self {
-            case .blur_Box:
-                "CIBoxBlur"
-            case .blur_Disc:
-                "CIDiscBlur"
-            case .blur_Gaussian:
-                "CIGaussianBlur"
-            case .blur_MotionBlur:
-                "CIMotionBlur"
-            case .blur_Zoom:
-                "CIZoomBlur"
-            case .color_Clamp:
-                "CIColorClamp"
-            case .color_Invert:
-                "CIColorInvert"
-            case .photo_Chrome:
-                "CIPhotoEffectChrome"
-            case .photo_Fade:
-                "CIPhotoEffectFade"
-            case .photo_Instant:
-                "CIPhotoEffectInstant"
-            case .photo_Mono:
-                "CIPhotoEffectMono"
-            case .Photo_Noir:
-                "CIPhotoEffectNoir"
-            case .Photo_Process:
-                "CIPhotoEffectProcess"
-            case .Photo_Tonal:
-                "CIPhotoEffectTonal"
-            case .Photo_Transfer:
-                "CIPhotoEffectTransfer"
-            }
-        }
-    }
-    
     /// 对图片使用滤镜 -  获得一张新的图片
     ///
     /// 可选系统内置滤镜，例如老照片Mono、黑白Tonal等
-    func effect(filter: CIEffectType) -> UIImage? {
+    private func effect_ios(filter: CIEffectType) -> UIImage? {
         //创建一个CIContext()，用来放置处理后的内容
         let context = CIContext()
         //将输入的UIImage转变成CIImage
@@ -797,6 +793,37 @@ public extension NSImage {
         
         return NSColor(red: averageR, green: averageG, blue: averageB, alpha: averageA)
     }
+    
+    /// 对图片使用滤镜 -  获得一张新的图片
+    ///
+    /// 可选系统内置滤镜，例如老照片Mono、黑白Tonal等
+    private func effect_mac(filter: CIEffectType) -> NSImage? {
+        guard let tiffData = tiffRepresentation,
+              let bitmapImage = NSBitmapImageRep(data: tiffData),
+              let inputCIImage = CIImage(bitmapImageRep: bitmapImage) else {
+            return nil
+        }
+        
+        let filter = CIFilter(name: filter.name())
+        filter?.setValue(inputCIImage, forKey: kCIInputImageKey)
+        guard let outputCIImage = filter?.outputImage else {
+            return nil
+        }
+        
+        // 从 CIImage 创建 CGImage
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(
+            outputCIImage,
+            from: outputCIImage.extent
+        ) else {
+            return nil
+        }
+
+        let outputImage = NSImage(cgImage: cgImage, size: size)
+        return outputImage
+    }
+    
+    // 文件夹操作
 
     /// SwifterSwift: Write NSImage to url.
     ///
@@ -822,7 +849,7 @@ public extension NSImage {
         try? imageData.write(to: url)
     }
     
-    /// 保存到硬盘（用户选择路径）
+    /// 保存到硬盘（用户来选择路径）
     func saveImage() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.png, .jpeg, .bmp, .heic, .heif]

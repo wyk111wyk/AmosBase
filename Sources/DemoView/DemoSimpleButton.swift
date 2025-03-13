@@ -42,9 +42,9 @@ public struct DemoSimpleButton<V: View>: View {
     @State private var sliderValue: CGFloat = 20
     @State private var starValue: Int = 2
     
-    @ViewBuilder let stateView: () -> V
-    public init(@ViewBuilder stateView: @escaping () -> V = { EmptyView() }) {
-        self.stateView = stateView
+    @ViewBuilder let hiddenView: () -> V
+    public init(@ViewBuilder hiddenView: @escaping () -> V = { EmptyView() }) {
+        self.hiddenView = hiddenView
         
         singleValue = allPickerContent.randomElement()!
         mutipleValue = [allPickerContent.randomElement()!]
@@ -64,7 +64,7 @@ public struct DemoSimpleButton<V: View>: View {
             .navigationDestination(
                 isPresented: $showPage,
                 destination: {
-                    stateView()
+                    hiddenView()
                 })
             .navigationTitle("UI元素")
             .buttonCircleNavi(role: .destructive)

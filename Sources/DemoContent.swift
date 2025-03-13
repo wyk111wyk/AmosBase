@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct DemoContent<V: View>: View {
+public struct DemoContent<V: View, C: View>: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
@@ -20,13 +20,17 @@ public struct DemoContent<V: View>: View {
     @State private var showWelcomePage = false
     
     let iCloudIdentifier: String
-    @ViewBuilder let stateView: () -> V
+    @ViewBuilder let hiddenView: () -> V
+    
+    @ViewBuilder let customView: () -> C
     public init(
         iCloudIdentifier: String = "",
-        @ViewBuilder stateView: @escaping () -> V = { EmptyView() }
+        @ViewBuilder hiddenView: @escaping () -> V = { EmptyView() },
+        @ViewBuilder customView: @escaping () -> C = { EmptyView() }
     ) {
         self.iCloudIdentifier = iCloudIdentifier
-        self.stateView = stateView
+        self.hiddenView = hiddenView
+        self.customView = customView
     }
     
     public var body: some View {
@@ -55,13 +59,7 @@ public struct DemoContent<V: View>: View {
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
                         NavigationLink(value: page) {
-                            SimpleCell(page.title, systemImage: page.icon) {
-                                if page.isOn {
-                                    Circle()
-                                        .frame(width: 14, height: 14)
-                                        .foregroundStyle(.green)
-                                }
-                            }
+                            SimpleCell(page.title, systemImage: page.icon)
                         }
                     }
                     Button {
@@ -77,6 +75,20 @@ public struct DemoContent<V: View>: View {
                             continueType: .dismiss)
                         .interactiveDismissDisabled(true)
                     }
+                }
+                Section("Cus - 控制页面") {
+                    #if os(iOS)
+                    let control = Page(id: 18, title: "Controls - 应用管理", icon: "app.badge.clock", isOn: SimpleDefaults[.control_startRestriction])
+                    NavigationLink(value: control) {
+                        SimpleCell(control.title, systemImage: control.icon) {
+                            if control.isOn {
+                                Circle()
+                                    .frame(width: 14, height: 14)
+                                    .foregroundStyle(.green)
+                            }
+                        }
+                    }
+                    #endif
                 }
                 Section("Web - 网络关联") {
                     ForEach(Page.webSection()) { page in
@@ -114,7 +126,7 @@ public struct DemoContent<V: View>: View {
                 switch selectedPage.id {
                 case 0: DemoSimpleToast()
                 case 1: DemoSimpleAlert()
-                case 2: DemoSimpleButton(stateView: stateView)
+                case 2: DemoSimpleButton(hiddenView: hiddenView)
                 case 3: DemoSimpleCard()
                 case 4:
                     #if !os(watchOS)
@@ -141,7 +153,7 @@ public struct DemoContent<V: View>: View {
                 case 16: DemoSimpleText(markdown: String.testText(.markdown02))
                 case 17: DemoSimpleWebLoad()
                 #if os(iOS)
-                case 18: SimpleFamilyControl()
+                case 18: customView()
                 #endif
                 case 19: DemoSimpleCrypto()
                 default: Text(selectedPage.title)
@@ -185,17 +197,17 @@ public struct DemoContent<V: View>: View {
     }
 }
 
-struct Page: Identifiable, Equatable, Hashable {
-    static func == (lhs: Page, rhs: Page) -> Bool {
+public struct Page: Identifiable, Equatable, Hashable {
+    public static func == (lhs: Page, rhs: Page) -> Bool {
         lhs.id == rhs.id
     }
     
-    let id: Int
+    public let id: Int
     let title: String
     let icon: String
     let isOn: Bool
     
-    init(
+    public init(
         id: Int,
         title: String,
         icon: String,
@@ -213,16 +225,12 @@ struct Page: Identifiable, Equatable, Hashable {
     }
     
     static func elementSection() -> [Self] {
-        var commonElements: [Self] =
+        let commonElements: [Self] =
         [.init(id: 2, title: "UI - 页面元素", icon: "uiwindow.split.2x1"),
          .init(id: 3, title: "Card - 卡片", icon: "rectangle.portrait.on.rectangle.portrait.angled"),
          .init(id: 5, title: "Device - 设备信息", icon: "iphone.gen3"),
          .init(id: 6, title: "Holder - 占位符", icon: "doc.text.image")
          ]
-        #if os(iOS)
-        commonElements.append(contentsOf: [
-            .init(id: 18, title: "Controls - 应用管理", icon: "app.badge.clock", isOn: SimpleDefaults[.control_startRestriction])])
-        #endif
         
         return commonElements
     }

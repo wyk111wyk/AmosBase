@@ -30,9 +30,19 @@ public extension Binding {
 extension GeometryProxy: @unchecked @retroactive Sendable {}
         
 public extension View {
+    /// 设置List的Section间距
     func sectionSpacing(_ spacing: CGFloat = 15) -> some View {
         #if os(iOS)
         self.listSectionSpacing(spacing)
+        #else
+        self
+        #endif
+    }
+    
+    /// 设置标题为inline
+    func inlineTitleForNavigationBar() -> some View {
+        #if os(iOS)
+        self.navigationBarTitleDisplayMode(.inline)
         #else
         self
         #endif

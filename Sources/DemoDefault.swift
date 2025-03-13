@@ -23,8 +23,8 @@ extension SimpleDefaults.Keys {
     static let feedback_hasShowReviewRequest = Key<Bool>("Feedback_HasShowReviewRequest", default: false)
     
     #if os(iOS)
-    static let control_startRestriction = Key<Bool>("control_StartRestriction", default: false)
-    static let control_selectedApp = Key<FamilyActivitySelection>("control_SelectedApp", default: FamilyActivitySelection())
+    public static let control_startRestriction = Key<Bool>("control_StartRestriction", default: false)
+    public static let control_selectedApp = Key<FamilyActivitySelection>("control_SelectedApp", default: FamilyActivitySelection())
     #endif
 }
 

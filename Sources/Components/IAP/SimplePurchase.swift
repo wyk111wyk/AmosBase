@@ -55,11 +55,11 @@ extension Product {
     }
     
     var type: SimpleProductType {
-        if id == "yearlyPremium" {
+        if id.hasPrefix("yearlyPremium") {
             return .yearly
-        }else if id == "monthlyPremium" {
+        }else if id.hasPrefix("monthlyPremium") {
             return .monthly
-        }else if id == "lifePremium" {
+        }else if id.hasPrefix("lifePremium") {
             return .lifetime
         }else {
             return .unknow

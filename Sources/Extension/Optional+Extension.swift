@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // MARK: - Methods (RawRepresentable, RawValue: Equatable)
 
@@ -77,6 +78,44 @@ public extension Optional {
         }else {
             return nil
         }
+    }
+}
+
+public extension Optional where Wrapped == Bool {
+    @ViewBuilder
+    func statusSign(
+        connectedText: String = "已连接",
+        unconnectedText: String = "无法连接",
+        unknownText: String = "未测试"
+    ) -> some View {
+        let color: Color =
+        if let isConnected = self { if isConnected { .green }else { .red } }
+        else { .gray }
+        HStack(alignment: .center, spacing: 6) {
+            if let isConnected = self {
+                if isConnected {
+                    Image(systemName: "link")
+                    Text(connectedText)
+                }else {
+                    Image(systemName: "personalhotspot.slash")
+                    Text(unconnectedText)
+                }
+            }else {
+                Circle()
+                    .frame(width: 8, height: 8)
+                    .foregroundStyle(color)
+                Text(unknownText)
+            }
+        }
+        .simpleTag(
+            .bg(
+                verticalPad: 4,
+                horizontalPad: 6,
+                contentFont: .footnote,
+                contentColor: color,
+                bgColor: color
+            )
+        )
     }
 }
 

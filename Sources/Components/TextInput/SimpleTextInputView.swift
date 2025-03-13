@@ -139,9 +139,7 @@ public struct SimpleTextInputView: View {
                 dismissPage()
             }
             .navigationTitle(pageName)
-            #if os(iOS)
-            .navigationBarTitleDisplayMode(.inline)
-            #endif
+            .inlineTitleForNavigationBar()
         }
     }
 }
