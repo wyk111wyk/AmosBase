@@ -114,6 +114,7 @@ public extension SFImage {
         SFImage(bundle: .module, packageResource: "photoProcess", ofType: "png")!
     }
     
+    // Logo
     static var logoBlack: SFImage {
         SFImage(bundle: .module, packageResource: "AmosLogoB", ofType: "png")!
     }
@@ -130,6 +131,7 @@ public extension SFImage {
         SFImage(bundle: .module, packageResource: "Logo-Black", ofType: "png")!
     }
     
+    // Demo
     static var lady01Image: SFImage {
         SFImage(bundle: .module, packageResource: "IMG_5151", ofType: "jpeg")!
     }
@@ -138,6 +140,15 @@ public extension SFImage {
         SFImage(bundle: .module, packageResource: "IMG_5153", ofType: "jpeg")!
     }
     
+    static var device: SFImage {
+        SFImage(bundle: .module, packageResource: "AmosTeslaDevice", ofType: "heic")!
+    }
+    
+    static var lal_nba: SFImage {
+        SFImage(bundle: .module, packageResource: "LAL_r", ofType: "png")!
+    }
+    
+    // IAP
     static var dimond: SFImage {
         SFImage(bundle: .module, packageResource: "dimond", ofType: "heic")!
     }

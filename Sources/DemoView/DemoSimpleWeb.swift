@@ -30,10 +30,8 @@ public struct DemoSimpleWeb: View {
                 isPushIn: true,
                 webType: .mobile
             )
-                #if os(iOS)
-                .navigationBarTitleDisplayMode(.inline)
-                #endif
-                .toolbar{ toolbarMenu() }
+            .inlineTitleForNavigationBar()
+            .toolbar{ toolbarMenu() }
         }
     }
 }

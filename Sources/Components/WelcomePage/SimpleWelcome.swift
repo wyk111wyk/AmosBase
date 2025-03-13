@@ -66,11 +66,11 @@ extension SimpleWelcome {
     private func headerView() -> some View {
         VStack(spacing: 12) {
             Text("Welcome to use", bundle: .module)
-                .font(.system(.largeTitle, design: .rounded))
+                .font(.system(.title, design: .rounded))
                 .foregroundStyle(.gray)
             if let appName {
                 Text(appName)
-                    .font(.system(.title, design: .rounded))
+                    .font(.system(.largeTitle, design: .rounded))
                     .foregroundStyle(.primary)
             }
         }
@@ -172,7 +172,7 @@ extension SimpleWelcome {
     #endif
 }
 
-#Preview("Action") {
+#Preview("按钮") {
     NavigationStack {
         SimpleWelcome<EmptyView>(
             allIntroItems: .allExamples,
@@ -186,7 +186,7 @@ extension SimpleWelcome {
 //    .frame(minWidth: 500, minHeight: 500)
 }
 
-#Preview("LinkPage") {
+#Preview("换页") {
     SimpleWelcome(
         allIntroItems: .allExamples,
         appName: "AmosBase",

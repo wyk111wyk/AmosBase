@@ -8,73 +8,6 @@
 import SwiftUI
 import StoreKit
 
-public struct SimplePurchaseItem: Identifiable {
-    public let id: UUID = UUID()
-    
-    let icon: Image
-    let title: String
-    let regular: String
-    let premium: String
-    
-    public init(icon: Image, title: String, regular: String, premium: String) {
-        self.icon = icon
-        self.title = title
-        self.regular = regular
-        self.premium = premium
-    }
-}
-
-public struct SimplePurchaseConfig {
-    let title: String?
-    let titleImage_w: Image
-    let titleImage_b: Image?
-    let imageCaption: String?
-    let devNote: String?
-    let allProductId: [String]
-    
-    public init(title: String?, titleImage_w: Image, titleImage_b: Image? = nil, imageCaption: String? = nil, devNote: String? = nil, allProductId: [String] = []) {
-        self.title = title
-        self.titleImage_w = titleImage_w
-        self.titleImage_b = titleImage_b
-        self.imageCaption = imageCaption
-        self.devNote = devNote
-        self.allProductId = allProductId
-    }
-}
-
-public extension StoreKit.Transaction {
-    var isPurchased: Bool {
-        (self.productType == .nonConsumable && self.revocationDate == nil) ||
-        (self.productType == .autoRenewable && self.expirationDate ?? .now > .now)
-    }
-}
-
-extension Product {
-    enum SimpleProductType {
-        case monthly, yearly, lifetime, unknow
-    }
-    
-    var type: SimpleProductType {
-        if id.hasPrefix("yearlyPremium") {
-            return .yearly
-        }else if id.hasPrefix("monthlyPremium") {
-            return .monthly
-        }else if id.hasPrefix("lifePremium") {
-            return .lifetime
-        }else {
-            return .unknow
-        }
-    }
-    
-    var isAvailable: Bool {
-        if self.type == .unknow {
-            return false
-        }else {
-            return true
-        }
-    }
-}
-
 public struct SimplePurchaseView: View {
     @Environment(\.dismiss) private var dismissPage
     @Environment(\.colorScheme) private var colorScheme
@@ -218,16 +151,6 @@ extension SimplePurchaseView {
         }
     }
     
-    private var premiumImage: some View {
-        if colorScheme == .light {
-            Image(sfImage: .premium)
-                .resizable().scaledToFit()
-        }else {
-            Image(sfImage: .premium_w)
-                .resizable().scaledToFit()
-        }
-    }
-    
     private var topLog: some View {
         if colorScheme == .light {
             ZStack {
@@ -258,6 +181,11 @@ extension SimplePurchaseView {
                 }
             }
         }
+    }
+    
+    @ViewBuilder
+    private func compareTable() -> some View {
+        PurchaseCompareTable(allItem: allItem)
     }
 }
 
@@ -296,30 +224,28 @@ extension SimplePurchaseView {
                 }
             }
             .frame(minHeight: 120, maxHeight: 140)
-            VStack(alignment: .leading, spacing: 5) {
-                PlainButton {
-                    if let yearlyProduct {
-                        startPurchaseAction(yearlyProduct)
-                    }
-                } label: {
-                    ZStack {
-                        Capsule()
-                            .foregroundStyle(.blue_06)
-                        VStack(spacing: 2) {
-                            Text("开始免费试用")
-                                .font(.title3.bold())
+            PlainButton {
+                if let yearlyProduct {
+                    startPurchaseAction(yearlyProduct)
+                }
+            } label: {
+                ZStack {
+                    Capsule()
+                        .foregroundStyle(.blue_06)
+                    VStack(spacing: 2) {
+                        Text("开始免费试用")
+                            .font(.title3.bold())
+                            .foregroundStyle(.white)
+                        if let yearlyProduct {
+                            Text("试用7天后 \(yearlyProduct.displayPrice)/年 续订")
+                                .font(.caption)
                                 .foregroundStyle(.white)
-                            if let yearlyProduct {
-                                Text("试用7天后 \(yearlyProduct.displayPrice)/年 续订")
-                                    .font(.caption)
-                                    .foregroundStyle(.white)
-                            }
                         }
                     }
-                    .frame(width: 260, height: 50)
                 }
-                .disabled(yearlyProduct == nil || yearlyProduct?.isAvailable == false)
+                .frame(width: 260, height: 50)
             }
+            .disabled(yearlyProduct == nil || yearlyProduct?.isAvailable == false)
             .font(.footnote)
             .foregroundStyle(.secondary)
         }
@@ -447,100 +373,6 @@ extension SimplePurchaseView {
     }
     
     @ViewBuilder
-    private func compareTable() -> some View {
-        let height: CGFloat = 93*allItem.count+40
-        GeometryReader { proxy in
-            let titleWidth: CGFloat = 100
-            let contentWidth: CGFloat = min(230, proxy.size.width * 3 / 9)
-            VStack(alignment: .leading, spacing: 15) {
-                HStack(spacing: 0) {
-                    Spacer()
-                    Divider()
-                    Text("普通版")
-                        .font(.callout)
-                        .fontWeight(.light)
-                        .foregroundStyle(.secondary)
-                        .frame(width: contentWidth)
-                        .padding(.horizontal, 6)
-                    if horizontalSizeClass == .regular {
-                        Divider()
-                    }
-                    ZStack {
-                        premiumImage
-                            .frame(height: 14)
-                    }
-                    .frame(width: contentWidth)
-                }
-                Divider()
-                ForEach(allItem) { item in
-                    compareCell(
-                        item,
-                        titleWidth: titleWidth,
-                        contentWidth: contentWidth
-                    )
-                        .frame(height: 78)
-                }
-            }
-        }
-        .frame(height: height)
-        .contentBackground(
-            color: colorScheme == .light ? .white : .black,
-            withMaterial: false
-        )
-        .padding(.bottom)
-    }
-    
-    private func compareCell(
-        _ item: SimplePurchaseItem,
-        titleWidth: CGFloat,
-        contentWidth: CGFloat
-    ) -> some View {
-        HStack(spacing: 0) {
-            HStack(spacing: 6) {
-                VStack(spacing: 2) {
-                    item.icon
-                        .imageModify(length: 45)
-                    Text(item.title)
-                        .font(.callout)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.primary)
-                        .minimumScaleFactor(0.8)
-                }
-            }
-            Spacer()
-            Divider()
-            ZStack {
-                Text(item.regular)
-                    .simpleTag(
-                        .border(
-                            verticalPad: 6,
-                            horizontalPad: 6,
-                            cornerRadius: 6,
-                            contentFont: .callout.weight(.regular),
-                            contentColor: .secondary
-                        )
-                    )
-            }
-                .frame(width: contentWidth)
-                .padding(.horizontal, 6)
-            ZStack {
-                Text(item.premium)
-                    .simpleTag(
-                        .full(
-                            verticalPad: 6,
-                            horizontalPad: 6,
-                            cornerRadius: 6,
-                            contentFont: .callout.weight(.medium),
-                            contentColor: .white,
-                            bgColor: .init(white: 0.18)
-                        )
-                    )
-            }
-            .frame(width: contentWidth)
-        }
-    }
-    
-    @ViewBuilder
     private func introContent() -> some View {
         if let devNote = config.devNote {
             let textColor: Color = .hexColor("f1f2f4")
@@ -639,24 +471,27 @@ extension SimplePurchaseView {
 #Preview {
     var allItem: [SimplePurchaseItem] {
         [
-            SimplePurchaseItem(icon: Image("ipa-feature5"), title: "学习计划", regular: "仅限预设", premium: "自由创建和更改"),
-            SimplePurchaseItem(icon: Image("ipa-feature4"), title: "作品详情", regular: "解析、佳句", premium: "介绍、译文、评论、百科"),
-            SimplePurchaseItem(icon: Image("ipa-feature3"), title: "诵读引擎", regular: "系统合成音效", premium: "专项训练的神经网络引擎"),
-            SimplePurchaseItem(icon: Image("ipa-feature6"), title: "作品成图", regular: "无法生成图片", premium: "多维定制生成诗词图片"),
-            SimplePurchaseItem(icon: Image("ipa-feature2"), title: "数据同步", regular: "仅限本地使用", premium: "多设备无缝实时同步使用"),
-            SimplePurchaseItem(icon: Image("ipa-feature1"), title: "多端使用", regular: "多平台", premium: "单次购买 · 多端同享")
+            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "学习计划", regular: "仅限预设", premium: "自由创建和更改"),
+            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品详情", regular: "解析、佳句", premium: "介绍、译文、评论、百科"),
+            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "诵读引擎", regular: "系统合成音效", premium: "专项训练的神经网络引擎"),
+            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品成图", regular: "无法生成图片", premium: "多维定制生成诗词图片"),
+            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "数据同步", regular: "仅限本地使用", premium: "多设备无缝实时同步使用"),
+            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "多端使用", regular: "多平台", premium: "单次购买 · 多端同享")
         ]
     }
     SimplePurchaseView(
         allItem: allItem,
         config: .init(
             title: "体验完整文学魅力",
-            titleImage_w: Image(sfImage: .logoNameBlack),
-            titleImage_b: Image(sfImage: .logoNameWhite),
+            titleImage_w: Image(sfImage: .device),
+            titleImage_b: Image(sfImage: .device),
             imageCaption: "单次购买 · 多端同享",
             devNote: "我们的愿景是希望用App解决生活中的“小问题”。这意味着对日常用户而言，免费版本也必须足够好用。\n10万诗词文章离线可查，核心的阅读、检索、学习体验完整而简洁，加上现代化的设计和全平台的体验完全开放。\n而高级版本又将解锁一系列新的特性。让诗词赏析的体验进一步提升，更私人、更灵活、更智能、更值得。",
             allProductId: ["lifePremium","monthlyPremium","yearlyPremium"]
         )
     )
     .environment(\.locale, .zhHans)
+    #if os(macOS)
+    .frame(height: 800)
+    #endif
 }
