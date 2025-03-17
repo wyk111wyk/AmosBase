@@ -216,12 +216,10 @@ extension SimpleDevice {
     }
     
     /// 是否我自己的设备
-    public static func isAmosDevice() -> Bool {
+    public static func isAmosDevice(isDebug: Bool = false) -> Bool {
         guard let deviceIdentifier = getDeviceIdentifier() else {
             return false
         }
-        
-//        debugPrint("deviceIdentifier: " + deviceIdentifier)
         
         let myDevice = [
             "35138123-122A-4E76-AD0C-9394FD458D6F", //iPhone 15 Pro Max
@@ -229,7 +227,14 @@ extension SimpleDevice {
             "ECA17554-E72E-5FE4-A2F0-99897557EB1A", //Mac mini M4
             "9B0B1092-30C7-45BF-B8CE-99FCE5B581C4" //Aurora 13 mini
         ]
-        return myDevice.contains(deviceIdentifier)
+        let isMyDevice = myDevice.contains(deviceIdentifier)
+        
+        if isDebug {
+            debugPrint("deviceIdentifier: " + deviceIdentifier)
+            debugPrint("isMyDevice: " + isMyDevice.toString())
+        }
+        
+        return isMyDevice
     }
     
     #if !os(watchOS)
