@@ -29,45 +29,6 @@ import WatchKit
 #endif
 
 public class SimpleDevice: NSObject {
-    public static func playSuccessHaptic() {
-#if os(iOS)
-        playNotificationHaptic(.success)
-#elseif os(watchOS)
-        playWatchHaptic(.success)
-#endif
-    }
-    
-    public static func playFailureHaptic() {
-#if os(iOS)
-        playNotificationHaptic(.error)
-#elseif os(watchOS)
-        playWatchHaptic(.failure)
-#endif
-    }
-    
-    public static func playHeavyHaptic() {
-#if os(iOS)
-        playFeedbackHaptic(.heavy)
-#elseif os(watchOS)
-        playWatchHaptic(.notification)
-#endif
-    }
-    
-    public static func playMediumHaptic() {
-#if os(iOS)
-        playFeedbackHaptic(.medium)
-#elseif os(watchOS)
-        playWatchHaptic(.retry)
-#endif
-    }
-    
-    public static func playLightHaptic() {
-#if os(iOS)
-        playFeedbackHaptic(.light)
-#elseif os(watchOS)
-        playWatchHaptic(.click)
-#endif
-    }
     
     /// 打开系统设置 -  本App的页面
     ///
@@ -83,32 +44,6 @@ public class SimpleDevice: NSObject {
         }
         #endif
     }
-    
-    #if os(iOS)
-    /// 设备进行震动 -  成功、失败
-    ///
-    /// 可自动判断设备是否支持
-    public static func playNotificationHaptic(_ type: UINotificationFeedbackGenerator.FeedbackType) {
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(type)
-    }
-    
-    /// 设备进行震动 - 强、弱
-    ///
-    /// 可自动判断设备是否支持
-    public static func playFeedbackHaptic(_ style: UIImpactFeedbackGenerator.FeedbackStyle) {
-        let generator = UIImpactFeedbackGenerator(style: style)
-        generator.impactOccurred()
-    }
-    #elseif canImport(WatchKit)
-    
-    /// 手表进行震动和声音 -  根据传入状态
-    ///
-    /// 该方法仅支持手表：notification、directionUp、directionDown、success、failure、retry、start、stop、click
-    public static func playWatchHaptic(_ type: WKHapticType) {
-        WKInterfaceDevice.current().play(type)
-    }
-    #endif
     
     #if os(iOS)
     

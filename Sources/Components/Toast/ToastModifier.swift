@@ -213,9 +213,9 @@ public struct ToastModifier<Item: Equatable>: ViewModifier{
         if let toastView = toast(), withHaptic {
             switch toastView.type {
             case .success:
-                SimpleDevice.playSuccessHaptic()
+                SimpleHaptic.playSuccessHaptic()
             case .error:
-                SimpleDevice.playFailureHaptic()
+                SimpleHaptic.playFailureHaptic()
             default:
                 break
             }

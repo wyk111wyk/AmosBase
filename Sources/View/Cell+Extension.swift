@@ -251,5 +251,5 @@ public struct SimpleCell<V: View>: View {
 }
 
 #Preview("Cell") {
-    DemoSimpleButton()
+    DemoSimpleUIElement()
 }

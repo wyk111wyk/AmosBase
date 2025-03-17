@@ -8,6 +8,16 @@
 import Foundation
 import FamilyControls
 
+/*
+ 一些常用功能添加
+ 
+ typealias SimpleDefaults = _SimpleDefaults
+ typealias SimpleSetting = _SimpleSetting
+ typealias SimpleCell = _SimpleCell
+ typealias PlainButton = _PlainButton
+ 
+ */
+
 extension SimpleDefaults.Keys {
     static let colorDisplayType = Key<String>("Library_ColorDisplayType", default: "small", iCloud: true)
     

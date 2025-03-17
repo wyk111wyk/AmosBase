@@ -13,7 +13,7 @@ public enum SimpleDefaults {
 	import SimpleDefaults
 
 	extension SimpleDefaults.Keys {
-	 static let quality = Key<Double>("quality", default: 0.8)
+	   static let quality = Key<Double>("quality", default: 0.8)
 	}
      
     @SimpleSetting(.quality) var quality

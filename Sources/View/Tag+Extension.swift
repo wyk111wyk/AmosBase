@@ -126,7 +126,7 @@ struct TagBorder: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .font(config.contentFont)
+            .font(config.contentFont.monospacedDigit())
             .padding(.vertical, config.verticalPad)
             .padding(.horizontal, config.horizontalPad)
             .foregroundStyle(config.contentColor)

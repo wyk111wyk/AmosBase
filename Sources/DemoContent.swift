@@ -126,7 +126,7 @@ public struct DemoContent<V: View, C: View>: View {
                 switch selectedPage.id {
                 case 0: DemoSimpleToast()
                 case 1: DemoSimpleAlert()
-                case 2: DemoSimpleButton(hiddenView: hiddenView)
+                case 2: DemoSimpleUIElement(hiddenView: hiddenView)
                 case 3: DemoSimpleCard()
                 case 4:
                     #if !os(watchOS)
@@ -156,6 +156,8 @@ public struct DemoContent<V: View, C: View>: View {
                 case 18: customView()
                 #endif
                 case 19: DemoSimpleCrypto()
+                case 20: DemoSimpleHaptic()
+                case 21: DemoSimpleButton()
                 default: Text(selectedPage.title)
                 }
             }
@@ -227,8 +229,10 @@ public struct Page: Identifiable, Equatable, Hashable {
     static func elementSection() -> [Self] {
         let commonElements: [Self] =
         [.init(id: 2, title: "UI - 页面元素", icon: "uiwindow.split.2x1"),
+         .init(id: 21, title: "Button - 按钮", icon: "rectangle.inset.topleft.filled"),
          .init(id: 3, title: "Card - 卡片", icon: "rectangle.portrait.on.rectangle.portrait.angled"),
          .init(id: 5, title: "Device - 设备信息", icon: "iphone.gen3"),
+         .init(id: 20, title: "Haptic - 震动", icon: "iphone.homebutton.radiowaves.left.and.right"),
          .init(id: 6, title: "Holder - 占位符", icon: "doc.text.image")
          ]
         

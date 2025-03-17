@@ -282,5 +282,7 @@ public struct CircularProgressStyle: ProgressViewStyle {
         .padding(.horizontal)
     }
     .padding()
-    .frame(minWidth: 500, minHeight: 500)
+    #if os(macOS)
+    .frame(height: 800)
+    #endif
 }
