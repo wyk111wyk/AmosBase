@@ -78,7 +78,7 @@ public struct DemoContent<V: View, C: View>: View {
                 }
                 Section("Cus - 控制页面") {
                     #if os(iOS)
-                    let control = Page(id: 18, title: "Controls - 应用管理", icon: "app.badge.clock", isOn: SimpleDefaults[.control_startRestriction])
+                    let control = Page(id: 18, title: "Controls - 应用管理", icon: "app.badge.clock")
                     NavigationLink(value: control) {
                         SimpleCell(control.title, systemImage: control.icon) {
                             if control.isOn {

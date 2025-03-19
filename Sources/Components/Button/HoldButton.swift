@@ -8,6 +8,8 @@
 import SwiftUI
 
 public struct SimpleHoldButton<V: View>: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
     @State private var progress: CGFloat = 0 // 当前进度，范围 0-1
     @State private var isPressing: Bool = false // 是否正在按住
     @State private var isCompleted: Bool = false // 是否完成
@@ -139,7 +141,7 @@ public struct SimpleHoldButton<V: View>: View {
 #Preview {
     @Previewable @State var buttonColor: Color = .blue
     SimpleHoldButton(
-        isDisabled: true,
+        isDisabled: false,
         buttonView: {
             Text("按住")
                 .foregroundColor(.white)

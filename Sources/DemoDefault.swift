@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import FamilyControls
 
 /*
  一些常用功能添加
@@ -31,39 +30,7 @@ extension SimpleDefaults.Keys {
     
     static let feedback_account = Key<SimpleFeedbackModel?>("Feedback_Account", iCloud: true)
     static let feedback_hasShowReviewRequest = Key<Bool>("Feedback_HasShowReviewRequest", default: false)
-    
-    #if os(iOS)
-    public static let control_startRestriction = Key<Bool>("control_StartRestriction", default: false)
-    public static let control_selectedApp = Key<FamilyActivitySelection>("control_SelectedApp", default: FamilyActivitySelection())
-    #endif
 }
-
-#if os(iOS)
-extension FamilyActivitySelection: SimpleDefaults.Serializable {
-    public static let bridge = SimpleFamilyActivitySelectionBridge()
-}
-
-public struct SimpleFamilyActivitySelectionBridge: SimpleDefaults.Bridge {
-    public typealias Value = FamilyActivitySelection
-    public typealias Serializable = Data
-
-    public func serialize(_ value: Value?) -> Serializable? {
-        guard let value else {
-            return nil
-        }
-
-        return value.encode()
-    }
-
-    public func deserialize(_ object: Serializable?) -> Value? {
-        guard let object else {
-            return nil
-        }
-
-        return object.decode(type: Value.self)
-    }
-}
-#endif
 
 extension SimpleFeedbackModel: SimpleDefaults.Serializable {
     public static let bridge = SimpleFeedbackBridge()
