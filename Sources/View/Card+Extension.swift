@@ -73,7 +73,6 @@ public struct SimpleCard<
                 }
                .scrollTargetBehavior(.paging)
                .scrollPosition(id: $currentPositionID)
-//               .frame(width: width, height: height + 30)
                 
                 if BottomView.self != EmptyView.self {
                     bottomView()

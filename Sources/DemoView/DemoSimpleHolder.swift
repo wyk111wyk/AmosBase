@@ -36,6 +36,7 @@ struct DemoSimplePlaceholder: View {
         .sheet(isPresented: $showPickerSheet) {
             pickerSheet()
                 .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
         }
     }
     
@@ -54,8 +55,10 @@ struct DemoSimplePlaceholder: View {
             subtitle: "Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle",
             content: "content content content content content content content content content content content content content content content content"
         ) {
-            Button("Button") {
-                dismissPage()
+            Button {
+                showPickerSheet = true
+            }label: {
+                Label("查看类别", systemImage: "rectangle.grid.2x2.fill")
             }
             .buttonStyle(.borderedProminent)
         }

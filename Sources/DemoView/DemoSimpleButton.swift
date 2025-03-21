@@ -22,7 +22,7 @@ public struct DemoSimpleButton: View {
         NavigationStack {
             Form {
                 Section {
-                    SimpleTriggerButton(
+                    SimpleToggleButton(
                         title: "点击切换：\(isPresent.toString())",
                         isPresented: $isPresent
                     )
@@ -108,7 +108,7 @@ public struct DemoSimpleButton: View {
                 isPresented: $showConfirm,
                 titleVisibility: .visible
             ) {
-                SimpleTriggerButton(
+                SimpleToggleButton(
                     title: "切换载入",
                     isPresented: $isLoading
                 )

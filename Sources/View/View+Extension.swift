@@ -32,6 +32,25 @@ public extension Binding {
 extension GeometryProxy: @unchecked @retroactive Sendable {}
 
 public extension View {
+    /// SF Symbol的跳跃动画
+    func bounceEffect(
+        effect: BounceSymbolEffect = .bounce.byLayer,
+        isActive: Bool? = nil
+    ) -> some View {
+        if #available(iOS 18.0, macOS 15.0, watchOS 10.0, *) {
+            if let isActive {
+                return self.symbolEffect(
+                    effect,
+                    isActive: isActive
+                )
+            }else {
+                return self.symbolEffect(effect)
+            }
+        } else {
+            return self
+        }
+    }
+    
     /// 设置List的Section间距
     func sectionSpacing(_ spacing: CGFloat = 15) -> some View {
 #if os(iOS)

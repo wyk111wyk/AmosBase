@@ -101,7 +101,7 @@ public struct DemoSimpleUIElement<V: View>: View {
             }.simpleSwipe(allowsFullSwipe: true, isFavor: isFavor, favorAction: {
                 isFavor.toggle()
             })
-            Button {
+            PlainButton {
                 SimpleAudioHelper.playRightAudio()
             } label: {
                 SimpleCell(

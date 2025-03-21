@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// 简单的开关，点击后切换 isPresented 的值
-public struct SimpleTriggerButton<V: View>: View {
+public struct SimpleToggleButton<V: View>: View {
     let title: String?
     let systemImage: String?
     

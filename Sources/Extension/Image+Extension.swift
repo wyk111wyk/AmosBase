@@ -57,13 +57,23 @@ public extension Image {
     func imageModify(
         color: Color? = nil,
         mode: ContentMode = .fit,
-        length: CGFloat? = nil
+        length: CGFloat? = nil,
+        width: CGFloat? = nil,
+        height: CGFloat? = nil
     ) -> some View {
-        self
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .foregroundStyle(color ?? Color.primary)
-            .frame(width: length ?? .infinity, height: length ?? .infinity)
+        let width: CGFloat = width ?? (length ?? .infinity)
+        let height: CGFloat = height ?? (length ?? .infinity)
+        
+        if let color {
+            return self
+                .resizable().scaledToFit()
+                .frame(width: width, height: height)
+                .foregroundStyle(color)
+        }else {
+            return self
+                .resizable().scaledToFit()
+                .frame(width: width, height: height)
+        }
     }
 }
 
@@ -131,23 +141,6 @@ public extension SFImage {
         SFImage(bundle: .module, packageResource: "Logo-Black", ofType: "png")!
     }
     
-    // Demo
-    static var lady01Image: SFImage {
-        SFImage(bundle: .module, packageResource: "IMG_5151", ofType: "jpeg")!
-    }
-    
-    static var lady02Image: SFImage {
-        SFImage(bundle: .module, packageResource: "IMG_5153", ofType: "jpeg")!
-    }
-    
-    static var device: SFImage {
-        SFImage(bundle: .module, packageResource: "AmosTeslaDevice", ofType: "heic")!
-    }
-    
-    static var lal_nba: SFImage {
-        SFImage(bundle: .module, packageResource: "LAL_r", ofType: "png")!
-    }
-    
     // IAP
     static var dimond: SFImage {
         SFImage(bundle: .module, packageResource: "dimond", ofType: "heic")!
@@ -171,6 +164,36 @@ public extension SFImage {
     
     static var lock: SFImage {
         SFImage(bundle: .module, packageResource: "lock", ofType: "heic")!
+    }
+    
+    
+    // Demo
+    static var lady01Image: SFImage {
+        SFImage(bundle: .module, packageResource: "IMG_5151", ofType: "jpeg")!
+    }
+    
+    static var lady02Image: SFImage {
+        SFImage(bundle: .module, packageResource: "IMG_5153", ofType: "jpeg")!
+    }
+    
+    static var device: SFImage {
+        SFImage(bundle: .module, packageResource: "AmosTeslaDevice", ofType: "heic")!
+    }
+    
+    static var lal_nba: SFImage {
+        SFImage(bundle: .module, packageResource: "LAL_r", ofType: "png")!
+    }
+    
+    static var randomGirl: SFImage {
+        girl(Int.random(in: 1...20))
+    }
+    
+    static func girl(_ index: Int = 1) -> SFImage {
+        guard index > 0 && index < 21 else {
+            return SFImage(bundle: .module, packageResource: "Girl_1", ofType: "heic")!
+        }
+        
+        return SFImage(bundle: .module, packageResource: "Girl_\(index)", ofType: "heic")!
     }
 }
 

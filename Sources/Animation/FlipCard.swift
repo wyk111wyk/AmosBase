@@ -19,11 +19,11 @@ struct FlipCard: View {
     
     var body: some View {
         ZStack {
-            Image(sfImage: .lady02Image)
+            Image(sfImage: .girl(1))
                 .resizable().scaledToFit()
                 .frame(height: 400)
                 .zIndex(isFlipped02 ? 1 : 0)
-            Image(sfImage: .lady01Image)
+            Image(sfImage: .girl(2))
                 .resizable().scaledToFit()
                 .frame(height: 400)
         }
@@ -34,18 +34,32 @@ struct FlipCard: View {
             axis: (x: 0, y: 1, z: 0)
         )
         .onTapGesture {
-            withAnimation(.spring(duration: duration)) {
-                isFlipped01.toggle()
-            }
-            Timer.scheduledTimer(withTimeInterval: (duration / 4), repeats: false) { _ in
-                withAnimation(.spring(duration: duration)) {
-                    isFlipped02.toggle()
-                }
-            }
+            flipCard()
         }
         .overlay(alignment: .bottom) {
-            Text("点击卡片反转")
-                .offset(y: 80)
+            PlainButton {
+                flipCard()
+            } label: {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundStyle(.blue)
+                    .frame(width: 200, height: 48)
+                    .overlay(alignment: .center) {
+                        Text("点击卡片反转")
+                            .foregroundStyle(.white)
+                    }
+            }
+                .offset(y: 120)
+        }
+    }
+    
+    private func flipCard() {
+        withAnimation(.spring(duration: duration)) {
+            isFlipped01.toggle()
+        }
+        Timer.scheduledTimer(withTimeInterval: (duration / 4), repeats: false) { _ in
+            withAnimation(.spring(duration: duration)) {
+                isFlipped02.toggle()
+            }
         }
     }
 }

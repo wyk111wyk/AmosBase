@@ -17,6 +17,8 @@ public struct SimpleWelcome<V: View>: View {
     @Environment(\.dismiss) private var dismissPage
     
     let allIntroItems: [SimpleWelcomeItem]
+    @State private var showItems: [SimpleWelcomeItem] = []
+    @State private var showButton: Bool = false
     
     let appName: String?
     let buttonName: String?
@@ -45,18 +47,51 @@ public struct SimpleWelcome<V: View>: View {
     public var body: some View {
         NavigationStack {
             ScrollView {
-                VStack {
-                    headerView()
-                    VStack(alignment: .leading) {
-                        ForEach(allIntroItems) { item in
-                            SimpleWelcome.contentCell(item)
+                ScrollViewReader { proxy in
+                    VStack {
+                        headerView()
+                        VStack(alignment: .leading) {
+                            ForEach(showItems) { item in
+                                SimpleWelcome.contentCell(item)
+                                    .id(item.id)
+                                    .transition(.opacity.combined(with: .offset(y: 100)))
+                            }
+                        }
+                        .contentBackground(verticalPadding: 8, isAppear: showItems.isNotEmpty)
+                        .padding(.horizontal)
+                        .animation(.linear(duration: 0.5), value: showItems)
+                    }
+                    .onChange(of: showItems) {
+                        if showItems.count == allIntroItems.count {
+                            withAnimation {
+                                proxy.scrollTo(showItems.first?.id, anchor: .bottom)
+                                showButton = true
+                            }
+                        }else {
+                            withAnimation {
+                                proxy.scrollTo(showItems.last?.id, anchor: .bottom)
+                            }
                         }
                     }
                 }
             }
             .scrollIndicators(.hidden)
             .safeAreaInset(edge: .bottom) {
-                footerView()
+                if showButton {
+                    footerView()
+                }
+            }
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { showFeatureswithDelay()
+                }
+            }
+        }
+    }
+    
+    private func showFeatureswithDelay() {
+        for (index, item) in allIntroItems.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + index * 1.2) { showItems.append(item)
+                
             }
         }
     }
@@ -66,12 +101,14 @@ extension SimpleWelcome {
     private func headerView() -> some View {
         VStack(spacing: 12) {
             Text("Welcome to use", bundle: .module)
-                .font(.system(.title, design: .rounded))
-                .foregroundStyle(.gray)
+                .font(.system(.body, design: .rounded))
+                .foregroundStyle(.gray.opacity(0.8))
             if let appName {
-                Text(appName)
-                    .font(.system(.largeTitle, design: .rounded))
-                    .foregroundStyle(.primary)
+                AnimaTextShimmer(
+                    textContent: appName,
+                    textColor: .primary,
+                    textFont: .largeTitle
+                )
             }
         }
         .padding(.top, 40)
@@ -92,19 +129,22 @@ extension SimpleWelcome {
                     .imageModify(length: 50)
                     .padding(.trailing)
             }
-            VStack(alignment: .leading, spacing: 6) {
-                Text(LocalizedStringKey(item.title))
-                    .font(.title2)
-                    .fontWeight(.medium)
-                    .foregroundColor(.primary)
+            VStack(alignment: .leading, spacing: 5) {
+                HStack {
+                    Text(LocalizedStringKey(item.title))
+                        .font(.title3)
+                        .fontWeight(.medium)
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
                 Text(LocalizedStringKey(item.content))
-                    .font(.body)
+                    .font(.callout)
                     .foregroundColor(.secondary)
             }
             .offset(y:-3)
         }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 28)
+        .padding(.vertical, 8)
+        .padding(.horizontal, 20)
     }
 }
 
@@ -118,13 +158,13 @@ extension SimpleWelcome {
                 privateLink()
                 #endif
                 SimpleLogoView()
-                    .padding(.vertical, 8)
+                    .padding(.vertical, 4)
             }
             Spacer()
         }
         .padding(.top, 18)
         #if !os(watchOS)
-        .background(.regularMaterial.opacity(0.9))
+        .background(.regularMaterial.opacity(0.95).shadow(.drop(radius: 5)))
         #endif
     }
     

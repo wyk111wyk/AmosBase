@@ -161,10 +161,12 @@ public struct SimpleColorPicker: View {
 
 extension SimpleColorPicker {
     private func switchDisplay() {
-        let showType = ShowType(rawValue: type)
-        if showType == .small { type = "big" }
-        else if showType == .big { type = "side" }
-        else { type = "small" }
+        withAnimation {
+            let showType = ShowType(rawValue: type)
+            if showType == .small { type = "big" }
+            else if showType == .big { type = "side" }
+            else { type = "small" }
+        }
     }
     
     private func sideDisplay() -> some View {

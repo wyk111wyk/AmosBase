@@ -15,29 +15,31 @@ public struct ImageDetailView: View {
     var image: Image
     var imageOpt: Image?
     var caption: String?
+    var captionLine: Int?
     
     @State var dragOffset: CGSize = CGSize.zero
     @State var dragOffsetPredicted: CGSize = CGSize.zero
     
     public init(
         image: SFImage,
-        caption: String? = nil
+        caption: String? = nil,
+        captionLine: Int? = 4
     ) {
         self.image = .init(sfImage: image)
         self.imageOpt = nil
         self.caption = caption
+        self.captionLine = captionLine
     }
     
     public init(
         image: Image?,
-        caption: String? = nil
+        caption: String? = nil,
+        captionLine: Int? = 4
     ) {
-        self.image = .init(
-            packageResource: "photoProcess",
-            ofType: "png"
-        )
+        self.image = image ?? .init(sfImage: .placeHolder)
         self.imageOpt = image
         self.caption = caption
+        self.captionLine = captionLine
     }
     
     func getImage() -> Image {
@@ -63,16 +65,11 @@ public struct ImageDetailView: View {
         .overlay(alignment: .bottom) {
             if let caption = caption, !caption.isEmpty {
                 Text(caption)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.88))
                     .multilineTextAlignment(.center)
-                    .padding(.vertical, 8)
+                    .lineLimit(captionLine)
+                    .padding(.bottom, 15)
                     .padding(.horizontal, 15)
-                    .background {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(.regularMaterial)
-                    }
-                    .padding(.horizontal)
-                    .padding(.bottom)
             }
         }
         .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
@@ -85,8 +82,8 @@ public struct ImageDetailView: View {
 
 #Preview {
     ImageDetailView(
-        image: nil,
-        caption: "I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan I am IronMan"
+        image: .randomGirl,
+        caption: "I am IronMan"
     )
 }
 #endif

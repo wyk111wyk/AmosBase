@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public struct SimpleWelcomeItem: Identifiable {
+public struct SimpleWelcomeItem: Identifiable, Equatable {
     public var id: UUID
     
     let title: String

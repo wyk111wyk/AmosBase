@@ -151,26 +151,35 @@ public extension View {
 }
 
 // MARK: - 预览画面
-struct ContentView: View {
+struct ScoreChangeDemo: View {
     @State private var score = 10
 
     var body: some View {
         VStack(spacing: 20) {
             Text("Score: \(score)")
-                .simpleTag(.bg(contentFont: .body))
+                .simpleTag(.bg(contentFont: .title))
+                .contentTransition(.numericText())
                 .scoreChangeAnimation(
                     currentScore: score
                 )
                 .padding(.top, 30)
+                .frame(height: 100)
 
-            Button("点击增加数字") {
+            PlainButton {
                 score += Int.random(in: 2...10)
+            } label: {
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundStyle(.blue)
+                    .frame(width: 200, height: 48)
+                    .overlay(alignment: .center) {
+                        Text("点击增加数字")
+                            .foregroundStyle(.white)
+                    }
             }
-            .buttonStyle(.bordered)
         }
     }
 }
 
 #Preview {
-    ContentView()
+    ScoreChangeDemo()
 }

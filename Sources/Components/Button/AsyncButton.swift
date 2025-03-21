@@ -49,5 +49,6 @@ public struct SimpleAsyncButton<V: View>: View {
                 .contentShape(Rectangle())
             }
         }
+        .buttonStyle(.borderless)
     }
 }

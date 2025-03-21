@@ -24,7 +24,7 @@ public struct DemoSimpleDevice: View {
     public var body: some View {
         Form {
             Section("设备操作") {
-                Button {
+                PlainButton {
                     SimpleDevice.openSystemSetting()
                 } label: {
                     SimpleCell("跳转系统设置", systemImage: "gear")

@@ -56,6 +56,20 @@ public struct DemoContent<V: View, C: View>: View {
                         }
                     }
                 }
+                Section("Cus - 控制页面") {
+                    #if os(iOS)
+                    let control = Page(id: 18, title: "Controls - 应用管理", icon: "app.badge.clock")
+                    NavigationLink(value: control) {
+                        SimpleCell(control.title, systemImage: control.icon) {
+                            if control.isOn {
+                                Circle()
+                                    .frame(width: 14, height: 14)
+                                    .foregroundStyle(.green)
+                            }
+                        }
+                    }
+                    #endif
+                }
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
                         NavigationLink(value: page) {
@@ -75,20 +89,6 @@ public struct DemoContent<V: View, C: View>: View {
                             continueType: .dismiss)
                         .interactiveDismissDisabled(true)
                     }
-                }
-                Section("Cus - 控制页面") {
-                    #if os(iOS)
-                    let control = Page(id: 18, title: "Controls - 应用管理", icon: "app.badge.clock")
-                    NavigationLink(value: control) {
-                        SimpleCell(control.title, systemImage: control.icon) {
-                            if control.isOn {
-                                Circle()
-                                    .frame(width: 14, height: 14)
-                                    .foregroundStyle(.green)
-                            }
-                        }
-                    }
-                    #endif
                 }
                 Section("Web - 网络关联") {
                     ForEach(Page.webSection()) { page in
@@ -158,6 +158,8 @@ public struct DemoContent<V: View, C: View>: View {
                 case 19: DemoSimpleCrypto()
                 case 20: DemoSimpleHaptic()
                 case 21: DemoSimpleButton()
+                case 22: DemoSimpleAnimation()
+                case 23: DemoSFSymbol()
                 default: Text(selectedPage.title)
                 }
             }
@@ -229,6 +231,8 @@ public struct Page: Identifiable, Equatable, Hashable {
     static func elementSection() -> [Self] {
         let commonElements: [Self] =
         [.init(id: 2, title: "UI - 页面元素", icon: "uiwindow.split.2x1"),
+         .init(id: 22, title: "Animation - 动画", icon: "play.circle"),
+         .init(id: 23, title: "SF Symbols", icon: "heart.text.clipboard"),
          .init(id: 21, title: "Button - 按钮", icon: "rectangle.inset.topleft.filled"),
          .init(id: 3, title: "Card - 卡片", icon: "rectangle.portrait.on.rectangle.portrait.angled"),
          .init(id: 5, title: "Device - 设备信息", icon: "iphone.gen3"),
@@ -254,7 +258,7 @@ public struct Page: Identifiable, Equatable, Hashable {
          .init(id: 13, title: "Units - 单位", icon: "gauge.with.dots.needle.33percent"),
          .init(id: 14, title: "Data - 编解码", icon: "externaldrive"),
          .init(id: 15, title: "NL - 自然语言", icon: "character.book.closed"),
-         .init(id: 16, title: "Text - 可选文字", icon: "richtext.page"),
+         .init(id: 16, title: "Text - MD可选文字", icon: "richtext.page"),
          .init(id: 19, title: "AES - 加解密", icon: "lock.shield")
         ]
     }
@@ -262,4 +266,7 @@ public struct Page: Identifiable, Equatable, Hashable {
 
 #Preview {
     DemoContent()
+    #if os(macOS)
+    .frame(minWidth: 700, minHeight: 800)
+    #endif
 }

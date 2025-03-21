@@ -190,7 +190,8 @@ public struct SimplePlaceholder<V: View>: View {
     var maxWidth: CGFloat
     @ViewBuilder let buttonView: () -> V
     
-    @State private var isAnimate = false
+    @State private var isBounce = false
+    @State private var isHiden = false
     
     public init(
         type: SimplePlaceholderType? = nil,
@@ -293,8 +294,6 @@ public struct SimplePlaceholder<V: View>: View {
         }
     }
     
-    @State private var isHiden = false
-    
     public var body: some View {
         #if os(watchOS)
         ScrollView {
@@ -312,16 +311,24 @@ public struct SimplePlaceholder<V: View>: View {
                 if let type {
                     type.image
                         .imageModify(length: imageLength)
-                        .modifier(TapImageAnimation(isToggled: $isHiden))
                 }else if let systemImageName {
                     Image(systemName: systemImageName)
                         .imageModify(color: imageColor, length: imageLength)
-                        .modifier(TapSystemIconAnimation(isToggled: $isHiden))
                 }else if let imageName {
                     Image(imageName)
                         .imageModify(length: imageLength)
-                        .modifier(TapImageAnimation(isToggled: $isHiden))
                 }
+            }
+            .modifier(BounceModifier(isToggled: isBounce))
+            .opacity(isHiden ? 0.5 : 1)
+            .onTapGesture {
+                #if os(iOS) || os(watchOS)
+                withAnimation {
+                    isHiden.toggle()
+                }
+                #else
+                isBounce.toggle()
+                #endif
             }
             #if os(watchOS)
             .padding(.top, 30)
@@ -364,70 +371,6 @@ public struct SimplePlaceholder<V: View>: View {
         }
         .frame(maxWidth: maxWidth)
         .offset(x: 0, y: offsetY)
-    }
-}
-
-struct TapImageAnimation: ViewModifier {
-    @State private var isScaled: Bool = false
-    @Binding var isToggled: Bool
-    
-    init(isToggled: Binding<Bool> = .constant(false)) {
-        self._isToggled = isToggled
-    }
-    
-    func body(content: Content) -> some View {
-        content
-            .scaleEffect(isScaled ? 1.1 : 1.0)
-            .opacity(isToggled ? 0.3 : 1)
-            .animation(
-                Animation.interpolatingSpring(
-                    stiffness: 60,
-                    damping: 3
-                ).repeatCount(1, autoreverses: false),
-                value: isScaled
-            )
-            .contentShape(Rectangle())
-            .onTapGesture {
-                #if os(iOS)
-                withAnimation {
-                    isToggled.toggle()
-                }
-                #else
-                isScaled = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                    isScaled = false
-                }
-                #endif
-            }
-    }
-}
-
-struct TapSystemIconAnimation: ViewModifier {
-    // the animation is triggered each time the value changes
-    @State private var isAnimate: Bool = false
-    @Binding var isToggled: Bool
-    
-    init(isToggled: Binding<Bool> = .constant(false)) {
-        self._isToggled = isToggled
-    }
-    
-    func body(content: Content) -> some View {
-        if #available(iOS 17, watchOS 10, macOS 14.0, *) {
-            content
-                .symbolEffect(.bounce, value: isAnimate)
-                .opacity(isToggled ? 0.3 : 1)
-                .onTapGesture {
-                    #if os(iOS)
-                    withAnimation {
-                        isToggled.toggle()
-                    }
-                    #else
-                    isAnimate.toggle()
-                    #endif
-                }
-        }else {
-            content
-        }
     }
 }
 

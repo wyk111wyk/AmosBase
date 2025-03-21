@@ -7,16 +7,6 @@
 
 import SwiftUI
 
-extension Image {
-    func bounce(isActive: Bool) -> some View {
-        if #available(iOS 18.0, macOS 15.0, watchOS 10.0, *) {
-            return self.symbolEffect(.bounce, isActive: isActive)
-        } else {
-            return self
-        }
-    }
-}
-
 public struct DemoSimpleHaptic: View {
     @Environment(\.dismiss) private var dismissPage
     @State private var isPressing = false
@@ -41,13 +31,14 @@ public struct DemoSimpleHaptic: View {
             hapticSection()
         }
         .navigationTitle(title)
+        .formStyle(.grouped)
     }
     
     private func continueSection() -> some View {
         Section("连续震动") {
             HStack {
                 Image(systemName: "iphone.gen3.radiowaves.left.and.right")
-                    .bounce(isActive: isPressing)
+                    .bounceEffect(isActive: isPressing)
                 Text("Haptic - 长按连续震动")
                 Spacer()
             }
@@ -83,7 +74,7 @@ public struct DemoSimpleHaptic: View {
         Section("渐强震动") {
             HStack {
                 Image(systemName: "iphone.gen3.radiowaves.left.and.right")
-                    .bounce(isActive: isPressing)
+                    .bounceEffect(isActive: isPressing)
                 Text("Haptic - 长按渐强震动")
                 Spacer()
             }
