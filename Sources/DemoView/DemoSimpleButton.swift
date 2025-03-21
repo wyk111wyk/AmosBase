@@ -35,7 +35,7 @@ public struct DemoSimpleButton: View {
                         },
                         label: {
                             HStack {
-                                Text("点击检测：\(isPressing.toString())")
+                                Text("长按检测：\(isPressing.toString())")
                                     .foregroundStyle(isPressing ? .red : .green)
                                 Spacer()
                             }

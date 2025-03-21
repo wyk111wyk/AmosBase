@@ -48,7 +48,7 @@ struct FlipCard: View {
                             .foregroundStyle(.white)
                     }
             }
-                .offset(y: 120)
+                .offset(y: 100)
         }
     }
     

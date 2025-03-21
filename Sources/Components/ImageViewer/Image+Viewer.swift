@@ -16,7 +16,7 @@ public struct MutiImageViewer: View {
     }
 
     public var body: some View {
-        TabView(selection: $selectedIndex) {
+        TabView(selection: $selectedIndex.animation()) {
             if allImages.count > 0 {
                 ForEach(allImages.indices, id: \.self) { index in
                     ImageDetailView(
@@ -36,6 +36,14 @@ public struct MutiImageViewer: View {
             role: .cancel,
             labelColor: .white
         ) { dismissPage() }
+        .overlay(alignment: .topTrailing) {
+            Text("\(selectedIndex + 1) / \(allImages.count)")
+                .contentTransition(.numericText())
+                .foregroundStyle(.white)
+                .font(.footnote)
+                .padding(.top)
+                .padding(.trailing)
+        }
     }
 }
 

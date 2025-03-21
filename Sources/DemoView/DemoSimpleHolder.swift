@@ -73,6 +73,7 @@ struct DemoSimplePlaceholder: View {
                     ForEach(SimplePlaceholderType.allCases) { type in
                         Button {
                             selectedItem = type
+                            SimpleHaptic.playLightHaptic()
                             showPickerSheet = false
                         } label: {
                             VStack(spacing: 8) {

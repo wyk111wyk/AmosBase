@@ -13,7 +13,7 @@ public struct SimpleDetectButton<V: View>: View {
     let tapAction: () -> Void
     
     public init(
-        tapAction: @escaping () -> Void,
+        tapAction: @escaping () -> Void = {},
         holdAction: @escaping (Bool) -> Void,
         @ViewBuilder label: @escaping () -> V
     ) {

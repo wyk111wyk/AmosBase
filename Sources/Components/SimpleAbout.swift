@@ -256,7 +256,7 @@ extension SimpleCommonAbout {
                 HStack {
                     Spacer()
                     if let version = SimpleDevice.getAppVersion() {
-                        Text(version)
+                        Text("v."+version)
                     }
                     Spacer()
                 }

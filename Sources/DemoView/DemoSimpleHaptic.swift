@@ -9,7 +9,8 @@ import SwiftUI
 
 public struct DemoSimpleHaptic: View {
     @Environment(\.dismiss) private var dismissPage
-    @State private var isPressing = false
+    @State private var isContinuePressing = false
+    @State private var isIncreasePressing = false
     
     @State private var hapticIntensity: Float = 0.3
     @State private var hapticSharpness: Float = 0.3
@@ -36,26 +37,25 @@ public struct DemoSimpleHaptic: View {
     
     private func continueSection() -> some View {
         Section("连续震动") {
-            HStack {
-                Image(systemName: "iphone.gen3.radiowaves.left.and.right")
-                    .bounceEffect(isActive: isPressing)
-                Text("Haptic - 长按连续震动")
-                Spacer()
-            }
-            .contentShape(Rectangle())
-            .onLongPressGesture(
-                perform: {},
-                onPressingChanged: { isPressing in
-                    self.isPressing = isPressing
-                    if isPressing {
-                        haptic.playContinuousHaptic(
-                            intensity: hapticIntensity,
-                            sharpness: hapticSharpness
-                        )
+            SimpleDetectButton(holdAction: { isPressing in
+                self.isContinuePressing = isPressing
+                if isPressing {
+                    haptic.playContinuousHaptic(
+                        intensity: hapticIntensity,
+                        sharpness: hapticSharpness
+                    )
                 }else {
                     haptic.stopHaptic()
                 }
-            })
+            }) {
+                HStack {
+                    Image(systemName: "iphone.gen3.radiowaves.left.and.right")
+                        .bounceEffect(isActive: isContinuePressing)
+                    Text("Haptic - 长按连续震动")
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+            }
             
             HStack(spacing: 8) {
                 Text("强度: \(hapticIntensity.toString(digit: 1))")
@@ -72,28 +72,26 @@ public struct DemoSimpleHaptic: View {
     
     private func increasingSection() -> some View {
         Section("渐强震动") {
-            HStack {
-                Image(systemName: "iphone.gen3.radiowaves.left.and.right")
-                    .bounceEffect(isActive: isPressing)
-                Text("Haptic - 长按渐强震动")
-                Spacer()
-            }
-            .contentShape(Rectangle())
-            .onLongPressGesture(
-                perform: {
-                },
-                onPressingChanged: { isPressing in
-                    self.isPressing = isPressing
-                    if isPressing {
-                        haptic.playIncreasingHaptic(
-                            minIntensity: minIntensity,
-                            maxIntensity: maxIntensity,
-                            duration: hapticDuration
-                        )
+            SimpleDetectButton(holdAction: { isPressing in
+                self.isIncreasePressing = isPressing
+                if isPressing {
+                    haptic.playIncreasingHaptic(
+                        minIntensity: minIntensity,
+                        maxIntensity: maxIntensity,
+                        duration: hapticDuration
+                    )
                 }else {
                     haptic.stopHaptic()
                 }
-            })
+            }) {
+                HStack {
+                    Image(systemName: "iphone.gen3.radiowaves.left.and.right")
+                        .bounceEffect(isActive: isIncreasePressing)
+                    Text("Haptic - 长按渐强震动")
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+            }
             
             HStack(spacing: 8) {
                 Text("初始强度: \(minIntensity.toString(digit: 1))")
