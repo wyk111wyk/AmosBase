@@ -61,8 +61,8 @@ public extension Image {
         width: CGFloat? = nil,
         height: CGFloat? = nil
     ) -> some View {
-        let width: CGFloat = width ?? (length ?? .infinity)
-        let height: CGFloat = height ?? (length ?? .infinity)
+        let width: CGFloat? = width ?? (length ?? nil)
+        let height: CGFloat? = height ?? (length ?? nil)
         
         if let color {
             return self
@@ -72,7 +72,7 @@ public extension Image {
         }else {
             return self
                 .resizable().scaledToFit()
-                .frame(width: width, height: height)
+                .frame(width: width ?? .infinity, height: height ?? .infinity)
         }
     }
 }

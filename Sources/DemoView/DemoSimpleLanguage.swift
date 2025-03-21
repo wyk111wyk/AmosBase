@@ -37,7 +37,7 @@ struct DemoSimpleLanguage: View {
                         Button("导入") {
                             sourceText = inputText.content
                         }
-                        .buttonStyle(.borderless)
+                        .buttonStyle(.bordered)
                     }
                     #if os(watchOS)
                     .pickerStyle(.automatic)

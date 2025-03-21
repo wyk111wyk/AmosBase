@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct DemoSimpleUIElement<V: View>: View {
+public struct DemoSimpleUIElement: View {
     @State private var isTapDismiss = true
     
     @State private var cellId: Int = Date().timeIntervalSince1970.toInt
@@ -17,7 +17,6 @@ public struct DemoSimpleUIElement<V: View>: View {
     @State private var isFavor = false
     
     @State private var confirmShowPage = false
-    @State private var showPage = false
     
     @State private var randomWord01: String = .randomChinese(word: true)
     @State private var randomTitle01: String = .randomChinese(short: true)
@@ -42,9 +41,15 @@ public struct DemoSimpleUIElement<V: View>: View {
     @State private var sliderValue: CGFloat = 20
     @State private var starValue: Int = 2
     
-    @ViewBuilder let hiddenView: () -> V
-    public init(@ViewBuilder hiddenView: @escaping () -> V = { EmptyView() }) {
-        self.hiddenView = hiddenView
+    let additionViews: [AnyView]
+    
+    @State private var showHiddenButton = false
+    @State private var selectedViewIndex: Int?
+    
+    public init(
+        additionViews: [AnyView] = []
+    ) {
+        self.additionViews = additionViews
         
         singleValue = allPickerContent.randomElement()!
         mutipleValue = [allPickerContent.randomElement()!]
@@ -61,11 +66,9 @@ public struct DemoSimpleUIElement<V: View>: View {
                 textFieldSection()
             }
             .formStyle(.grouped)
-            .navigationDestination(
-                isPresented: $showPage,
-                destination: {
-                    hiddenView()
-                })
+            .navigationDestination(item: $selectedViewIndex, destination: { selectedViewIndex in
+                additionViews[selectedViewIndex]
+            })
             .navigationTitle("UI元素")
             .buttonCircleNavi(role: .destructive)
 #if !os(watchOS)
@@ -99,7 +102,9 @@ public struct DemoSimpleUIElement<V: View>: View {
                         .simpleTag(.full(bgColor: .blue.opacity(0.9)))
                 }
             }.simpleSwipe(allowsFullSwipe: true, isFavor: isFavor, favorAction: {
-                isFavor.toggle()
+                withAnimation {
+                    isFavor.toggle()
+                }
             })
             PlainButton {
                 SimpleAudioHelper.playRightAudio()
@@ -120,6 +125,16 @@ public struct DemoSimpleUIElement<V: View>: View {
                 contentSystemImage: "tray",
                 stateText: randomTitle02
             )
+            .swipeActions(edge: .leading, allowsFullSwipe: true, content: {
+                Button {
+                    withAnimation {
+                        showHiddenButton.toggle()
+                    }
+                } label: {
+                    Label("附加按钮", systemImage: "lasso.badge.sparkles")
+                }
+                .tint(.orange)
+            })
         } header: {
             HStack {
                 Text("Cell", bundle: .module)
@@ -147,13 +162,22 @@ public struct DemoSimpleUIElement<V: View>: View {
     
     @ViewBuilder
     private func buttonSection() -> some View {
-        Section {
-            SimpleMiddleButton("普通中央按钮", role: .none, rowVisibility: .hidden) {
-                confirmShowPage = true }
-            .simpleConfirmation(type: .destructiveCancel, title: "确认操作", isPresented: $confirmShowPage, confirmTap:  { showPage = true })
-        } header: {
-            Text("Button", bundle: .module)
+        if showHiddenButton {
+            Section("附加按钮") {
+                ForEach(additionViews.indices, id: \.self) { index in
+                    PlainButton {
+                        selectedViewIndex = index
+                    } label: {
+                        SimpleCell(additionTitles[index], isPushButton: true)
+                            .contentShape(Rectangle())
+                    }
+                }
+            }
         }
+    }
+    
+    private var additionTitles: [String] {
+        ["地图和标记", "设备应用管理"]
     }
     
     @ViewBuilder

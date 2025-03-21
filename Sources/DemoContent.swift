@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct DemoContent<V: View, C: View>: View {
+public struct DemoContent: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     @State private var columnVisibility: NavigationSplitViewVisibility = .doubleColumn
@@ -20,17 +20,14 @@ public struct DemoContent<V: View, C: View>: View {
     @State private var showWelcomePage = false
     
     let iCloudIdentifier: String
-    @ViewBuilder let hiddenView: () -> V
+    let additionViews: [AnyView]
     
-    @ViewBuilder let customView: () -> C
     public init(
         iCloudIdentifier: String = "",
-        @ViewBuilder hiddenView: @escaping () -> V = { EmptyView() },
-        @ViewBuilder customView: @escaping () -> C = { EmptyView() }
+        additionViews: [AnyView] = []
     ) {
         self.iCloudIdentifier = iCloudIdentifier
-        self.hiddenView = hiddenView
-        self.customView = customView
+        self.additionViews = additionViews
     }
     
     public var body: some View {
@@ -55,20 +52,6 @@ public struct DemoContent<V: View, C: View>: View {
                                 .buttonCircleNavi(role: .cancel) { showToastPage.toggle() }
                         }
                     }
-                }
-                Section("Cus - 控制页面") {
-                    #if os(iOS)
-                    let control = Page(id: 18, title: "Controls - 应用管理", icon: "app.badge.clock")
-                    NavigationLink(value: control) {
-                        SimpleCell(control.title, systemImage: control.icon) {
-                            if control.isOn {
-                                Circle()
-                                    .frame(width: 14, height: 14)
-                                    .foregroundStyle(.green)
-                            }
-                        }
-                    }
-                    #endif
                 }
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
@@ -126,7 +109,7 @@ public struct DemoContent<V: View, C: View>: View {
                 switch selectedPage.id {
                 case 0: DemoSimpleToast()
                 case 1: DemoSimpleAlert()
-                case 2: DemoSimpleUIElement(hiddenView: hiddenView)
+                case 2: DemoSimpleUIElement(additionViews: additionViews)
                 case 3: DemoSimpleCard()
                 case 4:
                     #if !os(watchOS)
@@ -152,9 +135,6 @@ public struct DemoContent<V: View, C: View>: View {
                 case 15: DemoSimpleLanguage()
                 case 16: DemoSimpleText(markdown: String.testText(.markdown02))
                 case 17: DemoSimpleWebLoad()
-                #if os(iOS)
-                case 18: customView()
-                #endif
                 case 19: DemoSimpleCrypto()
                 case 20: DemoSimpleHaptic()
                 case 21: DemoSimpleButton()
