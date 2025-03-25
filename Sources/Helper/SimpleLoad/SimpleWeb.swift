@@ -97,29 +97,6 @@ extension SimpleWeb {
         )
     }
     
-    /// 已知URLRequest，进行网络请求
-    /// <调试> 将 type 设置为 String.self 将返回 data 的 JSON 格式
-    public func request<T: Codable>(
-        urlRequest: URLRequest,
-        callbackQueue: DispatchQueue = .main,
-        type: T.Type
-    ) async throws -> T? {
-        let result = try await request(
-            urlRequest: urlRequest,
-            callbackQueue: callbackQueue
-        )
-        
-        guard let data = result.data else {
-            throw SimpleError.customError(title: "网络请求错误(\(urlRequest))", msg: "无法获取到数据 Data")
-        }
-        
-        if type.self == String.self {
-            return data.toJsonPrint() as? T
-        }else {
-            return try data.decodeWithError(type: T.self)
-        }
-    }
-    
     /// 从网络请求数据等基础操作
     public func request(
         method: SimpleRequestMethod,
@@ -161,6 +138,30 @@ extension SimpleWeb {
             })
     }
     
+    /// 已知URLRequest，进行网络请求
+    /// <调试> 将 type 设置为 String.self 将返回 data 的 JSON 格式
+    public func request<T: Codable>(
+        urlRequest: URLRequest,
+        callbackQueue: DispatchQueue = .main,
+        type: T.Type,
+        decoder: any DataDecoder = JSONDecoder()
+    ) async throws -> T? {
+        let result = try await request(
+            urlRequest: urlRequest,
+            callbackQueue: callbackQueue
+        )
+        
+        guard let data = result.data else {
+            throw SimpleError.customError(title: "网络请求错误(\(urlRequest))", msg: "无法获取到数据 Data")
+        }
+        
+        if type.self == String.self {
+            return data.toJsonPrint() as? T
+        }else {
+            return try data.decodeWithError(type: T.self)
+        }
+    }
+    
     /// 请求网络数据并根据格式解码
     /// <调试> 将 type 设置为 String.self 将返回 data 的 JSON 格式
     public func request<T: Codable>(
@@ -170,7 +171,8 @@ extension SimpleWeb {
         headers: [String: String] = [:],
         body: Data? = nil,
         callbackQueue: DispatchQueue = .main,
-        type: T.Type
+        type: T.Type,
+        decoder: any DataDecoder = JSONDecoder()
     ) async throws -> T? {
         let result = try await request(
             method: method,

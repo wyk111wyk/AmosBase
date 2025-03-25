@@ -28,7 +28,7 @@ public struct AnimaTextShimmer: View {
     }
     
     public var body: some View {
-        if #available(iOS 18.0, macOS 15.0, watchOS 10.0, *) {
+        if #available(iOS 18.0, macOS 15.0, watchOS 11.0, *) {
             ZStack {
                 Text(textContent)
                     .font(textFont)

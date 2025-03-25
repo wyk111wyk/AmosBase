@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Translation
+import Foundation
 
 // MARK: - 全平台使用的方法
 
@@ -34,21 +35,40 @@ extension GeometryProxy: @unchecked @retroactive Sendable {}
 public extension View {
     /// SF Symbol的跳跃动画
     func bounceEffect(
-        effect: BounceSymbolEffect = .bounce.byLayer,
+        byLayer: Bool = true,
         isActive: Bool? = nil
     ) -> some View {
-        if #available(iOS 18.0, macOS 15.0, watchOS 10.0, *) {
+        #if os(watchOS)
+        return self
+        #else
+        if #available(iOS 18.0, macOS 15.0, *) {
             if let isActive {
-                return self.symbolEffect(
-                    effect,
-                    isActive: isActive
-                )
+                if byLayer {
+                    return self.symbolEffect(
+                        .bounce.byLayer,
+                        isActive: isActive
+                    )
+                }else {
+                    return self.symbolEffect(
+                        .bounce.wholeSymbol,
+                        isActive: isActive
+                    )
+                }
             }else {
-                return self.symbolEffect(effect)
+                if byLayer {
+                    return self.symbolEffect(
+                        .bounce.byLayer
+                    )
+                }else {
+                    return self.symbolEffect(
+                        .bounce.wholeSymbol
+                    )
+                }
             }
         } else {
             return self
         }
+        #endif
     }
     
     /// 设置List的Section间距

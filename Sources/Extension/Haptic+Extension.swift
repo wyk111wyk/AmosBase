@@ -7,9 +7,15 @@
 
 import Foundation
 import AVFoundation
+
 #if canImport(CoreHaptics)
 import CoreHaptics
 #endif
+
+#if canImport(WatchKit)
+import WatchKit
+#endif
+
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
@@ -20,6 +26,7 @@ import IOKit
 public class SimpleHaptic {
     public static let shared = SimpleHaptic()
     
+    #if !os(watchOS)
     private var engine: CHHapticEngine?
 
     public init() {
@@ -179,6 +186,7 @@ public class SimpleHaptic {
             }
         })
     }
+    #endif
 }
 
 // MARK: - 单次震动

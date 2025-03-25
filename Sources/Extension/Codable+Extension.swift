@@ -8,6 +8,31 @@
 import SwiftUI
 import CoreData
 
+// MARK: - DataDecoder Protocol
+
+/// Any type which can decode `Data` into a `Decodable` type.
+public protocol DataDecoder: Sendable {
+    /// Decode `Data` into the provided type.
+    ///
+    /// - Parameters:
+    ///   - type:  The `Type` to be decoded.
+    ///   - data:  The `Data` to be decoded.
+    ///
+    /// - Returns: The decoded value of type `D`.
+    /// - Throws:  Any error that occurs during decode.
+    func decode<D: Decodable>(_ type: D.Type, from data: Data) throws -> D
+}
+
+/// `JSONDecoder` automatically conforms to `DataDecoder`.
+extension JSONDecoder: DataDecoder {}
+/// `PropertyListDecoder` automatically conforms to `DataDecoder`.
+extension PropertyListDecoder: DataDecoder {}
+
+public protocol DataEncoder: Sendable {
+    func encode<E: Encodable>(_ value: E) throws -> Data
+}
+extension JSONEncoder: DataEncoder {}
+
 public extension Encodable {
     /// 将对象转换为 Json 格式的文字
     func toJson() -> String? {
@@ -28,10 +53,8 @@ public extension Encodable {
         self.encode()
     }
     
-    func encode() -> Data? {
+    func encode(encoder: any DataEncoder = JSONEncoder()) -> Data? {
         do {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = .sortedKeys
             let encoded = try encoder.encode(self)
             return encoded
         } catch let DecodingError.dataCorrupted(context) {
@@ -57,9 +80,11 @@ public extension Encodable {
 }
 
 public extension Data {
-    func decode<T: Codable>(type: T.Type) -> T? {
+    func decode<T: Codable>(
+        type: T.Type,
+        decoder: any DataDecoder = JSONDecoder()
+    ) -> T? {
         do {
-            let decoder = JSONDecoder()
             let decoded = try decoder.decode(T.self, from: self)
             return decoded
         } catch let DecodingError.dataCorrupted(context) {
@@ -85,9 +110,11 @@ public extension Data {
         }
     }
     
-    func decodeWithError<T: Codable>(type: T.Type) throws -> T {
+    func decodeWithError<T: Codable>(
+        type: T.Type,
+        decoder: any DataDecoder = JSONDecoder()
+    ) throws -> T {
         do {
-            let decoder = JSONDecoder()
             let decoded = try decoder.decode(T.self, from: self)
             return decoded
         } catch let DecodingError.dataCorrupted(context) {

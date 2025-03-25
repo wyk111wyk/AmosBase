@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// 进度条+震动的按钮
 public struct SimpleHoldButton<V: View>: View {
     @Environment(\.colorScheme) private var colorScheme
     
@@ -100,7 +101,9 @@ public struct SimpleHoldButton<V: View>: View {
                 
                 isCompleted = true
                 if isHaptic {
+                    #if !os(watchOS)
                     haptic.stopHaptic()
+                    #endif
                 }
                 onCompletion()
             }, onPressingChanged: { isPressing in
@@ -112,6 +115,7 @@ public struct SimpleHoldButton<V: View>: View {
             })
             .onChange(of: isPressing) {
                 // 手势状态改变时更新进度
+                #if !os(watchOS)
                 if isPressing {
                     isCompleted = false
                     progress = 1.0
@@ -134,6 +138,7 @@ public struct SimpleHoldButton<V: View>: View {
                         }
                     }
                 }
+                #endif
         }
     }
 }

@@ -29,10 +29,10 @@ struct DemoSFSymbol: View {
                 Group {
                     Image(systemName: "iphone.homebutton.radiowaves.left.and.right")
                         .resizable().scaledToFit()
-                        .bounceEffect(effect: .bounce.wholeSymbol, isActive: showAnimate)
+                        .bounceEffect(isActive: showAnimate)
                     Image(systemName: "iphone.homebutton.radiowaves.left.and.right")
                         .resizable().scaledToFit()
-                        .bounceEffect(effect: .bounce.byLayer, isActive: showAnimate)
+                        .bounceEffect(byLayer: false, isActive: showAnimate)
                     Image(systemName: "inset.filled.rectangle.and.person.filled")
                         .resizable().scaledToFit()
                         .symbolEffect(
@@ -71,7 +71,7 @@ struct DemoSFSymbol: View {
                     Image(systemName: showAnimate ? "bell.slash" : "bell")
                         .resizable().scaledToFit()
                         .contentTransition(.symbolEffect(.replace))
-                    if #available(iOS 18.0, macOS 15.0, watchOS 10.0, *) {
+                    if #available(iOS 18.0, macOS 15.0, watchOS 11.0, *) {
                         Image(systemName: "fan.desk")
                             .resizable().scaledToFit()
                             .symbolEffect(

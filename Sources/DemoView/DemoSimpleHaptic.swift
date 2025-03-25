@@ -35,7 +35,9 @@ public struct DemoSimpleHaptic: View {
         .formStyle(.grouped)
     }
     
+    @ViewBuilder
     private func continueSection() -> some View {
+        #if os(iOS)
         Section("连续震动") {
             SimpleDetectButton(holdAction: { isPressing in
                 self.isContinuePressing = isPressing
@@ -68,9 +70,12 @@ public struct DemoSimpleHaptic: View {
                 Slider(value: $hapticSharpness, in: 0...1, step: 0.1)
             }
         }
+        #endif
     }
     
+    @ViewBuilder
     private func increasingSection() -> some View {
+        #if os(iOS)
         Section("渐强震动") {
             SimpleDetectButton(holdAction: { isPressing in
                 self.isIncreasePressing = isPressing
@@ -109,6 +114,7 @@ public struct DemoSimpleHaptic: View {
                 Slider(value: $hapticDuration, in: 0...8, step: 0.1)
             }
         }
+        #endif
     }
     
     @ViewBuilder
