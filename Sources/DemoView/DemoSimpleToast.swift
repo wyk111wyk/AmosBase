@@ -24,65 +24,83 @@ public struct DemoSimpleToast: View {
     public var body: some View {
         Form {
             Section("转换 Toast") {
-                Button("Loading -> Success".localized(bundle: .module)) {
+                Button {
                     selectedToast = .topLoading
                     SimpleTimer().after(timeInterval: 2) {
                         selectedToast = .centerSuccess
                     }
+                } label: {
+                    SimpleCell("Loading -> Success", localizationBundle: .module)
                 }
                 .buttonStyle(.borderless)
-                Button("Loading -> Error".localized(bundle: .module)) {
+                Button {
                     selectedToast = .topLoading
                     SimpleTimer().after(timeInterval: 2) {
                         selectedToast = .topError
                     }
+                } label: {
+                    SimpleCell("Loading -> Error", localizationBundle: .module)
                 }
                 .buttonStyle(.borderless)
-                Button("Loading Title Change".localized(bundle: .module)) {
+                Button {
                     loadingTest()
+                } label: {
+                    SimpleCell("Loading Title Change", localizationBundle: .module)
                 }
                 .buttonStyle(.borderless)
             }
             
             Section("Simple Toast".localized(bundle: .module)) {
-                Button("Simple Error".localized(bundle: .module)) {
+                Button {
                     simpleError = true
+                } label: {
+                    SimpleCell("Simple Error", localizationBundle: .module)
                 }
                 .buttonStyle(.borderless)
-                Button("Simple Loading".localized(bundle: .module)) {
+                Button {
                     if simpleLoading == true {
                         simpleLoading = nil
                     }else {
                         simpleLoading = true
                     }
+                } label: {
+                    SimpleCell("Simple Loading", localizationBundle: .module)
                 }
                 .buttonStyle(.borderless)
-                Button("Simple Success".localized(bundle: .module)) {
+                Button {
                     simpleSuccess = true
+                } label: {
+                    SimpleCell("Simple Success", localizationBundle: .module)
                 }
                 .buttonStyle(.borderless)
             }
             
             Section("Top Toasts".localized(bundle: .module)) {
                 ForEach(ToastType.topToasts(), id: \.self.rawValue) { tosat in
-                    Button(tosat.rawValue) {
+                    Button {
                         selectedToast = tosat
+                    } label: {
+                        SimpleCell(tosat.rawValue, localizationBundle: .module)
                     }
                     .buttonStyle(.borderless)
                 }
             }
             Section("Center Toasts".localized(bundle: .module)) {
                 ForEach(ToastType.centerToasts(), id: \.self.rawValue) { tosat in
-                    Button(tosat.rawValue) {
+                    Button {
                         selectedToast = tosat
+                    } label: {
+                        SimpleCell(tosat.rawValue, localizationBundle: .module)
                     }
                     .buttonStyle(.borderless)
                 }
             }
             Section("Bottom Toasts".localized(bundle: .module)) {
                 ForEach(ToastType.bottomToasts(), id: \.self.rawValue) { tosat in
-                    Button(tosat.rawValue) {
+                    Button {
                         selectedToast = tosat
+                    } label: {
+                        SimpleCell(tosat.rawValue, localizationBundle: .module)
                     }
                     .buttonStyle(.borderless)
                 }
@@ -189,4 +207,5 @@ public struct DemoSimpleToast: View {
     NavigationStack {
         DemoSimpleToast()
     }
+    .environment(\.locale, .zhHans)
 }

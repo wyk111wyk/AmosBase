@@ -82,7 +82,9 @@ public struct SimpleWelcome<V: View>: View {
                 }
             }
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) { showFeatureswithDelay()
+                if showItems.isEmpty {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) { showFeatureswithDelay()
+                    }
                 }
             }
         }

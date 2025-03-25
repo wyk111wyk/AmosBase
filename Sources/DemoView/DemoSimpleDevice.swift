@@ -45,7 +45,7 @@ public struct DemoSimpleDevice: View {
             }
             
             #if !os(macOS)
-            Section("位置信息") {
+            Section {
                 SimpleCell("Wifi名称", stateText: wifiName)
                 SimpleCell("当前地址") {
                     if let place = location.currentPlace {
@@ -73,6 +73,18 @@ public struct DemoSimpleDevice: View {
                     }
                 }
                 .disabled(location.currentLocation == nil)
+            } header: {
+                HStack {
+                    Text("位置信息")
+                    Spacer()
+                    Button {
+                        wifiName = SimpleDevice.wifiInfo()
+                        location.startLocation()
+                    } label: {
+                        Text("获取地点")
+                            .font(.footnote)
+                    }
+                }
             }
             #endif
         }
@@ -83,11 +95,6 @@ public struct DemoSimpleDevice: View {
                 isPushin: false,
                 pinMarker: .init(location: location.toLocation())
             )
-        }
-        .task {
-            #if os(iOS)
-            wifiName = SimpleDevice.wifiInfo()
-            #endif
         }
     }
 }

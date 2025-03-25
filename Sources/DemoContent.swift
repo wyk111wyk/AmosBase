@@ -39,38 +39,13 @@ public struct DemoContent: View {
                             SimpleCell(page.title, systemImage: page.icon)
                         }
                     }
-                    Button {
-                        showToastPage.toggle()
-                    } label: {
-                        SimpleCell("Toast - Sheet页面", systemImage: "rectangle.portrait.bottomthird.inset.filled")
-                    }
-                    .buttonStyle(.borderless)
-                    .sheet(isPresented: $showToastPage) {
-                        NavigationStack {
-                            DemoSimpleToast()
-                                .navigationTitle("Sheet页面测试")
-                                .buttonCircleNavi(role: .cancel) { showToastPage.toggle() }
-                        }
-                    }
+                    sheetSection()
                 }
                 Section("UI - 页面元素") {
                     ForEach(Page.elementSection()) { page in
                         NavigationLink(value: page) {
                             SimpleCell(page.title, systemImage: page.icon)
                         }
-                    }
-                    Button {
-                        showWelcomePage.toggle()
-                    } label: {
-                        SimpleCell("Welcome - 欢迎页", systemImage: "list.bullet.below.rectangle")
-                    }
-                    .buttonStyle(.borderless)
-                    .sheet(isPresented: $showWelcomePage) {
-                        SimpleWelcome<EmptyView>(
-                            allIntroItems: .allExamples,
-                            appName: "AmosBase",
-                            continueType: .dismiss)
-                        .interactiveDismissDisabled(true)
                     }
                 }
                 Section("Web - 网络关联") {
@@ -149,6 +124,43 @@ public struct DemoContent: View {
             if horizontalSizeClass == .regular {
                 selectedPage = Page.alertSection().first
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func sheetSection() -> some View {
+        Button {
+            showToastPage.toggle()
+        } label: {
+            SimpleCell(
+                "Toast - Sheet页面",
+                systemImage: "rectangle.portrait.bottomthird.inset.filled"
+            )
+        }
+        .buttonStyle(.borderless)
+        .sheet(isPresented: $showToastPage) {
+            NavigationStack {
+                DemoSimpleToast()
+                    .navigationTitle("Sheet页面测试")
+                    .buttonCircleNavi(role: .cancel) { showToastPage.toggle() }
+            }
+        }
+        
+        Button {
+            showWelcomePage.toggle()
+        } label: {
+            SimpleCell(
+                "Welcome - 欢迎页",
+                systemImage: "list.bullet.below.rectangle"
+            )
+        }
+        .buttonStyle(.borderless)
+        .sheet(isPresented: $showWelcomePage) {
+            SimpleWelcome<EmptyView>(
+                allIntroItems: .allExamples,
+                appName: "AmosBase",
+                continueType: .dismiss)
+            .interactiveDismissDisabled(true)
         }
     }
     

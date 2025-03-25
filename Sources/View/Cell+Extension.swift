@@ -21,6 +21,7 @@ public struct SimpleCell<V: View>: View {
     
     let isDisplay: Bool // 是否展示
     let isPushButton: Bool // 是否是Navi
+    let isCellButton: Bool // 是否是列表中的按钮（右侧填充空白）
     let isPremium: Bool // 是否是Premium
     // Title
     let titleSystemImage: String?
@@ -80,6 +81,7 @@ public struct SimpleCell<V: View>: View {
         contentSystemImage: String? = nil,
         isDisplay: Bool = true,
         isPushButton: Bool = false,
+        isCellButton: Bool = true,
         isPremium: Bool = false,
         contentSpace: Double = 12,
         stateText: String? = nil,
@@ -88,6 +90,7 @@ public struct SimpleCell<V: View>: View {
     ) {
         self.isDisplay = isDisplay
         self.isPushButton = isPushButton
+        self.isCellButton = isCellButton
         self.isPremium = isPremium
         
         self.title = title
@@ -171,6 +174,7 @@ public struct SimpleCell<V: View>: View {
                     .frame(width: imageSize, height: imageSize)
                     .foregroundColor(iconColor)
                 }
+                
                 // Title 和 Content
                 VStack(alignment: .leading, spacing: 5) {
                     HStack(alignment: .firstTextBaseline, spacing: 8) {
@@ -204,8 +208,8 @@ public struct SimpleCell<V: View>: View {
                         }
                     }
                     
-                    HStack(alignment: .top, spacing: 4) {
-                        if let content = content, !content.isEmpty {
+                    if let content = content, !content.isEmpty {
+                        HStack(alignment: .top, spacing: 4) {
                             if let contentSystemImage {
                                 Image(systemName: contentSystemImage)
                                     .foregroundColor(contentColor)
@@ -220,7 +224,7 @@ public struct SimpleCell<V: View>: View {
                     }
                 }
                 
-                if isPushButton || V.self != EmptyView.self || stateText != nil {
+                if isPushButton || V.self != EmptyView.self || stateText != nil || isCellButton {
                     Spacer()
                 }
                 
@@ -243,6 +247,7 @@ public struct SimpleCell<V: View>: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .contentShape(Rectangle())
             #if !os(watchOS)
             .textSelection(.enabled)
             #endif
