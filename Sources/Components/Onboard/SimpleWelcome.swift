@@ -106,11 +106,9 @@ extension SimpleWelcome {
                 .font(.system(.body, design: .rounded))
                 .foregroundStyle(.gray.opacity(0.8))
             if let appName {
-                AnimaTextShimmer(
-                    textContent: appName,
-                    textColor: .primary,
-                    textFont: .largeTitle
-                )
+                Text(appName)
+                    .font(.largeTitle)
+                    .shimmering()
             }
         }
         .padding(.top, 40)

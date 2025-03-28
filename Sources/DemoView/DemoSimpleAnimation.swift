@@ -41,18 +41,17 @@ struct DemoSimpleAnimation: View {
         }
     }
     
+    @ViewBuilder
     private func contentView(for page: Int) -> some View {
         switch page {
-        case 0: return FlipCard()
-        case 1: return MovingDashDemo()
-        case 2: return ScoreChangeDemo()
-        case 3: return ShakeViewDemo()
-        case 4: return ShapeChange()
-        case 5: return AnimaTextShimmer()
-                .padding()
-                .background(.gray.tertiary, in: Capsule())
-        case 6: return BounceView()
-        default: return EmptyView()
+        case 0: FlipCard()
+        case 1: MovingDashDemo()
+        case 2: ScoreChangeDemo()
+        case 3: ShakeViewDemo()
+        case 4: ShapeChange()
+        case 5: ShimmerDemo()
+        case 6: BounceView()
+        default: EmptyView()
         }
     }
 }

@@ -78,6 +78,9 @@
     "%lld 字" : {
 
     },
+    "← Right-to-left layout direction" : {
+
+    },
     "🔍 搜索" : {
 
     },
@@ -556,6 +559,9 @@
         }
       }
     },
+    "Custom Gradient Mode" : {
+
+    },
     "Custom single color" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -905,6 +911,9 @@
         }
       }
     },
+    "Loading..." : {
+
+    },
     "Lon: %lf" : {
 
     },
@@ -1194,6 +1203,9 @@
         }
       }
     },
+    "SwiftUI Shimmer" : {
+
+    },
     "System color" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1428,6 +1440,12 @@
           }
         }
       }
+    },
+    "שלום" : {
+
+    },
+    "مرحبًا" : {
+
     },
     "上一张" : {
 

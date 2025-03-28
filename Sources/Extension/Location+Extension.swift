@@ -73,12 +73,16 @@ extension MKCoordinateSpan: @retroactive Equatable {
 
 public extension String {
     /// 将地址转换为坐标
-    func toCoordinate(region: CLRegion? = nil,
-                      locale: Locale = .current) async -> CLLocationCoordinate2D? {
+    func toCoordinate(
+        region: CLRegion? = nil,
+        locale: Locale = .current
+    ) async -> CLLocationCoordinate2D? {
         let place = try? await CLGeocoder().geocodeAddressString(self, in: region, preferredLocale: locale).first
         return place?.location?.coordinate
     }
 }
+
+extension CLLocationCoordinate2D: @retroactive @unchecked Sendable {}
 
 extension CLLocationCoordinate2D: @retroactive Identifiable {
     public var id: String {

@@ -184,6 +184,7 @@ public struct SimpleCell<V: View>: View {
                                     .foregroundColor(titleImageColor)
                                     .font(.body)
                                     .layoutPriority(1)
+                                    .offset(y: 1)
                             }
                             HStack(alignment: .center, spacing: 6) {
                                 Text(LocalizedStringKey(title), bundle: localizationBundle)

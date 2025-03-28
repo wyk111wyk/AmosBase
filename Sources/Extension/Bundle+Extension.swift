@@ -31,6 +31,7 @@ public extension Bundle {
 }
 
 public extension String {
+    /// 将 Bundle 中自带的Json文件转换为相对应的数据
     func decodeJSON<T: Codable>() -> T? {
         guard let url = Bundle.main.url(forResource: self, withExtension: "json") else {
             fatalError("Failed to locate \(self) in bundle.")

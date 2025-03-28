@@ -7,25 +7,14 @@
 
 import SwiftUI
 import CoreData
+import CoreLocation
 
 // MARK: - DataDecoder Protocol
 
-/// Any type which can decode `Data` into a `Decodable` type.
 public protocol DataDecoder: Sendable {
-    /// Decode `Data` into the provided type.
-    ///
-    /// - Parameters:
-    ///   - type:  The `Type` to be decoded.
-    ///   - data:  The `Data` to be decoded.
-    ///
-    /// - Returns: The decoded value of type `D`.
-    /// - Throws:  Any error that occurs during decode.
     func decode<D: Decodable>(_ type: D.Type, from data: Data) throws -> D
 }
-
-/// `JSONDecoder` automatically conforms to `DataDecoder`.
 extension JSONDecoder: DataDecoder {}
-/// `PropertyListDecoder` automatically conforms to `DataDecoder`.
 extension PropertyListDecoder: DataDecoder {}
 
 public protocol DataEncoder: Sendable {
@@ -79,8 +68,28 @@ public extension Encodable {
     }
 }
 
+public extension String {
+    /// 将 JSON 编码的文字转换为相应的内容
+    func decode<T: Decodable>(
+        type: T.Type,
+        decoder: any DataDecoder = JSONDecoder()
+    ) -> T? {
+        guard let jsonData = self.data(using: .utf8) else {
+            print("Error: Could not convert JSON string to Data using UTF-8.")
+            return nil
+        }
+        
+        return jsonData.decode(type: type, decoder: decoder)
+    }
+    
+    /// 将 JSON 编码的 [String] 类型文字转换为相应的内容
+    func decodeArray(decoder: any DataDecoder = JSONDecoder()) -> [String] {
+        self.decode(type: [String].self, decoder: decoder) ?? []
+    }
+}
+
 public extension Data {
-    func decode<T: Codable>(
+    func decode<T: Decodable>(
         type: T.Type,
         decoder: any DataDecoder = JSONDecoder()
     ) -> T? {
@@ -88,29 +97,24 @@ public extension Data {
             let decoded = try decoder.decode(T.self, from: self)
             return decoded
         } catch let DecodingError.dataCorrupted(context) {
-            debugPrint("Data 损坏: \(context)")
-            debugPrint(String(describing: T.self))
+            debugPrint(String(describing: T.self) + " :Data 损坏: \(context)")
             return nil
         } catch let DecodingError.keyNotFound(key, context) {
-            debugPrint("Key '\(key)' not found:", context.debugDescription)
-            debugPrint(String(describing: T.self))
+            debugPrint(String(describing: T.self) + " :Key '\(key)' not found:", context.codingPath, context.debugDescription)
             return nil
         } catch let DecodingError.valueNotFound(value, context) {
-            debugPrint("Value '\(value)' not found:", context.debugDescription)
-            debugPrint(String(describing: T.self))
+            debugPrint(String(describing: T.self) + " :Value '\(value)' not found:", context.codingPath, context.debugDescription)
             return nil
         } catch let DecodingError.typeMismatch(valueType, context)  {
-            debugPrint("Type '\(valueType)' mismatch:", context.debugDescription)
-            debugPrint(String(describing: T.self))
+            debugPrint(String(describing: T.self) + " :Type '\(valueType)' mismatch:", context.codingPath, context.debugDescription)
             return nil
         } catch {
-            debugPrint("encode error: ", error)
-            debugPrint(String(describing: T.self))
+            debugPrint(String(describing: T.self) + " :encode error: ", error)
             return nil
         }
     }
     
-    func decodeWithError<T: Codable>(
+    func decodeWithError<T: Decodable>(
         type: T.Type,
         decoder: any DataDecoder = JSONDecoder()
     ) throws -> T {
@@ -118,24 +122,19 @@ public extension Data {
             let decoded = try decoder.decode(T.self, from: self)
             return decoded
         } catch let DecodingError.dataCorrupted(context) {
-            debugPrint("Data 损坏: \(context)")
-            debugPrint(String(describing: T.self))
+            debugPrint(String(describing: T.self) + " :Data 损坏: \(context)")
             throw DecodingError.dataCorrupted(context)
         } catch let DecodingError.keyNotFound(key, context) {
-            debugPrint("Key '\(key)' not found:", context.debugDescription)
-            debugPrint(String(describing: T.self))
+            debugPrint(String(describing: T.self) + " :Key '\(key)' not found:", context.codingPath, context.debugDescription)
             throw DecodingError.keyNotFound(key, context)
         } catch let DecodingError.valueNotFound(value, context) {
-            debugPrint("Value '\(value)' not found:", context.debugDescription)
-            debugPrint(String(describing: T.self))
+            debugPrint(String(describing: T.self) + " :Value '\(value)' not found:", context.codingPath, context.debugDescription)
             throw DecodingError.valueNotFound(value, context)
         } catch let DecodingError.typeMismatch(valueType, context)  {
-            debugPrint("Type '\(valueType)' mismatch:", context.debugDescription)
-            debugPrint(String(describing: T.self))
+            debugPrint(String(describing: T.self) + " :Type '\(valueType)' mismatch:", context.codingPath, context.debugDescription)
             throw DecodingError.typeMismatch(valueType, context)
         } catch {
-            debugPrint("encode error: ", error)
-            debugPrint(String(describing: T.self))
+            debugPrint(String(describing: T.self) + " :encode error: ", error)
             throw error
         }
     }
@@ -191,5 +190,24 @@ extension Color: Codable {
         try container.encode(SFColor(self).toRGBAComponents().r, forKey: .red)
         try container.encode(SFColor(self).toRGBAComponents().g, forKey: .green)
         try container.encode(SFColor(self).toRGBAComponents().b, forKey: .blue)
+    }
+}
+
+extension CLLocationCoordinate2D: Codable {
+    enum CodingKeys: String, CodingKey {
+        case latitude, longitude
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let latitude = try container.decode(Double.self, forKey: .latitude)
+        let longitude = try container.decode(Double.self, forKey: .longitude)
+        self.init(latitude: latitude, longitude: longitude)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.latitude, forKey: .latitude)
+        try container.encode(self.longitude, forKey: .longitude)
     }
 }

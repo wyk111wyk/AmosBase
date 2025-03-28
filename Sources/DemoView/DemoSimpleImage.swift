@@ -15,10 +15,10 @@ public struct DemoSimpleImage: View {
         self.title = title
     }
     
-    @State private var originalImage: SFImage? = .lady01Image
-    @State private var adjustedImage: SFImage? = .lady01Image
+    @State private var originalImage: SFImage? = .gymGirl()
+    @State private var adjustedImage: SFImage? = .gymGirl()
     
-    var defaultImage: SFImage { .lady01Image }
+    var defaultImage: SFImage { .gymGirl() }
     
     @State private var isSaveSuccessed: Bool? = nil
     
