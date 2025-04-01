@@ -81,13 +81,17 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
                     if let deleteAction { deleteButton(deleteAction) }
                     if let editAction { editButton(editAction) }
                     if let favorAction { favorButton(favorAction) }
-                    buttonView()
+                    if V.self != EmptyView.self {
+                        buttonView()
+                    }
                 }
             }
         #if !os(watchOS)
             .contextMenu {
                 if hasContextMenu {
-                    buttonView()
+                    if V.self != EmptyView.self {
+                        buttonView()
+                    }
                     if let favorAction { favorButton(favorAction) }
                     if let editAction { editButton(editAction) }
                     if let deleteAction { deleteButton(deleteAction) }
@@ -98,24 +102,29 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
     
     func deleteButton(_ action: @escaping () -> Void) -> some View {
         Button(role: .destructive, action: action, label: {
-            SimpleCell("Delete", systemImage: "trash", localizationBundle: .module)
+            HStack {
+                Image(systemName: "trash")
+                Text("Delete", bundle: .module)
+            }
         })
     }
     
     func editButton(_ action: @escaping () -> Void) -> some View {
         Button(action: action, label: {
-            SimpleCell("Edit", systemImage: "square.and.pencil", localizationBundle: .module)
+            HStack {
+                Image(systemName: "square.and.pencil")
+                Text("Edit", bundle: .module)
+            }
         }).tint(.blue)
     }
     
     func favorButton(_ action: @escaping () -> Void) -> some View {
         Button(action: action,
                label: {
-            SimpleCell(
-                isFavor == true ? "Unfavor":"Favor",
-                systemImage: isFavor == true ? "star.slash" : "star",
-                localizationBundle: .module
-            )
+            HStack {
+                Image(systemName: isFavor == true ? "star.slash" : "star")
+                Text(isFavor == true ? "Unfavor" : "Favor", bundle: .module)
+            }
         }).tint(.yellow)
     }
 }

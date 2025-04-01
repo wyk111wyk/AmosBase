@@ -39,39 +39,35 @@ public extension View {
         isActive: Bool? = nil
     ) -> some View {
         #if os(watchOS)
-        return self
+        return AnyView(self)
         #else
         if #available(iOS 18.0, macOS 15.0, *) {
             if let isActive {
-                if byLayer {
-                    return self.symbolEffect(
-                        .bounce.byLayer,
-                        isActive: isActive
-                    )
-                }else {
-                    return self.symbolEffect(
-                        .bounce.wholeSymbol,
-                        isActive: isActive
-                    )
-                }
+                return AnyView(self.symbolEffect(
+                    byLayer ? .bounce.byLayer : .bounce.wholeSymbol,
+                    isActive: isActive
+                ))
             }else {
-                if byLayer {
-                    return self.symbolEffect(
-                        .bounce.byLayer
-                    )
-                }else {
-                    return self.symbolEffect(
-                        .bounce.wholeSymbol
-                    )
-                }
+                return AnyView(self.symbolEffect(
+                    byLayer ? .bounce.byLayer : .bounce.wholeSymbol
+                ))
             }
         } else {
-            return self
+            return AnyView(self)
         }
         #endif
     }
     
-    /// 设置List的Section间距
+    /// 设置 View 的颜色
+    func viewColor(_ color: Color? = nil) -> some View {
+        if let color {
+            return AnyView(self.foregroundStyle(color))
+        }else {
+            return AnyView(self)
+        }
+    }
+    
+    /// 设置 List 的 Section 间距
     func sectionSpacing(_ spacing: CGFloat = 15) -> some View {
 #if os(iOS)
         self.listSectionSpacing(spacing)

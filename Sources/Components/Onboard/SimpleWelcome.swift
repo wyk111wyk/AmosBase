@@ -119,20 +119,18 @@ extension SimpleWelcome {
         HStack(alignment: .top) {
             if let systemImage = item.systemImage {
                 Image(systemName: systemImage)
-                    .imageModify(
-                        color: .accentColor,
-                        length: 50
-                    )
+                    .imageModify(length: 46)
+                    .foregroundStyle(Color.accentColor)
                     .padding(.trailing)
             }else {
                 item.image
-                    .imageModify(length: 50)
+                    .imageModify(length: 46)
                     .padding(.trailing)
             }
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
                     Text(LocalizedStringKey(item.title))
-                        .font(.title3)
+                        .font(.body)
                         .fontWeight(.medium)
                         .foregroundColor(.primary)
                     Spacer()

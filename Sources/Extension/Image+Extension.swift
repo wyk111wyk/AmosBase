@@ -54,8 +54,21 @@ public extension Image {
         #endif
     }
     
+    init?(data: Data) {
+        #if canImport(UIKit)
+        guard let image = UIImage(data: data) else {
+            return nil
+        }
+        self.init(uiImage: image)
+        #else
+        guard let image = NSImage(data: data) else {
+            return nil
+        }
+        self.init(nsImage: image)
+        #endif
+    }
+    
     func imageModify(
-        color: Color? = nil,
         mode: ContentMode = .fit,
         length: CGFloat? = nil,
         width: CGFloat? = nil,
@@ -64,16 +77,10 @@ public extension Image {
         let width: CGFloat? = width ?? (length ?? nil)
         let height: CGFloat? = height ?? (length ?? nil)
         
-        if let color {
-            return self
-                .resizable().scaledToFit()
-                .frame(width: width, height: height)
-                .foregroundStyle(color)
-        }else {
-            return self
-                .resizable().scaledToFit()
-                .frame(width: width ?? .infinity, height: height ?? .infinity)
-        }
+        return self
+            .resizable()
+            .aspectRatio(contentMode: mode)
+            .frame(width: width, height: height)
     }
 }
 

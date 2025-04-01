@@ -170,7 +170,8 @@ public struct ToastView: View{
                     .padding(10)
             case .systemImage(let name, let color):
                 Image(systemName: name)
-                    .imageModify(color: color, length: 50)
+                    .imageModify(length: 50)
+                    .foregroundStyle(color)
                     .padding(10)
             case .image(let name):
                 Image(name)

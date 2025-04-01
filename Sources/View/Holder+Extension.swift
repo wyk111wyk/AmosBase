@@ -313,7 +313,8 @@ public struct SimplePlaceholder<V: View>: View {
                         .imageModify(length: imageLength)
                 }else if let systemImageName {
                     Image(systemName: systemImageName)
-                        .imageModify(color: imageColor, length: imageLength)
+                        .imageModify(length: imageLength)
+                        .foregroundStyle(imageColor)
                 }else if let imageName {
                     Image(imageName)
                         .imageModify(length: imageLength)
