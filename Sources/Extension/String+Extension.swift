@@ -147,8 +147,8 @@ public extension String {
     }
     
     /// 转换为 UUID
-    func toUUID() -> UUID {
-        UUID(uuidString: self) ?? UUID()
+    func toUUID() -> UUID? {
+        UUID(uuidString: self)
     }
     
     /// 转换为 Int

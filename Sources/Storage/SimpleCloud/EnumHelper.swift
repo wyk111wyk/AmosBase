@@ -8,6 +8,7 @@
 import Foundation
 import CoreLocation
 import CloudKit
+import SwiftUI
 
 extension NSPredicate: @unchecked @retroactive Sendable {}
 
@@ -142,5 +143,47 @@ public extension CKAccountStatus {
         case .temporarilyUnavailable: "temporarilyUnavailable"
         @unknown default: "unknown"
         }
+    }
+    
+    var color: Color {
+        switch self {
+        case .couldNotDetermine: .gray
+        case .available: .green
+        case .restricted: .red
+        case .noAccount: .yellow
+        case .temporarilyUnavailable: .pink
+        @unknown default: .gray
+        }
+    }
+    
+    @ViewBuilder
+    func statusSign() -> some View {
+        HStack(alignment: .center, spacing: 6) {
+            switch self {
+            case .available:
+                Image(systemName: "icloud")
+                Text(title)
+            case .restricted, .temporarilyUnavailable:
+                Image(systemName: "icloud.slash")
+                Text(title)
+            case .noAccount:
+                Image(systemName: "person.crop.circle.badge.xmark")
+                Text(title)
+            default:
+                Circle()
+                    .frame(width: 8, height: 8)
+                    .foregroundStyle(color)
+                Text("无法连接")
+            }
+        }
+        .simpleTag(
+            .bg(
+                verticalPad: 4,
+                horizontalPad: 6,
+                contentFont: .footnote,
+                contentColor: color,
+                bgColor: color
+            )
+        )
     }
 }

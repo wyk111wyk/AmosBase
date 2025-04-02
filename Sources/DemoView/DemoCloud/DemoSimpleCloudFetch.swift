@@ -118,7 +118,7 @@ public struct DemoSimpleCloudFetch<T: Hashable>: View {
                     idKey: value.idKey,
                     recordId: value.recordID
                 )
-                fetchResults.removeById(value)
+                fetchResults.removeByItem(value)
             }catch {
                 errorMsg = error.localizedDescription
                 debugPrint(error)

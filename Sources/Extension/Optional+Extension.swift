@@ -35,6 +35,10 @@ public extension Optional {
         }
     }
     
+    func toUUID() -> UUID? {
+        self.toString()?.toUUID()
+    }
+    
     func toString() -> String? {
         if self.isString() {
             return self as? String

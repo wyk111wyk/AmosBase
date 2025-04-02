@@ -345,7 +345,7 @@ extension DemoSimpleCloud {
             }
                 .swipeActions(edge: .trailing) {
                     Button(role: .destructive) {
-                        uploadArray.removeById(item)
+                        uploadArray.removeByItem(item)
                     } label: {
                         Text("删除")
                     }

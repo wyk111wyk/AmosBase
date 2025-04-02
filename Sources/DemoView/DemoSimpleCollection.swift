@@ -108,9 +108,9 @@ public struct DemoSimpleCollection: View {
         case 1:
             newArray.safeSwap(from: 1, to: 6)
         case 2:
-            newArray.removeAll(4)
+            newArray.remove(4)
         case 3:
-            newArray.removeAll([3,4])
+            newArray.removeItems([3,4])
         case 4:
             newArray.removeDuplicates()
         default: break
@@ -124,16 +124,16 @@ public struct DemoSimpleCollection: View {
         let thirdId = newArray[2].id
         switch index {
         case 0:
-            newArray.removeById(second)
+            newArray.removeByItem(second)
         case 1:
             second.name = "Hello"
             newArray.replace(second)
         case 2:
-            secondIndex = newArray.indexById(second)
+            secondIndex = newArray.indexByItem(second)
         case 3:
-            isContainSecond = newArray.containById(second)
+            isContainSecond = newArray.containByItem(second)
         case 4:
-            thirdValue = newArray.findById(thirdId)?.name
+            thirdValue = newArray.firstById(thirdId)?.name
         default: break
         }
         

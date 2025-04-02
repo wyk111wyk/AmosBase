@@ -195,7 +195,7 @@ public struct SimplePicList: View {
             do {
                 if try await picBed.deleteFile(for: gitImage) {
                     withAnimation {
-                        allImageList.removeById(gitImage)
+                        allImageList.removeByItem(gitImage)
                         allImage.removeAll(where: {
                             $0.id == gitImage.id
                         })

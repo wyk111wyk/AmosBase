@@ -248,7 +248,7 @@ public struct DemoSimpleUIElement: View {
                 newTag.icon = "medal"
                 newTag.viewType = .border()
                 withAnimation {
-                    tagCollectOne.removeById(newTag)
+                    tagCollectOne.removeByItem(newTag)
                     tagCollectTwo.appendOrReplace(newTag)
                 }
             }
@@ -258,7 +258,7 @@ public struct DemoSimpleUIElement: View {
                 newTag.icon = "person.wave.2.fill"
                 newTag.viewType = .bg()
                 withAnimation {
-                    tagCollectTwo.removeById(newTag)
+                    tagCollectTwo.removeByItem(newTag)
                     tagCollectOne.appendOrReplace(newTag)
                 }
             }

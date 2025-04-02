@@ -7,6 +7,15 @@
 
 import Foundation
 
+public enum SimpleSortOrder {
+    case ascending
+    case descending
+    
+    public mutating func toggle() {
+        self = self == .ascending ? .descending : .ascending
+    }
+}
+
 public extension Collection {
     /// 判断集合非空
     var isNotEmpty: Bool {
@@ -17,6 +26,51 @@ public extension Collection {
 // MARK: - Methods
 
 public extension Array {
+    
+    /// 使用 Key path 进行map的转换
+    ///
+    ///     let articleIDs = articles.map { $0.id }
+    ///     let articleSources = articles.map { $0.source }
+    ///     可变成：
+    ///     let articleIDs = articles.map(\.id)
+    ///     let articleSources = articles.map(\.source)
+    func map<T>(_ keyPath: KeyPath<Element, T>) -> [T] {
+      return map { $0[keyPath: keyPath] }
+    }
+    
+    /// 自定义排序闭包
+    ///
+    ///     playlist.songs.sorted(by: \.name)
+    func sorted<T: Comparable>(
+        by keyPath: KeyPath<Element, T>,
+        order: SimpleSortOrder = .ascending
+    ) -> [Element] {
+        return sorted { a, b in
+            switch order {
+            case .ascending:
+                return a[keyPath: keyPath] < b[keyPath: keyPath]
+            case .descending:
+                return a[keyPath: keyPath] > b[keyPath: keyPath]
+            }
+        }
+    }
+    
+    /// 自定义排序闭包
+    ///
+    ///     playlist.songs.sorted(by: \.name)
+    mutating func sort<T: Comparable>(
+        by keyPath: KeyPath<Element, T>,
+        order: SimpleSortOrder = .ascending
+    ) {
+        sort { a, b in
+            switch order {
+            case .ascending:
+                return a[keyPath: keyPath] < b[keyPath: keyPath]
+            case .descending:
+                return a[keyPath: keyPath] > b[keyPath: keyPath]
+            }
+        }
+    }
     
     /// SwifterSwift: 在第一位插入。Insert an element at the beginning of array.
     ///
@@ -107,7 +161,7 @@ public extension Array where Element: Identifiable {
     /// 在最后面添加或者更新一个元素
     @discardableResult
     mutating func appendOrReplace(_ item: Element) -> [Element] {
-        if self.containById(item) {
+        if self.containByItem(item) {
             self.replace(item)
         }else {
             self.append(item)
@@ -120,44 +174,61 @@ public extension Array where Element: Identifiable {
     ///
     /// - Returns: self after removing all instances of item.
     @discardableResult
-    mutating func removeById(_ item: Element) -> [Element] {
+    mutating func removeByItem(_ item: Element) -> [Element] {
         removeAll(where: { $0.id == item.id })
+        return self
+    }
+    
+    /// SwifterSwift: 根据Id删除数组中的值。
+    ///
+    /// - Returns: self after removing all instances of item.
+    @discardableResult
+    mutating func removeById(_ id: Element.ID) -> [Element] {
+        removeAll(where: { $0.id == id })
         return self
     }
     
     /// 根据 Id 替换数组中的值。
     @discardableResult
     mutating func replace(_ item: Element) -> [Element] {
-        if let index = self.indexById(item) {
+        if let index = self.indexByItem(item) {
             self[index] = item
         }
         return self
     }
     
     /// 根据 Id 取出数组中的值
-    func findById(_ id: any Hashable) -> Element? {
+    func firstById(_ id: Element.ID) -> Element? {
         self.first {
-            $0.id == id as? Element.ID
+            $0.id == id
         }
     }
     
     /// 根基 Id 取出第一个符合的 index
-    func indexById(_ item: Element) -> Int? {
+    func indexByItem(_ item: Element) -> Int? {
+        self.indexById(item.id)
+    }
+    
+    func indexById(_ id: Element.ID) -> Int? {
         self.firstIndex(where: {
-            $0.id == item.id
+            $0.id == id
         })
     }
     
     /// 判断数组是否包含某个值（Identifiable）
-    func containById(_ item: Element) -> Bool {
+    func containByItem(_ item: Element) -> Bool {
+        self.containById(item.id)
+    }
+    
+    func containById(_ id: Element.ID) -> Bool {
         self.contains {
-            $0.id == item.id
+            $0.id == id
         }
     }
     
     /// 下一个元素的 Index
     func nextIndex(_ item: Element) -> Int? {
-        guard let index = self.indexById(item) else { return nil }
+        guard let index = self.indexByItem(item) else { return nil }
         if index + 1 == self.count {
             return index
         }else {
@@ -167,7 +238,7 @@ public extension Array where Element: Identifiable {
     
     /// 上一个元素的 Index
     func previousIndex(_ item: Element) -> Int? {
-        guard let index = self.indexById(item) else { return nil }
+        guard let index = self.indexByItem(item) else { return nil }
         if index - 1 < 0 {
             return index
         }else {
@@ -242,7 +313,7 @@ public extension Array where Element: Equatable {
     /// - Parameter item: item to remove.
     /// - Returns: self after removing all instances of item.
     @discardableResult
-    mutating func removeAll(_ item: Element) -> [Element] {
+    mutating func remove(_ item: Element) -> [Element] {
         removeAll(where: { $0 == item })
         return self
     }
@@ -255,7 +326,7 @@ public extension Array where Element: Equatable {
     /// - Parameter items: items to remove.
     /// - Returns: self after removing all instances of all items in given array.
     @discardableResult
-    mutating func removeAll(_ items: [Element]) -> [Element] {
+    mutating func removeItems(_ items: [Element]) -> [Element] {
         guard !items.isEmpty else { return self }
         removeAll(where: { items.contains($0) })
         return self
