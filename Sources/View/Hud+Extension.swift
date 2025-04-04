@@ -20,8 +20,8 @@ struct SimpleHud: ViewModifier {
         isLoading: Bool,
         title: String? = nil,
         progress: Float? = nil,
-        width: CGFloat? = 240,
-        height: CGFloat? = 140
+        width: CGFloat? = 220,
+        height: CGFloat? = 120
     ) {
         self.isLoading = isLoading
         self.title = title

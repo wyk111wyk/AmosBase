@@ -233,11 +233,11 @@ extension SimplePurchaseView {
                     Capsule()
                         .foregroundStyle(.blue_06)
                     VStack(spacing: 2) {
-                        Text("开始免费试用")
+                        Text("Start Free Trial")
                             .font(.title3.bold())
                             .foregroundStyle(.white)
                         if let yearlyProduct {
-                            Text("试用7天后 \(yearlyProduct.displayPrice)/年 续订")
+                            Text("7-day free trial, then \(yearlyProduct.displayPrice)/year subscription.")
                                 .font(.caption)
                                 .foregroundStyle(.white)
                         }
@@ -268,7 +268,7 @@ extension SimplePurchaseView {
         if let product {
             let price = NSDecimalNumber(decimal: product.price).doubleValue
             switch product.type {
-            case .lifetime: return "终身"
+            case .lifetime: return "Lifetime"
             case .yearly:
                 let weekPrice = price / 365 * 7
                 return String(format: "%.2f / 周", weekPrice)
@@ -297,7 +297,7 @@ extension SimplePurchaseView {
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
             if let promotion = weekPromotion(product) {
-                Text(promotion)
+                Text(promotion.toLocalizedKey(), bundle: .module)
                     .font(.callout.weight(.light))
                     .foregroundStyle(.secondary)
                     .minimumScaleFactor(0.8)
@@ -324,7 +324,7 @@ extension SimplePurchaseView {
                 ZStack(alignment: .top) {
                     RoundedRectangle(cornerRadius: 12)
                         .foregroundStyle(colorScheme == .light ? .black : .white)
-                    Text("推荐")
+                    Text("Recommended", bundle: .module)
                         .font(.footnote)
                         .fontWeight(.medium)
                         .lineLimit(1)
@@ -394,7 +394,7 @@ extension SimplePurchaseView {
                         HStack {
                             Text("“")
                                 .font(.system(size: 100))
-                            Text("产品寄语")
+                            Text("Product Message", bundle: .module)
                                 .fontDesign(.rounded)
                                 .fontWeight(.semibold)
                                 .font(.title)
@@ -411,25 +411,7 @@ extension SimplePurchaseView {
     private func policyContent() -> some View {
         VStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 8) {
-                Text(
-                """
-                【自动订阅服务说明】
-                1. 订阅服务：
-                A）高级服务连续包月（1个月）、高级服务连续包年（12个月)
-                B）高级服务买断（终身）
-                2. 订阅价格：
-                a）高级服务：连续包月产品为 \(monthlyProduct?.displayPrice ?? "12元")/月，连续包年产品为 \(yearlyProduct?.displayPrice ?? "68元")/年
-                c）高级服务：买断服务为 \(lifetimeProduct?.displayPrice ?? "98元")
-                3. 付款：用户确认购买并付款后计入iTunes账户
-                4. 自动续费：苹果iTunes 账户会在到期前 24小时内扣费，扣费成功后订阅周期顺延一个订阅周期
-                5. 关闭服务：您可以在苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击“Apple ID”，选择"查看 Apple ID"，进入"账户设置"页面，点击“订阅”，管理自动订阅服务，如需取消，每个计费周期结束前 24小时关闭即可，到期前 24小时内则不再扣费
-                6. 使用条款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/
-                7. 隐私条款（Privacy policy）：https://www.amosstudio.com.cn/amosgym-privacydeal.html
-                8. 其他支持：
-                """)
-                Text("·随时在论坛进行反馈交流")
-                Text("·支持与家人共享（最多6人）")
-                Text("·订阅和试用随时可以取消")
+                Text("Service Description 1:\(monthlyProduct?.displayPrice ?? "N/A") 2:\(yearlyProduct?.displayPrice ?? "N/A") 3:\(lifetimeProduct?.displayPrice ?? "N/A")", bundle: .module)
             }
             .font(.footnote)
             .foregroundStyle(.secondary)
@@ -437,7 +419,7 @@ extension SimplePurchaseView {
                 Button {
                     showPrivacySheet = true
                 } label: {
-                    Text("隐私条款")
+                    Text("Privacy Policy", bundle: .module)
                         .foregroundStyle(.blue)
                 }
                 Text("·").foregroundStyle(.secondary)
@@ -446,7 +428,7 @@ extension SimplePurchaseView {
                         await recoverPurchase()
                     }
                 } label: {
-                    Text("恢复购买")
+                    Text("Resume purchases", bundle: .module)
                         .foregroundStyle(.blue)
                 }
                 #if os(iOS)
@@ -454,7 +436,7 @@ extension SimplePurchaseView {
                 Button {
                     showRedeemSheet = true
                 } label: {
-                    Text("代码兑换")
+                    Text("Code Redemption", bundle: .module)
                         .foregroundStyle(.blue)
                 }
                 #endif

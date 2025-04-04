@@ -484,4 +484,5 @@ struct SimpleAlertItem<V: Identifiable>: ViewModifier {
 
 #Preview(body: {
     DemoSimpleAlert()
+        .environment(\.locale, .zhHans)
 })

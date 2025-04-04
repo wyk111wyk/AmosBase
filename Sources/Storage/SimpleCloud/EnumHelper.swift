@@ -141,7 +141,7 @@ public extension CKAccountStatus {
         case .restricted: "restricted"
         case .noAccount: "noAccount"
         case .temporarilyUnavailable: "temporarilyUnavailable"
-        @unknown default: "unknown"
+        @unknown default: "Unknown"
         }
     }
     
@@ -162,18 +162,18 @@ public extension CKAccountStatus {
             switch self {
             case .available:
                 Image(systemName: "icloud")
-                Text(title)
+                Text(title.toLocalizedKey(), bundle: .module)
             case .restricted, .temporarilyUnavailable:
                 Image(systemName: "icloud.slash")
-                Text(title)
+                Text(title.toLocalizedKey(), bundle: .module)
             case .noAccount:
                 Image(systemName: "person.crop.circle.badge.xmark")
-                Text(title)
+                Text(title.toLocalizedKey(), bundle: .module)
             default:
                 Circle()
                     .frame(width: 8, height: 8)
                     .foregroundStyle(color)
-                Text("无法连接")
+                Text("Unavailable", bundle: .module)
             }
         }
         .simpleTag(
@@ -186,4 +186,15 @@ public extension CKAccountStatus {
             )
         )
     }
+}
+
+#Preview {
+    VStack(spacing: 20) {
+        CKAccountStatus.available.statusSign()
+        CKAccountStatus.restricted.statusSign()
+        CKAccountStatus.noAccount.statusSign()
+        CKAccountStatus.temporarilyUnavailable.statusSign()
+        CKAccountStatus.couldNotDetermine.statusSign()
+    }
+    .environment(\.locale, .zhHans)
 }

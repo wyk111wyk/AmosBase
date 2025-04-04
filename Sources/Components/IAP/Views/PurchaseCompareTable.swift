@@ -73,7 +73,7 @@ struct PurchaseCompareTable: View {
     
     private func regularColumns() -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("普通版")
+            Text("Regular", bundle: .module)
                 .font(.callout)
                 .fontWeight(.light)
                 .foregroundStyle(.secondary)

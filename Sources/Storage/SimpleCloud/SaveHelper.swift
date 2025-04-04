@@ -8,53 +8,7 @@
 import Foundation
 import CloudKit
 
-public extension Data {
-    /// 将 `Data` 转换为 `CKRecord`
-    func toCKRecord(hasCustomData: Bool = false) throws -> CKRecord {
-        // 初始化解码器
-        let unarchiver = try NSKeyedUnarchiver(forReadingFrom: self)
-        unarchiver.requiresSecureCoding = true
-        
-        // 1. 解码系统字段并创建 CKRecord
-        guard let decodedRecord = CKRecord(coder: unarchiver) else {
-            throw SimpleError.customError(msg: "CKRecord 解码失败")
-        }
-        
-        // 2. 解码自定义字段
-        if hasCustomData {
-            for key in decodedRecord.allKeys() {
-                if let value = unarchiver.decodeObject(forKey: key) {
-                    print("Decode 解码 key: \(key) value: \(value)")
-                    decodedRecord[key] = value as? CKRecordValue
-                }
-            }
-        }
-        
-        unarchiver.finishDecoding()
-        return decodedRecord
-    }
-}
-
 public extension CKRecord {
-    /// 将当前记录转换为 `Data`
-    func toData(hasCustomData: Bool = false) -> Data {
-        let encoder = NSKeyedArchiver(requiringSecureCoding: true)
-        // 专门用于编码记录的系统字段
-        self.encodeSystemFields(with: encoder)
-        // 编码自定义字段
-        if hasCustomData {
-            for key in self.allKeys() {
-                if let value = self.object(forKey: key) {
-//                    print("Encode 编码 key: \(key) value: \(value)")
-                    encoder.encode(value, forKey: key)
-                }
-            }
-        }
-        encoder.finishEncoding()
-        let recordData = encoder.encodedData
-        return recordData
-    }
-    
     /// 更新当前记录的值
     /// - Parameters:
     ///   - dataType: 储存类型和数据本身（必须携带数据）

@@ -165,6 +165,10 @@ public extension Data {
 }
 
 public extension NSManagedObject {
+    static var entityName: String {
+        String(describing: self)
+    }
+    
     var entityName: String {
         String(describing: type(of: self))
     }

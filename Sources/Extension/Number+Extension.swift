@@ -119,6 +119,10 @@ public extension CGFloat {
         Int(self)
     }
     
+    var toFloat: Float {
+        Float(self)
+    }
+    
     /// 转换为文字
     ///
     /// 默认不带小数点，最多8位
@@ -140,7 +144,7 @@ public extension CGFloat {
         } else if digit == 7 {
             return String(format: "%.7f", self)
         } else {
-            return String(format: "%.8f", self)
+            return String(self.toFloat)
         }
     }
 }
@@ -175,7 +179,7 @@ public extension Float {
         } else if digit == 7 {
             return String(format: "%.7f", self)
         } else {
-            return String(format: "%.8f", self)
+            return String(self)
         }
     }
 }

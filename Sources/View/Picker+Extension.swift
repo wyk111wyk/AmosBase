@@ -229,15 +229,51 @@ public struct SimplePicker<Value: SimplePickerItem, V: View>: View {
     }
 }
 
-#Preview {
-    let allPickerContent = DemoPickerModel.allContent
-    NavigationStack {
-        SimplePicker(
-            title: "Picker",
-            maxSelectCount: 2,
-            allValue: allPickerContent,
-            disabledValues: [allPickerContent.randomElement()!],
-            selectValues: [allPickerContent.randomElement()!]
-        )
+struct SimplePickerDemo: View {
+    enum PageSelection: CaseIterable, Identifiable {
+        case single, multiple
+        var id: String { title }
+        var title: String {
+            switch self {
+            case .single: "单选"
+            case .multiple: "多选"
+            }
+        }
+        var count: Int {
+            switch self {
+            case .single: 1
+            case .multiple: 6
+            }
+        }
     }
+    
+    @State private var page: PageSelection = .single
+    let allPickerContent = DemoPickerModel.allContent
+    
+    public var body: some View {
+        NavigationStack {
+            SimplePicker(
+                title: "Picker",
+                maxSelectCount: page.count,
+                allValue: allPickerContent,
+                disabledValues: [allPickerContent.randomElement()!],
+                selectValues: [allPickerContent.randomElement()!]
+            )
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Picker("", selection: $page) {
+                        ForEach(PageSelection.allCases) {
+                            Text($0.title).tag($0)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(width: 180)
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    SimplePickerDemo()
 }

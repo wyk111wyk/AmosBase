@@ -50,6 +50,7 @@ struct ConfirmToggleStyle: ToggleStyle {
                 .accessibility(label: Text(configuration.isOn ? "Checked" : "Unchecked"))
                 .foregroundColor(configuration.isOn ? iconColor : .init(white: 0.8))
                 .imageScale(.large)
+                .contentTransition(.symbolEffect(.replace))
         }
         .buttonStyle(.plain)
     }
@@ -88,6 +89,7 @@ struct LabelToggleStyle: ToggleStyle {
                     .accessibility(label: Text(configuration.isOn ? "Checked" : "Unchecked"))
                     .foregroundColor(configuration.isOn ? iconColor : .init(white: 0.8))
                     .imageScale(.medium)
+                    .contentTransition(.symbolEffect(.replace))
                 configuration.label
                     .foregroundColor(configuration.isOn ? selectLabelColor : deselectLabelColor)
             }
