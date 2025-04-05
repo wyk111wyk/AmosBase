@@ -8,6 +8,7 @@
 import Foundation
 import CloudKit
 
+// MARK: - SimpleDefault 协议
 extension CKRecord: SimpleDefaults.Serializable {
     public static let bridge = CKRecordBridge()
 }
@@ -21,7 +22,7 @@ public struct CKRecordBridge: SimpleDefaults.Bridge, Sendable {
             return nil
         }
 
-        return value.toData(hasCustomData: true)
+        return try? value.toData()
     }
     
     public func deserialize(_ object: Serializable?) -> Value? {
@@ -29,11 +30,10 @@ public struct CKRecordBridge: SimpleDefaults.Bridge, Sendable {
             return nil
         }
 
-        return try? object.toCKRecord(hasCustomData: true)
+        return try? object.toCKRecord()
     }
 }
 
-// MARK: - CKRecord.ID
 extension CKRecord.ID: SimpleDefaults.Serializable {
     public static let bridge = CKRecordIDBridge()
 }
@@ -59,7 +59,9 @@ public struct CKRecordIDBridge: SimpleDefaults.Bridge, Sendable {
     }
 }
 
+// MARK: - 实现 CKRecord 的 Codable 协议
 public extension Data {
+    /// 将 `Data` 转换为 `CKRecord.ID`
     func toCKRecordID() throws -> CKRecord.ID {
         let decoder = JSONDecoder()
         let codableRecordID = try decoder.decode(CodableRecordID.self, from: self)
@@ -67,57 +69,110 @@ public extension Data {
     }
     
     /// 将 `Data` 转换为 `CKRecord`
-    func toCKRecord(hasCustomData: Bool = false) throws -> CKRecord {
-        // 初始化解码器
+    func toCKRecord() throws -> CKRecord {
+        let decoder = JSONDecoder()
+        decoder.dataDecodingStrategy = .base64
+        let codableRecord = try decoder.decode(CodableCKRecord.self, from: self)
+        return try codableRecord.toCKRecord()
+    }
+    
+    func toSystemRecord() throws -> CKRecord {
         let unarchiver = try NSKeyedUnarchiver(forReadingFrom: self)
         unarchiver.requiresSecureCoding = true
-        
-        // 1. 解码系统字段并创建 CKRecord
         guard let decodedRecord = CKRecord(coder: unarchiver) else {
             throw SimpleError.customError(msg: "CKRecord 解码失败")
         }
-        
-        // 2. 解码自定义字段
-        if hasCustomData {
-            for key in decodedRecord.allKeys() {
-                if let value = unarchiver.decodeObject(forKey: key),
-                   let value = value as? CKRecordValue {
-                    print("Decode 解码 key: \(key) value: \(value)")
-                    decodedRecord[key] = value
-                }
-            }
-        }
-        
-        unarchiver.finishDecoding()
         return decodedRecord
     }
 }
 
 public extension CKRecord {
-    
-    /// 将当前记录转换为 `Data`
-    func toData(hasCustomData: Bool = false, prefix: String? = "AK_") -> Data {
+    /// 将记录的系统字段转换为 `Data`
+    func toSystemData() -> Data {
         let encoder = NSKeyedArchiver(requiringSecureCoding: true)
         // 专门用于编码记录的系统字段
         self.encodeSystemFields(with: encoder)
-        // 编码自定义字段
-        if hasCustomData {
-            for key in self.allKeys() {
-                if let prefix, !key.hasPrefix(prefix) {
-                    continue
-                }
-                if let value = self.object(forKey: key) {
-//                    print("Encode 编码 key: \(key) value: \(value)")
-                    encoder.encode(value, forKey: key)
-                }
-            }
-        }
         let recordData = encoder.encodedData
         encoder.finishEncoding()
         return recordData
     }
+    
+    func toData() throws -> Data {
+        let codableRecord = CodableCKRecord(record: self)
+        let encoder = JSONEncoder()
+        encoder.dataEncodingStrategy = .base64
+        return try encoder.encode(codableRecord)
+    }
 }
 
+// 定义一个包装 CKRecord 的结构体，符合 Codable
+private struct CodableCKRecord: Codable {
+    let systemFields: Data // 系统字段编码为 Data
+    let customFields: [String: AnyCodable] // 自定义字段
+    let customFieldPrefix: String? // 可选的自定义字段前缀
+
+    // 从 CKRecord 初始化，允许指定前缀
+    init(record: CKRecord, customFieldPrefix: String? = "AK_") {
+        // 编码系统字段
+        self.systemFields = record.toSystemData()
+        
+        // 设置前缀
+        self.customFieldPrefix = customFieldPrefix
+        
+        // 提取自定义字段
+        var fields: [String: AnyCodable] = [:]
+        for key in record.allKeys() {
+            // 如果指定了前缀，只提取带有前缀的字段作为自定义字段
+            if let prefix = customFieldPrefix {
+                if key.hasPrefix(prefix), let value = record[key] {
+                    fields[key] = AnyCodable(value: value)
+                }
+            } else {
+                if let value = record[key] {
+                    fields[key] = AnyCodable(value: value)
+                }
+            }
+        }
+        self.customFields = fields
+    }
+
+    // 转换为 CKRecord
+    func toCKRecord() throws -> CKRecord {
+        // 解码系统字段
+        let record = try systemFields.toSystemRecord()
+        
+        // 设置自定义字段
+        for (key, value) in customFields {
+            record[key] = value.value as? CKRecordValue
+        }
+        return record
+    }
+
+    // Codable 的编码实现
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(systemFields, forKey: .systemFields)
+        try container.encode(customFields, forKey: .customFields)
+        try container.encodeIfPresent(customFieldPrefix, forKey: .customFieldPrefix)
+    }
+
+    // Codable 的解码实现
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.systemFields = try container.decode(Data.self, forKey: .systemFields)
+        self.customFields = try container.decode([String: AnyCodable].self, forKey: .customFields)
+        self.customFieldPrefix = try container.decodeIfPresent(String.self, forKey: .customFieldPrefix)
+    }
+
+    // CodingKeys 用于指定编码/解码的键
+    enum CodingKeys: String, CodingKey {
+        case systemFields
+        case customFields
+        case customFieldPrefix
+    }
+}
+
+// MARK: - 实现 CKRecord.ID 的 Codable
 private struct CodableRecordID: Codable {
     let recordName: String
     let zoneName: String
@@ -161,12 +216,5 @@ public extension CKRecord.ID {
         let codableRecordID = CodableRecordID(recordID: self)
         let encoder = JSONEncoder()
         return try encoder.encode(codableRecordID)
-    }
-    
-    // 从 Data 解码
-    static func decode(from data: Data) throws -> CKRecord.ID {
-        let decoder = JSONDecoder()
-        let codableRecordID = try decoder.decode(CodableRecordID.self, from: data)
-        return codableRecordID.toRecordID()
     }
 }

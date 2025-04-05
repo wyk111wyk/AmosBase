@@ -150,8 +150,8 @@ public extension CKAccountStatus {
         case .couldNotDetermine: .gray
         case .available: .green
         case .restricted: .red
-        case .noAccount: .yellow
-        case .temporarilyUnavailable: .pink
+        case .noAccount: .brown
+        case .temporarilyUnavailable: .orange
         @unknown default: .gray
         }
     }

@@ -215,3 +215,107 @@ extension CLLocationCoordinate2D: Codable {
         try container.encode(self.longitude, forKey: .longitude)
     }
 }
+
+public extension CLLocation {
+    func toData() -> Data? {
+        let location = CodableCLLocation(location: self)
+        return try? JSONEncoder().encode(location)
+    }
+}
+
+public extension Data {
+    func toCLLocation() -> CLLocation? {
+        let location = try? JSONDecoder().decode(CodableCLLocation.self, from: self)
+        return location?.toCLLocation()
+    }
+}
+
+private struct CodableCLLocation: Codable {
+    let latitude: CLLocationDegrees
+    let longitude: CLLocationDegrees
+    let altitude: CLLocationDistance?
+    let horizontalAccuracy: CLLocationAccuracy?
+    let verticalAccuracy: CLLocationAccuracy?
+    let timestamp: Date?
+
+    init(location: CLLocation) {
+        self.latitude = location.coordinate.latitude
+        self.longitude = location.coordinate.longitude
+        self.altitude = location.altitude != 0 ? location.altitude : nil
+        self.horizontalAccuracy = location.horizontalAccuracy >= 0 ? location.horizontalAccuracy : nil
+        self.verticalAccuracy = location.verticalAccuracy >= 0 ? location.verticalAccuracy : nil
+        self.timestamp = location.timestamp
+    }
+
+    func toCLLocation() -> CLLocation {
+        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        return CLLocation(
+            coordinate: coordinate,
+            altitude: altitude ?? 0,
+            horizontalAccuracy: horizontalAccuracy ?? -1,
+            verticalAccuracy: verticalAccuracy ?? -1,
+            timestamp: timestamp ?? Date()
+        )
+    }
+}
+
+// 辅助类型 AnyCodable，用于处理动态类型的自定义字段
+struct AnyCodable: Codable {
+    let value: Any
+
+    init(value: Any) {
+        self.value = value
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch value {
+        case let string as String:
+            try container.encode(string)
+        case let int as Int:
+            try container.encode(int)
+        case let double as Double:
+            try container.encode(double)
+        case let bool as Bool:
+            try container.encode(bool)
+        case let date as Date:
+            try container.encode(date)
+        case let color as Color:
+            try container.encode(color)
+        case let location2D as CLLocationCoordinate2D:
+            try container.encode(location2D)
+        case let location as CLLocation:
+            let locationCode = CodableCLLocation(location: location)
+            try container.encode(locationCode)
+        case let stringArray as [String]:
+            try container.encode(stringArray)
+        default:
+            throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Unsupported type"))
+        }
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let string = try? container.decode(String.self) {
+            self.value = string
+        } else if let int = try? container.decode(Int.self) {
+            self.value = int
+        } else if let double = try? container.decode(Double.self) {
+            self.value = double
+        } else if let bool = try? container.decode(Bool.self) {
+            self.value = bool
+        } else if let date = try? container.decode(Date.self) {
+            self.value = date
+        } else if let color = try? container.decode(Color.self) {
+            self.value = color
+        } else if let location = try? container.decode(CLLocationCoordinate2D.self) {
+            self.value = location
+        } else if let locationCoda = try? container.decode(CodableCLLocation.self) {
+            self.value = locationCoda.toCLLocation()
+        } else if let stringArray = try? container.decode([String].self) {
+            self.value = stringArray
+        } else {
+            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unsupported type")
+        }
+    }
+}
