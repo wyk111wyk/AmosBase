@@ -7,6 +7,8 @@
 
 import Foundation
 import CloudKit
+import SwiftUI
+import CoreLocation
 
 // MARK: - SimpleDefault 协议
 extension CKRecord: SimpleDefaults.Serializable {
@@ -93,15 +95,144 @@ public extension CKRecord {
         // 专门用于编码记录的系统字段
         self.encodeSystemFields(with: encoder)
         let recordData = encoder.encodedData
+//        print("CKRecord 转换系统字段", "recordChangeTag: \(self.recordChangeTag ?? "还未进行同步")")
         encoder.finishEncoding()
         return recordData
     }
     
+    /// 通过转换层 保存为 Data
     func toData() throws -> Data {
         let codableRecord = CodableCKRecord(record: self)
         let encoder = JSONEncoder()
         encoder.dataEncodingStrategy = .base64
         return try encoder.encode(codableRecord)
+    }
+    
+    // 为记录进行赋值
+    func setFields(allValues: [String: Any], prefix: String? = "AK_") {
+        for (key_, value) in allValues {
+            let key =
+            if let prefix { prefix + key_ }
+            else { key_ }
+            
+//          print("编码 CKRecord - key: \(key) type: \(type(of: value)) value: \(value)")
+            
+            switch value {
+            case let url as URL: self[key] = url.absoluteString
+            case let uuid as UUID: self[key] = uuid.uuidString
+            case let string as String: self[key] = string
+            case let bool as Bool: self[key] = bool
+            case let number as NSNumber: self[key] = number
+            case let date as Date: self[key] = date.timeIntervalSince1970
+            case let stringArray as [String]: self[key] = stringArray
+            case let location as CLLocation: self[key] = location
+            case let location as CLLocationCoordinate2D:
+                self[key] = location.toLocation()
+            case let data as Data:
+                let newKey = key + "_data"
+                self[newKey] = data
+            case let color as Color:
+                let newKey = key + "_color"
+                self[newKey] = color.toJson()
+            case let image as SFImage:
+                let newKey = key + "_image"
+                self[newKey] = image.jpegImageData()
+            case Optional<Any>.none:
+                // 当值是 nil 的时候，不上传该内容，避免初始化错误的类型
+                continue
+            default:
+                print("不支持的转换类型: key \(key_): \(type(of: value)) (\(String(describing: value))")
+                continue
+            }
+        }
+    }
+    
+    /// 抽取所有自定义的数据
+    func toFields(customFieldPrefix: String? = "AK_") -> [String: Any] {
+        var tempDicts: [String: Any] = [:]
+        for (key, value) in self {
+            var newKey = key
+            if let customFieldPrefix {
+                if key.hasPrefix(customFieldPrefix) {
+                    newKey = String(key.dropFirst(customFieldPrefix.count))
+                }else {
+                    // 忽略没有自定义前缀的属性
+                    continue
+                }
+            }
+            
+//            print("Key: \(key), Type: \(type(of: value)), Value: \(value)")
+            
+            if newKey.hasSuffix("_color") {
+                newKey = String(newKey.dropLast(6))
+                if let newValue = value as? String {
+                    tempDicts[newKey] = newValue.decode(type: [String: Double].self)
+                }
+            }else if newKey.hasSuffix("_data") {
+                newKey = String(newKey.dropLast(5))
+                tempDicts[newKey] = value
+            }else if newKey.hasSuffix("_image") {
+                newKey = String(newKey.dropLast(6))
+            }else {
+                switch value {
+                case let number as NSNumber:
+                    // 处理布尔值和数字
+                    if number == kCFBooleanTrue || number == kCFBooleanFalse {
+                        tempDicts[newKey] = number.boolValue
+                    } else {
+                        tempDicts[newKey] = number
+                    }
+                case let location as CLLocation:
+                    if let encode = location.coordinate.toData() {
+                        tempDicts[newKey] = encode.decode(type: [String: Double].self)
+                    }
+                default:
+                    tempDicts[newKey] = value
+                }
+            }
+        }
+        return tempDicts
+    }
+    
+    /// 将记录转换为不同的项目
+    func decode<T: Decodable>() -> T? {
+        let customFields = self.toFields()
+        if let jsonData = customFields.jsonData() {
+            do {
+                let decoder = JSONDecoder()
+                decoder.dataDecodingStrategy = .base64
+                decoder.dateDecodingStrategy = .secondsSince1970
+                return try jsonData.decodeWithError(type: T.self, decoder: decoder)
+            }catch {
+                print("2.数据转换错误", customFields.description)
+                return nil
+            }
+        }else {
+            print("1.无法转换Data", customFields.description)
+            return nil
+        }
+    }
+    
+    /// 将 CKRecord 的所有系统字段清空，但是保留自定义内容
+    func toNoneSystemFields() -> CKRecord {
+        let record = CKRecord(recordType: recordType, recordID: recordID)
+        for key in self.allKeys() {
+            record[key] = self[key]
+        }
+        
+        return record
+    }
+    
+    func replaceCustomFields(_ newRecord: CKRecord) -> CKRecord {
+        let record = self
+        for key in newRecord.allKeys() {
+            record[key] = newRecord[key]
+        }
+        return record
+    }
+    
+    override var description: String {
+        SimpleCloudValue(record: self, value: "").description
     }
 }
 
@@ -196,14 +327,14 @@ public extension CKRecord.ID {
     
     // 从 CKRecord.ID 初始化
     convenience init(
-        itemId: UUID,
+        itemID: UUID,
         zoneName: String? = nil
     ) {
         if let zoneName {
             let zoneID = CKRecordZone.ID(zoneName: zoneName)
-            self.init(recordName: itemId.uuidString, zoneID: zoneID)
+            self.init(recordName: itemID.uuidString, zoneID: zoneID)
         }else {
-            self.init(recordName: itemId.uuidString)
+            self.init(recordName: itemID.uuidString)
         }
     }
     

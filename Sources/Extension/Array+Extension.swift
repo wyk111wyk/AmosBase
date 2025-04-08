@@ -170,6 +170,18 @@ public extension Array where Element: Identifiable {
         return self
     }
     
+    /// 在第一个添加或者更新一个元素
+    @discardableResult
+    mutating func prependOrReplace(_ item: Element) -> [Element] {
+        if self.containByItem(item) {
+            self.replace(item)
+        }else {
+            self.prepend(item)
+        }
+        
+        return self
+    }
+    
     /// SwifterSwift: 根据Id删除数组中的值。
     ///
     /// - Returns: self after removing all instances of item.

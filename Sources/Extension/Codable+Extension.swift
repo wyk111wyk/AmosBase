@@ -249,13 +249,39 @@ private struct CodableCLLocation: Codable {
 
     func toCLLocation() -> CLLocation {
         let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        return CLLocation(
+        let location = CLLocation(
             coordinate: coordinate,
             altitude: altitude ?? 0,
             horizontalAccuracy: horizontalAccuracy ?? -1,
             verticalAccuracy: verticalAccuracy ?? -1,
             timestamp: timestamp ?? Date()
         )
+        
+        return location
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case latitude, longitude, altitude, horizontalAccuracy, verticalAccuracy, timestamp
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.latitude = try container.decode(CLLocationDegrees.self, forKey: .latitude)
+        self.longitude = try container.decode(CLLocationDegrees.self, forKey: .longitude)
+        self.altitude = try container.decodeIfPresent(CLLocationDistance.self, forKey: .altitude)
+        self.horizontalAccuracy = try container.decodeIfPresent(CLLocationAccuracy.self, forKey: .horizontalAccuracy)
+        self.verticalAccuracy = try container.decodeIfPresent(CLLocationAccuracy.self, forKey: .verticalAccuracy)
+        self.timestamp = try container.decodeIfPresent(Date.self, forKey: .timestamp)
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.latitude, forKey: .latitude)
+        try container.encode(self.longitude, forKey: .longitude)
+        try container.encodeIfPresent(self.altitude, forKey: .altitude)
+        try container.encodeIfPresent(self.horizontalAccuracy, forKey: .horizontalAccuracy)
+        try container.encodeIfPresent(self.verticalAccuracy, forKey: .verticalAccuracy)
+        try container.encodeIfPresent(self.timestamp, forKey: .timestamp)
     }
 }
 
@@ -278,15 +304,17 @@ struct AnyCodable: Codable {
             try container.encode(double)
         case let bool as Bool:
             try container.encode(bool)
+        case let data as Data:
+            try container.encode(data)
         case let date as Date:
             try container.encode(date)
         case let color as Color:
             try container.encode(color)
-        case let location2D as CLLocationCoordinate2D:
-            try container.encode(location2D)
         case let location as CLLocation:
             let locationCode = CodableCLLocation(location: location)
             try container.encode(locationCode)
+        case let location2D as CLLocationCoordinate2D:
+            try container.encode(location2D)
         case let stringArray as [String]:
             try container.encode(stringArray)
         default:
@@ -304,14 +332,16 @@ struct AnyCodable: Codable {
             self.value = double
         } else if let bool = try? container.decode(Bool.self) {
             self.value = bool
-        } else if let date = try? container.decode(Date.self) {
+        } else if let data = try? container.decode(Data.self) {
+            self.value = data
+        }  else if let date = try? container.decode(Date.self) {
             self.value = date
         } else if let color = try? container.decode(Color.self) {
             self.value = color
-        } else if let location = try? container.decode(CLLocationCoordinate2D.self) {
-            self.value = location
         } else if let locationCoda = try? container.decode(CodableCLLocation.self) {
             self.value = locationCoda.toCLLocation()
+        } else if let location = try? container.decode(CLLocationCoordinate2D.self) {
+            self.value = location
         } else if let stringArray = try? container.decode([String].self) {
             self.value = stringArray
         } else {

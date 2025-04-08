@@ -42,10 +42,34 @@ public struct SimpleCloudValue<T: Hashable>: Identifiable, Hashable {
         self.dataType = dataType
         self.value = value
     }
+    
+    public init(record: CKRecord, value: T) {
+        id = record.recordID.recordName.toUUID() ?? .init()
+        idKey = record.recordID.recordName
+        recordID = record.recordID
+        recordChangeTag = record.recordChangeTag
+        creationDate = record.creationDate
+        modificationDate = record.modificationDate
+        modifiedByDevice = record.value(forKey: "modifiedByDevice") as? String
+        dataType = .text(nil)
+        self.value = value
+    }
 }
 
 extension SimpleCloudValue {
     var creationText: String? {
         creationDate?.toString_DateTime()
+    }
+    
+    public var description: String {
+        """
+        CKRecord 详情如下：
+        id: \(idKey)
+        recordID: \(recordID)
+        recordChangeTag: \(recordChangeTag ?? "")
+        creationDate: \(creationDate?.toString_DateTime() ?? "")
+        modificationDate: \(modificationDate?.toString_DateTime() ?? "")
+        modifiedByDevice: \(modifiedByDevice ?? "")
+        """
     }
 }
