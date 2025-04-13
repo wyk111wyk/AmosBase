@@ -15,7 +15,7 @@ public struct SimpleTextField<
     @Binding var inputText: String
     
     let title: String
-    let prompt: String
+    let prompt: String?
     let systemImage: String?
     let startLine: Int
     let endLine: Int
@@ -31,7 +31,7 @@ public struct SimpleTextField<
     public init(
         _ inputText: Binding<String>,
         title: String = "",
-        prompt: String = "请输入文本",
+        prompt: String? = nil,
         systemImage: String? = nil,
         startLine: Int = 4,
         endLine: Int = 10,
@@ -57,11 +57,16 @@ public struct SimpleTextField<
         self.moreMenus = moreMenus
     }
     
+    var promptText: Text {
+        if let prompt { return Text(prompt) }
+        else { return Text("Please enter the content", bundle: .module) }
+    }
+    
     public var body: some View {
         TextField(
             title,
             text: $inputText,
-            prompt: Text(prompt),
+            prompt: promptText,
             axis: .vertical
         )
         .textFieldStyle(style)
@@ -97,7 +102,7 @@ public struct SimpleTextField<
                     if let systemImage, inputText.isNotEmpty {
                         HStack(spacing: 6) {
                             Image(systemName: systemImage)
-                            Text(prompt)
+                            promptText
                                 .lineLimit(1)
                         }
                         .font(.footnote)

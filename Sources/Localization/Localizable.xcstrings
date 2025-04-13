@@ -7,7 +7,46 @@
     "·" : {
 
     },
+    "·出现动画: %@" : {
+
+    },
+    "·启用震动: %@" : {
+
+    },
+    "·外部点击关闭: %@" : {
+
+    },
+    "·弹窗位置: %@" : {
+
+    },
+    "·技术方案: %@" : {
+
+    },
+    "·拖拽关闭: %@" : {
+
+    },
+    "·显示模态背景: %@" : {
+
+    },
+    "·消失动画: %@" : {
+
+    },
+    "·点击关闭: %@" : {
+
+    },
+    "·自动消失: %@" : {
+
+    },
+    "·计算键盘高度: %@" : {
+
+    },
     "“" : {
+
+    },
+    "(" : {
+
+    },
+    ")" : {
 
     },
     "%@" : {
@@ -232,7 +271,7 @@
         }
       }
     },
-    "available" : {
+    "Available" : {
       "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
@@ -528,7 +567,7 @@
         }
       }
     },
-    "couldNotDetermine" : {
+    "Could Not Determine" : {
       "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
@@ -945,7 +984,20 @@
       }
     },
     "Loading..." : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在载入..."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在載入…"
+          }
+        }
+      }
     },
     "Lon: %lf" : {
 
@@ -995,7 +1047,18 @@
         }
       }
     },
-    "noAccount" : {
+    "Network temporarily unavailable." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂时无法连接网络"
+          }
+        }
+      }
+    },
+    "No Account" : {
       "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
@@ -1052,6 +1115,34 @@
           }
         }
       }
+    },
+    "Please check system settings and app permissions." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查系统设置和应用权限"
+          }
+        }
+      }
+    },
+    "Please enter the content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请输入内容"
+          }
+        }
+      }
+    },
+    "Popup Style" : {
+
+    },
+    "Popup 弹窗" : {
+
     },
     "Privacy Policy" : {
       "extractionState" : "manual",
@@ -1148,7 +1239,18 @@
         }
       }
     },
-    "restricted" : {
+    "Required" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必填"
+          }
+        }
+      }
+    },
+    "Restricted" : {
       "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
@@ -1196,7 +1298,21 @@
         }
       }
     },
+    "Settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "设置"
+          }
+        }
+      }
+    },
     "SF符号" : {
+
+    },
+    "Sheet Popup" : {
 
     },
     "Sheet页面测试" : {
@@ -1359,7 +1475,7 @@
     "Tags" : {
 
     },
-    "temporarilyUnavailable" : {
+    "Temporarily Unavailable" : {
       "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
@@ -1652,6 +1768,9 @@
     "最大强度: %@" : {
 
     },
+    "出现动画" : {
+
+    },
     "初始强度: %@" : {
 
     },
@@ -1700,6 +1819,9 @@
     "可选文字" : {
 
     },
+    "启用震动（成功/失败）" : {
+
+    },
     "图床列表" : {
 
     },
@@ -1734,6 +1856,9 @@
 
     },
     "填写邮箱（选填）" : {
+
+    },
+    "外部点击关闭" : {
 
     },
     "女性" : {
@@ -1782,6 +1907,9 @@
     "开始分析" : {
 
     },
+    "弹窗位置" : {
+
+    },
     "强度: %@" : {
 
     },
@@ -1789,6 +1917,12 @@
 
     },
     "待编码数据" : {
+
+    },
+    "技术方案" : {
+
+    },
+    "拖拽关闭" : {
 
     },
     "持续时间: %@" : {
@@ -1804,6 +1938,9 @@
 
     },
     "断开" : {
+
+    },
+    "无效" : {
 
     },
     "无法购买" : {
@@ -1824,6 +1961,9 @@
     "时间长度 Duration" : {
 
     },
+    "显示模态背景" : {
+
+    },
     "服务测试" : {
 
     },
@@ -1839,6 +1979,9 @@
     "测试按钮" : {
 
     },
+    "消失动画" : {
+
+    },
     "渐强震动" : {
 
     },
@@ -1849,6 +1992,9 @@
 
     },
     "火腿" : {
+
+    },
+    "点击关闭" : {
 
     },
     "点击切换" : {
@@ -1893,6 +2039,9 @@
     "网络传输 - Fetch" : {
 
     },
+    "自动消失" : {
+
+    },
     "自定义颜色" : {
 
     },
@@ -1909,6 +2058,9 @@
 
     },
     "补全用户信息" : {
+
+    },
+    "计算键盘高度" : {
 
     },
     "设备信息" : {

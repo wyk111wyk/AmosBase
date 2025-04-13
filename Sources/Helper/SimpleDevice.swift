@@ -45,18 +45,22 @@ public class SimpleDevice: NSObject {
         #endif
     }
     
-    #if os(iOS)
-    
-    ///获取设备类型 iPhone
-    public static func getModel() -> String {
-        return UIDevice.current.model
-    }
-    
     ///获取系统语言
     public static func getSystemLanguage() -> String {
         return Locale.current.identifier
     }
     
+    #if os(iOS)
+    
+    ///获取设备类型: phone, pad, mac, vision, tv, carplay
+    public func getDevice() -> UIUserInterfaceIdiom {
+        UIDevice.current.userInterfaceIdiom
+    }
+    
+    ///获取设备类型 iPhone
+    public static func getModel() -> String {
+        return UIDevice.current.model
+    }
     
     class public override func description() -> String {
         var message = "系统版本: \(getSystemVersion())\n"

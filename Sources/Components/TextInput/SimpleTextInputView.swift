@@ -14,10 +14,12 @@ public struct SimpleTextInputView: View {
     @State var title: String
     @State var content: String
     
-    let titlePrompt: String
-    let contentPrompt: String
-    let isTitleNoEmpty: Bool
-    let isContentNoEmpty: Bool
+    let titlePrompt: String?
+    let contentPrompt: String?
+    // 标题是否可以为空
+    let isTitleRequired: Bool
+    // 内容是否可以为空
+    let isContentRequired: Bool
     let contentStartLine: Int
     let contentEndLine: Int
     
@@ -25,6 +27,9 @@ public struct SimpleTextInputView: View {
     let tintColor: Color
     let showTitle: Bool
     let showContent: Bool
+    let cornerRadius: CGFloat
+    
+    @Binding var dismissTap: Bool
     
     public typealias inputResult = (title: String, content: String)
     let saveAction: (inputResult) -> Void
@@ -33,15 +38,17 @@ public struct SimpleTextInputView: View {
         pageName: String = "",
         title: String = "",
         content: String = "",
-        titlePrompt: String = "请输入标题",
-        contentPrompt: String = "请输入文本",
-        isTitleNoEmpty: Bool = true,
-        isContentNoEmpty: Bool = false,
+        titlePrompt: String? = nil,
+        contentPrompt: String? = nil,
+        isTitleRequired: Bool = true,
+        isContentRequired: Bool = false,
         showTitle: Bool = true,
         showContent: Bool = true,
         contentStartLine: Int = 4,
         contentEndLine: Int = 6,
         tintColor: Color = .accentColor,
+        cornerRadius: CGFloat = 0,
+        dismissTap: Binding<Bool> = .constant(true),
         saveAction: @escaping (inputResult) -> Void = {_ in}
     ) {
         self.pageName = pageName
@@ -49,35 +56,37 @@ public struct SimpleTextInputView: View {
         self._content = State(initialValue: content)
         self.titlePrompt = titlePrompt
         self.contentPrompt = contentPrompt
-        self.isTitleNoEmpty = isTitleNoEmpty
-        self.isContentNoEmpty = isContentNoEmpty
+        self.isTitleRequired = isTitleRequired
+        self.isContentRequired = isContentRequired
         self.contentStartLine = contentStartLine
         self.contentEndLine = contentEndLine
         self.tintColor = tintColor
         self.showTitle = showTitle
         self.showContent = showContent
+        self.cornerRadius = cornerRadius
+        self._dismissTap = dismissTap
         self.saveAction = saveAction
     }
     
-    var titleHeaderText: String {
-        if isTitleNoEmpty {
-            titlePrompt + "(必填)"
+    var titleHeaderText: Text {
+        if let titlePrompt {
+            Text(titlePrompt)
         }else {
-            titlePrompt
+            Text("Please enter the content", bundle: .module)
         }
     }
     
-    var contentHeaderText: String {
-        if isContentNoEmpty {
-            contentPrompt + "(必填)"
+    var contentHeaderText: Text {
+        if let contentPrompt {
+            Text(contentPrompt)
         }else {
-            contentPrompt
+            Text("Please enter the content", bundle: .module)
         }
     }
     
     var isSaveDisabled: Bool {
-        (isTitleNoEmpty && title.isEmpty && showTitle) ||
-        (isContentNoEmpty && content.isEmpty && showContent)
+        (isTitleRequired && title.isEmpty && showTitle) ||
+        (isContentRequired && content.isEmpty && showContent)
     }
     
     public var body: some View {
@@ -86,9 +95,16 @@ public struct SimpleTextInputView: View {
                 VStack(spacing: 15) {
                     if showTitle {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text(titleHeaderText)
+                            HStack(spacing: 1) {
+                                titleHeaderText
+                                if isTitleRequired {
+                                    Text("(")
+                                    Text("Required", bundle: .module)
+                                    Text(")")
+                                }
+                            }
                                 .font(.caption)
-                                .foregroundStyle(isTitleNoEmpty ? .primary : .secondary)
+                                .foregroundStyle(isTitleRequired ? .primary : .secondary)
                                 .padding(.leading, 25)
                             SimpleTextField(
                                 $title,
@@ -99,18 +115,25 @@ public struct SimpleTextInputView: View {
                             )
                             .padding()
                             .background {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(style: .init(lineWidth: 1))
-                                    .foregroundStyle(.secondary)
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(style: .init(lineWidth: 0.7))
+                                    .foregroundStyle(Color.init(white: 0.7))
                             }
                             .padding(.horizontal)
                         }
                     }
                     if showContent {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text(contentHeaderText)
+                            HStack(spacing: 1) {
+                                contentHeaderText
+                                if isContentRequired {
+                                    Text("(")
+                                    Text("Required", bundle: .module)
+                                    Text(")")
+                                }
+                            }
                                 .font(.caption)
-                                .foregroundStyle(isContentNoEmpty ? .primary : .secondary)
+                                .foregroundStyle(isContentRequired ? .primary : .secondary)
                                 .padding(.leading, 25)
                             SimpleTextField(
                                 $content,
@@ -122,9 +145,9 @@ public struct SimpleTextInputView: View {
                             )
                             .padding()
                             .background {
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(style: .init(lineWidth: 1))
-                                    .foregroundStyle(.secondary)
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(style: .init(lineWidth: 0.7))
+                                    .foregroundStyle(Color.init(white: 0.7))
                             }
                             .padding(.horizontal)
                         }
@@ -132,15 +155,20 @@ public struct SimpleTextInputView: View {
                 }
                 .padding(.vertical)
             }
-            .buttonCircleNavi(role: .cancel) {dismissPage()}
+            .buttonCircleNavi(role: .cancel) {
+                dismissPage()
+                dismissTap = false
+            }
             .buttonCircleNavi(role: .destructive,
                               isDisable: isSaveDisabled) {
                 saveAction((title: title, content: content))
                 dismissPage()
+                dismissTap = false
             }
             .navigationTitle(pageName)
             .inlineTitleForNavigationBar()
         }
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
     }
 }
 
@@ -153,4 +181,5 @@ public struct SimpleTextInputView: View {
         showContent: true,
         tintColor: .red
     ){_ in}
+        .environment(\.locale, .zhHans)
 }

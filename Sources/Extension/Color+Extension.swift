@@ -131,6 +131,17 @@ public extension Color {
     var textColor: Color {
         self.isLight() ? .black : .white
     }
+    
+    static func textColor(
+        bgColor: Color?,
+        baseColor: Color = .primary
+    ) -> Color {
+        if let bgColor = bgColor {
+            return bgColor.textColor
+        }else{
+            return baseColor
+        }
+    }
 }
 
 public extension SFColor {
@@ -258,14 +269,17 @@ public extension SFColor {
      Determines if the color object is dark or light.
 
      It is useful when you need to know whether you should display the text in black or white.
+     
+     常用的亮度公式是基于 W3C 无障碍标准 L = 0.2126 * R + 0.7152 * G + 0.0722 * B
 
      - returns: A boolean value to know whether the color is light. If true the color is light, dark otherwise.
      */
     func isLight() -> Bool {
-      let components = toRGBAComponents()
-      let brightness = ((components.r * 299.0) + (components.g * 587.0) + (components.b * 114.0)) / 1000.0
-
-      return brightness >= 0.5
+        let components = toRGBAComponents()
+        // 计算亮度 (W3C 公式)
+        let luminance = 0.2126 * components.r + 0.7152 * components.g + 0.0722 * components.b
+        // Green: 0.62668 Red: 0.39166
+        return luminance >= 0.65
     }
     
     /**

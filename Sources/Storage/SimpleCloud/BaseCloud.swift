@@ -50,7 +50,7 @@ public class SimpleCloudHelper {
         }
         
         if isDebuging {
-            logger.debug(self.container.containerIdentifier ?? "N/A", title: "iCloud Identifier")
+            logger.debug(self.container.containerIdentifier ?? "N/A", title: "☁️iCloud Identifier")
             self.container.accountStatus { status, error in
                 if let error {
                     debugPrint("iCloud Container Error: \(error)")

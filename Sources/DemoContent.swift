@@ -82,7 +82,7 @@ public struct DemoContent: View {
         } detail: {
             if let selectedPage {
                 switch selectedPage.id {
-                case 0: DemoSimpleToast()
+                case 0: DemoSimplePop()
                 case 1: DemoSimpleAlert()
                 case 2: DemoSimpleUIElement(additionViews: additionViews)
                 case 3: DemoSimpleCard()
@@ -216,7 +216,7 @@ public struct Page: Identifiable, Equatable, Hashable {
     }
     
     static func alertSection() -> [Self] {
-        [.init(id: 0, title: "Toast - 简单提醒", icon: "rectangle.portrait.topthird.inset.filled"),
+        [.init(id: 0, title: "Banner - 提醒系统", icon: "rectangle.portrait.topthird.inset.filled"),
          .init(id: 1, title: "Alert - 系统提醒", icon: "bell")]
     }
     

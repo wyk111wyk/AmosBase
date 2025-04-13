@@ -121,7 +121,9 @@ public extension CKRecord {
             case let url as URL: self[key] = url.absoluteString
             case let uuid as UUID: self[key] = uuid.uuidString
             case let string as String: self[key] = string
-            case let bool as Bool: self[key] = bool
+            case let bool as Bool:
+                let newKey = key + "_bool"
+                self[newKey] = bool
             case let number as NSNumber: self[key] = number
             case let date as Date: self[key] = date.timeIntervalSince1970
             case let stringArray as [String]: self[key] = stringArray
@@ -173,15 +175,13 @@ public extension CKRecord {
                 tempDicts[newKey] = value
             }else if newKey.hasSuffix("_image") {
                 newKey = String(newKey.dropLast(6))
+            }else if newKey.hasSuffix("_bool") {
+                newKey = String(newKey.dropLast(5))
+                if let number = value as? NSNumber {
+                    tempDicts[newKey] = number.boolValue
+                }
             }else {
                 switch value {
-                case let number as NSNumber:
-                    // 处理布尔值和数字
-                    if number == kCFBooleanTrue || number == kCFBooleanFalse {
-                        tempDicts[newKey] = number.boolValue
-                    } else {
-                        tempDicts[newKey] = number
-                    }
                 case let location as CLLocation:
                     if let encode = location.coordinate.toData() {
                         tempDicts[newKey] = encode.decode(type: [String: Double].self)
@@ -232,7 +232,16 @@ public extension CKRecord {
     }
     
     override var description: String {
-        SimpleCloudValue(record: self, value: "").description
+        """
+        CKRecord 详情如下：
+        recordID: \(recordID.recordName)
+        zoneID: \(recordID.zoneID.zoneName)
+        typeName: \(recordType)
+        recordChangeTag: \(recordChangeTag ?? "")
+        creationDate: \(creationDate?.toString_DateTime() ?? "")
+        modificationDate: \(modificationDate?.toString_DateTime() ?? "")
+        modifiedByDevice: \(self.value(forKey: "modifiedByDevice") as? String ?? "")
+        """
     }
 }
 

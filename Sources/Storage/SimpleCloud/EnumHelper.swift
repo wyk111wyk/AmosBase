@@ -136,11 +136,11 @@ extension SimpleCloudHelper{
 public extension CKAccountStatus {
     var title: String {
         switch self {
-        case .couldNotDetermine: "couldNotDetermine"
-        case .available: "available"
-        case .restricted: "restricted"
-        case .noAccount: "noAccount"
-        case .temporarilyUnavailable: "temporarilyUnavailable"
+        case .couldNotDetermine: "Could Not Determine"
+        case .available: "Available"
+        case .restricted: "Restricted"
+        case .noAccount: "No Account"
+        case .temporarilyUnavailable: "Temporarily Unavailable"
         @unknown default: "Unknown"
         }
     }

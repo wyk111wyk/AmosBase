@@ -50,13 +50,15 @@ public struct ToastView: View{
     public var subTitle: String? = nil
     @Binding public var variableSubTitle: String?
     
-    public init(displayMode: DisplayMode,
-                type: AlertType,
-                bgColor: Color? = nil,
-                title: String? = nil,
-                variableTitle: Binding<String?> = .constant(nil),
-                subTitle: String? = nil,
-                variableSubTitle: Binding<String?> = .constant(nil)){
+    public init(
+        displayMode: DisplayMode,
+        type: AlertType,
+        bgColor: Color? = nil,
+        title: String? = nil,
+        variableTitle: Binding<String?> = .constant(nil),
+        subTitle: String? = nil,
+        variableSubTitle: Binding<String?> = .constant(nil)
+    ){
         
         self.displayMode = displayMode
         self.type = type
@@ -281,7 +283,7 @@ extension ToastView: Equatable {
 }
 
 #Preview("Center") {
-    ScrollView {
+    ScrollView(showsIndicators: false) {
         VStack(spacing: 15) {
             ToastView(displayMode: .topToast, type: .loading)
             ToastView(displayMode: .centerToast, type: .loading, title: "Loading")
@@ -295,8 +297,7 @@ extension ToastView: Equatable {
 
 // MARK: - UI组件
 
-@available(iOS 13, macOS 11, *)
-fileprivate struct AnimatedCheckmark: View {
+struct AnimatedCheckmark: View {
     
     ///Checkmark color
     var color: Color = .black
@@ -333,8 +334,7 @@ fileprivate struct AnimatedCheckmark: View {
     }
 }
 
-@available(iOS 13, macOS 11, *)
-fileprivate struct AnimatedXmark: View {
+struct AnimatedXmark: View {
     
     ///xmark color
     var color: Color = .black
@@ -376,7 +376,7 @@ fileprivate struct AnimatedXmark: View {
     }
 }
 
-fileprivate extension Image {
+extension Image {
     func hudModifier(_ color: Color? = nil) -> some View{
         self
             .resizable()
@@ -386,8 +386,9 @@ fileprivate extension Image {
     }
 }
 
-fileprivate struct BackgroundColorModifier: ViewModifier {
+struct BackgroundColorModifier: ViewModifier {
     var bgColor: Color? = nil
+    var cornerRadius: CGFloat = 12
     
     @ViewBuilder
     func body(content: Content) -> some View {
@@ -398,21 +399,42 @@ fileprivate struct BackgroundColorModifier: ViewModifier {
                 }
         }else{
             content
-                .background(
-                    .regularMaterial,
-                    in: RoundedRectangle(cornerRadius: 12)
-                )
+                .background {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    .white.opacity(0.3),
+                                    .white.opacity(0.1)
+                                ]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                            .blendMode(.overlay)
+                        )
+                }
         }
     }
 }
 
-fileprivate struct ShadowModifier: ViewModifier {
+struct ShadowModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
+    let isTop: Bool
+    init(isTop: Bool = true) {
+        self.isTop = isTop
+    }
+    
     @ViewBuilder
     func body(content: Content) -> some View {
         if colorScheme == .light {
             content
-                .shadow(color: Color.primary.opacity(0.1), radius: 5, x: 0, y: 6)
+                .shadow(
+                    color: Color.primary.opacity(0.1),
+                    radius: 5,
+                    x: isTop ? 0 : 6,
+                    y: isTop ? 6 : 0
+                )
         }else{
             content
         }

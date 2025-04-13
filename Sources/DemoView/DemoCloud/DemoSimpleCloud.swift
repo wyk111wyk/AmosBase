@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreLocation
+import CloudKit
 
 public struct DemoSimpleCloud: View {
     struct ArrayContent: Identifiable {
@@ -17,7 +18,7 @@ public struct DemoSimpleCloud: View {
     let cloudHelper: SimpleCloudHelper?
     @State private var saveType: SimpleCloudHelper.DataType
     @State private var isNetworkAvailable: Bool?
-    @State private var isICloudAvailable: Bool?
+    @State private var iCloudAccoutStatus: CKAccountStatus = .couldNotDetermine
     
     @State private var loadingMsg: String = ""
     @State private var isLoading: Bool = false
@@ -185,13 +186,13 @@ extension DemoSimpleCloud {
             SimpleCell("网络情况", systemImage: "network") {
                 isNetworkAvailable.statusSign()
             }
-            SimpleCell("设备iCloud状态", systemImage: "icloud") {
-                isICloudAvailable.statusSign()
+            SimpleCell("iCloud 账户状态", systemImage: "icloud") {
+                iCloudAccoutStatus.statusSign()
             }
         }
         .task {
             isNetworkAvailable = await SimpleWeb().isNetworkAvailable()
-            isICloudAvailable = try? await cloudHelper?.accountStatus() == .available
+            iCloudAccoutStatus = (try? await cloudHelper?.accountStatus()) ?? .couldNotDetermine
         }
     }
     

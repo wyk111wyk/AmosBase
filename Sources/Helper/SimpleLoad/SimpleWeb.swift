@@ -28,7 +28,7 @@ extension SimpleWeb {
     ) async -> Bool {
         let result = try? await loadData(from: url)
         if let result {
-            logger.debug(result.count.toDouble.toStorage(), title: "检查网络是否可用: \(url)")
+            logger.debug("🟢已联网 \(result.count.toDouble.toStorage())", title: "🛜设备网络状况")
             return true
         }else {
             return false
@@ -40,13 +40,13 @@ extension SimpleWeb {
         guard let url = URL(string: key) else { return nil }
         if cacheHelper?.exists(forKey: key) == true,
            let cacheImage = try cacheHelper?.loadImage(forKey: key) {
-            logger.debug(key, title: "1.从缓存获取图片")
+            logger.debug(key, title: "🛜1.从缓存获取图片")
             return cacheImage
         }
         
         if let data = try await loadData(from: url),
            let image = SFImage(data: data) {
-            logger.debug(data.count.toDouble.toStorage(), title: "2.从网络获取图片")
+            logger.debug(data.count.toDouble.toStorage(), title: "🛜2.从网络获取图片")
             try cacheHelper?.save(object: data, forKey: key)
             return image
         }else {
@@ -62,7 +62,7 @@ extension SimpleWeb {
             let (data, _) = try await session.data(from: url)
             return data
         }catch {
-            logger.error(error, title: "下载 Data 错误")
+            logger.error(error, title: "🛜下载 Data 错误")
             throw error
         }
     }
@@ -84,7 +84,7 @@ extension SimpleWeb {
                 ) { (data, response, error) in
                     callbackQueue.async {
                         if let error {
-                            debugPrint("网络请求错误：\(error)")
+                            debugPrint("🛜网络请求错误：\(error)")
                             contionuation.resume(throwing: error)
                         }else {
 //                          data?.toJsonPrint()
@@ -122,7 +122,7 @@ extension SimpleWeb {
                         ) { (data, response, error) in
                             callbackQueue.async {
                                 if let error {
-                                    debugPrint("网络请求错误：\(error)")
+                                    debugPrint("🛜网络请求错误：\(error)")
                                     contionuation.resume(throwing: error)
                                 }else {
 //                                    data?.toJsonPrint()
