@@ -27,7 +27,7 @@ struct PopDemoConfig {
     var closeOnTapOutside: Bool = false
     
     var useKeyboardSafeArea: Bool = false
-    var hasHaptic: Bool = false
+    var hasHaptic: Bool = true
 }
 
 extension popup.PopupParameters {
@@ -117,7 +117,11 @@ extension popup.Position: Hashable, Identifiable {
     }
     #else
     static var allCases: [popup.Position] {
-        [.top, .center, .bottom]
+        if SimpleDevice.getDevice() == .phone {
+            return [.top, .center, .bottom]
+        }else {
+            return [.topLeading, .top, .topTrailing, .leading, .center, .trailing, .bottomLeading, .bottom, .bottomTrailing]
+        }
     }
     #endif
     var title: String {

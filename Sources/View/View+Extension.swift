@@ -32,6 +32,24 @@ public extension Binding {
 
 extension GeometryProxy: @unchecked @retroactive Sendable {}
 
+public extension Picker {
+    func segmentStyle() -> some View {
+        #if os(watchOS)
+        self.pickerStyle(.automatic)
+        #else
+        self.pickerStyle(.segmented)
+        #endif
+    }
+    
+    func menuStyle() -> some View {
+        #if os(watchOS)
+        self.pickerStyle(.automatic)
+        #else
+        self.pickerStyle(.menu)
+        #endif
+    }
+}
+
 public extension View {
     /// SF Symbol的跳跃动画
     func bounceEffect(
@@ -69,35 +87,50 @@ public extension View {
     
     /// 设置 List 的 Section 间距
     func sectionSpacing(_ spacing: CGFloat = 15) -> some View {
-#if os(iOS)
+        #if os(iOS)
         self.listSectionSpacing(spacing)
-#else
+        #else
         self
-#endif
+        #endif
     }
     
     /// 设置标题类型为 inline
     func inlineTitleForNavigationBar() -> some View {
-#if os(iOS)
+        #if os(iOS)
         self.navigationBarTitleDisplayMode(.inline)
-#else
+        #else
         self
-#endif
+        #endif
     }
     
     /// 设置标题类型为 large
     func largeTitleForNavigationBar() -> some View {
-#if os(iOS)
+        #if os(iOS)
         self.navigationBarTitleDisplayMode(.large)
-#else
+        #else
         self
-#endif
+        #endif
     }
-}
-
-// MARK: - 除 watch 外的平台
-#if !os(watchOS)
-public extension View {
+    
+    /// 为按钮设置快捷键
+    func simpleKeyboard(_ key: KeyEquivalent, modifiers: EventModifiers = []) -> some View {
+        #if !os(watchOS)
+        self.keyboardShortcut(key, modifiers: modifiers)
+        #else
+        self
+        #endif
+    }
+    
+    /// 让文字可选
+    func selectableText() -> some View {
+        #if !os(watchOS)
+        self.textSelection(.disabled)
+        #else
+        self
+        #endif
+    }
+    
+    /// 为列表添加搜索功能
     func simpleSearch(
         text: Binding<String>,
         prompt: String? = nil,
@@ -105,35 +138,35 @@ public extension View {
     ) -> some View {
         let promptText: Text? =
         if let prompt { Text(prompt) } else { nil }
-#if os(iOS)
+        #if os(iOS)
         return self.searchable(
             text: text,
             placement: .navigationBarDrawer(displayMode: isAlwaysShow ? .always : .automatic),
             prompt: promptText
         )
         .searchDictationBehavior(.inline(activation: .onLook))
-#elseif os(macOS)
+        #elseif os(macOS)
         return self.searchable(
             text: text,
             placement: .toolbar,
             prompt: promptText
         )
-#endif
+        #endif
     }
     
+    /// 为视图添加翻译功能
     func translation(isPresented: Binding<Bool>, text: String) -> some View {
-#if targetEnvironment(macCatalyst)
+        #if targetEnvironment(macCatalyst) || os(watchOS)
         return self
-#else
+        #else
         if #available(iOS 17.4, macOS 14.4, *) {
             return self.translationPresentation(isPresented: isPresented, text: text)
         } else {
             return self
         }
-#endif
+        #endif
     }
 }
-#endif
 
 // MARK: - Mac 平台
 #if os(macOS)

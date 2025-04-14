@@ -172,9 +172,7 @@ struct SimpleConfirmation: ViewModifier {
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.escape)
-#endif
+                    .simpleKeyboard(.escape)
                 case .singleConfirm:
                     Button(role: .cancel, action: {
                         cancelTap()
@@ -182,35 +180,25 @@ struct SimpleConfirmation: ViewModifier {
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.return)
-#endif
+                    .simpleKeyboard(.return)
                 case .confirmCancel:
                     Button(role: .none, action: confirmTap, label: {
                         Text("Confirm", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.return)
-#endif
+                    .simpleKeyboard(.return)
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.escape)
-#endif
+                    .simpleKeyboard(.escape)
                 case .destructiveCancel:
                     Button(role: .destructive, action: confirmTap, label: {
                         Text("Confirm", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.return)
-#endif
+                    .simpleKeyboard(.return)
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.escape)
-#endif
+                    .simpleKeyboard(.escape)
                 }
             } message: {
                 if let message {
@@ -260,9 +248,7 @@ struct SimpleConfirmationItem<V: Identifiable>: ViewModifier {
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.escape)
-#endif
+                    .simpleKeyboard(.escape)
                 case .singleConfirm:
                     Button(role: .cancel, action: {
                         cancelTap()
@@ -270,35 +256,25 @@ struct SimpleConfirmationItem<V: Identifiable>: ViewModifier {
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.return)
-#endif
+                    .simpleKeyboard(.return)
                 case .confirmCancel:
                     Button(role: .none, action: {confirmTap(passItem)}, label: {
                         Text("Confirm", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.return)
-#endif
+                    .simpleKeyboard(.return)
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.escape)
-#endif
+                    .simpleKeyboard(.escape)
                 case .destructiveCancel:
                     Button(role: .destructive, action: {confirmTap(passItem)}, label: {
                         Text("Confirm", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.return)
-#endif
+                    .simpleKeyboard(.return)
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-#if !os(watchOS)
-    .keyboardShortcut(.escape)
-#endif
+                    .simpleKeyboard(.escape)
                 }
             } message: {
                 if let message {
@@ -344,9 +320,7 @@ struct SimpleAlert: ViewModifier {
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    #if !os(watchOS)
-                        .keyboardShortcut(.escape)
-                    #endif
+                    .simpleKeyboard(.escape)
                 case .singleConfirm:
                     Button(role: .cancel, action: {
                         cancelTap()
@@ -354,35 +328,25 @@ struct SimpleAlert: ViewModifier {
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    #if !os(watchOS)
-                        .keyboardShortcut(.return)
-                    #endif
+                    .simpleKeyboard(.return)
                 case .confirmCancel:
                     Button(role: .none, action: confirmTap, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    #if !os(watchOS)
-                        .keyboardShortcut(.return)
-                    #endif
+                    .simpleKeyboard(.return)
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    #if !os(watchOS)
-                        .keyboardShortcut(.escape)
-                    #endif
+                    .simpleKeyboard(.escape)
                 case .destructiveCancel:
                     Button(role: .destructive, action: confirmTap, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    #if !os(watchOS)
-                    .keyboardShortcut(.return)
-                    #endif
+                    .simpleKeyboard(.return)
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    #if !os(watchOS)
-                    .keyboardShortcut(.escape)
-                    #endif
+                    .simpleKeyboard(.escape)
                 }
             } message: {
                 if let message {
@@ -431,48 +395,36 @@ struct SimpleAlertItem<V: Identifiable>: ViewModifier {
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    #if !os(watchOS)
-                        .keyboardShortcut(.escape)
-                    #endif
+                    .simpleKeyboard(.escape)
                 case .singleConfirm:
                     Button(role: .cancel, action: {
                         cancelTap()
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    #if !os(watchOS)
-                        .keyboardShortcut(.return)
-                    #endif
+                    .simpleKeyboard(.return)
                 case .confirmCancel:
                     Button(role: .none, action: {
                         confirmTap(passItem)
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    #if !os(watchOS)
-                        .keyboardShortcut(.return)
-                    #endif
+                    .simpleKeyboard(.return)
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    #if !os(watchOS)
-                        .keyboardShortcut(.escape)
-                    #endif
+                    .simpleKeyboard(.escape)
                 case .destructiveCancel:
                     Button(role: .destructive, action: {
                         confirmTap(passItem)
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    #if !os(watchOS)
-                    .keyboardShortcut(.return)
-                    #endif
+                    .simpleKeyboard(.return)
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    #if !os(watchOS)
-                    .keyboardShortcut(.escape)
-                    #endif
+                    .simpleKeyboard(.escape)
                 }
             } message: {
                 if let message {

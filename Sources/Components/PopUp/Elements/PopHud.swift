@@ -23,7 +23,7 @@ public struct PopHud: View {
     #else
     let centerSpace: CGFloat = 12
     let centerLabelSpace: CGFloat = 8
-    let centerMinHight: CGFloat = 80
+    let centerMinHight: CGFloat = 120
     let centerMaxHight: CGFloat = 300
     #endif
     

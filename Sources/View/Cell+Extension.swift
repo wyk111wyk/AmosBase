@@ -249,9 +249,7 @@ public struct SimpleCell<V: View>: View {
                 }
             }
             .contentShape(Rectangle())
-            #if !os(watchOS)
-            .textSelection(.enabled)
-            #endif
+            .selectableText()
         }
     }
 }

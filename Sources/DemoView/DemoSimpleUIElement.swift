@@ -11,9 +11,7 @@ public struct DemoSimpleUIElement: View {
     @State private var isTapDismiss = true
     
     @State private var cellId: Int = Date().timeIntervalSince1970.toInt
-    
     @State private var input = ""
-    @State private var showInput = false
     @State private var isFavor = false
     
     @State private var confirmShowPage = false
@@ -71,17 +69,6 @@ public struct DemoSimpleUIElement: View {
             })
             .navigationTitle("UI元素")
             .buttonCircleNavi(role: .destructive)
-#if !os(watchOS)
-            .sheet(isPresented: $showInput) {
-                SimpleTextInputView(
-                    pageName: "输入短文字",
-                    title: input,
-                    showContent: false) { result in
-                        input = result.title
-                    }
-                .presentationDetents([.height(200)])
-            }
-#endif
         }
     }
     
@@ -182,17 +169,11 @@ public struct DemoSimpleUIElement: View {
     
     @ViewBuilder
     private func textFieldSection() -> some View {
-#if !os(watchOS)
         Section {
-            Button { showInput = true } label: {
-                SimpleCell("输入短文字", systemImage: "rectangle.and.pencil.and.ellipsis.rtl")
-            }
-            .buttonStyle(.borderless)
             SimpleTextField($input)
         } header: {
             Text("TextField", bundle: .module)
         }
-#endif
     }
     
     private func pickerSection() -> some View {

@@ -115,6 +115,7 @@ public struct DemoContent: View {
                 case 21: DemoSimpleButton()
                 case 22: DemoSimpleAnimation()
                 case 23: DemoSFSymbol()
+                case 24: DemoSimpleToast()
                 default: Text(selectedPage.title)
                 }
             }
@@ -129,23 +130,6 @@ public struct DemoContent: View {
     
     @ViewBuilder
     private func sheetSection() -> some View {
-        Button {
-            showToastPage.toggle()
-        } label: {
-            SimpleCell(
-                "Toast - Sheet页面",
-                systemImage: "rectangle.portrait.bottomthird.inset.filled"
-            )
-        }
-        .buttonStyle(.borderless)
-        .sheet(isPresented: $showToastPage) {
-            NavigationStack {
-                DemoSimpleToast()
-                    .navigationTitle("Sheet页面测试")
-                    .buttonCircleNavi(role: .cancel) { showToastPage.toggle() }
-            }
-        }
-        
         Button {
             showWelcomePage.toggle()
         } label: {
@@ -217,6 +201,7 @@ public struct Page: Identifiable, Equatable, Hashable {
     
     static func alertSection() -> [Self] {
         [.init(id: 0, title: "Banner - 提醒系统", icon: "rectangle.portrait.topthird.inset.filled"),
+         .init(id: 24, title: "Toast - 旧版本提醒", icon: "rectangle.portrait.bottomthird.inset.filled"),
          .init(id: 1, title: "Alert - 系统提醒", icon: "bell")]
     }
     

@@ -71,7 +71,7 @@ struct SimplePopSetting: View {
                     Text($0.title).tag($0)
                 }
             }
-            .pickerStyle(.segmented)
+            .segmentStyle()
             Picker(
                 "弹窗位置",
                 selection: currentConfig.position
@@ -80,7 +80,6 @@ struct SimplePopSetting: View {
                     Text($0.title).tag($0)
                 }
             }
-            .pickerStyle(.segmented)
         }
     }
     
@@ -154,7 +153,7 @@ extension SimplePopSetting {
                     Text(style.title).tag(style)
                 }
             }
-            .pickerStyle(.segmented)
+            .segmentStyle()
             .frame(width: 220)
         }
     }

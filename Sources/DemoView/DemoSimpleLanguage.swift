@@ -39,11 +39,7 @@ struct DemoSimpleLanguage: View {
                         }
                         .buttonStyle(.bordered)
                     }
-                    #if os(watchOS)
-                    .pickerStyle(.automatic)
-                    #else
-                    .pickerStyle(.menu)
-                    #endif
+                    .menuStyle()
 
                     #if !os(watchOS)
                     SimpleTextField($sourceText)

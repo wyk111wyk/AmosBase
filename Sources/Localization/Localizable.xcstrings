@@ -85,6 +85,9 @@
         }
       }
     },
+    "%lld" : {
+
+    },
     "%lld / %lld" : {
       "localizations" : {
         "en" : {
@@ -97,6 +100,16 @@
     },
     "%lld 字" : {
 
+    },
+    "%lld. %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld. %2$@"
+          }
+        }
+      }
     },
     "← Right-to-left layout direction" : {
 
@@ -1315,9 +1328,6 @@
     "Sheet Popup" : {
 
     },
-    "Sheet页面测试" : {
-
-    },
     "Show buttons confirmation" : {
 
     },
@@ -1520,9 +1530,6 @@
       }
     },
     "Title" : {
-
-    },
-    "Toast - Sheet页面" : {
 
     },
     "Top Toasts" : {
@@ -1959,6 +1966,9 @@
 
     },
     "时间长度 Duration" : {
+
+    },
+    "是否可调" : {
 
     },
     "显示模态背景" : {

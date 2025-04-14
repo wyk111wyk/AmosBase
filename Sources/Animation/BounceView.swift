@@ -43,7 +43,7 @@ struct BounceView: View {
             Text("Hello, World!")
                 .font(.largeTitle)
                 .modifier(BounceModifier(isToggled: isToggled))
-            Image(sfImage: .dimond)
+            Image(sfImage: .lal_nba)
                 .imageModify(width: 100)
                 .modifier(BounceModifier(isToggled: isToggled))
             Image(systemName: "rectangle.and.pencil.and.ellipsis")

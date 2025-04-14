@@ -19,7 +19,14 @@ extension View {
         dismissSource: DismissSource?,
         userDismissCallback: @escaping (DismissSource) -> (),
         content: @escaping () -> Content) -> some View {
-            modifier(TransparentNonAnimatableFullScreenModifier(isPresented: isPresented, dismissSource: dismissSource, userDismissCallback: userDismissCallback, fullScreenContent: content))
+            modifier(
+                TransparentNonAnimatableFullScreenModifier(
+                    isPresented: isPresented,
+                    dismissSource: dismissSource,
+                    userDismissCallback: userDismissCallback,
+                    fullScreenContent: content
+                )
+            )
     }
 }
 

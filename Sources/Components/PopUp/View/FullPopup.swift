@@ -250,6 +250,11 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
             .modifier(getModifier())
         }
     }
+    
+    @ViewBuilder
+    func popupView() -> some View {
+        
+    }
 
     var viewForItem: (() -> PopupContent)? {
         if let item = item {
@@ -273,9 +278,9 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
                 // 关闭开始后，不允许重新计算位置触发再次显示弹窗
                 if !closingIsInProcess {
                     DispatchQueue.main.async {
-                        shouldShowContent = true // this will cause currentOffset change thus triggering the sliding showing animation
+                        shouldShowContent = true // 这将导致currentOffset改变，从而触发滑动显示动画
                         withAnimation(.linear(duration: 0.2)) {
-                            animatableOpacity = 1 // this will cause cross dissolving animation for background color/view
+                            animatableOpacity = 1 // 这将导致背景颜色/视图的交叉溶解动画
                         }
                     }
                     setupAutohide()
@@ -323,6 +328,7 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
         }
     }
 
+    /// 配置动画结束之后的回调
     func onAnimationCompleted() {
         if shouldShowContent { // return if this was called on showing animation, only proceed if called on hiding
             eventsSemaphore.signal()
@@ -343,6 +349,7 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
         eventsSemaphore.signal()
     }
 
+    /// 配置自动延时关闭的程序
     func setupAutohide() {
         // if needed, dispatch autohide and cancel previous one
         if let autohideIn = autohideIn {

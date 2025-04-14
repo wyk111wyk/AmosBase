@@ -44,7 +44,7 @@ extension DemoSimpleWeb {
                 Text("虎扑").tag(PageType.hupu)
                 Text("NBA官网").tag(PageType.nba)
             }
-            .pickerStyle(.segmented)
+            .segmentStyle()
             .frame(width: 160)
         }
     }

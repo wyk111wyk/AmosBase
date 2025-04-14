@@ -51,7 +51,6 @@ public struct SimpleConfirmButton<V: View>: View {
     }
 }
 
-#if !os(watchOS)
 struct ButtonShortkey: ViewModifier {
     let role: ButtonRole?
     let key: KeyEquivalent?
@@ -60,13 +59,12 @@ struct ButtonShortkey: ViewModifier {
     func body(content: Content) -> some View {
         if role == .cancel {
             content
-                .keyboardShortcut(.escape)
+                .simpleKeyboard(.escape)
         }else if let key, let modifiers {
             content
-                .keyboardShortcut(key, modifiers: modifiers)
+                .simpleKeyboard(key, modifiers: modifiers)
         }else {
             content
         }
     }
 }
-#endif

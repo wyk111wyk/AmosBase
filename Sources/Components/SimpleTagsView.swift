@@ -276,9 +276,7 @@ struct TT: Identifiable {
                     Text("Center").tag(TextAlignment.center)
                     Text("Trailing").tag(TextAlignment.trailing)
                 }
-                #if !os(watchOS)
-                .pickerStyle(.segmented)
-                #endif
+                .segmentStyle()
                 SimpleFlowLayout(alignment: alignment) {
                     ForEach(TT.example) { tag in
                         Text(tag.title).simpleTag(.bg())

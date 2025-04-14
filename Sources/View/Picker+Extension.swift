@@ -207,7 +207,6 @@ public struct SimplePicker<Value: SimplePickerItem, V: View>: View {
         .navigationTitle(title)
         #if !os(watchOS)
         .simpleSearch(text: $searchKey, isAlwaysShow: false)
-        .searchable(text: $searchKey, placement: SearchFieldPlacement.automatic)
         #endif
         #if os(iOS)
         .buttonCircleNavi(role: .cancel, isPresent: !isPushin) {dismissPage()}
@@ -266,7 +265,7 @@ struct SimplePickerDemo: View {
                             Text($0.title).tag($0)
                         }
                     }
-                    .pickerStyle(.segmented)
+                    .segmentStyle()
                     .frame(width: 180)
                 }
             }

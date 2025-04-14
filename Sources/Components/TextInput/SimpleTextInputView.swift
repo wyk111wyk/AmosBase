@@ -111,7 +111,8 @@ public struct SimpleTextInputView: View {
                                 prompt: titlePrompt,
                                 startLine: 1,
                                 endLine: 3,
-                                tintColor: tintColor
+                                tintColor: tintColor,
+                                isAppearFocused: title.isEmpty
                             )
                             .padding()
                             .background {
@@ -167,6 +168,7 @@ public struct SimpleTextInputView: View {
             }
             .navigationTitle(pageName)
             .inlineTitleForNavigationBar()
+            .modifier(BackgroundColorModifier(cornerRadius: 0))
         }
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
     }

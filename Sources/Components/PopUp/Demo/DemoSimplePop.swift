@@ -12,9 +12,9 @@ struct DemoSimplePop: View {
     @State private var showDemoSheet = false
     @State private var showConfigSheet: SimplePopupStyle?
     
-    @State private var bannerConfig: PopDemoConfig = .init(autohideIn: 2, hasHaptic: true)
-    @State private var toastConfig: PopDemoConfig = .init(autohideIn: 2)
-    @State private var hudConfig: PopDemoConfig = .init(position: .center, appearFrom: .centerScale, showBackground: true, closeOnTapOutside: true)
+    @State private var bannerConfig: PopDemoConfig = .init(autohideIn: 2)
+    @State private var toastConfig: PopDemoConfig = .init(displayMode: .window, autohideIn: 2)
+    @State private var hudConfig: PopDemoConfig = .init(displayMode: .window, position: .center, appearFrom: .centerScale, showBackground: true, closeOnTapOutside: true)
     
     @State private var showReplacePop1 = false
     @State private var showReplacePop2 = false
@@ -23,6 +23,7 @@ struct DemoSimplePop: View {
     @State private var replaceSubTitle: String = .randomChinese(long: true)
     
     @State private var showInputPop = false
+    @State private var showInputSheet = false
     @State private var showInputMutliPop = false
     @State private var inputText: String = ""
     @State private var contentText: String = ""
@@ -66,8 +67,7 @@ struct DemoSimplePop: View {
             isPresented: $showInputPop,
             pageName: "演示输入",
             title: inputText,
-            cornerRadius: 15,
-            dismissTap: $showInputPop
+            cornerRadius: 15
         ) { result in
             inputText = result.title
         }
@@ -78,8 +78,7 @@ struct DemoSimplePop: View {
             content: contentText,
             isContentRequired: true,
             showContent: true,
-            cornerRadius: 15,
-            dismissTap: $showInputMutliPop
+            cornerRadius: 15
         ) { result in
             inputText = result.title
             contentText = result.content
@@ -134,6 +133,13 @@ struct DemoSimplePop: View {
                 SimpleCell("Sheet 查看", systemImage: "rectangle.portrait.bottomhalf.inset.filled", isCellButton: true)
             }
         }
+        .simpleInputSheet(
+            isPresented: $showInputSheet,
+            pageName: "演示输入(Sheet)",
+            title: inputText
+        ) { result in
+            inputText = result.title
+        }
     }
     
     func config(_ style: SimplePopupStyle?) -> PopDemoConfig {
@@ -174,6 +180,11 @@ struct DemoSimplePop: View {
                 showInputPop = true
             } label: {
                 SimpleCell("输入弹窗", systemImage: "keyboard", isCellButton: true)
+            }
+            PlainButton {
+                showInputSheet = true
+            } label: {
+                SimpleCell("输入弹窗（Sheet）", systemImage: "keyboard", isCellButton: true)
             }
             PlainButton {
                 showInputMutliPop = true

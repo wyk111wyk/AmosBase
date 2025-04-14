@@ -11,21 +11,38 @@ struct DemoSimpleAnimation: View {
     @State private var pageIndex: Int = 0
     var body: some View {
         TabView(selection: $pageIndex) {
-            ForEach(0..<7) { index in
-                contentView(for: index).tag(index)
-                    .overlay(alignment: .top) {
-                        if let title = contentTitle(for: index) {
-                            Text(title)
-                                .font(.title)
-                                .offset(y: -80)
-                        }
+            ForEach(0..<8) { index in
+                VStack(spacing: 20) {
+                    if let title = contentTitle(for: index) {
+                        Text(title)
+                            .font(.title)
                     }
+                    contentView(for: index).tag(index)
+                }
+                .offset(y: index == 0 ? -50 : 0)
             }
         }
         #if os(iOS)
         .tabViewStyle(.page)
-        .indexViewStyle(.page(backgroundDisplayMode: .always))
+        .indexViewStyle(.page(backgroundDisplayMode: .interactive))
         #endif
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Menu {
+                    ForEach(0..<8) { index in
+                        Button {
+                            withAnimation {
+                                pageIndex = index
+                            }
+                        } label: {
+                            Text("\(index + 1). \(contentTitle(for: index) ?? "")")
+                        }
+                    }
+                } label: {
+                    Image(systemName: "rectangle.on.rectangle.angled")
+                }
+            }
+        }
     }
     
     private func contentTitle(for page: Int) -> String? {
@@ -37,6 +54,7 @@ struct DemoSimpleAnimation: View {
         case 4: "形状转换"
         case 5: "文字闪烁"
         case 6: "弹性跳跃"
+        case 7: "动态时钟"
         default: nil
         }
     }
@@ -51,6 +69,7 @@ struct DemoSimpleAnimation: View {
         case 4: ShapeChange()
         case 5: ShimmerDemo()
         case 6: BounceView()
+        case 7: ClockDemo()
         default: EmptyView()
         }
     }

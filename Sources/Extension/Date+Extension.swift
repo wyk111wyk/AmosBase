@@ -42,6 +42,11 @@ public extension Date {
         Calendar.current.component(.minute, from: self)
     }
     
+    func getSecond() -> Int {
+        Calendar.current.component(.second, from: self)
+    }
+        
+    
     func getWeekday() -> Int {
         Calendar.current.component(.weekday, from: self)
     }

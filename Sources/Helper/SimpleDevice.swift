@@ -53,7 +53,7 @@ public class SimpleDevice: NSObject {
     #if os(iOS)
     
     ///获取设备类型: phone, pad, mac, vision, tv, carplay
-    public func getDevice() -> UIUserInterfaceIdiom {
+    public static func getDevice() -> UIUserInterfaceIdiom {
         UIDevice.current.userInterfaceIdiom
     }
     

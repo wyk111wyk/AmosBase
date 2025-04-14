@@ -146,8 +146,8 @@ struct ShimmerDemo: View {
         VStack(spacing: 20) {
             Group {
                 Text("SwiftUI Shimmer")
-                Text("SwiftUI Shimmer").preferredColorScheme(.light)
-                Text("SwiftUI Shimmer").preferredColorScheme(.dark)
+                Text("SwiftUI Shimmer")
+                Text("SwiftUI Shimmer")
                 
                 VStack(alignment: .leading) {
                     Text("Loading...").font(.title)

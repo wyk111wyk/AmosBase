@@ -237,6 +237,7 @@ public struct ToastView: View{
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(RoundedRectangle(cornerRadius: 12)
             .stroke(Color.gray.opacity(0.2), lineWidth: 1))
+        .modifier(ShadowModifier())
         .compositingGroup()
     }
     
@@ -383,60 +384,5 @@ extension Image {
             .aspectRatio(contentMode: .fit)
             .foregroundStyle(color ?? Color.primary)
             .frame(maxWidth: 20, maxHeight: 20, alignment: .center)
-    }
-}
-
-struct BackgroundColorModifier: ViewModifier {
-    var bgColor: Color? = nil
-    var cornerRadius: CGFloat = 12
-    
-    @ViewBuilder
-    func body(content: Content) -> some View {
-        if let bgColor{
-            content
-                .background(alignment: .center) {
-                    bgColor
-                }
-        }else{
-            content
-                .background {
-                    RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(.ultraThinMaterial)
-                        .overlay(
-                            LinearGradient(
-                                gradient: Gradient(colors: [
-                                    .white.opacity(0.3),
-                                    .white.opacity(0.1)
-                                ]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                            .blendMode(.overlay)
-                        )
-                }
-        }
-    }
-}
-
-struct ShadowModifier: ViewModifier {
-    @Environment(\.colorScheme) private var colorScheme
-    let isTop: Bool
-    init(isTop: Bool = true) {
-        self.isTop = isTop
-    }
-    
-    @ViewBuilder
-    func body(content: Content) -> some View {
-        if colorScheme == .light {
-            content
-                .shadow(
-                    color: Color.primary.opacity(0.1),
-                    radius: 5,
-                    x: isTop ? 0 : 6,
-                    y: isTop ? 6 : 0
-                )
-        }else{
-            content
-        }
     }
 }

@@ -8,6 +8,28 @@
 import Foundation
 import SwiftUI
 
+public extension TimeZone {
+    static var beijin: TimeZone {
+        TimeZone(identifier: "Asia/Shanghai")!
+    }
+    
+    static var newYork: TimeZone {
+        TimeZone(identifier: "America/New_York")!
+    }
+    
+    static var losAngeles: TimeZone {
+        TimeZone(identifier: "America/Los_Angeles")!
+    }
+    
+    static var tokyo: TimeZone {
+        TimeZone(identifier: "Asia/Tokyo")!
+    }
+    
+    static var london: TimeZone {
+        TimeZone(identifier: "Europe/London")!
+    }
+}
+
 public extension Locale {
     
     static var zhHans: Locale {
@@ -20,6 +42,10 @@ public extension Locale {
     
     static var deDE: Locale {
         Locale(identifier: "de_DE")
+    }
+    
+    static var jaJP: Locale {
+        Locale(identifier: "ja_JP")
     }
     
     /// 当前系统设置的Locale（可设置显示的语言和区域）

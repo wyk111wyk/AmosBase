@@ -46,7 +46,6 @@ public extension View {
                 .position(isBottom ? .bottom : .top)
                 .appearFrom(isBottom ? .bottomSlide : .topSlide)
                 .autohideIn(duration)
-                .closeOnTap(false)
         }
     }
     
@@ -124,6 +123,41 @@ public extension View {
         }
     }
     
+    func simpleInputSheet(
+        isPresented: Binding<Bool>,
+        pageName: String = "",
+        title: String = "",
+        content: String = "",
+        titlePrompt: String? = nil,
+        contentPrompt: String? = nil,
+        isTitleRequired: Bool = false,
+        isContentRequired: Bool = false,
+        showTitle: Bool = true,
+        showContent: Bool = false,
+        tintColor: Color = .accentColor,
+        showBackground: Bool = true,
+        saveAction: @escaping (SimpleTextInputView.inputResult)->Void
+    ) -> some View {
+        self.sheet(isPresented: isPresented) {
+            SimpleTextInputView(
+                pageName: pageName,
+                title: title,
+                content: content,
+                titlePrompt: titlePrompt,
+                contentPrompt: contentPrompt,
+                isTitleRequired: isTitleRequired,
+                isContentRequired: isContentRequired,
+                showTitle: showTitle,
+                showContent: showContent,
+                tintColor: tintColor,
+                dismissTap: isPresented,
+                saveAction: saveAction
+            )
+            .presentationDetents([.height(showContent ? 380 : 200)])
+            .presentationDragIndicator(.hidden)
+        }
+    }
+    
     func simpleInputBanner(
         isPresented: Binding<Bool>,
         pageName: String = "",
@@ -138,7 +172,6 @@ public extension View {
         tintColor: Color = .accentColor,
         cornerRadius: CGFloat = 15,
         showBackground: Bool = true,
-        dismissTap: Binding<Bool>,
         saveAction: @escaping (SimpleTextInputView.inputResult)->Void
     ) -> some View {
         self.popup(isPresented: isPresented) {
@@ -154,10 +187,10 @@ public extension View {
                 showContent: showContent,
                 tintColor: tintColor,
                 cornerRadius: cornerRadius,
-                dismissTap: dismissTap,
+                dismissTap: isPresented,
                 saveAction: saveAction
             )
-            .padding(.horizontal)
+            .padding(.horizontal, 10)
             .frame(maxHeight: showContent ? 370 : 190)
             .modifier(ShadowModifier())
         } customize: {
@@ -166,7 +199,7 @@ public extension View {
             content.position = .bottom
             content.closeOnTap = false
             content.appearFrom = .bottomSlide
-            content.useKeyboardSafeArea = true
+            content.useKeyboardSafeArea = false
             if showBackground {
                 content.backgroundView = AnyView(PopBackgroundView())
             }

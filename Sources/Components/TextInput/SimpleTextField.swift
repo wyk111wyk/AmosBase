@@ -13,6 +13,8 @@ public struct SimpleTextField<
     S: TextFieldStyle
 >: View {
     @Binding var inputText: String
+    @FocusState var isFocused: Bool
+    let isAppearFocused: Bool
     
     let title: String
     let prompt: String?
@@ -38,6 +40,7 @@ public struct SimpleTextField<
         tintColor: Color = .accentColor,
         style: S = .plain,
         canClear: Bool = true,
+        isAppearFocused: Bool = false,
         @ViewBuilder moreMenus: @escaping () -> Menus = { EmptyView() }
     ) {
         self._inputText = inputText
@@ -54,6 +57,7 @@ public struct SimpleTextField<
         self.style = style
         self.tintColor = tintColor
         self.canClear = canClear
+        self.isAppearFocused = isAppearFocused
         self.moreMenus = moreMenus
     }
     
@@ -69,6 +73,7 @@ public struct SimpleTextField<
             prompt: promptText,
             axis: .vertical
         )
+        .focused($isFocused)
         .textFieldStyle(style)
         .lineLimit(startLine...endLine)
         .lineSpacing(4)
@@ -76,6 +81,13 @@ public struct SimpleTextField<
         .scrollDismissesKeyboard(.automatic)
         .tint(tintColor)
         .padding(.bottom, (endLine > 1 && (canClear || systemImage != nil)) ? 28 : 0)
+        .onAppear {
+            if isAppearFocused {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    isFocused = true
+                }
+            }
+        }
         #if os(iOS)
         .overlay(alignment: .trailing) {
             if endLine == 1 {
@@ -144,52 +156,7 @@ public struct SimpleTextField<
     }
 }
 
-/// 用来输入密钥的输入框
-public struct SimpleTokenTextField: View {
-    @State private var showFullKey = false
-    
-    @Binding var tokenText: String
-    let tokenTitle: String
-    let prompt: String
-    let tintColor: Color
-    
-    init(
-        _ tokenText: Binding<String>,
-        tokenTitle: String = "密钥",
-        prompt: String = "请输入密钥",
-        tintColor: Color = .accentColor
-    ) {
-        self._tokenText = tokenText
-        self.tokenTitle = tokenTitle
-        self.prompt = prompt
-        self.tintColor = tintColor
-    }
-    
-    public var body: some View {
-        if tokenText.isEmpty || showFullKey {
-            SimpleTextField(
-                $tokenText,
-                title: tokenTitle,
-                prompt: prompt,
-                endLine: 1,
-                tintColor: tintColor
-            )
-            .onSubmit { showFullKey = false }
-        }else {
-            Button {
-                showFullKey = true
-            } label: {
-                HStack {
-                    Text(tokenTitle)
-                    Text(tokenText.lastCharacters())
-                }
-            }
-            .buttonStyle(.borderless)
-        }
-    }
-}
-
-#Preview("Form") {
+#Preview("Input") {
     @Previewable @State var input01: String = ""
     @Previewable @State var input02: String = ""
     @Previewable @State var input03: String = ""
