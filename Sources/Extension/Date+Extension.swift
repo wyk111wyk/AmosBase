@@ -157,8 +157,9 @@ public extension Date {
     }
     
     /// ISO8601Format
-    func toString_ISO8601() -> String {
-        self.ISO8601Format()
+    func toString_ISO8601(timeZone: TimeZone = .current) -> String {
+        let dateStyle: Date.ISO8601FormatStyle = .iso8601(timeZone: timeZone)
+        return self.ISO8601Format(dateStyle)
     }
 }
 

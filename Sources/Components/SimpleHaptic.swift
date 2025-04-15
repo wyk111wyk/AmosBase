@@ -28,6 +28,7 @@ public class SimpleHaptic {
     
     #if !os(watchOS)
     private var engine: CHHapticEngine?
+    private var timer: Timer?
 
     public init() {
         createHapticEngine()

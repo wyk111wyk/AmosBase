@@ -13,19 +13,17 @@ public struct AnimaMovingBorder<Content: View>: View {
     let borderWidth: CGFloat
     let dashLength: CGFloat
     let dashSpacing: CGFloat
-    let dashPhase: CGFloat
     let animationDuration: Double
     let cornerRadius: CGFloat
-    
-    @State private var isMovingAround = false
+
+    @State private var dashPhase: CGFloat = 0
 
     public init(
         isMoving: Bool,
         borderWidth: CGFloat = 4,
-        dashLength: CGFloat = 50,
-        dashSpacing: CGFloat = 400,
-        dashPhase: CGFloat = 220,
-        animationDuration: Double = 2,
+        dashLength: CGFloat = 60,
+        dashSpacing: CGFloat = 200,
+        animationDuration: Double = 5,
         cornerRadius: CGFloat = 10,
         @ViewBuilder content: () -> Content
     ) {
@@ -34,55 +32,49 @@ public struct AnimaMovingBorder<Content: View>: View {
         self.borderWidth = borderWidth
         self.dashLength = dashLength
         self.dashSpacing = dashSpacing
-        self.dashPhase = dashPhase
         self.animationDuration = animationDuration
         self.cornerRadius = cornerRadius
     }
 
     public var body: some View {
-        content
-            .overlay(
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .strokeBorder(
-                        style: StrokeStyle(
-                            lineWidth: borderWidth,
-                            lineCap: .round,
-                            lineJoin: .round,
-                            dash: [dashLength, dashSpacing],
-                            dashPhase: isMovingAround ? dashPhase : -dashPhase
+        GeometryReader { geometry in
+            let rect = geometry.frame(in: .local)
+            let perimeter = 2 * (rect.width + rect.height)
+
+            content
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .strokeBorder(
+                            style: StrokeStyle(
+                                lineWidth: borderWidth,
+                                lineCap: .round,
+                                lineJoin: .round,
+                                dash: [dashLength, dashSpacing],
+                                dashPhase: dashPhase
+                            )
                         )
-                    )
-                    .foregroundStyle(linearGradientColor)
-                    .opacity(isMoving ? 1 : 0)
-            )
-            .onAppear {
-                withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
-                    isMovingAround.toggle()
+                        .foregroundStyle(linearGradientColor)
+                        .opacity(isMoving ? 1 : 0)
+                )
+                .onAppear {
+                    if isMoving {
+                        withAnimation(.linear(duration: animationDuration).repeatForever(autoreverses: false)) {
+                            dashPhase = perimeter
+                        }
+                    }
                 }
-            }
+        }
     }
-    
-    private func linearGradientSingle(for color: Color) -> some ShapeStyle {
-        LinearGradient(
-            gradient:Gradient(
-                colors: [color.opacity(0.01), color, color, color.opacity(0.01)]
-            ),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-    }
-    
+
     private var linearGradientColor: some ShapeStyle {
         LinearGradient(
-            gradient: Gradient(
-                colors:
-                    [.indigo, .white, .green, .mint, .white, .orange, .indigo]
-            ),
+            gradient: Gradient(colors: [.indigo, .white, .green, .mint, .white, .orange, .indigo]),
             startPoint: .trailing,
             endPoint: .leading
         )
     }
 }
+
 
 struct MovingDashDemo: View {
     @State private var isBorderMoving = true
@@ -98,23 +90,23 @@ struct MovingDashDemo: View {
                 } label: {
                     Rectangle()
                         .foregroundStyle(.gray.opacity(0.2))
-                        .frame(width: 200, height: 50)
                 }
             }
+            .frame(width: 200, height: 50)
             .padding()
             
             AnimaMovingBorder(
                 isMoving: isBorderMoving,
-                cornerRadius: 50
+                cornerRadius: 100
             ) {
                 PlainButton {
                     isBorderMoving.toggle()
                 } label: {
                     Circle()
                         .foregroundStyle(.gray.opacity(0.2))
-                        .frame(width: 100, height: 100)
                 }
             }
+            .frame(width: 200, height: 100)
             .padding()
 
             SimpleToggleButton(isPresented: $isBorderMoving) {

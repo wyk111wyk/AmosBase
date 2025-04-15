@@ -21,7 +21,6 @@ struct PopupBackgroundView<Item: Equatable>: View {
     var backgroundColor: Color
     var backgroundView: AnyView?
     var closeOnTapOutside: Bool
-    var dismissEnabled: Binding<Bool>
 
     var body: some View {
         Group {
@@ -36,11 +35,9 @@ struct PopupBackgroundView<Item: Equatable>: View {
             view.contentShape(Rectangle())
         }
         .addTapIfNotTV(if: closeOnTapOutside) {
-            if dismissEnabled.wrappedValue {
-                dismissSource = .tapOutside
-                isPresented = false
-                item = nil
-            }
+            dismissSource = .tapOutside
+            isPresented = false
+            item = nil
         }
         .edgesIgnoringSafeArea(.all)
         .animation(.linear(duration: 0.2), value: animatableOpacity)
@@ -56,7 +53,6 @@ struct PopupBackgroundView<Item: Equatable>: View {
         dismissSource: .constant(nil),
         backgroundColor: .black.opacity(0.2),
         backgroundView: nil,
-        closeOnTapOutside: true,
-        dismissEnabled: .constant(true)
+        closeOnTapOutside: true
     )
 }

@@ -31,7 +31,6 @@ public struct Popup<PopupContent: View>: ViewModifier {
         self.animation = params.animation
         self.dragToDismiss = params.dragToDismiss
         self.dragToDismissDistance = params.dragToDismissDistance
-        self.dismissEnabled = params.dismissEnabled
         self.closeOnTap = params.closeOnTap
 
         self.view = view
@@ -80,10 +79,6 @@ public struct Popup<PopupContent: View>: ViewModifier {
     var useKeyboardSafeArea: Bool
 
     var animation: Animation
-
-    /// Becomes true when `dismissibleIn` times finishes
-    /// Makes no sense if `dismissibleIn` is nil
-    var dismissEnabled: Binding<Bool>
 
     /// Should close on tap - default is `true`
     var closeOnTap: Bool
@@ -248,10 +243,10 @@ public struct Popup<PopupContent: View>: ViewModifier {
     /// The scale when the popup is hidden
     private var hiddenScale: CGFloat {
         if shouldShowContent.wrappedValue, calculatedAppearFrom == .centerScale {
-            return 0.3
+            return 0
         }
         else if !shouldShowContent.wrappedValue, calculatedDisappearTo == .centerScale {
-            return 0.3
+            return 0
         }
         return 1
     }
@@ -271,10 +266,10 @@ public struct Popup<PopupContent: View>: ViewModifier {
     /// The opacity when the popup is hidden
     private var hiddenOpacity: CGFloat {
         if shouldShowContent.wrappedValue, calculatedAppearFrom == .centerScale {
-            return 0.2
+            return 0
         }
         else if !shouldShowContent.wrappedValue, calculatedDisappearTo == .centerScale {
-            return 0.2
+            return 0
         }
         return 1
     }
@@ -370,9 +365,7 @@ public struct Popup<PopupContent: View>: ViewModifier {
                 VStack {
                     contentView()
                         .addTapIfNotTV(if: closeOnTap) {
-                            if dismissEnabled.wrappedValue {
-                                dismissCallback(.tapInside)
-                            }
+                            dismissCallback(.tapInside)
                         }
                         .scaleEffect(actualScale) // scale is here to avoid it messing with frameGetter for sheetContentRect
                         .opacity(actualOpacity)
@@ -407,6 +400,7 @@ public struct Popup<PopupContent: View>: ViewModifier {
                 }
 
                 .onChange(of: sheetContentRect.size) {
+//                    print("Size change: \(sheetContentRect.size)")
                     positionIsCalculatedCallback()
                     if shouldShowContent.wrappedValue { // already displayed but the size has changed
                         actualCurrentOffset = targetCurrentOffset
@@ -423,9 +417,7 @@ public struct Popup<PopupContent: View>: ViewModifier {
                 VStack {
                     contentView()
                         .addTapIfNotTV(if: closeOnTap) {
-                            if dismissEnabled.wrappedValue {
-                                dismissCallback(.tapInside)
-                            }
+                            dismissCallback(.tapInside)
                         }
                         .scaleEffect(actualScale) // scale is here to avoid it messing with frameGetter for sheetContentRect
                         .opacity(actualOpacity)
@@ -591,7 +583,7 @@ public struct Popup<PopupContent: View>: ViewModifier {
             shouldDismiss = true
         }
 
-        if dismissEnabled.wrappedValue, shouldDismiss {
+        if shouldDismiss {
             dismissCallback(.drag)
         } else {
             withAnimation {

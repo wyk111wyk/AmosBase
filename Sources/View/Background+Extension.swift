@@ -139,18 +139,25 @@ struct BackgroundColorModifier: ViewModifier {
         if let bgColor{
             content
                 .background(alignment: .center) {
-                    bgColor
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            bgColor.opacity(1),
+                            bgColor.opacity(0.9)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
                 }
         }else{
             content
                 .background {
                     RoundedRectangle(cornerRadius: cornerRadius)
-                        .fill(.ultraThinMaterial)
+                        .fill(.regularMaterial)
                         .overlay(
                             LinearGradient(
                                 gradient: Gradient(colors: [
-                                    .white.opacity(0.3),
-                                    .white.opacity(0.1)
+                                    .white.opacity(0.4),
+                                    .black.opacity(0.3)
                                 ]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -182,10 +189,10 @@ struct ShadowModifier: ViewModifier {
         }else{
             content
                 .shadow(
-                    color: Color.primary.opacity(0.14),
-                    radius: 8,
-                    x: isTop ? 0 : 6,
-                    y: isTop ? 6 : 0
+                    color: Color.primary.opacity(0.05),
+                    radius: 5,
+                    x: isTop ? 0 : 5,
+                    y: isTop ? 5 : 0
                 )
         }
     }

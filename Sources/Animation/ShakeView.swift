@@ -55,6 +55,10 @@ struct ShakeViewDemo: View {
                 .frame(width: 200, height: 150)
                 .padding(.bottom, 50)
                 .modifier(ShakeModifier(isShake: isShake))
+                .onTapGesture {
+                    isShake.toggle()
+                    SimpleHaptic.playFailureHaptic()
+                }
             
             PlainButton {
                 isShake.toggle()

@@ -33,13 +33,6 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
     /// If nil - never hides on its own
     var autohideIn: Double?
 
-    /// 一定时间内不允许 dismiss
-    var dismissibleIn: Double?
-
-    /// Becomes true when `dismissibleIn` times finishes
-    /// Makes no sense if `dismissibleIn` is nil
-    var dismissEnabled: Binding<Bool>
-
     /// Should close on tap outside - default is `false`
     var closeOnTapOutside: Bool
 
@@ -104,10 +97,6 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
     /// if autohide time was set up, shows that timer has come to an end already
     @State private var timeToHide = false
 
-    // MARK: - dismissibleIn
-
-    private var dismissEnabledRef: ClassReference<Binding<Bool>>?
-
     // MARK: - Internal
 
     /// Set dismiss source to pass to dismiss callback
@@ -115,6 +104,7 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
 
     /// Synchronize isPresented changes and animations
     private let eventsQueue = DispatchQueue(label: "eventsQueue", qos: .utility)
+    // 确保同一时间只有一个任务在执行关键代码块
     @State private var eventsSemaphore = DispatchSemaphore(value: 1)
 
     init(isPresented: Binding<Bool> = .constant(false),
@@ -130,8 +120,6 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
         self.params = params
         self.haptic = params.haptic
         self.autohideIn = params.autohideIn
-        self.dismissibleIn = params.dismissibleIn
-        self.dismissEnabled = params.dismissEnabled
         self.closeOnTapOutside = params.closeOnTapOutside
         self.backgroundColor = params.backgroundColor
         self.backgroundView = params.backgroundView
@@ -148,7 +136,6 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
 
         self.isPresentedRef = ClassReference(self.$isPresented)
         self.itemRef = ClassReference(self.$item)
-        self.dismissEnabledRef = ClassReference(self.dismissEnabled)
     }
 
     public func body(content: Content) -> some View {
@@ -156,6 +143,8 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
             main(content: content)
                 .onChange(of: isPresented) {
                     eventsQueue.async { [eventsSemaphore] in
+                        // 但如果信号量没有被正确释放（通过 signal()），后续任务会一直等待
+                        // 检查代码中是否有 eventsSemaphore.signal() 的调用，用于在任务完成后释放信号量
                         eventsSemaphore.wait()
                         DispatchQueue.main.async {
                             closingIsInProcess = !isPresented
@@ -232,6 +221,30 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
 #endif
     }
     
+    @MainActor
+    func dismissPopup() {
+        if !isPresented {
+            eventsQueue.async { [eventsSemaphore] in
+                // 但如果信号量没有被正确释放（通过 signal()），后续任务会一直等待
+                // 检查代码中是否有 eventsSemaphore.signal() 的调用，用于在任务完成后释放信号量
+                eventsSemaphore.wait()
+                DispatchQueue.main.async {
+                    closingIsInProcess = true
+                    appearAction(popupPresented: false)
+                }
+            }
+        }else if item == nil {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.03) {
+                self.closingIsInProcess = true
+                if let item {
+                    /// copying `itemView`
+                    self.tempItemView = itemView(item)
+                }
+                appearAction(popupPresented: false)
+            }
+        }
+    }
+    
     /// 背景 + 弹窗的构造
     @ViewBuilder
     func constructPopup() -> some View {
@@ -244,16 +257,10 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
                 dismissSource: $dismissSource,
                 backgroundColor: backgroundColor,
                 backgroundView: backgroundView,
-                closeOnTapOutside: closeOnTapOutside,
-                dismissEnabled: dismissEnabled
+                closeOnTapOutside: closeOnTapOutside
             )
             .modifier(getModifier())
         }
-    }
-    
-    @ViewBuilder
-    func popupView() -> some View {
-        
     }
 
     var viewForItem: (() -> PopupContent)? {
@@ -278,42 +285,76 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
                 // 关闭开始后，不允许重新计算位置触发再次显示弹窗
                 if !closingIsInProcess {
                     DispatchQueue.main.async {
-                        shouldShowContent = true // 这将导致currentOffset改变，从而触发滑动显示动画
+                        // 这将导致currentOffset改变，从而触发滑动显示动画
+                        shouldShowContent = true
                         withAnimation(.linear(duration: 0.2)) {
                             animatableOpacity = 1 // 这将导致背景颜色/视图的交叉溶解动画
                         }
+                        performWithDelay(0.3) {
+                            eventsSemaphore.signal()
+                        }
                     }
                     setupAutohide()
-                    setupdismissibleIn()
                 }
             },
             dismissCallback: { source in
+//                print("dismissCallback")
+                
                 dismissSource = source
                 isPresented = false
                 item = nil
+                dismissPopup()
             }
         )
+    }
+    
+    /// 配置自动延时关闭的程序
+    func setupAutohide() {
+        // if needed, dispatch autohide and cancel previous one
+        if let autohideIn = autohideIn {
+            autohidingWorkHolder.work?.cancel()
+
+            // Weak reference to avoid the work item capturing the struct,
+            // which would create a retain cycle with the work holder itself.
+
+            // 自动结束提醒的方法
+            autohidingWorkHolder.work = DispatchWorkItem(block: { [weak isPresentedRef, weak itemRef] in
+                if isDragging {
+                    timeToHide = true // raise this flag to hide the popup once the drag is over
+                    return
+                }
+//                print("autohidingWorkHolder.work")
+                
+                dismissSource = .autohide
+                isPresentedRef?.value.wrappedValue = false
+                itemRef?.value.wrappedValue = nil
+                autohidingWorkHolder.work = nil
+                dismissPopup()
+            })
+            if popupPresented, let work = autohidingWorkHolder.work {
+                DispatchQueue.main.asyncAfter(deadline: .now() + autohideIn, execute: work)
+            }
+        }
     }
 
     func appearAction(popupPresented: Bool) {
         if popupPresented {
+//            print("开始 Popup")
             dismissSource = nil
             showSheet = true // show transparent fullscreen sheet
             showContent = true // immediately load popup body
             playHaptic()
         } else {
+//            print("Popup 关闭")
             closingIsInProcess = true
             userWillDismissCallback(dismissSource ?? .binding)
             autohidingWorkHolder.work?.cancel()
             dismissibleInWorkHolder.work?.cancel()
             shouldShowContent = false // this will cause currentOffset change thus triggering the sliding hiding animation
             animatableOpacity = 0
-            // do the rest once the animation is finished (see onAnimationCompleted())
-        }
-
-        // 当同时有其他动画（拖动、自动隐藏等）发生时，动画完成块不会被可靠调用，因此我们在此模仿 onAnimationCompleted
-        performWithDelay(0.3) {
-            onAnimationCompleted()
+            performWithDelay(0.3) {
+                onAnimationCompleted()
+            }
         }
     }
     
@@ -330,15 +371,10 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
 
     /// 配置动画结束之后的回调
     func onAnimationCompleted() {
-        if shouldShowContent { // return if this was called on showing animation, only proceed if called on hiding
-            eventsSemaphore.signal()
-            return
-        }
+//        print("pop 动画结束")
         showContent = false // unload popup body after hiding animation is done
         tempItemView = nil
-        if dismissibleIn != nil {
-            dismissEnabled.wrappedValue = false
-        }
+        
         performWithDelay(0.01) {
             showSheet = false
         }
@@ -347,48 +383,6 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
         }
 
         eventsSemaphore.signal()
-    }
-
-    /// 配置自动延时关闭的程序
-    func setupAutohide() {
-        // if needed, dispatch autohide and cancel previous one
-        if let autohideIn = autohideIn {
-            autohidingWorkHolder.work?.cancel()
-
-            // Weak reference to avoid the work item capturing the struct,
-            // which would create a retain cycle with the work holder itself.
-
-            autohidingWorkHolder.work = DispatchWorkItem(block: { [weak isPresentedRef, weak itemRef] in
-                if isDragging {
-                    timeToHide = true // raise this flag to hide the popup once the drag is over
-                    return
-                }
-                dismissSource = .autohide
-                isPresentedRef?.value.wrappedValue = false
-                itemRef?.value.wrappedValue = nil
-                autohidingWorkHolder.work = nil
-            })
-            if popupPresented, let work = autohidingWorkHolder.work {
-                DispatchQueue.main.asyncAfter(deadline: .now() + autohideIn, execute: work)
-            }
-        }
-    }
-
-    func setupdismissibleIn() {
-        if let dismissibleIn = dismissibleIn {
-            dismissibleInWorkHolder.work?.cancel()
-
-            // Weak reference to avoid the work item capturing the struct,
-            // which would create a retain cycle with the work holder itself.
-
-            dismissibleInWorkHolder.work = DispatchWorkItem(block: { [weak dismissEnabledRef] in
-                dismissEnabledRef?.value.wrappedValue = true
-                dismissibleInWorkHolder.work = nil
-            })
-            if popupPresented, let work = dismissibleInWorkHolder.work {
-                DispatchQueue.main.asyncAfter(deadline: .now() + dismissibleIn, execute: work)
-            }
-        }
     }
 
     func performWithDelay(_ delay: Double, block: @escaping ()->()) {

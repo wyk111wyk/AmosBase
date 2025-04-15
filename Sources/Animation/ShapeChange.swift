@@ -27,17 +27,18 @@ struct ShapeChange: View {
                             .foregroundStyle(.blue)
                             .frame(
                                 width: isExpanded ? nil : 60,
-                                height: isExpanded ? 200 : 60
+                                height: isExpanded ? 300 : 60
                             )
                         
                         Text("Hello SwiftUI!")
                             .fontWeight(.semibold)
                             .foregroundStyle(.white)
                             .opacity(isExpanded ? 1 : 0)
+                            .scaleEffect(isExpanded ? 1 : 0.2)
                     }
                 }
             }
-            .frame(height: 200)
+            .frame(height: 300)
             .padding()
             .onTapGesture {
                 withAnimation(.easeInOut) {

@@ -85,21 +85,21 @@ struct SimplePopSetting: View {
     
     private func appearSection() -> some View {
         Section {
-            Picker(
+            OptionalPicker(
                 "出现动画",
-                selection: currentConfig.appearFrom
+                selection: currentConfig.appearFrom,
+                options: AmosBase.popup.AppearAnimation.allCases,
+                nilOptionText: "默认"
             ) {
-                ForEach(AmosBase.popup.AppearAnimation.allCases) {
-                    Text($0.title).tag($0)
-                }
+                Text($0.title)
             }
-            Picker(
+            OptionalPicker(
                 "消失动画",
-                selection: currentConfig.disappearTo
+                selection: currentConfig.disappearTo,
+                options: AmosBase.popup.AppearAnimation.allCases,
+                nilOptionText: "默认"
             ) {
-                ForEach(AmosBase.popup.AppearAnimation.allCases) {
-                    Text($0.title).tag($0)
-                }
+                Text($0.title)
             }
         }
     }
@@ -159,7 +159,7 @@ extension SimplePopSetting {
     }
 }
 
-#Preview {
+#Preview("Setting") {
     @Previewable @State var bannerConfig: PopDemoConfig = .init()
     @Previewable @State var toastConfig: PopDemoConfig = .init()
     @Previewable @State var hudConfig: PopDemoConfig = .init()
