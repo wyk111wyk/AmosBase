@@ -105,11 +105,17 @@ extension DemoSimpleCard {
         } ?? 0) + 1
         let msg: String = "\(index) / \(allCardItems.count)"
         
-        ProgressView(
-            value: index.toDouble,
-            total: allCardItems.count.toDouble
+        let selectIndex = Binding<CGFloat>(
+            get: {
+                index.toCGFloat
+            },
+            set: { newValue in
+                currentPositionID = allCardItems[newValue.toInt-1].id
+            }
         )
-        .barStyle(
+        SimpleSlider(
+            value: selectIndex,
+            range: 1...allCardItems.count.toCGFloat,
             barHeight: 20,
             cornerScale: 2,
             textType: .custom(msg: msg)

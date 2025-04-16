@@ -18,11 +18,9 @@ public struct PopHud: View {
     #if os(watchOS)
     let centerSpace: CGFloat = 6
     let centerLabelSpace: CGFloat = 4
-    let centerMaxHight: CGFloat = 180
     #else
     let centerSpace: CGFloat = 12
     let centerLabelSpace: CGFloat = 8
-    let centerMaxHight: CGFloat = 300
     #endif
     
     var minWidth: CGFloat {
@@ -121,7 +119,7 @@ public struct PopHud: View {
         }
         .padding()
         .frame(minWidth: minWidth, maxWidth: maxWidth,
-               minHeight: minHeight, alignment: .center)
+               minHeight: minHeight,  alignment: .center)
         .modifier(BackgroundColorModifier(bgColor: bgColor))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(RoundedRectangle(cornerRadius: 12)
@@ -129,6 +127,10 @@ public struct PopHud: View {
         .modifier(ShadowModifier())
         .compositingGroup()
     }
+}
+
+#Preview("Loading") {
+    PopHud(mode: .loading)
 }
 
 #Preview {

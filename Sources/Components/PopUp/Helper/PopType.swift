@@ -148,6 +148,7 @@ extension SimplePopupMode {
             #if os(iOS)
                 .scaleEffect(1.5)
             #endif
+                .frame(width: 22, height: 22)
         default:
             EmptyView()
         }

@@ -153,9 +153,10 @@ public struct SimpleSlider: View {
                 DragGesture(minimumDistance: 0)
                     .onChanged({ dragValue in
                         isGragging = true
-                        let start: Int = (dragValue.location.x / totalWidth * 100).toInt
+                        // 稍微增加系数，让触控时更容易抵达Max边界
+                        let start: Int = (dragValue.location.x / totalWidth * 105).toInt
                         if start >= 0, start <= 100, isDragable {
-//                            debugPrint("目前进度：\(start)%")
+        //                            debugPrint("目前进度：\(start)%")
                             withAnimation {
                                 currentValue.wrappedValue = CGFloat(start)
                             }
@@ -321,18 +322,18 @@ public struct SimpleButtonSlider: View {
                     .onChanged({ dragValue in
                         isGragging = true
                         let locationX: CGFloat = dragValue.location.x
-//                        debugPrint("移动坐标X: \(locationX)")
+        //                        debugPrint("移动坐标X: \(locationX)")
                         
                         let newTotalWidth = totalWidth - buttonWidth
-//                        debugPrint("修正宽度：\(newTotalWidth)")
+        //                        debugPrint("修正宽度：\(newTotalWidth)")
                         let newLocationX: CGFloat =
                         if locationX <= (buttonWidth / 2) { 0 }
                         else { locationX - buttonWidth / 2 }
-//                        debugPrint("修正坐标X: \(newLocationX)")
+        //                        debugPrint("修正坐标X: \(newLocationX)")
                         let percentage: Int = min((newLocationX / newTotalWidth * 100).toInt, 100)
                         
                         if percentage >= 0, isDragable {
-//                            debugPrint("目前进度：\(percentage)%")
+        //                            debugPrint("目前进度：\(percentage)%")
                             withAnimation {
                                 currentValue.wrappedValue = CGFloat(percentage)
                             }
@@ -355,6 +356,7 @@ public struct SimpleStarSlider: View {
     let title: String?
     let state: String?
     let tagConfig: SimpleTagConfig
+    
     public init(
         currentRating: Binding<Int>,
         systemIcon: String? = nil,
@@ -371,7 +373,7 @@ public struct SimpleStarSlider: View {
     
     public var body: some View {
         HStack(spacing: 8) {
-            #if !os(watchOS)
+#if !os(watchOS)
             HStack(spacing: 4) {
                 if let systemIcon {
                     Image(systemName: systemIcon)
@@ -389,7 +391,7 @@ public struct SimpleStarSlider: View {
                     .foregroundStyle(.secondary)
                     .opacity(0.4)
             }
-            #endif
+#endif
             
             HStack(spacing: 12) {
                 ForEach(1...5) { rate in
@@ -400,14 +402,14 @@ public struct SimpleStarSlider: View {
                 }
             }
             
-            #if !os(watchOS)
+#if !os(watchOS)
             Spacer()
             
             if let state {
                 Text(state)
                     .simpleTag(tagConfig)
             }
-            #endif
+#endif
         }
     }
     

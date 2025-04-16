@@ -163,17 +163,21 @@ public extension CKAccountStatus {
             case .available:
                 Image(systemName: "icloud")
                 Text(title.toLocalizedKey(), bundle: .module)
+                    .lineLimit(2)
             case .restricted, .temporarilyUnavailable:
                 Image(systemName: "icloud.slash")
                 Text(title.toLocalizedKey(), bundle: .module)
+                    .lineLimit(2)
             case .noAccount:
                 Image(systemName: "person.crop.circle.badge.xmark")
                 Text(title.toLocalizedKey(), bundle: .module)
+                    .lineLimit(2)
             default:
                 Circle()
                     .frame(width: 8, height: 8)
                     .foregroundStyle(color)
                 Text("Unavailable", bundle: .module)
+                    .lineLimit(2)
             }
         }
         .simpleTag(

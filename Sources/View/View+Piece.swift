@@ -24,15 +24,19 @@ public extension Optional where Wrapped == Bool {
                     Image(systemName: "link")
                     if let connectedText {
                         Text(connectedText)
+                            .lineLimit(2)
                     }else {
                         Text("Connected", bundle: .module)
+                            .lineLimit(2)
                     }
                 }else {
                     Image(systemName: "personalhotspot.slash")
                     if let unconnectedText {
                         Text(unconnectedText)
+                            .lineLimit(2)
                     }else {
                         Text("Unconnected", bundle: .module)
+                            .lineLimit(2)
                     }
                 }
             }else {
@@ -41,8 +45,10 @@ public extension Optional where Wrapped == Bool {
                     .foregroundStyle(color)
                 if let unknownText {
                     Text(unknownText)
+                        .lineLimit(2)
                 }else {
                     Text("Unknown", bundle: .module)
+                        .lineLimit(2)
                 }
             }
         }

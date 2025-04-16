@@ -8,10 +8,11 @@
 import SwiftUI
 
 /// 简单的用来进行多线程任务的按钮
-public struct SimpleAsyncButton<V: View>: View {
+public struct SimpleAsyncButton<V: View, S: PrimitiveButtonStyle>: View {
     let title: String?
     let systemImage: String?
     let role: ButtonRole?
+    let style: S
     
     let action: () async throws -> Void
     @ViewBuilder var label: () -> V
@@ -20,12 +21,14 @@ public struct SimpleAsyncButton<V: View>: View {
         title: String? = nil,
         systemImage: String? = nil,
         role: ButtonRole? = nil,
+        style: S = .borderless,
         action: @escaping () async throws -> Void,
         label: @escaping () -> V = { EmptyView() }
     ) {
         self.title = title
         self.systemImage = systemImage
         self.role = role
+        self.style = style
         self.action = action
         self.label = label
     }
@@ -49,6 +52,6 @@ public struct SimpleAsyncButton<V: View>: View {
                 .contentShape(Rectangle())
             }
         }
-        .buttonStyle(.borderless)
+        .buttonStyle(style)
     }
 }
