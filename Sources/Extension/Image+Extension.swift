@@ -71,9 +71,13 @@ public extension Image {
     func imageModify(
         mode: ContentMode = .fit,
         length: CGFloat? = nil,
+        watchLength: CGFloat? = nil,
         width: CGFloat? = nil,
         height: CGFloat? = nil
     ) -> some View {
+        #if os(watchOS)
+        let length: CGFloat? = watchLength ?? (length ?? nil)
+        #endif
         let width: CGFloat? = width ?? (length ?? nil)
         let height: CGFloat? = height ?? (length ?? nil)
         
@@ -366,8 +370,7 @@ public extension SFImage {
     
     #if !os(watchOS)
     /// 用户可以将一张照片放入相册，使用前要先在 plist 中添加权限描述：
-    /// NSPhotoLibraryUsageDescription（完全访问）
-    /// NSPhotoLibraryAddUsageDescription（仅添加照片）
+    /// NSPhotoLibraryUsageDescription: 需要权限访问相册（完全访问）
     /// - Parameter accessLevel: 使用前需要进行授权
     /// - Returns: 成功或者错误提示
     func saveToPhotoLibrary(

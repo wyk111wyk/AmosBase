@@ -75,6 +75,81 @@ public struct AnimaMovingBorder<Content: View>: View {
     }
 }
 
+public struct FlowLightBorder<Content: View>: View {
+    let content: Content
+    let lineWidth: CGFloat
+    let cornerRadius: CGFloat
+    let animationDuration: Double
+    let glowRadius: CGFloat
+
+    @State private var rotation: Angle = .degrees(0)
+
+    public init(
+        lineWidth: CGFloat = 5,
+        cornerRadius: CGFloat = 20,
+        animationDuration: Double = 6,
+        glowRadius: CGFloat = 15,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.content = content()
+        self.lineWidth = lineWidth
+        self.cornerRadius = cornerRadius
+        self.animationDuration = animationDuration
+        self.glowRadius = glowRadius
+    }
+
+    public var body: some View {
+        content
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .overlay {
+                GeometryReader { geo in
+                    let size = geo.size
+
+                    ZStack {
+                        RoundedRectangle(cornerRadius: cornerRadius)
+                            .strokeBorder(
+                                AngularGradient(
+                                    gradient: Gradient(colors: gradientColors()),
+                                    center: .center
+                                ),
+                                lineWidth: lineWidth
+                            )
+                            .rotationEffect(rotation)
+                            .blur(radius: glowRadius)
+                            .mask(
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .stroke(lineWidth: lineWidth)
+                                    .frame(width: size.width, height: size.height)
+                            )
+                    }
+                    .onAppear {
+                        withAnimation(.linear(duration: animationDuration).repeatForever(autoreverses: false)) {
+                            rotation = .degrees(360)
+                        }
+                    }
+                }
+            }
+    }
+
+    private func gradientColors() -> [Color] {
+        [
+            .clear,
+            .mint,
+            .green,
+            .cyan,
+            .blue,
+            .purple,
+            .pink,
+            .orange,
+            .yellow,
+            .red,
+            .mint,
+            .clear
+        ]
+    }
+}
+
+
 
 struct MovingDashDemo: View {
     @State private var isBorderMoving = true
@@ -107,6 +182,20 @@ struct MovingDashDemo: View {
                 }
             }
             .frame(width: 200, height: 100)
+            .padding()
+            
+            FlowLightBorder(lineWidth: 6, cornerRadius: 30, animationDuration: 3) {
+                VStack {
+                    Image(systemName: "waveform.circle.fill")
+                        .font(.system(size: 60))
+                    Text("Siri is thinking...")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+                .frame(width: 220, height: 220)
+                .background(Color.green)
+            }
+            .frame(width: 220, height: 220)
             .padding()
 
             SimpleToggleButton(isPresented: $isBorderMoving) {

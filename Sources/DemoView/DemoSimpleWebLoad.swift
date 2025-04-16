@@ -137,7 +137,7 @@ struct DemoSimpleWebLoad: View {
             .formStyle(.grouped)
             .navigationTitle("网络传输 - Fetch")
             .simpleHud(isLoading: isLoading, title: "正在获取数据")
-            .simpleErrorToast(error: $currentError)
+            .simpleErrorBanner(error: $currentError)
         }
         .onChange(of: location.currentLocation) {
             currentLocation = location.currentLocation?.toLocation()

@@ -48,7 +48,11 @@ public final class WindowManager {
     var windows: [UUID: UIWindow] = [:]
 
     // Show a new window with hosted SwiftUI content
-    public static func showInNewWindow<Content: View>(id: UUID, dismissClosure: @escaping ()->(), content: @escaping () -> Content) {
+    public static func showInNewWindow<Content: View>(
+        id: UUID,
+        dismissClosure: @escaping ()->(),
+        content: @escaping () -> Content
+    ) {
         guard let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
             print("No valid scene available")
             return

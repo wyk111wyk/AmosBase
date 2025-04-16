@@ -20,7 +20,7 @@ public struct DemoSimpleImage: View {
     
     var defaultImage: SFImage { .gymGirl() }
     
-    @State private var isSaveSuccessed: Bool? = nil
+    @State private var isSaveSuccessed: Bool = false
     
     @State private var resizeImage: Bool = false
     @State private var scanText: String? = nil
@@ -63,7 +63,7 @@ public struct DemoSimpleImage: View {
             if let originalImage {
                 Section {
                     SimpleAsyncButton {
-                        self.isSaveSuccessed = try? await originalImage.saveToPhotoLibrary(accessLevel: .readWrite)
+                        self.isSaveSuccessed = (try? await originalImage.saveToPhotoLibrary(accessLevel: .readWrite)) ?? false
                     } label: {
                         SimpleCell("存入相册", systemImage: "arrow.down.doc")
                     }
@@ -90,8 +90,8 @@ public struct DemoSimpleImage: View {
         }
         .formStyle(.grouped)
         .navigationTitle(title)
-        .simpleSuccessToast(
-            presentState: $isSaveSuccessed,
+        .simpleSuccessBanner(
+            isPresented: $isSaveSuccessed,
             title: "图片已存入相册"
         )
         .task {

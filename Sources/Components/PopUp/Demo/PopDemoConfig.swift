@@ -117,7 +117,7 @@ extension popup.Position: Hashable, Identifiable {
     }
     #else
     static var allCases: [popup.Position] {
-        if SimpleDevice.getDevice() == .phone {
+        if SimpleDevice.getDevice() == .phone || SimpleDevice.getDevice() == .watch {
             return [.top, .center, .bottom]
         }else {
             return [.topLeading, .top, .topTrailing, .leading, .center, .trailing, .bottomLeading, .bottom, .bottomTrailing]

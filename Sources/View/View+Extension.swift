@@ -112,15 +112,6 @@ public extension View {
         #endif
     }
     
-    /// 为按钮设置快捷键
-    func simpleKeyboard(_ key: KeyEquivalent, modifiers: EventModifiers = []) -> some View {
-        #if !os(watchOS)
-        self.keyboardShortcut(key, modifiers: modifiers)
-        #else
-        self
-        #endif
-    }
-    
     /// 让文字可选
     func selectableText() -> some View {
         #if !os(watchOS)
@@ -151,6 +142,12 @@ public extension View {
             placement: .toolbar,
             prompt: promptText
         )
+        #else
+        return self.searchable(
+            text: text,
+            placement: .automatic,
+            prompt: promptText
+        )
         #endif
     }
     
@@ -166,6 +163,29 @@ public extension View {
         }
         #endif
     }
+    
+    func simpleKeyboardReturn() -> some View {
+        #if !os(watchOS)
+        self.keyboardShortcut(.return, modifiers: [])
+        #else
+        self
+        #endif
+    }
+    
+    func simpleKeyboardEspace() -> some View {
+        #if !os(watchOS)
+        self.keyboardShortcut(.escape, modifiers: [])
+        #else
+        self
+        #endif
+    }
+    
+    #if !os(watchOS)
+    /// 为按钮设置快捷键
+    func simpleKeyboard(_ key: KeyEquivalent, modifiers: EventModifiers = []) -> some View {
+        self.keyboardShortcut(key, modifiers: modifiers)
+    }
+    #endif
 }
 
 // MARK: - Mac 平台

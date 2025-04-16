@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct PopToast: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     let mode: SimplePopupMode
     let isTop: Bool
     var bgColor: Color? = nil
@@ -15,7 +16,15 @@ public struct PopToast: View {
     var title: String? = nil
     var subTitle: String? = nil
     
+    let topPadding: CGFloat
+    let bottomPadding: CGFloat
+    
     #if os(watchOS)
+    let bannerSpace: CGFloat = 12
+    let bannerLabelSpace: CGFloat = 2
+    let horizontalPadding: CGFloat? = 4
+    let contentHorizontalPadding: CGFloat = 12
+    #elseif os(iOS)
     let bannerSpace: CGFloat = 12
     let bannerLabelSpace: CGFloat = 2
     let horizontalPadding: CGFloat? = 4
@@ -39,6 +48,21 @@ public struct PopToast: View {
         self.bgColor = bgColor
         self.title = title
         self.subTitle = subTitle
+        #if os(watchOS)
+        topPadding = 12
+        bottomPadding = 12
+        #elseif os(iOS)
+        if horizontalSizeClass == .compact {
+            topPadding = 60
+            bottomPadding = 46
+        }else {
+            topPadding = 20
+            bottomPadding = 20
+        }
+        #else
+        topPadding = 20
+        bottomPadding = 20
+        #endif
     }
     
     public var body: some View {
@@ -64,8 +88,8 @@ public struct PopToast: View {
             }
         }
         .padding(.horizontal, contentHorizontalPadding)
-        .padding(.top, isTop ? 60 : 15)
-        .padding(.bottom, isTop ? 15 : 46)
+        .padding(.top, isTop ? topPadding : 15)
+        .padding(.bottom, isTop ? 15 : bottomPadding)
         .frame(maxWidth: .infinity)
         .modifier(
             BackgroundColorModifier(

@@ -73,11 +73,13 @@ public struct SimplePicList: View {
                 dismissPage()
             }
         }
-        .simpleErrorToast(error: $error)
-        .simpleSuccessToast(presentState: .isOptionalPresented($copyContent), displayMode: .topToast, title: "复制图片URL", subtitle: copyContent ?? "无法读取链接")
+        .simpleErrorBanner(error: $error)
+        .simpleSuccessBanner(subTitle: $copyContent, title: "成功复制图片URL")
         #if os(iOS)
-        .simpleImageViewer(selectedIndex: $selectedIndex,
-                           allPhotos: allImage)
+        .simpleImageViewer(
+            selectedIndex: $selectedIndex,
+            allPhotos: allImage
+        )
         #endif
     }
     

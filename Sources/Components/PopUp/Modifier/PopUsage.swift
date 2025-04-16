@@ -11,6 +11,7 @@ import SwiftUI
 // MARK: - 场景应用方法
 @MainActor
 public extension View {
+    /// 失败的提醒
     func simpleErrorBanner(
         error: Binding<Error?>,
         isTop: Bool = true,
@@ -33,6 +34,7 @@ public extension View {
         }
     }
     
+    /// 无法联网的提醒
     func simpleNoInternetBanner(
         isPresented: Binding<Bool>,
         isBottom: Bool = true,
@@ -61,7 +63,7 @@ public extension View {
         isPresented: Binding<Bool>,
         title: String? = nil,
         subTitle: String? = nil,
-        isCenter: Bool = true,
+        isCenter: Bool = false,
         hasHaptic: Bool = true,
         duration: Double = 1.6,
         dismissCallback: @escaping (DismissSource)->() = {_ in}
@@ -70,7 +72,34 @@ public extension View {
             if isCenter {
                 PopHud(mode: .success, title: title, subTitle: subTitle)
             }else {
-                PopBanner(mode: .success, title: title, subTitle: title)
+                PopBanner(mode: .success, title: title, subTitle: subTitle)
+            }
+        } customize: {
+            var content = $0
+            content.type = isCenter ? .default : .floater()
+            content.position = isCenter ? .center : .top
+            content.appearFrom = isCenter ? .centerScale : .topSlide
+            content.autohideIn = duration
+            content.haptic = hasHaptic ? .success : nil
+            content.dismissCallback = dismissCallback
+            
+            return content
+        }
+    }
+    
+    func simpleSuccessBanner(
+        subTitle: Binding<String?>,
+        title: String? = nil,
+        isCenter: Bool = false,
+        hasHaptic: Bool = true,
+        duration: Double = 1.6,
+        dismissCallback: @escaping (DismissSource)->() = {_ in}
+    ) -> some View {
+        self.popup(item: subTitle) { subTitle in
+            if isCenter {
+                PopHud(mode: .success, title: title, subTitle: subTitle)
+            }else {
+                PopBanner(mode: .success, title: title, subTitle: subTitle)
             }
         } customize: {
             var content = $0

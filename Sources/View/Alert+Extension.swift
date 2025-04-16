@@ -172,7 +172,7 @@ struct SimpleConfirmation: ViewModifier {
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 case .singleConfirm:
                     Button(role: .cancel, action: {
                         cancelTap()
@@ -180,25 +180,25 @@ struct SimpleConfirmation: ViewModifier {
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                 case .confirmCancel:
                     Button(role: .none, action: confirmTap, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 case .destructiveCancel:
                     Button(role: .destructive, action: confirmTap, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 }
             } message: {
                 if let message {
@@ -248,7 +248,7 @@ struct SimpleConfirmationItem<V: Identifiable>: ViewModifier {
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 case .singleConfirm:
                     Button(role: .cancel, action: {
                         cancelTap()
@@ -256,25 +256,25 @@ struct SimpleConfirmationItem<V: Identifiable>: ViewModifier {
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                 case .confirmCancel:
                     Button(role: .none, action: {confirmTap(passItem)}, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 case .destructiveCancel:
                     Button(role: .destructive, action: {confirmTap(passItem)}, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 }
             } message: {
                 if let message {
@@ -320,7 +320,7 @@ struct SimpleAlert: ViewModifier {
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 case .singleConfirm:
                     Button(role: .cancel, action: {
                         cancelTap()
@@ -328,25 +328,25 @@ struct SimpleAlert: ViewModifier {
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                 case .confirmCancel:
                     Button(role: .none, action: confirmTap, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 case .destructiveCancel:
                     Button(role: .destructive, action: confirmTap, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 }
             } message: {
                 if let message {
@@ -395,36 +395,36 @@ struct SimpleAlertItem<V: Identifiable>: ViewModifier {
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 case .singleConfirm:
                     Button(role: .cancel, action: {
                         cancelTap()
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                 case .confirmCancel:
                     Button(role: .none, action: {
                         confirmTap(passItem)
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 case .destructiveCancel:
                     Button(role: .destructive, action: {
                         confirmTap(passItem)
                     }, label: {
                         Text("Confirm", bundle: .module)
                     })
-                    .simpleKeyboard(.return)
+                    .simpleKeyboardReturn()
                     Button(role: .cancel, action: cancelTap, label: {
                         Text("Cancel", bundle: .module)
                     })
-                    .simpleKeyboard(.escape)
+                    .simpleKeyboardEspace()
                 }
             } message: {
                 if let message {

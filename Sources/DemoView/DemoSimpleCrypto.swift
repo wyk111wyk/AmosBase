@@ -49,7 +49,7 @@ struct DemoSimpleCrypto: View {
             .formStyle(.grouped)
             .navigationTitle("AES加解密")
         }
-        .simpleErrorToast(error: $error)
+        .simpleErrorBanner(error: $error)
         .task {
             if key.isEmpty {
                 key = String.random(length: 16)

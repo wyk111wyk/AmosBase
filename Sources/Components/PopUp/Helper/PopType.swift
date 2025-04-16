@@ -101,6 +101,7 @@ extension SimplePopupMode {
             #if os(macOS)
                 .scaleEffect(0.6)
             #endif
+                .frame(width: 22, height: 22)
         default:
             EmptyView()
         }
@@ -137,11 +138,11 @@ extension SimplePopupMode {
             PopAnimatedXmark(.textColor(bgColor: bgColor, baseColor: .red))
         case .systemImage(let systemName):
             Image(systemName: systemName)
-                .imageModify(length: 50)
+                .imageModify(length: 50, watchLength: 26)
                 .foregroundStyle(Color.textColor(bgColor: bgColor))
         case .image(let sfImage):
             Image(sfImage: sfImage)
-                .imageModify(length: 50)
+                .imageModify(length: 50, watchLength: 26)
         case .loading:
             ProgressView()
             #if os(iOS)
@@ -160,7 +161,7 @@ fileprivate struct PopAnimatedCheckmark: View {
     var color: Color = .black
     
     #if os(watchOS)
-    var size: Int = 26
+    var size: Int = 22
     #else
     var size: Int = 46
     #endif
@@ -201,7 +202,7 @@ fileprivate struct PopAnimatedXmark: View {
     var color: Color = .black
     
     #if os(watchOS)
-    var size: Int = 26
+    var size: Int = 22
     #else
     var size: Int = 46
     #endif

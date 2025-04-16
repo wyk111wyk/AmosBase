@@ -18,12 +18,10 @@ public struct PopHud: View {
     #if os(watchOS)
     let centerSpace: CGFloat = 6
     let centerLabelSpace: CGFloat = 4
-    let centerMinHight: CGFloat = 70
     let centerMaxHight: CGFloat = 180
     #else
     let centerSpace: CGFloat = 12
     let centerLabelSpace: CGFloat = 8
-    let centerMinHight: CGFloat = 120
     let centerMaxHight: CGFloat = 300
     #endif
     
@@ -47,6 +45,18 @@ public struct PopHud: View {
             return 220
         } else {
             return 280
+        }
+        #endif
+    }
+    
+    var minHeight: CGFloat {
+        #if os(watchOS)
+        return 70
+        #else
+        if horizontalSizeClass == .compact {
+            return 120
+        } else {
+            return 160
         }
         #endif
     }
@@ -111,7 +121,7 @@ public struct PopHud: View {
         }
         .padding()
         .frame(minWidth: minWidth, maxWidth: maxWidth,
-               minHeight: centerMinHight, alignment: .center)
+               minHeight: minHeight, alignment: .center)
         .modifier(BackgroundColorModifier(bgColor: bgColor))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(RoundedRectangle(cornerRadius: 12)
@@ -124,6 +134,7 @@ public struct PopHud: View {
 #Preview {
     ScrollView(showsIndicators: false) {
         VStack(spacing: 15) {
+            PopHud(mode: .loading)
             PopHud(mode: .error, title: String.randomChinese(short: true), subTitle: String.randomChinese(medium: true))
             PopHud(mode: .success, title: String.randomChinese(short: true), subTitle: String.randomChinese(medium: true))
             PopHud(mode: .loading)

@@ -145,29 +145,32 @@ public struct PopBanner: View {
 }
 
 #Preview("Banner") {
-    VStack(spacing: 20) {
-        PopBanner(
-            mode: .error,
-            title: String.randomChinese(short: true),
-            subTitle: String.randomChinese(medium: true)
-        )
-        PopBanner(
-            mode: .success,
-            title: String.randomChinese(short: true),
-            subTitle: String.randomChinese(long: true)
-        )
-        PopBanner(mode: .loading)
-            .environment(\.locale, .zhHans)
-        PopBanner(
-            mode: .systemImage("trash"),
-            title: String.randomChinese(medium: true)
-        )
-        PopBanner(mode: .noInternet).environment(\.locale, .zhHans)
-        PopBanner(mode: .noInternet)
-        PopBanner(
-            mode: .text,
-            title: String.randomChinese(short: true),
-            subTitle: String.randomChinese(medium: true)
-        )
+    ScrollView {
+        VStack(spacing: 20) {
+            PopBanner(
+                mode: .error,
+                title: String.randomChinese(short: true),
+                subTitle: String.randomChinese(medium: true)
+            )
+            PopBanner(
+                mode: .success,
+                title: String.randomChinese(short: true),
+                subTitle: String.randomChinese(long: true)
+            )
+            PopBanner(mode: .loading)
+                .environment(\.locale, .zhHans)
+            PopBanner(
+                mode: .systemImage("trash"),
+                title: String.randomChinese(medium: true)
+            )
+            PopBanner(mode: .noInternet).environment(\.locale, .zhHans)
+            PopBanner(mode: .noInternet)
+            PopBanner(
+                mode: .text,
+                title: String.randomChinese(short: true),
+                subTitle: String.randomChinese(medium: true)
+            )
+        }
+        .scrollIndicators(.hidden)
     }
 }

@@ -22,7 +22,7 @@ public struct DemoSimpleCloud: View {
     
     @State private var loadingMsg: String = ""
     @State private var isLoading: Bool = false
-    @State private var errorMsg: String? = nil
+    @State private var error: Error? = nil
     @State private var successMsg: String?
     
     @State private var uploadImage: SFImage?
@@ -80,10 +80,10 @@ public struct DemoSimpleCloud: View {
             }
             .formStyle(.grouped)
             .navigationTitle("云存储 iCloud")
-            .simpleHud(isLoading: isLoading, title: loadingMsg)
-            .simpleAlert(title: errorMsg, isPresented: .isPresented($errorMsg))
-            .simpleSuccessToast(presentState: .isOptionalPresented($successMsg), title: successMsg ?? "上传成功")
         }
+        .simpleHud(isLoading: isLoading, title: loadingMsg)
+        .simpleErrorBanner(error: $error)
+        .simpleSuccessBanner(subTitle: $successMsg, title: "上传成功")
     }
 }
 
@@ -112,16 +112,16 @@ extension DemoSimpleCloud {
             ) {
                 debugPrint("准备上传：\(saveData)")
                 do {
-                    if let _ = try await cloudHelper.saveDataToCloud(
+                    if let record = try await cloudHelper.saveDataToCloud(
                         dataType: saveData,
                         idKey: UUID().uuidString
                     ){
-                        successMsg = "上传成功"
+                        successMsg = "成功上传图片：\(record.recordID.recordName)"
                         clearAllData()
                     }
                 } catch {
                     debugPrint(error)
-                    errorMsg = error.localizedDescription
+                    self.error = error
                 }
                 loadingChange(false)
             }
@@ -137,8 +137,8 @@ extension DemoSimpleCloud {
                 let deleteCount = try await cloudHelper.deleteCloudValue()
                 successMsg = "成功删除\(deleteCount)条数据"
             }catch {
-                errorMsg = error.localizedDescription
                 debugPrint(error)
+                self.error = error
             }
             loadingChange(false)
         }

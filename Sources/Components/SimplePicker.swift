@@ -258,6 +258,7 @@ struct SimplePickerDemo: View {
                 disabledValues: [allPickerContent.randomElement()!],
                 selectValues: [allPickerContent.randomElement()!]
             )
+            #if !os(watchOS)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Picker("", selection: $page) {
@@ -269,6 +270,7 @@ struct SimplePickerDemo: View {
                     .frame(width: 180)
                 }
             }
+            #endif
         }
     }
 }

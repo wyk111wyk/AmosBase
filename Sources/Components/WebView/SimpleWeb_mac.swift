@@ -13,19 +13,19 @@ import SwiftUI
 struct SimpleWeb_mac: NSViewRepresentable {
     
     @Binding var isLoading: Bool
-    @Binding var showErrorAlert: Bool?
+    @Binding var error: Error?
     @State private var urlRequest: URLRequest
     @ObservedObject var model: SimpleWebModel
     
     init(
         url: URL,
         isloading: Binding<Bool>,
-        showErrorAlert: Binding<Bool?>,
+        error: Binding<Error?>,
         account: SimpleFeedbackModel?,
         model: SimpleWebModel
     ) {
         self._isLoading = isloading
-        self._showErrorAlert = showErrorAlert
+        self._error = error
         self.model = model
         var request: URLRequest = .init(url: url)
         
@@ -115,7 +115,7 @@ struct SimpleWeb_mac: NSViewRepresentable {
         ) {
             print("3.加载网页失败，失败原因:\n\(error)")
             if (error as NSError).code != NSURLErrorCancelled {
-                parent.showErrorAlert = true
+                parent.error = error
             }
             parent.isLoading = false
         }

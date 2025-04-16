@@ -151,6 +151,12 @@ struct BackgroundColorModifier: ViewModifier {
         }else{
             content
                 .background {
+                    #if os(watchOS)
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .foregroundStyle(.black)
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .foregroundStyle(.white.opacity(0.2))
+                    #else
                     RoundedRectangle(cornerRadius: cornerRadius)
                         .fill(.regularMaterial)
                         .overlay(
@@ -164,6 +170,7 @@ struct BackgroundColorModifier: ViewModifier {
                             )
                             .blendMode(.overlay)
                         )
+                    #endif
                 }
         }
     }

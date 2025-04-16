@@ -22,10 +22,9 @@ struct DemoSimpleAnimation: View {
                 .offset(y: index == 0 ? -50 : 0)
             }
         }
-        #if os(iOS)
+        #if !os(watchOS)
         .tabViewStyle(.page)
         .indexViewStyle(.page(backgroundDisplayMode: .interactive))
-        #endif
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Menu {
@@ -43,6 +42,7 @@ struct DemoSimpleAnimation: View {
                 }
             }
         }
+        #endif
     }
     
     private func contentTitle(for page: Int) -> String? {

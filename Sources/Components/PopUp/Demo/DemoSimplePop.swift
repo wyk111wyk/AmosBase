@@ -29,6 +29,7 @@ struct DemoSimplePop: View {
     @State private var contentText: String = ""
     
     @State private var showSuccessPop = false
+    @State private var showSuccessTitle: String? = nil
     @State private var showErrorPop: Error?
     @State private var showLoadingPop = false
     @State private var showNoInternetPop = false
@@ -58,6 +59,7 @@ struct DemoSimplePop: View {
             title: "成功进行操作！",
             isCenter: true
         )
+        .simpleSuccessBanner(subTitle: $showSuccessTitle, title: "成功完成！")
         .simpleErrorBanner(error: $showErrorPop)
         .simpleLoadingBanner(
             isPresented: $showLoadingPop,
@@ -197,6 +199,11 @@ struct DemoSimplePop: View {
                 SimpleCell("成功弹窗", systemImage: "checkmark.square", isCellButton: true)
             }
             PlainButton {
+                showSuccessTitle = String.randomChinese(medium: true)
+            } label: {
+                SimpleCell("成功弹窗", systemImage: "checkmark.square", content: "自定义标题", isCellButton: true)
+            }
+            PlainButton {
                 showErrorPop = SimpleError.customError(title: "Error Title", msg: "Error Message")
             } label: {
                 SimpleCell("失败弹窗", systemImage: "xmark.square", isCellButton: true)
@@ -238,7 +245,7 @@ struct DemoSimplePop: View {
                 HStack {
                     Text(style.title)
                     Spacer()
-                    Button { showConfigSheet = style } label: {
+                    PlainButton { showConfigSheet = style } label: {
                         Image(systemName: "slider.horizontal.3")
                     }
                 }

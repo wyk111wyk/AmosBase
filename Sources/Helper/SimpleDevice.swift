@@ -50,31 +50,17 @@ public class SimpleDevice: NSObject {
         return Locale.current.identifier
     }
     
-    #if os(iOS)
-    
     ///获取设备类型: phone, pad, mac, vision, tv, carplay
-    public static func getDevice() -> UIUserInterfaceIdiom {
-        UIDevice.current.userInterfaceIdiom
-    }
-    
-    ///获取设备类型 iPhone
-    public static func getModel() -> String {
-        return UIDevice.current.model
-    }
-    
-    class public override func description() -> String {
-        var message = "系统版本: \(getSystemVersion())\n"
-        message += "系统名称: \(getSystemName())\n"
-        message += "设备类型: \(getModel())\n"
-        message += "设备型号全称: \(getFullModel())\n"
-        message += "总磁盘: \(getDiskTotalSize())\n"
-        message += "可用磁盘: \(getAvalibleDiskSize())\n"
-        message += "当前设备IP: \(getDeviceIP() ?? "")\n"
-        message += "应用名称: \(getAppName() ?? "")\n"
-        message += "应用版本: \(getAppVersion() ?? "")"
-        
-//        print(message)
-        return message
+    public static func getDevice() -> SimpleDeviceType {
+        #if os(iOS) || os(tvOS) || os(visionOS)
+        return UIDevice.current.userInterfaceIdiom.toDevice
+        #elseif os(macOS)
+        return .mac
+        #elseif os(watchOS)
+        return .watch
+        #else
+        return .phone
+        #endif
     }
     
     /*
@@ -96,6 +82,7 @@ public class SimpleDevice: NSObject {
      */
     /// 获取正在连接的wifi的名称，必需要位置权限
     public static func wifiInfo() -> String? {
+        #if !os(watchOS)
         if let interfaces = CNCopySupportedInterfaces() as NSArray? {
             for interface in interfaces {
                 if let interfaceInfo = CNCopyCurrentNetworkInfo(interface as! CFString) as NSDictionary? {
@@ -105,6 +92,31 @@ public class SimpleDevice: NSObject {
             }
         }
         return nil
+        #else
+        return nil
+        #endif
+    }
+    
+    #if os(iOS)
+    
+    ///获取设备类型 iPhone
+    public static func getModel() -> String {
+        return UIDevice.current.model
+    }
+    
+    class public override func description() -> String {
+        var message = "系统版本: \(getSystemVersion())\n"
+        message += "系统名称: \(getSystemName())\n"
+        message += "设备类型: \(getModel())\n"
+        message += "设备型号全称: \(getFullModel())\n"
+        message += "总磁盘: \(getDiskTotalSize())\n"
+        message += "可用磁盘: \(getAvalibleDiskSize())\n"
+        message += "当前设备IP: \(getDeviceIP() ?? "")\n"
+        message += "应用名称: \(getAppName() ?? "")\n"
+        message += "应用版本: \(getAppVersion() ?? "")"
+        
+//        print(message)
+        return message
     }
 #endif
 }
@@ -553,3 +565,56 @@ extension SimpleDevice {
         }
     }
 }
+
+public enum SimpleDeviceType: Sendable {
+    case phone
+    case pad
+    case mac
+    case vision
+    case tv
+    case carplay
+    case watch
+    
+    var title: String {
+        switch self {
+        case .phone: return "iPhone"
+        case .pad: return "iPad"
+        case .mac: return "Mac"
+        case .vision: return "Apple Vision"
+        case .tv: return "Apple TV"
+        case .carplay: return "CarPlay"
+        case .watch: return "Apple Watch"
+        }
+    }
+    
+    #if os(iOS)
+    var toUIUserInterfaceIdiom: UIUserInterfaceIdiom {
+        switch self {
+        case .phone: .phone
+        case .pad: .pad
+        case .mac: .mac
+        case .vision: .vision
+        case .tv: .tv
+        case .carplay: .carPlay
+        case .watch: .unspecified
+        }
+    }
+    #endif
+}
+
+#if os(iOS)
+extension UIUserInterfaceIdiom {
+    var toDevice: SimpleDeviceType {
+        switch self {
+        case .unspecified: .watch
+        case .phone: .pad
+        case .pad: .pad
+        case .tv: .tv
+        case .carPlay: .carplay
+        case .mac: .mac
+        case .vision: .vision
+        @unknown default: .watch
+        }
+    }
+}
+#endif

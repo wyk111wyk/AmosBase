@@ -1406,6 +1406,9 @@
         }
       }
     },
+    "Siri is thinking..." : {
+
+    },
     "Slider" : {
       "localizations" : {
         "zh-Hans" : {

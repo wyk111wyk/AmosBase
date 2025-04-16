@@ -54,7 +54,9 @@ struct SimplePopSetting: View {
             }
             .formStyle(.grouped)
             .navigationTitle(popStyle.title)
+            #if !os(watchOS)
             .toolbar(content: toolbarMenu)
+            #endif
             .buttonCircleNavi(role: .destructive) {
                 dismissPage()
             }
@@ -144,6 +146,7 @@ struct SimplePopSetting: View {
     }
 }
 
+#if !os(watchOS)
 extension SimplePopSetting {
     @ToolbarContentBuilder
     private func toolbarMenu() -> some ToolbarContent {
@@ -158,6 +161,7 @@ extension SimplePopSetting {
         }
     }
 }
+#endif
 
 #Preview("Setting") {
     @Previewable @State var bannerConfig: PopDemoConfig = .init()

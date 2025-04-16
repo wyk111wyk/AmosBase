@@ -12,7 +12,7 @@ import SwiftUI
 
 struct SimpleWeb_iOS: UIViewRepresentable {
     @Binding var isLoading: Bool
-    @Binding var showErrorAlert: Bool?
+    @Binding var error: Error?
     @State private var urlRequest: URLRequest
     @ObservedObject var model: SimpleWebModel
     let webType: SimpleWebView.WebType
@@ -20,13 +20,13 @@ struct SimpleWeb_iOS: UIViewRepresentable {
     init(
         url: URL,
         isloading: Binding<Bool>,
-        showErrorAlert: Binding<Bool?>,
+        error: Binding<Error?>,
         account: SimpleFeedbackModel?,
         model: SimpleWebModel,
         webType: SimpleWebView.WebType = .mobile
     ) {
         self._isLoading = isloading
-        self._showErrorAlert = showErrorAlert
+        self._error = error
         self.model = model
         self.webType = webType
         var request: URLRequest = .init(url: url)
@@ -128,7 +128,7 @@ struct SimpleWeb_iOS: UIViewRepresentable {
         ) {
             print("3.加载网页失败，失败原因:\n\(error)")
             if (error as NSError).code != NSURLErrorCancelled {
-                parent.showErrorAlert = true
+                parent.error = error
             }
             parent.isLoading = false
         }

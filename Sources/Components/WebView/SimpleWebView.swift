@@ -29,7 +29,7 @@ public struct SimpleWebView: View {
     let webType: WebType
     
     @State private var isLoading = false
-    @State private var showErrorAlert: Bool? = false
+    @State private var error: Error? = nil
     
     public init(
         url: URL,
@@ -57,6 +57,17 @@ public struct SimpleWebView: View {
         NavigationStack {
             webView()
                 .buttonCircleNavi(role: .cancel) { dismissPage() }
+                .simpleErrorBanner(error: $error)
+                .onChange(of: url) {
+        //            debugPrint("URL改变：\(new.absoluteString)")
+                    model.loadRequest(.init(url: url))
+                }
+                .buttonCircleNavi(
+                    imageName: "arrow.triangle.2.circlepath",
+                    isLoading: isLoading
+                ) {
+                    model.reload()
+                }
         }
     }
     
@@ -65,49 +76,21 @@ public struct SimpleWebView: View {
         SimpleWeb_iOS(
             url: url,
             isloading: $isLoading,
-            showErrorAlert: $showErrorAlert,
+            error: $error,
             account: account,
             model: model,
             webType: webType
         )
         .ignoresSafeArea(.container, edges: .bottom)
-        .onChange(of: url) {
-//            debugPrint("URL改变：\(new.absoluteString)")
-            model.loadRequest(.init(url: url))
-        }
-        .simpleErrorToast(
-            presentState: $showErrorAlert,
-            title: "内容载入失败"
-        )
-        .buttonCircleNavi(
-            imageName: "arrow.triangle.2.circlepath",
-            isLoading: isLoading
-        ) {
-            model.reload()
-        }
         #elseif os(macOS)
         SimpleWeb_mac(
             url: url,
             isloading: $isLoading,
-            showErrorAlert: $showErrorAlert,
+            error: $error,
             account: account,
             model: model
         )
         .ignoresSafeArea()
-        .onChange(of: url) {
-            debugPrint("URL改变：\(url.absoluteString)")
-            model.loadRequest(.init(url: url))
-        }
-        .simpleErrorToast(
-            presentState: $showErrorAlert,
-            title: "内容载入失败"
-        )
-        .buttonCircleNavi(
-            imageName: "arrow.triangle.2.circlepath",
-            isLoading: isLoading
-        ) {
-            model.reload()
-        }
         #endif
     }
 }

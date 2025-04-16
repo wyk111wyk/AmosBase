@@ -51,6 +51,7 @@ public struct SimpleConfirmButton<V: View>: View {
     }
 }
 
+#if !os(watchOS)
 struct ButtonShortkey: ViewModifier {
     let role: ButtonRole?
     let key: KeyEquivalent?
@@ -68,3 +69,4 @@ struct ButtonShortkey: ViewModifier {
         }
     }
 }
+#endif

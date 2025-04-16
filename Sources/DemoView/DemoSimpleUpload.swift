@@ -82,7 +82,7 @@ public struct DemoSimpleUpload: View {
             .formStyle(.grouped)
             .navigationTitle("上传图床")
         }
-        .simpleErrorToast(error: $error)
+        .simpleErrorBanner(error: $error)
         .task {
             gitToken = "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"
         }
