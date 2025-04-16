@@ -52,12 +52,12 @@ public struct PopToast: View {
         topPadding = 12
         bottomPadding = 12
         #elseif os(iOS)
-        if horizontalSizeClass == .compact {
-            topPadding = 60
-            bottomPadding = 46
-        }else {
+        if SimpleDevice.getDevice() == .pad {
             topPadding = 20
             bottomPadding = 20
+        }else {
+            topPadding = 60
+            bottomPadding = 46
         }
         #else
         topPadding = 20
