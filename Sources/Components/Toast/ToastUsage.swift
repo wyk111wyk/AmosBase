@@ -16,6 +16,7 @@ public extension View{
     /// loading 不会自动关闭，但是迭代为其他类型后会重置时间并关闭。
     ///
     /// iOS 端使用了 fullScreenCover 技术路线，其他平台是 overlay，但还是需要尽量放置在最根部的视图组件处。
+    @available(*, deprecated, renamed: "popup", message: "Toast 已弃用，使用 Popup 作为新的提醒方法")
     func simpleToast<Item: Equatable>(
         presentState: Binding<Item?>,
         duration: Double = 1.7,
@@ -44,6 +45,7 @@ public extension View{
                 completion: completion))}
     
     /// 简单UI组件 - 顶部错误提示（使用 Error）
+    @available(*, deprecated, renamed: "simpleErrorBanner(error:)", message: "Toast 已弃用，使用 Popup 作为新的提醒方法")
     func simpleErrorToast(
         error: Binding<Error?>,
         displayMode: ToastView.DisplayMode = .topToast,
@@ -69,6 +71,7 @@ public extension View{
     }
     
     /// 简单UI组件 - 顶部错误提示（可进一步定制）
+    @available(*, deprecated, renamed: "simpleErrorBanner(error:)", message: "Toast 已弃用，使用 Popup 作为新的提醒方法")
     func simpleErrorToast<Item: Equatable>(
         presentState: Binding<Item?>,
         duration: Double = 2.0,
@@ -106,6 +109,7 @@ public extension View{
     }
     
     /// 简单UI组件 - 中央成功动画提示（可进一步定制）
+    @available(*, deprecated, renamed: "simpleSuccessBanner(isPresented:)", message: "Toast 已弃用，使用 Popup 作为新的提醒方法")
     func simpleSuccessToast<Item: Equatable>(
         presentState: Binding<Item?>,
         displayMode: ToastView.DisplayMode = .centerToast,
@@ -143,6 +147,7 @@ public extension View{
     /// 简单UI组件 - 中央载入提示（可进一步定制）
     ///
     /// 不会自动从屏幕消失，需要程序dismss或手动点击
+    @available(*, deprecated, renamed: "simpleLoadingBanner(isPresented:)", message: "Toast 已弃用，使用 Popup 作为新的提醒方法")
     func simpleLoadingToast<Item: Equatable>(
         presentState: Binding<Item?>,
         displayMode: ToastView.DisplayMode = .centerToast,

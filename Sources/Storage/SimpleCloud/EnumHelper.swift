@@ -189,6 +189,11 @@ public extension CKAccountStatus {
                 bgColor: color
             )
         )
+        .onTapGesture {
+            if self != .available {
+                SimpleDevice.openSystemSetting()
+            }
+        }
     }
 }
 

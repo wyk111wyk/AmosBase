@@ -11,19 +11,54 @@ import SwiftUI
 // MARK: - 场景应用方法
 @MainActor
 public extension View {
+    func simpleBanner(
+        isPresented: Binding<Bool>,
+        systemImage: String? = nil,
+        title: String? = nil,
+        subTitle: String? = nil,
+        isCenter: Bool = false,
+        bgColor: Color? = nil,
+        duration: Double = 1.6,
+        dismissCallback: @escaping (DismissSource)->() = {_ in}
+    ) -> some View {
+        self.popup(isPresented: isPresented) {
+            if isCenter {
+                if let systemImage {
+                    PopHud(mode: .systemImage(systemImage), title: title, subTitle: subTitle, bgColor: bgColor)
+                }else {
+                    PopHud(mode: .text, title: title, subTitle: subTitle, bgColor: bgColor)
+                }
+            }else {
+                if let systemImage {
+                    PopBanner(mode: .systemImage(systemImage), title: title, subTitle: subTitle, bgColor: bgColor)
+                }else {
+                    PopBanner(mode: .text, title: title, subTitle: subTitle, bgColor: bgColor)
+                }
+            }
+        } customize: { content in
+            content
+                .type(isCenter ? .default : .floater())
+                .position(isCenter ? .center : .top)
+                .appearFrom(isCenter ? .centerScale : .topSlide)
+                .autohideIn(duration)
+                .dismissCallback(dismissCallback)
+        }
+    }
+    
     /// 失败的提醒
     func simpleErrorBanner(
         error: Binding<Error?>,
         isTop: Bool = true,
+        bgColor: Color? = nil,
         hasHaptic: Bool = true,
         duration: Double = 2.0
     ) -> some View {
         self.popup(isPresented: .isPresented(error)) {
             if let simpleError = error.wrappedValue as? SimpleError,
                case let .customError(title, msg, _) = simpleError {
-                PopBanner(mode: .error, title: title, subTitle: msg)
+                PopBanner(mode: .error, title: title, subTitle: msg, bgColor: bgColor)
             }else {
-                PopBanner(mode: .error, title: error.wrappedValue?.localizedDescription ?? "发生错误")
+                PopBanner(mode: .error, title: error.wrappedValue?.localizedDescription ?? "发生错误", bgColor: bgColor)
             }
         } customize: { content in
             content
@@ -64,15 +99,16 @@ public extension View {
         title: String? = nil,
         subTitle: String? = nil,
         isCenter: Bool = false,
+        bgColor: Color? = nil,
         hasHaptic: Bool = true,
         duration: Double = 1.6,
         dismissCallback: @escaping (DismissSource)->() = {_ in}
     ) -> some View {
         self.popup(isPresented: isPresented) {
             if isCenter {
-                PopHud(mode: .success, title: title, subTitle: subTitle)
+                PopHud(mode: .success, title: title, subTitle: subTitle, bgColor: bgColor)
             }else {
-                PopBanner(mode: .success, title: title, subTitle: subTitle)
+                PopBanner(mode: .success, title: title, subTitle: subTitle, bgColor: bgColor)
             }
         } customize: {
             var content = $0
@@ -91,15 +127,16 @@ public extension View {
         subTitle: Binding<String?>,
         title: String? = nil,
         isCenter: Bool = false,
+        bgColor: Color? = nil,
         hasHaptic: Bool = true,
         duration: Double = 1.6,
         dismissCallback: @escaping (DismissSource)->() = {_ in}
     ) -> some View {
         self.popup(item: subTitle) { subTitle in
             if isCenter {
-                PopHud(mode: .success, title: title, subTitle: subTitle)
+                PopHud(mode: .success, title: title, subTitle: subTitle, bgColor: bgColor)
             }else {
-                PopBanner(mode: .success, title: title, subTitle: subTitle)
+                PopBanner(mode: .success, title: title, subTitle: subTitle, bgColor: bgColor)
             }
         } customize: {
             var content = $0

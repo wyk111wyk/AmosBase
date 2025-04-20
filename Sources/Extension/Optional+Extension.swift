@@ -10,6 +10,18 @@ import SwiftUI
 
 // MARK: - Methods (RawRepresentable, RawValue: Equatable)
 
+public func isAnyNil(_ value: Any) -> Bool {
+    return value is OptionalProtocol && (value as? OptionalProtocol)?.isNil == true
+}
+
+protocol OptionalProtocol {
+    var isNil: Bool { get }
+}
+
+extension Optional: OptionalProtocol {
+    var isNil: Bool { self == nil }
+}
+
 public extension Optional {
     func isBool() -> Bool {
         if let item = self {

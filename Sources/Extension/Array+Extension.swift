@@ -38,6 +38,10 @@ public extension Array {
       return map { $0[keyPath: keyPath] }
     }
     
+    func compactMap<T>(_ keyPath: KeyPath<Element, T?>) -> [T] {
+      return compactMap { $0[keyPath: keyPath] }
+    }
+    
     /// 自定义排序闭包
     ///
     ///     playlist.songs.sorted(by: \.name)

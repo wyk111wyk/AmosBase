@@ -8,8 +8,12 @@
 import Foundation
 
 public extension Bool {
-    func toString() -> String {
-        self ? "Yes" : "No"
+    func toString(_ locale: Locale = .zhHans) -> String {
+        if locale == .zhHans {
+            self ? "是" : "否"
+        }else {
+            self ? "Yes" : "No"
+        }
     }
     
     var toInt: Int {

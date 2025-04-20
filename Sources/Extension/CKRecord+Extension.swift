@@ -130,6 +130,9 @@ public extension CKRecord {
             case let location as CLLocation: self[key] = location
             case let location as CLLocationCoordinate2D:
                 self[key] = location.toLocation()
+            case let uuidArray as [UUID]:
+                let newKey = key + "_uuidArray"
+                self[newKey] = uuidArray.map(\.uuidString)
             case let data as Data:
                 let newKey = key + "_data"
                 self[newKey] = data
@@ -142,6 +145,9 @@ public extension CKRecord {
             case Optional<Any>.none:
                 // 当值是 nil 的时候，不上传该内容，避免初始化错误的类型
                 continue
+            case let codableValue as Encodable:
+                let newKey = key + "_data"
+                self[newKey] = codableValue.toData()
             default:
                 print("不支持的转换类型: key \(key_): \(type(of: value)) (\(String(describing: value))")
                 continue
@@ -163,7 +169,9 @@ public extension CKRecord {
                 }
             }
             
-//            print("Key: \(key), Type: \(type(of: value)), Value: \(value)")
+            if type(of: value) != Data.self {
+                print("Key: \(key), Type: \(type(of: value)), Value: \(value)")
+            }
             
             if newKey.hasSuffix("_color") {
                 newKey = String(newKey.dropLast(6))
@@ -179,6 +187,11 @@ public extension CKRecord {
                 newKey = String(newKey.dropLast(5))
                 if let number = value as? NSNumber {
                     tempDicts[newKey] = number.boolValue
+                }
+            }else if newKey.hasSuffix("_uuidArray") {
+                newKey = String(newKey.dropLast(10))
+                if let uuidArray = value as? [String] {
+                    tempDicts[newKey] = uuidArray.compactMap{$0.toUUID()}
                 }
             }else {
                 switch value {
@@ -336,14 +349,14 @@ public extension CKRecord.ID {
     
     // 从 CKRecord.ID 初始化
     convenience init(
-        itemID: UUID,
+        itemID: String,
         zoneName: String? = nil
     ) {
         if let zoneName {
             let zoneID = CKRecordZone.ID(zoneName: zoneName)
-            self.init(recordName: itemID.uuidString, zoneID: zoneID)
+            self.init(recordName: itemID, zoneID: zoneID)
         }else {
-            self.init(recordName: itemID.uuidString)
+            self.init(recordName: itemID)
         }
     }
     
