@@ -169,8 +169,8 @@ public extension CKRecord {
                 }
             }
             
-            if type(of: value) != Data.self {
-                print("Key: \(key), Type: \(type(of: value)), Value: \(value)")
+            if !key.hasSuffix("_data") {
+//                print("Key: \(key), Type: \(type(of: value)), Value: \(value)")
             }
             
             if newKey.hasSuffix("_color") {
@@ -180,7 +180,11 @@ public extension CKRecord {
                 }
             }else if newKey.hasSuffix("_data") {
                 newKey = String(newKey.dropLast(5))
-                tempDicts[newKey] = value
+                if let newValue = value as? Data {
+                    tempDicts[newKey] = newValue.base64EncodedString()
+                }else {
+                    tempDicts[newKey] = value
+                }
             }else if newKey.hasSuffix("_image") {
                 newKey = String(newKey.dropLast(6))
             }else if newKey.hasSuffix("_bool") {
@@ -190,9 +194,7 @@ public extension CKRecord {
                 }
             }else if newKey.hasSuffix("_uuidArray") {
                 newKey = String(newKey.dropLast(10))
-                if let uuidArray = value as? [String] {
-                    tempDicts[newKey] = uuidArray.compactMap{$0.toUUID()}
-                }
+                tempDicts[newKey] = value
             }else {
                 switch value {
                 case let location as CLLocation:
