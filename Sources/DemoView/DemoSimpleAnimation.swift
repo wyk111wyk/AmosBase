@@ -22,9 +22,11 @@ struct DemoSimpleAnimation: View {
                 .offset(y: index == 0 ? -50 : 0)
             }
         }
-        #if !os(watchOS)
+        #if os(iOS)
         .tabViewStyle(.page)
         .indexViewStyle(.page(backgroundDisplayMode: .interactive))
+        #endif
+        #if !os(watchOS)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Menu {

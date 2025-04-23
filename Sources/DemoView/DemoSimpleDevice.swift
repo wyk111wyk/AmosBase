@@ -78,7 +78,7 @@ public struct DemoSimpleDevice: View {
                     Text("位置信息")
                     Spacer()
                     Button {
-                        wifiName = SimpleDevice.wifiInfo()
+                        wifiName = SimpleDevice.wifiName()
                         location.startLocation()
                     } label: {
                         Text("获取地点")

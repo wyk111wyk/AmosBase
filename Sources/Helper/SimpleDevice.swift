@@ -11,12 +11,14 @@ import AVFoundation
 #if os(iOS)
 import SystemConfiguration.CaptiveNetwork
 import CoreLocation
+import NetworkExtension
 #endif
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 import IOKit
+import CoreWLAN
 #endif
 #if canImport(WatchKit)
 import WatchKit
@@ -64,34 +66,42 @@ public class SimpleDevice: NSObject {
     }
     
     /*
-     在iOS 13之前，只要能够连接上WiFi就可以获取到WiFi信息。
-     在iOS 13之后，需要为应用授权获取WiFi信息的能力，还要授权获取位置，才能获取到WiFi信息。
-
-     为应用授权获取WiFi信息的能力 Targets -> Capabilities -> Access WiFi Information
-     
-     授权获取位置:
-     "NSLocationAlwaysUsageDescription"
-     "NSLocationAlwaysAndWhenInUseUsageDescription"
-     "NSLocationWhenInUseUsageDescription"
-     
-     {
-         BSSID = "a4:39:b3:c7:4a:10";
-         SSID = "Amos Studio";
-         SSIDDATA = {length = 11, bytes = 0x416d6f732053747564696f};
-     }
+     - 在 iOS 上，获取 Wi-Fi 信息需要使用 NetworkExtension 框架的 NEHotspotHelper。
+     1. 在项目的 Info.plist 中添加以下键：
+     NSLocationWhenInUseUsageDescription
+     com.apple.developer.networking.wifi-info
+     2. 在 Xcode 的 Capabilities 中启用 Access WiFi Information。
+     3. 调用前需确保用户已授权位置权限，因为 Wi-Fi 信息可能需要定位服务。
+     - 在 macOS 上，获取 Wi-Fi 信息通常使用 CoreWLAN 框架。
      */
     /// 获取正在连接的wifi的名称，必需要位置权限
-    public static func wifiInfo() -> String? {
-        #if !os(watchOS)
+    public static func wifiName() -> String? {
+        #if os(iOS)
         if let interfaces = CNCopySupportedInterfaces() as NSArray? {
             for interface in interfaces {
                 if let interfaceInfo = CNCopyCurrentNetworkInfo(interface as! CFString) as NSDictionary? {
-                    debugPrint(interfaceInfo)
-                    return interfaceInfo["SSID"] as? String
+                    // 获取 Wi-Fi 的 SSID
+                    if let ssid = interfaceInfo[kCNNetworkInfoKeySSID as String] as? String {
+                        return ssid
+                    }
                 }
             }
         }
         return nil
+        #elseif os(macOS)
+        // 确保 Wi-Fi 功能已启用，否则 interface.powerOn() 会返回 false
+        guard let interface = CWWiFiClient.shared().interface(),
+              interface.powerOn() else {
+            return nil
+        }
+        
+        // 获取当前 Wi-Fi 网络的 SSID、BSSID 和频道
+        let ssid = interface.ssid()
+        let bssid = interface.bssid()
+        let channel = interface.wlanChannel()?.channelNumber
+        print("SSID: \(ssid.wrapped) BSSID: \(bssid.wrapped) Channel: \(channel ?? 0)")
+        
+        return ssid
         #else
         return nil
         #endif

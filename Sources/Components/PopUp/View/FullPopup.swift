@@ -378,7 +378,7 @@ public struct FullscreenPopup<Item: Equatable, PopupContent: View>: ViewModifier
         
         performWithDelay(0.01) {
             showSheet = false
-            #if !os(watchOS)
+            #if os(iOS)
             // 当显示弹窗时页面导航变化，.onChange 方法将不再响应
             // 检测到有显示的弹窗，则进行正常关闭
             if displayMode == .window {
