@@ -35,7 +35,7 @@ struct DemoSimplePlaceholder: View {
         }
         .sheet(isPresented: $showPickerSheet) {
             pickerSheet()
-                .presentationDetents([.medium])
+                .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
     }

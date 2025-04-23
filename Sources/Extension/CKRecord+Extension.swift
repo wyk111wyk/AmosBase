@@ -141,7 +141,7 @@ public extension CKRecord {
                 self[newKey] = color.toJson()
             case let image as SFImage:
                 let newKey = key + "_image"
-                self[newKey] = image.jpegImageData()
+                self[newKey] = image.pngImageData()
             case Optional<Any>.none:
                 // 当值是 nil 的时候，不上传该内容，避免初始化错误的类型
                 continue

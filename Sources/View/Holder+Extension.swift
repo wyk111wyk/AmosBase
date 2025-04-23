@@ -115,7 +115,7 @@ struct SimplePlaceholderModify<V: View>: ViewModifier {
 }
 
 public enum SimplePlaceholderType: String, Identifiable, CaseIterable {
-    case listEmpty, star, allDone, map, edit, alert, lock, bell, bookmark, clock, done, pencil, target, thumbUp
+    case cheerUp, meditation, listEmpty, star, allDone, map, edit, alert, lock, bell, bookmark, clock, done, pencil, target, thumbUp, cloudFile, defend, glasses, medal
     
     public var id: String {
         self.rawValue
@@ -137,6 +137,12 @@ public enum SimplePlaceholderType: String, Identifiable, CaseIterable {
         case .pencil: .init(bundle: .module, packageResource: "edit2", ofType: "heic")
         case .target: .init(bundle: .module, packageResource: "target", ofType: "heic")
         case .thumbUp: .init(bundle: .module, packageResource: "thumb", ofType: "heic")
+        case .cheerUp: .init(bundle: .module, packageResource: "cheerUp", ofType: "heic")
+        case .meditation: .init(bundle: .module, packageResource: "clam", ofType: "heic")
+        case .cloudFile: .init(bundle: .module, packageResource: "cloudFile", ofType: "heic")
+        case .defend: .init(bundle: .module, packageResource: "defend", ofType: "heic")
+        case .glasses: .init(bundle: .module, packageResource: "glasses", ofType: "heic")
+        case .medal: .init(bundle: .module, packageResource: "medal", ofType: "heic")
         }
     }
     
@@ -156,6 +162,12 @@ public enum SimplePlaceholderType: String, Identifiable, CaseIterable {
         case .pencil: "编辑"
         case .target: "目标"
         case .thumbUp: "点赞"
+        case .cheerUp: "欢呼"
+        case .meditation: "冥想"
+        case .cloudFile: "云端"
+        case .defend: "守护"
+        case .glasses: "晕乎乎"
+        case .medal: "勋章"
         }
     }
 }

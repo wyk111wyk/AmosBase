@@ -228,7 +228,7 @@ extension SimpleWeb {
                     
                     var responseBody = ""
                     for try await line in stream.lines {
-                        responseBody += line + "\n"
+                        responseBody += line
                     }
                     
                     continuation.finish(

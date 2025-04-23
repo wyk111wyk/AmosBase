@@ -20,6 +20,32 @@ public typealias SFFont = NSFont
 
 // MARK: - 进行转换
 public extension String {
+    /// 将包含 Unicode 转义序列的字符串转换为实际字符
+    /// 支持格式：\Uxxxx (4 位), \Uxxxxxxxx (8 位), \uxxxx (4 位)
+    /// - Returns: 转换后的字符串，如果转换失败则返回原始字符串
+    func toUnicodeEscapes() -> String {
+        let pattern = "\\"
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            return self
+        }
+        
+        var result = self
+        let matches = regex.matches(in: self, options: [], range: NSRange(location: 0, length: self.utf16.count))
+        
+        for match in matches.reversed() {
+            if let range = Range(match.range(at: 1), in: self) {
+                let hex = String(self[range])
+                if let unicodeValue = UInt32(hex, radix: 16), let unicodeScalar = UnicodeScalar(unicodeValue) {
+                    let character = String(unicodeScalar)
+                    let fullMatchRange = Range(match.range, in: self)!
+                    result.replaceSubrange(fullMatchRange, with: character)
+                }
+            }
+        }
+        
+        return result
+    }
+
     /// 根据format将文字转换为日期
     ///
     /// 默认格式为 yyyy-MM-dd

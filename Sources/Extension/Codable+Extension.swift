@@ -147,10 +147,12 @@ public extension Data {
             
             // 检查jsonObject类型
             if let jsonDict = jsonObject as? [String: Any] {
-                debugPrint("JSON Dictionary: \(jsonDict)")
+                print("JSON Dictionary:")
+                print(jsonDict.description)
                 return jsonDict.description
             } else if let jsonArray = jsonObject as? [[String: Any]] {
-                debugPrint("JSON Array: \(jsonArray)")
+                print("JSON Array:")
+                print(jsonArray.description)
                 return jsonArray.description
             } else {
                 debugPrint("JSON is not a valid dictionary or array")
