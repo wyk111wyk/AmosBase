@@ -150,6 +150,64 @@ public extension Array {
         return String(data: jsonData, encoding: .utf8)
     }
     #endif
+    
+    /// 根据索引批量删除数组内的元素
+    @discardableResult
+    func removeByIndices(_ indices: [Int]) -> [Element] {
+        var tempArr = self
+        let uniqueIndices = Set(indices).filter {
+            $0 >= 0 && $0 < tempArr.count
+        }
+        for index in uniqueIndices.sorted(by: >) {
+            tempArr.remove(at: index)
+        }
+        return tempArr
+    }
+    
+    /// 删除数组中的空值
+    @discardableResult
+    func removeEmpty() -> [Element] {
+        var tempArr = self
+        tempArr.removeAll(where: {
+            if let text = $0 as? String {
+                return text.isEmpty
+            } else if let array = $0 as? Array<Any> {
+                return array.isEmpty
+            } else {
+                return false
+            }
+        })
+        return tempArr
+    }
+    
+    /// 返回去重指定 path 元素后的新数组（基于 KeyPath 的值比较）
+    func withoutDuplicates<E: Equatable>(keyPath path: KeyPath<Element, E>) -> [Element] {
+        var seenValues: [E] = []
+        return filter {
+            let value = $0[keyPath: path]
+            let isUnique = !seenValues.contains(value)
+            if isUnique { seenValues.append(value) }
+            return isUnique
+        }
+    }
+    
+    /// 批量根据ID将元素移动到最前方
+    func moveElementsToFront(indices: [Int]) -> [Element] {
+        var tempArr = self
+        // 确保索引是唯一且有效的
+        let uniqueIndices = Set(indices).filter { $0 >= 0 && $0 < tempArr.count }
+        
+        // 提取要移动的元素
+        var elementsToMove: [Element] = []
+        for index in uniqueIndices.sorted(by: >) { // 从后向前移除元素，避免索引错误
+            elementsToMove.append(tempArr[index])
+            tempArr.remove(at: index)
+        }
+        
+        // 将移动的元素添加到数组的前面
+        return elementsToMove + tempArr
+    }
+    
 }
 
 public extension Array where Element: Hashable {
@@ -161,6 +219,15 @@ public extension Array where Element: Hashable {
 }
 
 public extension Array where Element: Identifiable {
+    
+    /// 根据 Id 替换数组中的值。
+    @discardableResult
+    mutating func replace(_ item: Element) -> [Element] {
+        if let index = self.indexByItem(item) {
+            self[index] = item
+        }
+        return self
+    }
     
     /// 在最后面添加或者更新一个元素
     @discardableResult
@@ -186,35 +253,8 @@ public extension Array where Element: Identifiable {
         return self
     }
     
-    /// SwifterSwift: 根据Id删除数组中的值。
-    ///
-    /// - Returns: self after removing all instances of item.
-    @discardableResult
-    mutating func removeByItem(_ item: Element) -> [Element] {
-        removeAll(where: { $0.id == item.id })
-        return self
-    }
-    
-    /// SwifterSwift: 根据Id删除数组中的值。
-    ///
-    /// - Returns: self after removing all instances of item.
-    @discardableResult
-    mutating func removeById(_ id: Element.ID) -> [Element] {
-        removeAll(where: { $0.id == id })
-        return self
-    }
-    
-    /// 根据 Id 替换数组中的值。
-    @discardableResult
-    mutating func replace(_ item: Element) -> [Element] {
-        if let index = self.indexByItem(item) {
-            self[index] = item
-        }
-        return self
-    }
-    
     /// 根据 Id 取出数组中的值
-    func firstById(_ id: Element.ID) -> Element? {
+    func itemById(_ id: Element.ID) -> Element? {
         self.first {
             $0.id == id
         }
@@ -261,6 +301,65 @@ public extension Array where Element: Identifiable {
             return index - 1
         }
     }
+    
+    // MARK: -  删除的方法
+    
+    /// SwifterSwift: 根据Id删除数组中的值。
+    ///
+    /// - Returns: self after removing all instances of item.
+    @discardableResult
+    mutating func removeByItem(_ item: Element) -> [Element] {
+        removeAll(where: { $0.id == item.id })
+        return self
+    }
+    
+    /// 删除数组中的某些元素（基于 Identifiable 的 id）
+    @discardableResult
+    mutating func removeByItems(_ items: [Element]) -> [Element] {
+        guard !items.isEmpty else { return self }
+        let itemIDs = items.map { $0.id }
+        removeAll(where: { itemIDs.contains($0.id) })
+        return self
+    }
+    
+    /// SwifterSwift: 根据Id删除数组中的值。
+    ///
+    /// - Returns: self after removing all instances of item.
+    @discardableResult
+    mutating func removeById(_ id: Element.ID) -> [Element] {
+        removeAll(where: { $0.id == id })
+        return self
+    }
+    
+    /// 删除数组中的某些符合 ID 的元素（基于 Identifiable 的 id）
+    @discardableResult
+    mutating func removeByIds(_ ids: [Element.ID]) -> [Element] {
+        guard !ids.isEmpty else { return self }
+        removeAll(where: { ids.contains($0.id) })
+        return self
+    }
+    
+    /// 为数组去重且不改变位置（相同元素留一个，基于 Identifiable 的 id）
+    @discardableResult
+    mutating func removeDuplicates() -> [Element] {
+        var seenIDs: [Element.ID] = []
+        self = filter {
+            let isUnique = !seenIDs.contains($0.id)
+            if isUnique { seenIDs.append($0.id) }
+            return isUnique
+        }
+        return self
+    }
+    
+    /// 返回一个去重后的新数组（传入数组不变，基于 Identifiable 的 id）
+    func withoutDuplicates() -> [Element] {
+        var seenIDs: [Element.ID] = []
+        return filter {
+            let isUnique = !seenIDs.contains($0.id)
+            if isUnique { seenIDs.append($0.id) }
+            return isUnique
+        }
+    }
 }
 
 // MARK: - Methods (Equatable)
@@ -273,54 +372,6 @@ public extension Array where Element: Equatable {
         }
     }
     
-    /// 根据ID批量删除数组内的元素
-    @discardableResult
-    func removeMutil(indices: [Int]) -> [Element] {
-        var tempArr = self
-        let uniqueIndices = Set(indices).filter {
-            $0 >= 0 && $0 < tempArr.count
-        }
-        for index in uniqueIndices.sorted(by: >) {
-            tempArr.remove(at: index)
-        }
-        return tempArr
-    }
-    
-    /// 批量根据ID将元素移动到最前方
-    func moveElementsToFront(indices: [Int]) -> [Element] {
-        var tempArr = self
-        // 确保索引是唯一且有效的
-        let uniqueIndices = Set(indices).filter { $0 >= 0 && $0 < tempArr.count }
-        
-        // 提取要移动的元素
-        var elementsToMove: [Element] = []
-        for index in uniqueIndices.sorted(by: >) { // 从后向前移除元素，避免索引错误
-            elementsToMove.append(tempArr[index])
-            tempArr.remove(at: index)
-        }
-        
-        // 将移动的元素添加到数组的前面
-        return elementsToMove + tempArr
-    }
-    
-    /// SwifterSwift: 删除数组中的空值。
-    ///
-    /// - Returns: self after removing all instances of item.
-    @discardableResult
-    func removeEmpty() -> [Element] {
-        var tempArr = self
-        tempArr.removeAll(where: {
-            if let text = $0 as? String {
-                return text.isEmpty
-            }else if let array = $0 as? Array {
-                return array.isEmpty
-            }else {
-                return false
-            }
-        })
-        return tempArr
-    }
-    
     /// SwifterSwift: 删除数组中的某个元素。Remove all instances of an item from array.
     ///
     ///        [1, 2, 2, 3, 4, 5].removeAll(2) -> [1, 3, 4, 5]
@@ -329,7 +380,7 @@ public extension Array where Element: Equatable {
     /// - Parameter item: item to remove.
     /// - Returns: self after removing all instances of item.
     @discardableResult
-    mutating func remove(_ item: Element) -> [Element] {
+    mutating func removeItem(_ item: Element) -> [Element] {
         removeAll(where: { $0 == item })
         return self
     }
@@ -346,107 +397,5 @@ public extension Array where Element: Equatable {
         guard !items.isEmpty else { return self }
         removeAll(where: { items.contains($0) })
         return self
-    }
-
-    /// SwifterSwift: 为数组去重且不改变位置（相同元素留一个）。Remove all duplicate elements from Array.
-    ///
-    ///        [1, 2, 2, 3, 4, 5].removeDuplicates() -> [1, 2, 3, 4, 5]
-    ///        ["h", "e", "l", "l", "o"]. removeDuplicates() -> ["h", "e", "l", "o"]
-    ///
-    /// - Returns: Return array with all duplicate elements removed.
-    @discardableResult
-    mutating func removeDuplicates() -> [Element] {
-        // Thanks to https://github.com/sairamkotha for improving the method
-        self = reduce(into: [Element]()) {
-            if !$0.contains($1) {
-                $0.append($1)
-            }
-        }
-        return self
-    }
-
-    /// SwifterSwift: 返回一个去重后的新数组（传入数组不变）Return array with all duplicate elements removed.
-    ///
-    ///     [1, 1, 2, 2, 3, 3, 3, 4, 5].withoutDuplicates() -> [1, 2, 3, 4, 5])
-    ///     ["h", "e", "l", "l", "o"].withoutDuplicates() -> ["h", "e", "l", "o"])
-    ///
-    /// - Returns: an array of unique elements.
-    ///
-    func withoutDuplicates() -> [Element] {
-        // Thanks to https://github.com/sairamkotha for improving the method
-        return reduce(into: [Element]()) {
-            if !$0.contains($1) {
-                $0.append($1)
-            }
-        }
-    }
-
-    /// SwifterSwift: 返回去重指定 path 元素后的新数组（方法一）Returns an array with all duplicate elements removed using KeyPath to compare.
-    ///
-    /// - Parameter path: Key path to compare, the value must be Equatable.
-    /// - Returns: an array of unique elements.
-    func withoutDuplicates<E: Equatable>(keyPath path: KeyPath<Element, E>) -> [Element] {
-        return reduce(into: [Element]()) { result, element in
-            if !result.contains(where: { $0[keyPath: path] == element[keyPath: path] }) {
-                result.append(element)
-            }
-        }
-    }
-
-    /// SwifterSwift: 返回去重指定 path 元素后的新数组（方法二）Returns an array with all duplicate elements removed using KeyPath to compare.
-    ///
-    /// - Parameter path: Key path to compare, the value must be Hashable.
-    /// - Returns: an array of unique elements.
-    func withoutDuplicates<E: Hashable>(keyPath path: KeyPath<Element, E>) -> [Element] {
-        var set = Set<E>()
-        return filter { set.insert($0[keyPath: path]).inserted }
-    }
-}
-
-public extension Sequence {
-    /// SwifterSwift: 根据条件返回符合的个数。Get element count based on condition.
-    ///
-    ///        [2, 2, 4, 7].count(where: {$0 % 2 == 0}) -> 3
-    ///
-    /// - Parameter condition: condition to evaluate each element against.
-    /// - Returns: number of times the condition evaluated to true.
-    func count(where condition: (Element) throws -> Bool) rethrows -> Int {
-        var count = 0
-        for element in self where try condition(element) {
-            count += 1
-        }
-        return count
-    }
-
-    /// SwifterSwift: 反向遍历元素。Iterate over a collection in reverse order. (right to left)
-    ///
-    ///        [0, 2, 4, 7].forEachReversed({ print($0)}) -> // Order of print: 7,4,2,0
-    ///
-    /// - Parameter body: a closure that takes an element of the array as a parameter.
-    func forEachReversed(_ body: (Element) throws -> Void) rethrows {
-        try reversed().forEach(body)
-    }
-
-    /// SwifterSwift: 过滤并遍历元素。Calls the given closure with each element where condition is true.
-    ///
-    ///        [0, 2, 4, 7].forEach(where: {$0 % 2 == 0}, body: { print($0)}) -> // print: 0, 2, 4
-    ///
-    /// - Parameters:
-    ///   - condition: condition to evaluate each element against.
-    ///   - body: a closure that takes an element of the array as a parameter.
-    func forEach(where condition: (Element) throws -> Bool, body: (Element) throws -> Void) rethrows {
-        try lazy.filter(condition).forEach(body)
-    }
-    
-    /// SwifterSwift: 在同一个函数中过滤并转换元素。Filtered and map in a single operation.
-    ///
-    ///     [1,2,3,4,5].filtered({ $0 % 2 == 0 }, map: { $0.string }) -> ["2", "4"]
-    ///
-    /// - Parameters:
-    ///   - isIncluded: condition of inclusion to evaluate each element against.
-    ///   - transform: transform element function to evaluate every element.
-    /// - Returns: Return an filtered and mapped array.
-    func filtered<T>(_ isIncluded: (Element) throws -> Bool, map transform: (Element) throws -> T) rethrows -> [T] {
-        return try lazy.filter(isIncluded).map(transform)
     }
 }

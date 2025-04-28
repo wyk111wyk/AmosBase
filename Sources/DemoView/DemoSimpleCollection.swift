@@ -108,9 +108,9 @@ public struct DemoSimpleCollection: View {
         case 1:
             newArray.safeSwap(from: 1, to: 6)
         case 2:
-            newArray.remove(4)
+            newArray.removeByItem(4)
         case 3:
-            newArray.removeItems([3,4])
+            newArray.removeByItems([3,4])
         case 4:
             newArray.removeDuplicates()
         default: break
@@ -133,7 +133,7 @@ public struct DemoSimpleCollection: View {
         case 3:
             isContainSecond = newArray.containByItem(second)
         case 4:
-            thirdValue = newArray.firstById(thirdId)?.name
+            thirdValue = newArray.itemById(thirdId)?.name
         default: break
         }
         
