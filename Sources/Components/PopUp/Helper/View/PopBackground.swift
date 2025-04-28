@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-struct PopBackgroundView: View {
+public struct PopBackgroundView: View {
     @Environment(\.colorScheme) private var colorScheme
+    
+    public init() {}
     
     var gradient: Gradient {
         if colorScheme == .light {
@@ -24,7 +26,7 @@ struct PopBackgroundView: View {
         }
     }
     
-    var body: some View {
+    public var body: some View {
         ZStack {
             // 基础半透明层：更透明
             Color.black.opacity(0.1) // 降低 opacity 以提高透明度

@@ -83,7 +83,7 @@ extension DemoSimpleCard {
             Button(role: .destructive) {
                 deleteCard()
             } label: {
-                Text("Delete", bundle: .module)
+                Text(.delete, bundle: .module)
             }
             .disabled(allCardItems.count == 0)
             Spacer()

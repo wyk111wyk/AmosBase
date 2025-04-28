@@ -40,7 +40,7 @@ struct SimpleWeb_iOS: UIViewRepresentable {
             let os = SimpleDevice.getSystemName() + " " + SimpleDevice.getSystemVersion()
             let customInfo = "weixin:\(account.weixin) email:\(account.email)"
             
-            let login: String = "nickname=\(account.nickName)&avatar=\(account.avatar)&openid=\(account.openid)&clientInfo=\(clientInfo)&clientVersion=\(clientVersion)&os=\(os)&customInfo=\(customInfo)"
+            let login: String = "nickname=\(account.nickName)&avatar=\(account.gender.avatarUrl.absoluteString)&openid=\(account.openid)&clientInfo=\(clientInfo)&clientVersion=\(clientVersion)&os=\(os)&customInfo=\(customInfo)"
             
             request.httpMethod = "POST"
             request.httpBody = login.data(using: .utf8)

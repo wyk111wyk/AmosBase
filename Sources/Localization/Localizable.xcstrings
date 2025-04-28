@@ -124,15 +124,17 @@
 
     },
     "7-day free trial, then %@/year subscription." : {
-
-    },
-    "7-day free trial, then $@/year subscription." : {
-      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "试用7天后 %@/年 续订"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "試用7天後 %@/年 續訂"
           }
         }
       }
@@ -156,6 +158,23 @@
     },
     "About - 关于" : {
 
+    },
+    "Add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加"
+          }
+        }
+      }
     },
     "AES加解密" : {
 
@@ -292,6 +311,29 @@
             "state" : "translated",
             "value" : "正常"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正常"
+          }
+        }
+      }
+    },
+    "Back" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "返回"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "返回"
+          }
         }
       }
     },
@@ -328,22 +370,6 @@
         }
       }
     },
-    "Bottom Toasts" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "底部提醒"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "底部提醒"
-          }
-        }
-      }
-    },
     "Camera" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -351,6 +377,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用摄像头"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相機"
           }
         }
       }
@@ -368,6 +400,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "该设备没有可用的摄像头"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "該裝置沒有可以使用的攝影機。"
           }
         }
       }
@@ -405,22 +443,6 @@
         }
       }
     },
-    "Center Toasts" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "中央提醒"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "中央提醒"
-          }
-        }
-      }
-    },
     "Checked" : {
       "localizations" : {
         "zh-Hans" : {
@@ -445,6 +467,12 @@
             "state" : "translated",
             "value" : "选择图片"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "挑選一張圖片"
+          }
         }
       }
     },
@@ -461,6 +489,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "顏色選擇"
+          }
+        }
+      }
+    },
+    "Close" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关闭"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "關閉"
           }
         }
       }
@@ -566,6 +611,12 @@
             "state" : "translated",
             "value" : "已连接"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已連接"
+          }
         }
       }
     },
@@ -577,6 +628,12 @@
             "state" : "translated",
             "value" : "继续"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "繼續"
+          }
         }
       }
     },
@@ -587,6 +644,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法确认"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法確認"
           }
         }
       }
@@ -691,6 +754,23 @@
     "Data 编解码" : {
 
     },
+    "Default" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "默认"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "默認"
+          }
+        }
+      }
+    },
     "Delete" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -704,6 +784,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "移除"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成"
           }
         }
       }
@@ -725,7 +822,10 @@
         }
       }
     },
-    "Favor" : {
+    "En" : {
+
+    },
+    "Favorite" : {
       "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
@@ -742,6 +842,23 @@
         }
       }
     },
+    "Female" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "女"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "女"
+          }
+        }
+      }
+    },
     "From folder" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -749,6 +866,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "从文件夹挑选"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "來自資料夾"
           }
         }
       }
@@ -908,7 +1031,13 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "终身"
+            "value" : "永久"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永久"
           }
         }
       }
@@ -1015,6 +1144,23 @@
     "Lon: %lf" : {
 
     },
+    "Male" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "男"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "男"
+          }
+        }
+      }
+    },
     "Map - 定位" : {
 
     },
@@ -1057,6 +1203,12 @@
             "state" : "translated",
             "value" : "网络"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "網路"
+          }
         }
       }
     },
@@ -1067,6 +1219,29 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "暂时无法连接网络"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "網路暫時無法聯通"
+          }
+        }
+      }
+    },
+    "Next" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一项"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下一項"
           }
         }
       }
@@ -1079,6 +1254,12 @@
             "state" : "translated",
             "value" : "无账号"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有帳戶"
+          }
         }
       }
     },
@@ -1090,10 +1271,19 @@
             "state" : "translated",
             "value" : "无"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无"
+          }
         }
       }
     },
     "Only for iOS" : {
+
+    },
+    "Only for iOS / macOS" : {
 
     },
     "Other Apps from us, equally concise and practical." : {
@@ -1120,6 +1310,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "从相册挑选"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相簿"
           }
         }
       }
@@ -1148,6 +1344,12 @@
             "state" : "translated",
             "value" : "请检查系统设置和应用权限"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請檢查系統設定和應用權限"
+          }
         }
       }
     },
@@ -1159,6 +1361,12 @@
             "state" : "translated",
             "value" : "请输入内容"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請輸入內容"
+          }
         }
       }
     },
@@ -1168,6 +1376,23 @@
     "Popup 弹窗" : {
 
     },
+    "Previous" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上一项"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前一項"
+          }
+        }
+      }
+    },
     "Privacy Policy" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1175,6 +1400,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "隐私条款"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隱私政策"
           }
         }
       }
@@ -1186,6 +1417,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "产品寄语"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "產品寄語"
           }
         }
       }
@@ -1249,6 +1486,12 @@
             "state" : "translated",
             "value" : "推荐"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "推薦"
+          }
         }
       }
     },
@@ -1256,6 +1499,12 @@
       "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "普通版"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "普通版"
@@ -1271,6 +1520,12 @@
             "state" : "translated",
             "value" : "必填"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "必填"
+          }
         }
       }
     },
@@ -1281,6 +1536,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已拒绝"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已拒絕"
           }
         }
       }
@@ -1293,12 +1554,41 @@
             "state" : "translated",
             "value" : "恢复购买"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "恢復購買"
+          }
+        }
+      }
+    },
+    "Save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存"
+          }
         }
       }
     },
     "Score: %lld" : {
       "localizations" : {
         "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "比分： %lld"
+          }
+        },
+        "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "比分： %lld"
@@ -1319,6 +1609,12 @@
             "state" : "translated",
             "value" : "【自动订阅服务说明】\n\n1. 订阅服务：\nA）高级服务连续包月（1个月）、高级服务连续包年（12个月)\nB）高级服务买断（终身）\n\n2. 订阅价格：\na）高级服务：连续包月产品为 %1$@/月，连续包年产品为 %2$@/年\nc）高级服务：买断服务为 %3$@\n\n3. 付款：用户确认购买并付款后计入iTunes账户\n\n4. 自动续费：苹果iTunes 账户会在到期前 24小时内扣费，扣费成功后订阅周期顺延一个订阅周期\n\n5. 关闭服务：您可以在苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击“Apple ID”，选择\"查看 Apple ID\"，进入\"账户设置\"页面，点击“订阅”，管理自动订阅服务，如需取消，每个计费周期结束前 24小时关闭即可，到期前 24小时内则不再扣费\n\n6. 使用条款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/\n\n7. 隐私条款（Privacy policy）：https://www.amosstudio.com.cn/amosgym-privacydeal.html\n\n8. 其他支持：\n·随时在论坛进行反馈交流\n·支持与家人共享（最多6人）\n·订阅和试用随时可以取消"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "【自動訂閱服務說明】\n\n1. 訂閱服務：\nA）高級服務連續包月（1個月）、高級服務連續包年（12個月)\nB）高級服務買斷（終身）\n\n2. 訂閱價格：\na）高級服務：連續包月產品為 %1$@/月，連續包年產品為 %2$@/年\nc）高級服務：買斷服務為 %3$@\n\n3. 付款：使用者確認購買並付款後計入iTunes帳戶\n\n4. 自動續費：蘋果iTunes 帳戶會在到期前 24小時內扣費，扣費成功後訂閱週期順延一個訂閱週期\n\n5. 關閉服務：您可以在蘋果手機“設定” --> 進入“iTunes Store 與 App Store”-->點選“Apple ID”，選擇\"查看 Apple ID\"，進入\"帳戶設定\"頁面，點選“訂閱”，管理自動訂閱服務，如需取消，每個計費週期結束前 24小時關閉即可，到期前 24小時內則不再扣費\n\n6. 使用條款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/\n\n7. 隱私條款（Privacy policy）：https://www.amosstudio.com.cn/amosgym-privacydeal.html\n\n8. 其他支援：\n·隨時在論壇進行反饋交流\n·支援與家人共享（最多6人）\n·訂閱和試用隨時可以取消"
+          }
         }
       }
     },
@@ -1330,11 +1626,34 @@
             "state" : "translated",
             "value" : "设置"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定"
+          }
         }
       }
     },
     "SF符号" : {
 
+    },
+    "Share" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分享"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分享"
+          }
+        }
+      }
     },
     "Sheet Popup" : {
 
@@ -1342,72 +1661,25 @@
     "Show buttons confirmation" : {
 
     },
-    "Simple Error" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "简单错误"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "簡單錯誤"
-          }
-        }
-      }
-    },
-    "Simple Loading" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "简单载入"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "簡單載入"
-          }
-        }
-      }
-    },
-    "Simple Success" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "简单成功"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "簡單成功"
-          }
-        }
-      }
-    },
-    "Simple Toast" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "简单提醒"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "簡單提醒"
-          }
-        }
-      }
-    },
     "Siri is thinking..." : {
 
+    },
+    "Skip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跳过"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跳過"
+          }
+        }
+      }
     },
     "Slider" : {
       "localizations" : {
@@ -1456,6 +1728,12 @@
             "state" : "translated",
             "value" : "开始免费试用"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始免費試用"
+          }
         }
       }
     },
@@ -1497,7 +1775,20 @@
       }
     },
     "Tags" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标签"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標籤"
+          }
+        }
+      }
     },
     "Temporarily Unavailable" : {
       "extractionState" : "manual",
@@ -1506,6 +1797,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "暂时无法使用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暫時無法使用"
           }
         }
       }
@@ -1544,20 +1841,17 @@
       }
     },
     "Title" : {
-
-    },
-    "Top Toasts" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "顶部提醒"
+            "value" : "标题"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "頂部提醒"
+            "value" : "標題"
           }
         }
       }
@@ -1578,6 +1872,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法连接"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法連接"
           }
         }
       }
@@ -1606,10 +1906,33 @@
             "state" : "translated",
             "value" : "未连接"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未連接"
+          }
         }
       }
     },
-    "Unfavor" : {
+    "Undo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "撤销"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "撤銷"
+          }
+        }
+      }
+    },
+    "Unfavorite" : {
       "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
@@ -1634,6 +1957,12 @@
             "state" : "translated",
             "value" : "未知情况"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未知情況"
+          }
         }
       }
     },
@@ -1644,6 +1973,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "上传"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上傳"
           }
         }
       }
@@ -1754,6 +2089,9 @@
 
     },
     "不压缩" : {
+
+    },
+    "中文" : {
 
     },
     "云存储 iCloud" : {
@@ -1882,9 +2220,6 @@
     "外部点击关闭" : {
 
     },
-    "女性" : {
-
-    },
     "完善详细的基础信息可以提升反馈的效率，以便开发者联系后续与您针对问题进一步沟通。" : {
 
     },
@@ -1997,6 +2332,9 @@
     "未进行编码" : {
 
     },
+    "本地化" : {
+
+    },
     "查看类别" : {
 
     },
@@ -2043,9 +2381,6 @@
 
     },
     "狗狗" : {
-
-    },
-    "男性" : {
 
     },
     "确认" : {
@@ -2106,9 +2441,6 @@
 
     },
     "读取 Download" : {
-
-    },
-    "转换 Toast" : {
 
     },
     "转换为文字" : {

@@ -23,11 +23,10 @@ class ClockHelper: ObservableObject {
 
 // MARK: - View
 struct Clock: View {
-    @State private var adjustedDate: Date
+    @Binding var adjustedDate: Date
     // 每次手势调节使用的临时时间
     @State private var setDate: Date? = nil
     let isAdjustable: Bool
-    let setAction: (Date) -> Void
     
     let sizeLength: CGFloat
     
@@ -42,14 +41,12 @@ struct Clock: View {
     let showNumbers: Bool
     let showSecondHand: Bool
     
-    let customDate: Date
     let timeZone: TimeZone
     
-    
     init(
-        customDate: Date = .now,
+        customDate: Binding<Date>,
         isAdjustable: Bool = false,
-        timeZone: TimeZone = .beijin,
+        timeZone: TimeZone = .current,
         clockColor: Color = .primary,
         backgroundColor: Color = .clear,
         numberColor: Color = .primary,
@@ -58,31 +55,27 @@ struct Clock: View {
         secondHandColor: Color = .red,
         showNumbers: Bool = true,
         showSecondHand: Bool = true,
-        sizeLength: CGFloat = 300,
-        setAction: @escaping (Date) -> Void = {_ in}
+        sizeLength: CGFloat = 300
     ) {
+        self._adjustedDate = customDate
         self.clockColor = clockColor
         self.isAdjustable = isAdjustable
-        self._adjustedDate = State(initialValue: customDate)
         self.backgroundColor = backgroundColor
         self.timeZone = timeZone
         self.hourHandColor = hourHandColor
         self.minuteHandColor = minuteHandColor
         self.secondHandColor = secondHandColor
         self.numberColor = numberColor
-        self.customDate = customDate
         self.showNumbers = showNumbers
         self.showSecondHand = showSecondHand
         self.sizeLength = sizeLength
-        self.setAction = setAction
     }
     
     // 提取调整后时间的组件
     private var timeComponents: DateComponents {
         var calendar = Calendar.current
         calendar.timeZone = timeZone
-        let customDate = isAdjustable ? adjustedDate : customDate
-        return calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: customDate)
+        return calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: adjustedDate)
     }
 
     // 计算秒、分、时，用于指针角度
@@ -195,11 +188,6 @@ struct Clock: View {
         }
         .frame(width: sizeLength, height: sizeLength)
         .animation(.linear(duration: 0.01), value: seconds)
-        .onChange(of: customDate) {
-            if !isAdjustable {
-                adjustedDate = customDate
-            }
-        }
     }
     
     private func setGesture(_ pixelsPerMinute: CGFloat) -> some Gesture {
@@ -220,7 +208,6 @@ struct Clock: View {
                     to: setDate!
                 ) else { return }
                 adjustedDate = newDate
-                setAction(newDate)
             }
             .onEnded { _ in
                 setDate = nil
@@ -288,15 +275,13 @@ struct ClockDemo: View {
     ) -> some View {
         VStack(spacing: 15) {
             Clock(
-                customDate: clockHelper.currentDate,
+                customDate: isAdjustable ? $adjustDate : .constant(clockHelper.currentDate),
                 isAdjustable: isAdjustable,
                 timeZone: timeZone,
                 showNumbers: showNumbers,
                 showSecondHand: showSecondHand,
                 sizeLength: length
-            ) { newDate in
-                self.adjustDate = newDate
-            }
+            )
             Text(timeZone.identifier)
                 .font(.callout)
         }

@@ -30,8 +30,9 @@ struct SimpleFeedbackAccount: View {
                     }
                     SimpleCell("性别", systemImage: "arrow.trianglehead.branch") {
                         Picker("", selection: $account.gender) {
-                            Text("男性").tag("male")
-                            Text("女性").tag("female")
+                            ForEach(Gender.allCases, id: \.self) { gender in
+                                Text(gender.title).tag(gender)
+                            }
                         }
                         .segmentStyle()
                     }

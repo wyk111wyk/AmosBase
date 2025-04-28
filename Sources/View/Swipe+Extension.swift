@@ -104,7 +104,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
         Button(role: .destructive, action: action, label: {
             HStack {
                 Image(systemName: "trash")
-                Text("Delete", bundle: .module)
+                Text(.delete, bundle: .module)
             }
         })
     }
@@ -113,7 +113,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
         Button(action: action, label: {
             HStack {
                 Image(systemName: "square.and.pencil")
-                Text("Edit", bundle: .module)
+                Text(.edit, bundle: .module)
             }
         }).tint(.blue)
     }
@@ -123,7 +123,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
                label: {
             HStack {
                 Image(systemName: isFavor == true ? "star.slash" : "star")
-                Text(isFavor == true ? "Unfavor" : "Favor", bundle: .module)
+                Text(isFavor == true ? .unfavorite : .favorite, bundle: .module)
             }
         }).tint(.yellow)
     }

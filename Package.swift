@@ -19,8 +19,7 @@ let package = Package(
             targets: ["AmosBase"]
         )
     ],
-    dependencies: [
-    ],
+    dependencies: [],
     targets: [
         // 目标是包的基本构建块。目标可以定义模块或测试套件。
         // 目标可以依赖于此程序包中的其他目标，以及此程序包所依赖的程序包中的产品。

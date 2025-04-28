@@ -248,7 +248,3 @@ fileprivate struct ToastTransition: ViewModifier {
         }
     }
 }
-
-#Preview("Alert") {
-    DemoSimpleToast()
-}

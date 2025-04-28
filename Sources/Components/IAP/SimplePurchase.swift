@@ -10,8 +10,8 @@ import StoreKit
 
 public struct SimplePurchaseView: View {
     @Environment(\.dismiss) private var dismissPage
-    @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     @State private var showPrivacySheet: Bool = false
     @State private var showRedeemSheet: Bool = false
@@ -22,9 +22,9 @@ public struct SimplePurchaseView: View {
     let allItem: [SimplePurchaseItem]
     let config: SimplePurchaseConfig
     
-    @State private var monthlyProduct: Product? = nil
-    @State private var yearlyProduct: Product? = nil
-    @State private var lifetimeProduct: Product? = nil
+    @State var monthlyProduct: SimpleProduct? = nil
+    @State var yearlyProduct: SimpleProduct? = nil
+    @State var lifetimeProduct: SimpleProduct? = nil
     
     let startPurchaseAction: (Product) -> Void
     let recoverPurchaseAction: (StoreKit.Transaction) -> Void
@@ -73,7 +73,7 @@ public struct SimplePurchaseView: View {
         .buttonCirclePage(role: .cancel) {
             dismissPage()
         }
-        .simpleHud(isLoading: isLoading, title: "请稍后...")
+        .simpleHud(isLoading: isLoading)
         #if !os(watchOS)
         .simpleErrorAlert(error: $showError)
         .sheet(isPresented: $showPrivacySheet) {
@@ -98,16 +98,26 @@ public struct SimplePurchaseView: View {
     
     private func fetchProduct() async {
         do {
+#if DEBUG
+            lifetimeProduct = .lifeExample
+            yearlyProduct = .yearExample
+            monthlyProduct = .monthExample
+#else
             let storeProducts = try await Product.products(for: config.allProductId)
             for product in storeProducts {
 //                logger.debug(product.id, title: "获取商品")
-                switch product.type {
-                case .lifetime: lifetimeProduct = product
-                case .yearly: yearlyProduct = product
-                case .monthly: monthlyProduct = product
+                switch product.simpleType {
+                case .lifetime:
+                    lifetimeProduct = product.toSimpleProduct()
+                case .yearly:
+                    yearlyProduct = product.toSimpleProduct()
+                case .monthly:
+                    monthlyProduct = product.toSimpleProduct()
                 default: break
                 }
             }
+            
+#endif
         }catch {
             logger.error(error)
             showError = error
@@ -189,152 +199,7 @@ extension SimplePurchaseView {
     }
 }
 
-extension SimplePurchaseView {
-    private func bottomPurchase() -> some View {
-        VStack(spacing: 12) {
-            GeometryReader { proxy in
-                let width: CGFloat = min((proxy.size.width - 20*4) / 3, 110)
-                HStack(alignment: .center, spacing: 10) {
-                    Spacer()
-                    PlainButton {
-                        if let monthlyProduct {
-                            startPurchaseAction(monthlyProduct)
-                        }
-                    } label: {
-                        productButton(product: monthlyProduct, width: width)
-                    }
-                    .disabled(monthlyProduct == nil || monthlyProduct?.isAvailable == false)
-                    PlainButton {
-                        if let yearlyProduct {
-                            startPurchaseAction(yearlyProduct)
-                        }
-                    } label: {
-                        productButton(product: yearlyProduct, isRecommend: true, width: width)
-                    }
-                    .disabled(yearlyProduct == nil || yearlyProduct?.isAvailable == false)
-                    PlainButton {
-                        if let lifetimeProduct {
-                            startPurchaseAction(lifetimeProduct)
-                        }
-                    } label: {
-                        productButton(product: lifetimeProduct, width: width)
-                    }
-                    .disabled(lifetimeProduct == nil || lifetimeProduct?.isAvailable == false)
-                    Spacer()
-                }
-            }
-            .frame(minHeight: 120, maxHeight: 140)
-            PlainButton {
-                if let yearlyProduct {
-                    startPurchaseAction(yearlyProduct)
-                }
-            } label: {
-                ZStack {
-                    Capsule()
-                        .foregroundStyle(.blue_06)
-                    VStack(spacing: 2) {
-                        Text("Start Free Trial")
-                            .font(.title3.bold())
-                            .foregroundStyle(.white)
-                        if let yearlyProduct {
-                            Text("7-day free trial, then \(yearlyProduct.displayPrice)/year subscription.")
-                                .font(.caption)
-                                .foregroundStyle(.white)
-                        }
-                    }
-                }
-                .frame(width: 260, height: 50)
-            }
-            .disabled(yearlyProduct == nil || yearlyProduct?.isAvailable == false)
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-        }
-        .padding(.top)
-        .padding(.bottom, 8)
-        #if !os(watchOS)
-        .background{
-            if colorScheme == .light {
-                Color.blue_02.opacity(0.92).shadow(radius: 5)
-                    .ignoresSafeArea(.all)
-            }else {
-                Color.blue_10.darken(by: 0.15).opacity(0.94).shadow(color: .blue.opacity(0.4), radius: 5)
-                    .ignoresSafeArea(.all)
-            }
-        }
-        #endif
-    }
-    
-    private func weekPromotion(_ product: Product?) -> String? {
-        if let product {
-            let price = NSDecimalNumber(decimal: product.price).doubleValue
-            switch product.type {
-            case .lifetime: return "Lifetime"
-            case .yearly:
-                let weekPrice = price / 365 * 7
-                return String(format: "%.2f / 周", weekPrice)
-            case .monthly:
-                let weekPrice = price / 30 * 7
-                return String(format: "%.2f / 周", weekPrice)
-            default: return "-"
-            }
-        }else {
-            return "-"
-        }
-    }
-    
-    private func productButton(
-        product: Product?,
-        isRecommend: Bool = false,
-        width: CGFloat
-    ) -> some View {
-        VStack(spacing: 6) {
-            Text(product?.displayName ?? "-")
-                .font(.callout)
-                .minimumScaleFactor(0.8)
-                .lineLimit(2)
-            Text(product?.displayPrice ?? "-")
-                .font(.title2.weight(.medium))
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-            if let promotion = weekPromotion(product) {
-                Text(promotion.toLocalizedKey(), bundle: .module)
-                    .font(.callout.weight(.light))
-                    .foregroundStyle(.secondary)
-                    .minimumScaleFactor(0.8)
-                    .lineLimit(1)
-                    .padding(.top, 6)
-            }
-        }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 4)
-        .frame(width: width)
-        .background {
-            RoundedRectangle(cornerRadius: 12)
-                .foregroundStyle(colorScheme == .light ? .white : .black)
-            if !isRecommend {
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(lineWidth: 1)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding(3)
-        .padding(.top, 18)
-        .background {
-            if isRecommend {
-                ZStack(alignment: .top) {
-                    RoundedRectangle(cornerRadius: 12)
-                        .foregroundStyle(colorScheme == .light ? .black : .white)
-                    Text("Recommended", bundle: .module)
-                        .font(.footnote)
-                        .fontWeight(.medium)
-                        .lineLimit(1)
-                        .foregroundStyle(colorScheme == .light ? .white : .black)
-                        .offset(y: 2.5)
-                }
-            }
-        }
-    }
-}
+
 
 extension SimplePurchaseView {
     private func topLogoContent() -> some View {
@@ -450,7 +315,7 @@ extension SimplePurchaseView {
     }
 }
 
-#Preview {
+struct DemoSimplePurchase: View {
     var allItem: [SimplePurchaseItem] {
         [
             SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "学习计划", regular: "仅限预设", premium: "自由创建和更改"),
@@ -461,19 +326,26 @@ extension SimplePurchaseView {
             SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "多端使用", regular: "多平台", premium: "单次购买 · 多端同享")
         ]
     }
-    SimplePurchaseView(
-        allItem: allItem,
-        config: .init(
-            title: "体验完整文学魅力",
-            titleImage_w: Image(sfImage: .device),
-            titleImage_b: Image(sfImage: .device),
-            imageCaption: "单次购买 · 多端同享",
-            devNote: "我们的愿景是希望用App解决生活中的“小问题”。这意味着对日常用户而言，免费版本也必须足够好用。\n10万诗词文章离线可查，核心的阅读、检索、学习体验完整而简洁，加上现代化的设计和全平台的体验完全开放。\n而高级版本又将解锁一系列新的特性。让诗词赏析的体验进一步提升，更私人、更灵活、更智能、更值得。",
-            allProductId: ["lifePremium","monthlyPremium","yearlyPremium"]
+    
+    var body: some View {
+        SimplePurchaseView(
+            allItem: allItem,
+            config: .init(
+                title: "体验完整文学魅力",
+                titleImage_w: Image(sfImage: .device),
+                titleImage_b: Image(sfImage: .device),
+                imageCaption: "单次购买 · 多端同享",
+                devNote: "我们的愿景是希望用App解决生活中的“小问题”。这意味着对日常用户而言，免费版本也必须足够好用。\n10万诗词文章离线可查，核心的阅读、检索、学习体验完整而简洁，加上现代化的设计和全平台的体验完全开放。\n而高级版本又将解锁一系列新的特性。让诗词赏析的体验进一步提升，更私人、更灵活、更智能、更值得。",
+                allProductId: ["lifePremium","monthlyPremium","yearlyPremium"]
+            )
         )
-    )
-    .environment(\.locale, .zhHans)
-    #if os(macOS)
-    .frame(height: 800)
-    #endif
+        .environment(\.locale, .zhHans)
+        #if os(macOS)
+        .frame(height: 800)
+        #endif
+    }
+}
+
+#Preview {
+    DemoSimplePurchase()
 }

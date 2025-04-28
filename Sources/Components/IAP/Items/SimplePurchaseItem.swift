@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 对 IAP 的介绍列表内容
 public struct SimplePurchaseItem: Identifiable {
     public let id: UUID = UUID()
     

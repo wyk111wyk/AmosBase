@@ -18,12 +18,12 @@ extension CKRecord: SimpleDefaults.Serializable {
 public struct CKRecordBridge: SimpleDefaults.Bridge, Sendable {
     public typealias Value = CKRecord
     public typealias Serializable = Data
-
+    
     public func serialize(_ value: Value?) -> Serializable? {
         guard let value else {
             return nil
         }
-
+        
         return try? value.toData()
     }
     
@@ -31,7 +31,7 @@ public struct CKRecordBridge: SimpleDefaults.Bridge, Sendable {
         guard let object else {
             return nil
         }
-
+        
         return try? object.toCKRecord()
     }
 }
@@ -43,7 +43,7 @@ extension CKRecord.ID: SimpleDefaults.Serializable {
 public struct CKRecordIDBridge: SimpleDefaults.Bridge, Sendable {
     public typealias Value = CKRecord.ID
     public typealias Serializable = Data
-
+    
     public func serialize(_ value: Value?) -> Serializable? {
         guard let value else {
             return nil
@@ -51,12 +51,12 @@ public struct CKRecordIDBridge: SimpleDefaults.Bridge, Sendable {
         
         return try? value.toData()
     }
-
+    
     public func deserialize(_ object: Serializable?) -> Value? {
         guard let object else {
             return nil
         }
-
+        
         return try? object.toCKRecordID()
     }
 }
@@ -89,13 +89,26 @@ public extension Data {
 }
 
 public extension CKRecord {
+    func printAllKeys(showValue: Bool = false) {
+        print("呈现 CKRecord 数据 - 共计 \(self.allKeys().count) 项")
+        if showValue {
+            for (key, value) in self {
+                print("呈现 CKRecord 数据 - key: \(key) type: \(type(of: value)) value: \(value)")
+            }
+        }else {
+            for (key, value) in self {
+                print("呈现 CKRecord 数据 - key: \(key) type: \(type(of: value))")
+            }
+        }
+    }
+    
     /// 将记录的系统字段转换为 `Data`
     func toSystemData() -> Data {
         let encoder = NSKeyedArchiver(requiringSecureCoding: true)
         // 专门用于编码记录的系统字段
         self.encodeSystemFields(with: encoder)
         let recordData = encoder.encodedData
-//        print("CKRecord 转换系统字段", "recordChangeTag: \(self.recordChangeTag ?? "还未进行同步")")
+        //        print("CKRecord 转换系统字段", "recordChangeTag: \(self.recordChangeTag ?? "还未进行同步")")
         encoder.finishEncoding()
         return recordData
     }
@@ -115,9 +128,12 @@ public extension CKRecord {
             if let prefix { prefix + key_ }
             else { key_ }
             
-//          print("编码 CKRecord - key: \(key) type: \(type(of: value)) value: \(value)")
+//            print("编码 CKRecord - key: \(key) type: \(type(of: value)) value: \(value)")
             
             switch value {
+            case Optional<Any>.none:
+                // 当值是 nil 的时候，不上传该内容，避免初始化错误的类型
+                continue
             case let url as URL: self[key] = url.absoluteString
             case let uuid as UUID: self[key] = uuid.uuidString
             case let string as String: self[key] = string
@@ -133,21 +149,21 @@ public extension CKRecord {
             case let uuidArray as [UUID]:
                 let newKey = key + "_uuidArray"
                 self[newKey] = uuidArray.map(\.uuidString)
-            case let data as Data:
-                let newKey = key + "_data"
-                self[newKey] = data
             case let color as Color:
                 let newKey = key + "_color"
                 self[newKey] = color.toJson()
             case let image as SFImage:
                 let newKey = key + "_image"
                 self[newKey] = image.pngImageData()
-            case Optional<Any>.none:
-                // 当值是 nil 的时候，不上传该内容，避免初始化错误的类型
-                continue
-            case let codableValue as Encodable:
+            case let data as Data:
                 let newKey = key + "_data"
-                self[newKey] = codableValue.toData()
+                self[newKey] = data
+            case let codableValue as Encodable:
+//                print("转换 Struct: key \(key_): \(type(of: value)) (\(String(describing: value))")
+                if let dataValue = codableValue.toData() {
+                    let newKey = key + "_data"
+                    self[newKey] = dataValue
+                }
             default:
                 print("不支持的转换类型: key \(key_): \(type(of: value)) (\(String(describing: value))")
                 continue
@@ -170,7 +186,7 @@ public extension CKRecord {
             }
             
             if !key.hasSuffix("_data") {
-//                print("Key: \(key), Type: \(type(of: value)), Value: \(value)")
+                //                print("Key: \(key), Type: \(type(of: value)), Value: \(value)")
             }
             
             if newKey.hasSuffix("_color") {
@@ -181,6 +197,7 @@ public extension CKRecord {
             }else if newKey.hasSuffix("_data") {
                 newKey = String(newKey.dropLast(5))
                 if let newValue = value as? Data {
+                    // 需要转换为 base64 才能正确被 decode
                     tempDicts[newKey] = newValue.base64EncodedString()
                 }else {
                     tempDicts[newKey] = value
@@ -265,7 +282,7 @@ private struct CodableCKRecord: Codable {
     let systemFields: Data // 系统字段编码为 Data
     let customFields: [String: AnyCodable] // 自定义字段
     let customFieldPrefix: String? // 可选的自定义字段前缀
-
+    
     // 从 CKRecord 初始化，允许指定前缀
     init(record: CKRecord, customFieldPrefix: String? = "AK_") {
         // 编码系统字段
@@ -290,7 +307,7 @@ private struct CodableCKRecord: Codable {
         }
         self.customFields = fields
     }
-
+    
     // 转换为 CKRecord
     func toCKRecord() throws -> CKRecord {
         // 解码系统字段
@@ -298,11 +315,12 @@ private struct CodableCKRecord: Codable {
         
         // 设置自定义字段
         for (key, value) in customFields {
+//            print("AnyCodable decode \(key): \(type(of: value.value))")
             record[key] = value.value as? CKRecordValue
         }
         return record
     }
-
+    
     // Codable 的编码实现
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -310,15 +328,17 @@ private struct CodableCKRecord: Codable {
         try container.encode(customFields, forKey: .customFields)
         try container.encodeIfPresent(customFieldPrefix, forKey: .customFieldPrefix)
     }
-
+    
     // Codable 的解码实现
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.systemFields = try container.decode(Data.self, forKey: .systemFields)
-        self.customFields = try container.decode([String: AnyCodable].self, forKey: .customFields)
         self.customFieldPrefix = try container.decodeIfPresent(String.self, forKey: .customFieldPrefix)
+        let customFields = try container.decode([String: AnyCodable].self, forKey: .customFields)
+//        print(customFields)
+        self.customFields = customFields
     }
-
+    
     // CodingKeys 用于指定编码/解码的键
     enum CodingKeys: String, CodingKey {
         case systemFields

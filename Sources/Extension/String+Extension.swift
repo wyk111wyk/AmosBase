@@ -863,6 +863,12 @@ public extension String {
     }
 }
 
+public extension LocalizedStringResource {
+    func toString() -> String {
+        String(localized: self)
+    }
+}
+
 // MARK: - 让Text显示多样式内容
 /*
  Text("我已经阅读并同意遵守\("《AK23会员协议》", color: .orange)")

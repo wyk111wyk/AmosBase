@@ -294,60 +294,93 @@ struct AnyCodable: Codable {
     init(value: Any) {
         self.value = value
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case type
+        case value
+    }
 
     func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
+        var container = encoder.container(keyedBy: CodingKeys.self)
+//        print("AnyCodable encode type: \(type(of: value)) value: \(value)")
+        
         switch value {
         case let string as String:
-            try container.encode(string)
+            try container.encode("string", forKey: .type)
+            try container.encode(string, forKey: .value)
         case let int as Int:
-            try container.encode(int)
+            try container.encode("int", forKey: .type)
+            try container.encode(int, forKey: .value)
         case let double as Double:
-            try container.encode(double)
+            try container.encode("double", forKey: .type)
+            try container.encode(double, forKey: .value)
         case let bool as Bool:
-            try container.encode(bool)
+            try container.encode("bool", forKey: .type)
+            try container.encode(bool, forKey: .value)
         case let data as Data:
-            try container.encode(data)
+            try container.encode("data", forKey: .type)
+            try container.encode(data, forKey: .value)
         case let date as Date:
-            try container.encode(date)
+            try container.encode("date", forKey: .type)
+            try container.encode(date, forKey: .value)
         case let color as Color:
-            try container.encode(color)
+            try container.encode("color", forKey: .type)
+            try container.encode(color, forKey: .value)
         case let location as CLLocation:
-            let locationCode = CodableCLLocation(location: location)
-            try container.encode(locationCode)
+            try container.encode("location", forKey: .type)
+            let location = CodableCLLocation(location: location)
+            try container.encode(location, forKey: .value)
         case let location2D as CLLocationCoordinate2D:
-            try container.encode(location2D)
-        case let stringArray as [String]:
-            try container.encode(stringArray)
+            try container.encode("location2D", forKey: .type)
+            try container.encode(location2D, forKey: .value)
+        case let array as [Any]:
+            try container.encode("array", forKey: .type)
+            try container.encode(array.map { AnyCodable(value: $0) }, forKey: .value)
+        case let dictionary as [String: Any]:
+            try container.encode("dictionary", forKey: .type)
+            try container.encode(dictionary.mapValues { AnyCodable(value: $0) }, forKey: .value)
+        case is NSNull:
+            try container.encode("null", forKey: .type)
+            try container.encodeNil(forKey: .value)
         default:
             throw EncodingError.invalidValue(value, EncodingError.Context(codingPath: [], debugDescription: "Unsupported type"))
         }
     }
     
     init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let string = try? container.decode(String.self) {
-            self.value = string
-        } else if let int = try? container.decode(Int.self) {
-            self.value = int
-        } else if let double = try? container.decode(Double.self) {
-            self.value = double
-        } else if let bool = try? container.decode(Bool.self) {
-            self.value = bool
-        } else if let data = try? container.decode(Data.self) {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(String.self, forKey: .type)
+        
+        if try container.decodeNil(forKey: .value) {
+           #if canImport(Foundation)
+            self.value = NSNull()
+           #else
+            self.value = Optional<Self>.none
+           #endif
+        }else if let data = try? container.decode(Data.self, forKey: .value), type == "data" {
             self.value = data
-        }  else if let date = try? container.decode(Date.self) {
+        }else if let string = try? container.decode(String.self, forKey: .value), type == "string" {
+            self.value = string
+        } else if let int = try? container.decode(Int.self, forKey: .value) {
+            self.value = int
+        } else if let double = try? container.decode(Double.self, forKey: .value) {
+            self.value = double
+        } else if let bool = try? container.decode(Bool.self, forKey: .value) {
+            self.value = bool
+        } else if let date = try? container.decode(Date.self, forKey: .value) {
             self.value = date
-        } else if let color = try? container.decode(Color.self) {
+        } else if let color = try? container.decode(Color.self, forKey: .value) {
             self.value = color
-        } else if let locationCoda = try? container.decode(CodableCLLocation.self) {
+        } else if let locationCoda = try? container.decode(CodableCLLocation.self, forKey: .value), type == "location" {
             self.value = locationCoda.toCLLocation()
-        } else if let location = try? container.decode(CLLocationCoordinate2D.self) {
+        } else if let location = try? container.decode(CLLocationCoordinate2D.self, forKey: .value), type == "location2D" {
             self.value = location
-        } else if let stringArray = try? container.decode([String].self) {
-            self.value = stringArray
+        } else if let array = try? container.decode([AnyCodable].self, forKey: .value) {
+            self.value = array.map { $0.value }
+        } else if let dictionary = try? container.decode([String: AnyCodable].self, forKey: .value) {
+            self.value = dictionary.mapValues { $0.value }
         } else {
-            throw DecodingError.dataCorruptedError(in: container, debugDescription: "Unsupported type")
+            throw DecodingError.dataCorruptedError(forKey: .value, in: container, debugDescription: "Unsupported type")
         }
     }
 }

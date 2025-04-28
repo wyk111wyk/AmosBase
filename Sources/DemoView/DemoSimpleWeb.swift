@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-#if !os(watchOS)
 public struct DemoSimpleWeb: View {
     enum PageType {
         case hupu, nba
@@ -24,6 +23,7 @@ public struct DemoSimpleWeb: View {
     @State private var page: PageType = .hupu
     
     public var body: some View {
+        #if !os(watchOS)
         NavigationStack {
             SimpleWebView(
                 url: page.url,
@@ -33,9 +33,13 @@ public struct DemoSimpleWeb: View {
             .inlineTitleForNavigationBar()
             .toolbar{ toolbarMenu() }
         }
+        #else
+        Text("Only for iOS / macOS")
+        #endif
     }
 }
 
+#if !os(watchOS)
 extension DemoSimpleWeb {
     @ToolbarContentBuilder
     private func toolbarMenu() -> some ToolbarContent {
@@ -49,8 +53,8 @@ extension DemoSimpleWeb {
         }
     }
 }
+#endif
 
 #Preview {
     DemoSimpleWeb()
 }
-#endif

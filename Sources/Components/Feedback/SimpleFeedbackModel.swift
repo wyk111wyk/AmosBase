@@ -17,7 +17,7 @@ public struct SimpleFeedbackModel: Identifiable {
     // 用户头像，一般是图片链接 必须要支持https
     var customAvatar: String?
     // 性别（决定头像）male/ female
-    var gender: String
+    var gender: Gender
     var email: String
     var weixin: String
     
@@ -25,7 +25,7 @@ public struct SimpleFeedbackModel: Identifiable {
         openid: String = UUID().uuidString,
         nickName: String = "",
         customAvatar: String? = nil,
-        gender: String = "male",
+        gender: Gender = .male,
         email: String = "",
         weixin: String = ""
     ) {
@@ -35,20 +35,6 @@ public struct SimpleFeedbackModel: Identifiable {
         self.gender = gender
         self.email = email
         self.weixin = weixin
-    }
-    
-    var genderMap: [String] {
-        ["male", "female"]
-    }
-    
-    var avatar: String {
-        if gender == genderMap.first {
-            "https://www.amosstudio.com.cn/avatar/avatar_m.png"
-        }else if gender == genderMap.last {
-            "https://www.amosstudio.com.cn/avatar/avatar_f.png"
-        }else {
-            "https://txc.qq.com/static/desktop/img/products/def-product-logo.png"
-        }
     }
 }
 

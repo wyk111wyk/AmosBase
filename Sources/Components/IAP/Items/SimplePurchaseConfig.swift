@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// IAP 配置
 public struct SimplePurchaseConfig {
     let title: String?
     let titleImage_w: Image

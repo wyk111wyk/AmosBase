@@ -7,6 +7,10 @@
 
 import StoreKit
 
+public enum SimpleProductType {
+    case monthly, yearly, lifetime, unknow
+}
+
 public extension StoreKit.Transaction {
     var isPurchased: Bool {
         (self.productType == .nonConsumable && self.revocationDate == nil) ||
@@ -15,11 +19,11 @@ public extension StoreKit.Transaction {
 }
 
 extension Product {
-    enum SimpleProductType {
-        case monthly, yearly, lifetime, unknow
+    func toSimpleProduct() -> SimpleProduct {
+        SimpleProduct(product: self)
     }
     
-    var type: SimpleProductType {
+    var simpleType: SimpleProductType {
         if id.hasPrefix("yearlyPremium") {
             return .yearly
         }else if id.hasPrefix("monthlyPremium") {
@@ -32,7 +36,7 @@ extension Product {
     }
     
     var isAvailable: Bool {
-        if self.type == .unknow {
+        if self.simpleType == .unknow {
             return false
         }else {
             return true
