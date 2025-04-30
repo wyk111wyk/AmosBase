@@ -352,11 +352,7 @@ struct AnyCodable: Codable {
         let type = try container.decode(String.self, forKey: .type)
         
         if try container.decodeNil(forKey: .value) {
-           #if canImport(Foundation)
             self.value = NSNull()
-           #else
-            self.value = Optional<Self>.none
-           #endif
         }else if let data = try? container.decode(Data.self, forKey: .value), type == "data" {
             self.value = data
         }else if let string = try? container.decode(String.self, forKey: .value), type == "string" {

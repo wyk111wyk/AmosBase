@@ -5,7 +5,6 @@
 //  Created by AmosFitness on 2023/12/14.
 //
 
-#if canImport(Foundation)
 import Foundation
 
 #if canImport(UIKit) && canImport(AVFoundation)
@@ -223,5 +222,3 @@ public extension URL {
     }
     #endif
 }
-
-#endif

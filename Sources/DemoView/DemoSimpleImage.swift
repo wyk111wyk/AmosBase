@@ -121,9 +121,7 @@ extension DemoSimpleImage {
         guard let originalImage else { return }
         
         if resizeImage {
-            let newImage = originalImage.adjustSize(
-                width: 300
-            )
+            let newImage = originalImage.adjustSize(length: 300)
             self.adjustedImage = newImage
         }else {
             self.adjustedImage = originalImage

@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-public struct SimpleDetectButton<V: View>: View {
+// 检测点击和点按的按钮
+public struct DetectButton<V: View>: View {
     let label: () -> V
     let holdAction: (Bool) -> Void
     let tapAction: () -> Void
@@ -24,11 +25,11 @@ public struct SimpleDetectButton<V: View>: View {
     
     public var body: some View {
         Button(action: tapAction, label: label)
-            .buttonStyle(DetectButtonModifier(holdAction: holdAction))
+            .buttonStyle(ButtonModifier(holdAction: holdAction))
     }
 }
 
-private struct DetectButtonModifier: ButtonStyle {
+private struct ButtonModifier: ButtonStyle {
     let holdAction: (Bool) -> Void
     
     func makeBody(configuration: Configuration) -> some View {

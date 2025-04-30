@@ -616,13 +616,13 @@ public enum SimpleDeviceType: Sendable {
 extension UIUserInterfaceIdiom {
     var toDevice: SimpleDeviceType {
         switch self {
-        case .unspecified: .watch
-        case .phone: .pad
+        case .phone: .phone
         case .pad: .pad
         case .tv: .tv
         case .carPlay: .carplay
         case .mac: .mac
         case .vision: .vision
+        case .unspecified: .watch
         @unknown default: .watch
         }
     }

@@ -187,7 +187,7 @@ public extension SFImage {
         SFImage(bundle: .module, packageResource: "LAL_r", ofType: "png")!
     }
     
-    static var randomGirl: SFImage {
+    static func randomGirl() -> SFImage {
         girl(Int.random(in: 1...20))
     }
     
@@ -199,7 +199,7 @@ public extension SFImage {
         return SFImage(bundle: .module, packageResource: "Girl_\(index)", ofType: "jpg")!
     }
     
-    static var randomGymGirl: SFImage {
+    static func randomGymGirl() -> SFImage {
         gymGirl(Int.random(in: 1...6))
     }
     
@@ -307,11 +307,11 @@ public extension SFImage {
     /// 改变图片尺寸 -  不改变比例
     ///
     /// 可自定义宽度，默认300px
-    func adjustSize(width: CGFloat = 300) -> SFImage {
+    func adjustSize(length: CGFloat = 300) -> SFImage {
         #if canImport(UIKit)
-        return adjustSizeToSmall(width: width)
+        return adjustSizeToSmall(length: length)
         #elseif os(macOS)
-        return scaled(width: width)
+        return scaled(length: length)
         #endif
     }
     
@@ -471,8 +471,8 @@ public extension View {
 public extension UIImage {
     /// 改变图片尺寸 -  不改变比例
     ///
-    /// 可自定义宽度，默认300px
-    private func adjustSizeToSmall(width: CGFloat = 300) -> UIImage {
+    /// 可自定义最长的边，默认300px
+    private func adjustSizeToSmall(length: CGFloat = 300) -> UIImage {
         func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
             let scale = newWidth / image.size.width
             let newHeight = image.size.height * scale
@@ -483,8 +483,21 @@ public extension UIImage {
             
             return newImage!
         }
-        let newImage = resizeImage(image: self, newWidth: width)
-        return newImage
+        
+        let imageWidth = self.width
+        let imageHeight = self.height
+        let imageLength = max(imageWidth, imageHeight)
+        guard imageLength > length else { return self }
+        
+        if imageWidth > imageHeight {
+            // 横的图片
+            return resizeImage(image: self, newWidth: length)
+        }else {
+            // 竖的图片
+            let ratio = imageWidth / imageHeight
+            let newWidth = length * ratio
+            return resizeImage(image: self, newWidth: newWidth)
+        }
     }
 }
 #endif
@@ -762,25 +775,37 @@ public extension NSImage {
     ///
     /// - Parameter maxSize: maximum size
     /// - Returns: scaled NSImage
-    private func scaled(width: CGFloat = 300) -> NSImage {
+    private func scaled(length: CGFloat = 300) -> NSImage {
         let imageWidth = size.width
         let imageHeight = size.height
+        let imageLength = max(imageWidth, imageHeight)
 
-        guard imageHeight > 0 else { return self }
-
+        guard imageHeight > 0, imageWidth > 0 else { return self }
+        guard imageLength > length else { return self }
+        
         // Get ratio (landscape or portrait)
         let ratio: CGFloat
-        ratio = width / imageWidth
+        ratio = length / imageWidth
 
         // Calculate new size based on the ratio
-        let newWidth = width
+        let newWidth = length
         let newHeight = imageHeight * ratio
 
         // Create a new NSSize object with the newly calculated size
-        let newSize = NSSize(
+        var newSize = NSSize(
             width: newWidth.rounded(.down),
             height: newHeight.rounded(.down)
         )
+                
+        if imageWidth < imageHeight {
+            // 竖的图片
+            let ratio = imageWidth / imageHeight
+            let newWidth = length * ratio
+            newSize = NSSize(
+                width: newWidth.rounded(.down),
+                height: length.rounded(.down)
+            )
+        }
 
         // Cast the NSImage to a CGImage
         var imageRect = CGRect(origin: .zero, size: size)

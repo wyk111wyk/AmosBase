@@ -206,7 +206,7 @@ extension SimpleImagePicker {
         originalImage = image
         var newImage: SFImage = image
         if let adjustWidth, adjustWidth > 0 {
-            newImage = newImage.adjustSize(width: adjustWidth)
+            newImage = newImage.adjustSize(length: adjustWidth)
         }
         if let adjustRatio, adjustRatio < 1 {
             if let imageData = newImage.jpegImageData(quality: adjustRatio),

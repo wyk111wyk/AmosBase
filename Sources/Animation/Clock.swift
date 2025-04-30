@@ -238,7 +238,7 @@ struct ClockHand: Shape {
 
 struct ClockDemo: View {
     @ObservedObject var clockHelper = ClockHelper()
-    @State private var isAdjustable: Bool = true
+    @State private var isAdjustable: Bool = false
     @State private var adjustDate: Date = .now
     
     var body: some View {

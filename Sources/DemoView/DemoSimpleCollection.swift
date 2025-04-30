@@ -47,8 +47,10 @@ public struct DemoSimpleCollection: View {
                     Button {
                         arrAction(index)
                     } label: {
-                        SimpleCell(arrTitles[index],
-                                   content: answerArr[index]?.description ?? "")
+                        SimpleCell(
+                            arrTitles[index],
+                            content: answerArr[index]?.description ?? ""
+                        )
                     }
                     .buttonStyle(.borderless)
                 }

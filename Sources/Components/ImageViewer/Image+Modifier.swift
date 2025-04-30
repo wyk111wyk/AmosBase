@@ -7,11 +7,10 @@
 
 import SwiftUI
 
-#if os(iOS) || os(macOS)
 public extension View {
     func simpleImageViewer(
         selectedIndex: Binding<Int?>,
-        allPhotos: [SimpleImageStore]
+        allPhotos: [any SimpleImageStore]
     ) -> some View {
         modifier(
             SimpleImageViewer(
@@ -24,7 +23,7 @@ public extension View {
 
 struct SimpleImageViewer: ViewModifier {
     @Binding var selectedIndex: Int?
-    let allPhotos: [SimpleImageStore]
+    let allPhotos: [any SimpleImageStore]
     
     func body(content: Content) -> some View {
         content
@@ -34,4 +33,3 @@ struct SimpleImageViewer: ViewModifier {
             }
     }
 }
-#endif

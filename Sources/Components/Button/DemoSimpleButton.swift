@@ -26,7 +26,7 @@ public struct DemoSimpleButton: View {
                         title: "点击切换：\(isPresent.toString())",
                         isPresented: $isPresent
                     )
-                    SimpleDetectButton(
+                    DetectButton(
                         tapAction: {
                             print("点击完成")
                         },

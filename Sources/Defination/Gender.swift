@@ -8,14 +8,11 @@
 import SwiftUI
 
 public enum Gender: String, Codable, CaseIterable, Identifiable, Sendable {
-    case male, female
+    case male = "Male", female = "Female"
     public var id: String { rawValue }
     
-    public var title: LocalizedStringResource {
-        switch self {
-        case .male: "Male"
-        case .female: "Female"
-        }
+    public var title: String {
+        String(localized: .init(rawValue))
     }
     
     public var avatarUrl: URL {

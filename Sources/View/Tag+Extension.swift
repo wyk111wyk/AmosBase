@@ -32,6 +32,7 @@ public struct SimpleTagConfig {
     let isMaterial: Bool
     // Tag
     let lineWidth: CGFloat
+    let shadowRadius: CGFloat?
     
     public init(
         verticalPad: CGFloat = 4,
@@ -42,7 +43,8 @@ public struct SimpleTagConfig {
         contentColor: Color = .blue,
         borderColor: Color? = .blue,
         bgColor: Color? = nil,
-        isMaterial: Bool = false
+        isMaterial: Bool = false,
+        shadowRadius: CGFloat? = nil
     ) {
         self.verticalPad = verticalPad
         self.horizontalPad = horizontalPad
@@ -53,6 +55,7 @@ public struct SimpleTagConfig {
         self.lineWidth = lineWidth
         self.bgColor = bgColor
         self.isMaterial = isMaterial
+        self.shadowRadius = shadowRadius
     }
     
     public static func border(
@@ -65,14 +68,16 @@ public struct SimpleTagConfig {
         borderColor: Color? = nil,
         bgColor: Color? = nil
     ) -> Self {
-        .init(verticalPad: verticalPad,
-              horizontalPad: horizontalPad,
-              cornerRadius: cornerRadius, 
-              lineWidth: lineWidth,
-              contentFont: contentFont,
-              contentColor: contentColor,
-              borderColor: borderColor ?? contentColor,
-              bgColor: bgColor)
+        .init(
+            verticalPad: verticalPad,
+            horizontalPad: horizontalPad,
+            cornerRadius: cornerRadius,
+            lineWidth: lineWidth,
+            contentFont: contentFont,
+            contentColor: contentColor,
+            borderColor: borderColor ?? contentColor,
+            bgColor: bgColor
+        )
     }
     
     public static func full(
@@ -82,16 +87,20 @@ public struct SimpleTagConfig {
         lineWidth: CGFloat = 0,
         contentFont: Font = .caption,
         contentColor: Color = .white,
-        bgColor: Color = .blue
+        bgColor: Color = .blue,
+        shadowRadius: CGFloat? = nil
     ) -> Self {
-        .init(verticalPad: verticalPad,
-              horizontalPad: horizontalPad,
-              cornerRadius: cornerRadius,
-              lineWidth: lineWidth,
-              contentFont: contentFont,
-              contentColor: contentColor,
-              borderColor: bgColor,
-              bgColor: bgColor)
+        .init(
+            verticalPad: verticalPad,
+            horizontalPad: horizontalPad,
+            cornerRadius: cornerRadius,
+            lineWidth: lineWidth,
+            contentFont: contentFont,
+            contentColor: contentColor,
+            borderColor: bgColor,
+            bgColor: bgColor,
+            shadowRadius: shadowRadius
+        )
     }
     
     public static func bg(
@@ -103,17 +112,21 @@ public struct SimpleTagConfig {
         contentColor: Color = .blue,
         borderColor: Color? = nil,
         bgColor: Color? = .blue,
-        isMaterial: Bool = true
+        isMaterial: Bool = true,
+        shadowRadius: CGFloat? = nil
     ) -> Self {
-        .init(verticalPad: verticalPad,
-              horizontalPad: horizontalPad,
-              cornerRadius: cornerRadius,
-              lineWidth: lineWidth,
-              contentFont: contentFont,
-              contentColor: contentColor,
-              borderColor: borderColor,
-              bgColor: bgColor ?? contentColor,
-              isMaterial: isMaterial)
+        .init(
+            verticalPad: verticalPad,
+            horizontalPad: horizontalPad,
+            cornerRadius: cornerRadius,
+            lineWidth: lineWidth,
+            contentFont: contentFont,
+            contentColor: contentColor,
+            borderColor: borderColor,
+            bgColor: bgColor ?? contentColor,
+            isMaterial: isMaterial,
+            shadowRadius: shadowRadius
+        )
     }
 }
 
@@ -131,33 +144,45 @@ struct TagBorder: ViewModifier {
             .padding(.horizontal, config.horizontalPad)
             .foregroundStyle(config.contentColor)
             .background {
-                ZStack {
-                    if let bgColor = config.bgColor {
-                        RoundedRectangle(cornerRadius: config.cornerRadius)
-                            .foregroundStyle(bgColor)
-                            .opacity(config.isMaterial ? 0.5 : 1)
-                    }
-                    if config.isMaterial {
-                        RoundedRectangle(cornerRadius: config.cornerRadius)
-                            .foregroundStyle(.ultraThickMaterial.opacity(0.92))
-                    }
-                    if let borderColor = config.borderColor {
-                        RoundedRectangle(cornerRadius: config.cornerRadius)
-                            .stroke(
-                                borderColor,
-                                lineWidth: config.lineWidth
-                            )
-                    }
+                if let shadowRadius = config.shadowRadius {
+                    backgroundView()
+                        .shadow(radius: shadowRadius)
+                }else {
+                    backgroundView()
                 }
             }
             .contentShape(Rectangle())
+            .compositingGroup()
+    }
+    
+    func backgroundView() -> some View {
+        ZStack {
+            if let bgColor = config.bgColor {
+                RoundedRectangle(cornerRadius: config.cornerRadius)
+                    .foregroundStyle(bgColor)
+                    .opacity(config.isMaterial ? 0.5 : 1)
+            }
+            if config.isMaterial {
+                RoundedRectangle(cornerRadius: config.cornerRadius)
+                    .foregroundStyle(.ultraThickMaterial.opacity(0.92))
+            }
+            if let borderColor = config.borderColor {
+                RoundedRectangle(cornerRadius: config.cornerRadius)
+                    .stroke(
+                        borderColor,
+                        lineWidth: config.lineWidth
+                    )
+            }
+        }
     }
 }
 
 #Preview("Tag", body: {
     VStack(spacing: 15) {
-        Text("Full").simpleTag(.full(contentFont: .title))
         Text("Border").simpleTag(.border(contentFont: .title))
+        Text("Full").simpleTag(.full(contentFont: .title))
+        Text("Full Shadow").simpleTag(.full(contentFont: .title, shadowRadius: 5))
         Text("Material").simpleTag(.bg(contentFont: .title))
+        Text("Material Shawod").simpleTag(.bg(contentFont: .title, shadowRadius: 5))
     }
 })

@@ -131,8 +131,9 @@ public struct DemoContent: View {
         } label: {
             SimpleCell("IAP - 内购页面", systemImage: "bag")
         }
-        .fullScreenCover(isPresented: $showPurchasePage) {
+        .sheet(isPresented: $showPurchasePage) {
             DemoSimplePurchase()
+                .interactiveDismissDisabled(true)
         }
         
         PlainButton {

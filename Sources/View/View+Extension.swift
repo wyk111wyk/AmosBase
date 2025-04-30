@@ -51,6 +51,14 @@ public extension Picker {
 }
 
 public extension View {
+    func deviceButtonStyle() -> some View {
+        #if os(macOS)
+        self.buttonStyle(.bordered)
+        #else
+        self.buttonStyle(.borderless)
+        #endif
+    }
+    
     /// SF Symbol的跳跃动画
     func bounceEffect(
         byLayer: Bool = true,

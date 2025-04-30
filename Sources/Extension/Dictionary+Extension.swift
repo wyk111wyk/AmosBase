@@ -56,7 +56,6 @@ public extension Dictionary {
         keys.forEach { removeValue(forKey: $0) }
     }
 
-    #if canImport(Foundation)
     /// SwifterSwift: 将字典转换为JSON Data。JSON Data from dictionary.
     ///
     /// - Parameter prettify: set true to prettify data (default is false).
@@ -100,7 +99,6 @@ public extension Dictionary {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: self, options: options) else { return nil }
         return String(data: jsonData, encoding: .utf8)
     }
-    #endif
 
     /// SwifterSwift: Returns a dictionary containing the results of mapping the given closure over the sequence’s
     /// elements.

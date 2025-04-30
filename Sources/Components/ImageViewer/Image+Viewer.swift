@@ -1,16 +1,17 @@
 import SwiftUI
 
-#if os(iOS) || os(macOS)
 // 查看照片的Sheet
 public struct MutiImageViewer: View {
     @Environment(\.dismiss) private var dismissPage
     @State private var selectedIndex: Int
-    let allImages: [SimpleImageStore]
+    let allImages: [any SimpleImageStore]
     
-    init(allImages: [SimpleImageStore] = [],
-         selectedIndex: Int = 0,
-         needToSave: Bool = false,
-         onSave: @escaping ((Int) -> Void) = {_ in}) {
+    init(
+        allImages: [any SimpleImageStore] = [],
+        selectedIndex: Int = 0,
+        needToSave: Bool = false,
+        onSave: @escaping ((Int) -> Void) = {_ in}
+    ) {
         self.allImages = allImages
         self._selectedIndex = State.init(initialValue: selectedIndex)
     }
@@ -26,6 +27,7 @@ public struct MutiImageViewer: View {
                 }
             }
         }
+        .background(Color(r: 0.12, g: 0.12, b: 0.12), in: Rectangle())
         #if os(iOS)
         .tabViewStyle(.page(indexDisplayMode: .automatic))
         #elseif os(macOS)
@@ -53,4 +55,3 @@ public struct MutiImageViewer: View {
         selectedIndex: 0
     )
 }
-#endif

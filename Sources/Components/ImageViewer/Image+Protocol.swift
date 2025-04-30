@@ -8,13 +8,13 @@
 import Foundation
 import SwiftUI
 
-public protocol SimpleImageStore {
+public protocol SimpleImageStore: Identifiable {
     var id: String { get set }
     var image: SFImage { get set }
     var caption: String?  { get set }
 }
 
-public struct ImageStoreModel: SimpleImageStore, Identifiable {
+public struct ImageStoreModel: SimpleImageStore {
     public var id: String
     public var image: SFImage
     public var caption: String?

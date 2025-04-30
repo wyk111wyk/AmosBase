@@ -18,6 +18,10 @@ import AppKit
 public typealias SFFont = NSFont
 #endif
 
+extension String: @retroactive Identifiable {
+    public var id: String { self }
+}
+
 // MARK: - 进行转换
 public extension String {
     /// 将包含 Unicode 转义序列的字符串转换为实际字符
@@ -187,11 +191,6 @@ public extension String {
         Double(self) ?? 0
     }
     
-    /// 转换为 LocalizedStringKey
-    func toLocalizedKey() -> LocalizedStringKey {
-        LocalizedStringKey(self)
-    }
-    
     /// 转换为位置坐标 -  (lat,long) 高德格式
     ///
     /// lat = 120 long = 29
@@ -264,24 +263,6 @@ public extension String {
     }
 #endif
     
-#if canImport(Foundation)
-    /// SwifterSwift: Returns a localized string, with an optional comment for translators.
-    ///
-    ///        "Hello world".localized() -> Hallo Welt
-    ///
-    /// - Parameter comment: Optional comment for translators.
-    /// - Returns: Localized string.
-    func localized(
-        bundle: Bundle = .main,
-        table: String = "Localizable"
-    ) -> String {
-        String(
-            localized: String.LocalizationValue(self),
-            table: table,
-            bundle: bundle
-        )
-    }
-    
     /// SwifterSwift: Returns a format localized string.
     ///
     ///    "%d Swift %d Objective-C".formatLocalized(1, 2) -> 1 Swift 2 Objective-C
@@ -337,7 +318,6 @@ public extension String {
         }
         return hash.map { String(format: "%02hhx", $0) }.joined()
     }
-#endif
 }
 
 // MARK: - 进行文字的判断
@@ -476,7 +456,7 @@ public extension String {
         return self[self.index(startIndex, offsetBy: index)]
     }
     
-    /// 分割文章
+    /// 根据字数分割文章
     func splitArticle(
         targetWordsPerParagraph: Int = 500
     ) -> [String] {
@@ -860,42 +840,5 @@ public extension String {
         }else {
             return data.decode(type: T.self)
         }
-    }
-}
-
-public extension LocalizedStringResource {
-    func toString() -> String {
-        String(localized: self)
-    }
-}
-
-// MARK: - 让Text显示多样式内容
-/*
- Text("我已经阅读并同意遵守\("《AK23会员协议》", color: .orange)")
- */
-public extension LocalizedStringKey.StringInterpolation {
-    mutating func appendInterpolation(bold value: LocalizedStringKey){
-        appendInterpolation(Text(value).bold())
-    }
-    
-    mutating func appendInterpolation(underline value: LocalizedStringKey){
-        appendInterpolation(Text(value).underline())
-    }
-    
-    mutating func appendInterpolation(italic value: LocalizedStringKey) {
-        appendInterpolation(Text(value).italic())
-    }
-    
-    /// Text("注意：支付成功后请点击\("\"返回商家\"", color: .green)跳转")
-    mutating func appendInterpolation(_ value: LocalizedStringKey, color: Color?) {
-        appendInterpolation(Text(value).bold().foregroundColor(color))
-    }
-    
-    mutating func appendInterpolation(_ image: Image, color: Color?) {
-        appendInterpolation(Text(image).foregroundColor(color))
-    }
-    
-    mutating func appendInterpolation(bold value: LocalizedStringKey, color: Color?){
-        appendInterpolation(Text(value).bold().foregroundColor(color))
     }
 }

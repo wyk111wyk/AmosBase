@@ -39,7 +39,7 @@ public struct DemoSimpleHaptic: View {
     private func continueSection() -> some View {
         #if os(iOS)
         Section("连续震动") {
-            SimpleDetectButton(holdAction: { isPressing in
+            DetectButton(holdAction: { isPressing in
                 self.isContinuePressing = isPressing
                 if isPressing {
                     haptic.playContinuousHaptic(
@@ -77,7 +77,7 @@ public struct DemoSimpleHaptic: View {
     private func increasingSection() -> some View {
         #if os(iOS)
         Section("渐强震动") {
-            SimpleDetectButton(holdAction: { isPressing in
+            DetectButton(holdAction: { isPressing in
                 self.isIncreasePressing = isPressing
                 if isPressing {
                     haptic.playIncreasingHaptic(

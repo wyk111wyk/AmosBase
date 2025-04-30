@@ -82,7 +82,7 @@ public struct ImageDetailView: View {
 
 #Preview {
     ImageDetailView(
-        image: .randomGirl,
+        image: .randomGirl(),
         caption: "I am IronMan"
     )
 }

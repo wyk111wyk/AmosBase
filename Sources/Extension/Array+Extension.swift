@@ -105,7 +105,6 @@ public extension Array {
         swapAt(index, otherIndex)
     }
     
-    #if canImport(Foundation)
     /// SwifterSwift: 将字典转换为JSON Data。JSON Data from dictionary.
     ///
     /// - Parameter prettify: set true to prettify data (default is false).
@@ -149,7 +148,6 @@ public extension Array {
         guard let jsonData = try? JSONSerialization.data(withJSONObject: self, options: options) else { return nil }
         return String(data: jsonData, encoding: .utf8)
     }
-    #endif
     
     /// 根据索引批量删除数组内的元素
     @discardableResult

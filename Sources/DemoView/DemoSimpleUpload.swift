@@ -160,7 +160,7 @@ extension DemoSimpleUpload {
         guard let originalImage else { return nil }
         if isCrop {
             // 进行缩放
-            var newImage = originalImage.adjustSize(width: newWidth.toDouble)
+            var newImage = originalImage.adjustSize(length: newWidth.toDouble)
             let imageData = newImage.jpegImageData(quality: ratio)
             // 进行压缩
             if let imageData,

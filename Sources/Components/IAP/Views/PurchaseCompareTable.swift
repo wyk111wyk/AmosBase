@@ -59,9 +59,9 @@ struct PurchaseCompareTable: View {
             ForEach(allItem) { item in
                 VStack(spacing: 4) {
                     item.icon
-                        .imageModify(length: 45)
+                        .imageModify(length: 42)
                     Text(item.title)
-                        .font(.callout)
+                        .font(.footnote)
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)
                         .minimumScaleFactor(0.8)
@@ -74,8 +74,7 @@ struct PurchaseCompareTable: View {
     private func regularColumns() -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Regular", bundle: .module)
-                .font(.callout)
-                .fontWeight(.light)
+                .font(.callout.weight(.light))
                 .foregroundStyle(.secondary)
                 .padding(.horizontal, 6)
                 .frame(height: 14)
@@ -83,12 +82,13 @@ struct PurchaseCompareTable: View {
             ForEach(allItem) { item in
                 Text(item.regular)
                     .simpleTag(
-                        .border(
+                        .bg(
                             verticalPad: 6,
                             horizontalPad: 6,
                             cornerRadius: 6,
                             contentFont: .callout.weight(.regular),
-                            contentColor: .secondary
+                            contentColor: .secondary,
+                            bgColor: .secondary
                         )
                     )
                     .frame(height: 88)
