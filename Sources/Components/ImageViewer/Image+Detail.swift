@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-#if os(iOS) || os(macOS)
 public struct ImageDetailView: View {
     @Environment(\.dismiss) private var dismissPage
     
@@ -86,4 +85,3 @@ public struct ImageDetailView: View {
         caption: "I am IronMan"
     )
 }
-#endif

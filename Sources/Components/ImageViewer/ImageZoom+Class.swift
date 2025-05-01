@@ -29,11 +29,14 @@ struct PinchToZoom: ViewModifier {
         content
             .scaleEffect(scale, anchor: anchor)
             .offset(offset)
+            #if !os(watchOS)
             .gesture(pinch())
+            #endif
             .gesture(doubleTap())
             .gesture(drag(), isEnabled: scale > 1)
     }
     
+    #if !os(watchOS)
     private func pinch() -> some Gesture {
         MagnifyGesture()
             .onChanged { value in
@@ -56,6 +59,7 @@ struct PinchToZoom: ViewModifier {
                 }
             }
     }
+    #endif
     
     private func doubleTap() -> some Gesture {
         TapGesture(count: 2)

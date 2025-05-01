@@ -28,8 +28,10 @@ struct SimpleImageViewer: ViewModifier {
     func body(content: Content) -> some View {
         content
             .sheet(item: $selectedIndex) { select in
-                MutiImageViewer(allImages: allPhotos,
-                                selectedIndex: select)
+                MutiImageViewer(
+                    allImages: allPhotos,
+                    selectedIndex: select
+                )
             }
     }
 }

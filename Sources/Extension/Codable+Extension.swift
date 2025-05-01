@@ -28,6 +28,7 @@ public extension Encodable {
         // 创建一个 JSONEncoder 对象
         let encoder = JSONEncoder()
         encoder.outputFormatting = .sortedKeys
+        encoder.dateEncodingStrategy = .secondsSince1970
 
         // 将对象编码成 JSON 格式的数据
         if let jsonData = try? encoder.encode(self),

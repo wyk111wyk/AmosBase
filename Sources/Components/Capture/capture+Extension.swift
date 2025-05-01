@@ -15,7 +15,7 @@ public extension View {
             content: self
         )
         render.scale = 2
-        #if canImport(AppKit)
+        #if os(macOS)
         return render.nsImage
         #else
         return render.uiImage

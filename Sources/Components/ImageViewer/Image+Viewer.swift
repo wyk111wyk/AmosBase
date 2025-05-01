@@ -1,7 +1,7 @@
 import SwiftUI
 
 // 查看照片的Sheet
-public struct MutiImageViewer: View {
+struct MutiImageViewer: View {
     @Environment(\.dismiss) private var dismissPage
     @State private var selectedIndex: Int
     let allImages: [any SimpleImageStore]
@@ -16,7 +16,7 @@ public struct MutiImageViewer: View {
         self._selectedIndex = State.init(initialValue: selectedIndex)
     }
 
-    public var body: some View {
+    var body: some View {
         TabView(selection: $selectedIndex.animation()) {
             if allImages.count > 0 {
                 ForEach(allImages.indices, id: \.self) { index in
