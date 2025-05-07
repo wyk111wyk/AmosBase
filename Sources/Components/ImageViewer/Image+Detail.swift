@@ -17,7 +17,6 @@ public struct ImageDetailView: View {
     var captionLine: Int?
     
     @State var dragOffset: CGSize = CGSize.zero
-    @State var dragOffsetPredicted: CGSize = CGSize.zero
     
     public init(
         image: SFImage,
@@ -53,29 +52,23 @@ public struct ImageDetailView: View {
     public var body: some View {
         self.getImage()
             .resizable()
-            .scaledToFit()
-            .offset(x: self.dragOffset.width, 
-                    y: self.dragOffset.height)
-        #if os(iOS)
+            .aspectRatio(contentMode: .fit)
             .pinchToZoom()
-        #endif
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(red: 0.12, green: 0.12, blue: 0.12, opacity: (1.0 - Double(abs(self.dragOffset.width) + abs(self.dragOffset.height)) / 1000)).edgesIgnoringSafeArea(.all))
-        .overlay(alignment: .bottom) {
-            if let caption = caption, !caption.isEmpty {
-                Text(caption)
-                    .foregroundColor(.white.opacity(0.88))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(captionLine)
-                    .padding(.bottom, 15)
-                    .padding(.horizontal, 15)
+            .background(Color(red: 0.12, green: 0.12, blue: 0.12, opacity: (1.0 - Double(abs(self.dragOffset.width) + abs(self.dragOffset.height)) / 1000)).edgesIgnoringSafeArea(.all))
+            .overlay(alignment: .bottom) {
+                if let caption = caption, !caption.isEmpty {
+                    Text(caption)
+                        .foregroundColor(.white.opacity(0.88))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(captionLine)
+                        .padding(.bottom, 15)
+                        .padding(.horizontal, 15)
+                }
             }
-        }
-        .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
-        .onAppear() {
-            self.dragOffset = .zero
-            self.dragOffsetPredicted = .zero
-        }
+            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
+            .onAppear() {
+                self.dragOffset = .zero
+            }
     }
 }
 

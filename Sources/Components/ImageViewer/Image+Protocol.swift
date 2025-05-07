@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public protocol SimpleImageStore: Identifiable {
+public protocol SimpleImageStore: Identifiable, Sendable {
     var id: String { get set }
     var image: SFImage { get set }
     var caption: String?  { get set }
@@ -33,6 +33,14 @@ public struct ImageStoreModel: SimpleImageStore {
         let images: [SFImage] = (1...20).map { .girl($0) }
         let allImages:[ImageStoreModel] = images.compactMap {
             ImageStoreModel(image: $0, caption: "caption") }
+        return allImages
+    }
+}
+
+public extension Array where Element: SFImage {
+    func toImageStore() -> [ImageStoreModel] {
+        let allImages:[ImageStoreModel] = self.compactMap {
+            ImageStoreModel(image: $0) }
         return allImages
     }
 }

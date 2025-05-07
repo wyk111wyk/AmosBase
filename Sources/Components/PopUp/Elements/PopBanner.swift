@@ -13,6 +13,7 @@ public struct PopBanner: View {
     
     var title: String? = nil
     var subTitle: String? = nil
+    var systemImage: String? = nil
     @Binding var variableTitle: String?
     @Binding var variableSubTitle: String?
     
@@ -34,6 +35,7 @@ public struct PopBanner: View {
         mode: SimplePopupMode,
         title: String? = nil,
         subTitle: String? = nil,
+        systemImage: String? = nil,
         variableTitle: Binding<String?> = .constant(nil),
         variableSubTitle: Binding<String?> = .constant(nil),
         bgColor: Color? = nil,
@@ -43,6 +45,7 @@ public struct PopBanner: View {
         self.bgColor = bgColor
         self.title = title
         self.subTitle = subTitle
+        self.systemImage = systemImage
         self._variableTitle = variableTitle
         self._variableSubTitle = variableSubTitle
         self.showSystemSetting = showSystemSetting
@@ -74,7 +77,7 @@ public struct PopBanner: View {
     
     public var body: some View {
         HStack(spacing: bannerSpace){
-            mode.bannerIcon(bgColor)
+            mode.bannerIcon(bgColor, systemImage: systemImage)
             
             if wrappedTitle != nil || subTitle != nil {
                 VStack(alignment: .leading, spacing: bannerLabelSpace){
@@ -168,7 +171,8 @@ public struct PopBanner: View {
             PopBanner(
                 mode: .text,
                 title: String.randomChinese(short: true),
-                subTitle: String.randomChinese(medium: true)
+                subTitle: String.randomChinese(medium: true),
+                systemImage: "person.crop.square"
             )
         }
         .scrollIndicators(.hidden)

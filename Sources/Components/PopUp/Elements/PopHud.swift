@@ -14,6 +14,7 @@ public struct PopHud: View {
     
     var title: String? = nil
     var subTitle: String? = nil
+    var systemImage: String? = nil
     
     #if os(watchOS)
     let centerSpace: CGFloat = 6
@@ -63,12 +64,14 @@ public struct PopHud: View {
         mode: SimplePopupMode,
         title: String? = nil,
         subTitle: String? = nil,
+        systemImage: String? = nil,
         bgColor: Color? = nil
     ){
         self.mode = mode
         self.bgColor = bgColor
         self.title = title
         self.subTitle = subTitle
+        self.systemImage = systemImage
     }
     
     var wrappedTitle: String? {
@@ -85,7 +88,7 @@ public struct PopHud: View {
     
     public var body: some View {
         VStack(spacing: centerSpace) {
-            mode.hudIcon(bgColor)
+            mode.hudIcon(bgColor, systemImage: systemImage)
                 .padding(10)
             if wrappedTitle != nil || subTitle != nil {
                 VStack(spacing: centerLabelSpace){

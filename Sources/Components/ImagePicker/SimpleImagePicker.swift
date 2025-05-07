@@ -102,7 +102,7 @@ public struct SimpleImagePicker<V: View>: View {
             }
             .fileImporter(
                 isPresented: $showFolder,
-                allowedContentTypes: [.image],
+                allowedContentTypes: [.image, .png, .jpeg, .webP],
                 allowsMultipleSelection: false,
                 onCompletion: { result in
                 switch result {
@@ -161,7 +161,10 @@ public struct SimpleImagePicker<V: View>: View {
                     }
                 }
             }
-            .simpleAlert(title: errorMsg, isPresented: .isPresented($errorMsg))
+            .simpleAlert(
+                title: errorMsg,
+                isPresented: .isPresented($errorMsg)
+            )
     }
 }
 

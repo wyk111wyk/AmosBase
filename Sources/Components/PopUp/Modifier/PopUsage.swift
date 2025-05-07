@@ -13,9 +13,9 @@ import SwiftUI
 public extension View {
     func simpleBanner(
         isPresented: Binding<Bool>,
-        systemImage: String? = nil,
         title: String? = nil,
         subTitle: String? = nil,
+        systemImage: String? = nil,
         isCenter: Bool = false,
         bgColor: Color? = nil,
         duration: Double = 1.6,
@@ -23,17 +23,9 @@ public extension View {
     ) -> some View {
         self.popup(isPresented: isPresented) {
             if isCenter {
-                if let systemImage {
-                    PopHud(mode: .systemImage(systemImage), title: title, subTitle: subTitle, bgColor: bgColor)
-                }else {
-                    PopHud(mode: .text, title: title, subTitle: subTitle, bgColor: bgColor)
-                }
+                PopHud(mode: .text, title: title, subTitle: subTitle, systemImage: systemImage, bgColor: bgColor)
             }else {
-                if let systemImage {
-                    PopBanner(mode: .systemImage(systemImage), title: title, subTitle: subTitle, bgColor: bgColor)
-                }else {
-                    PopBanner(mode: .text, title: title, subTitle: subTitle, bgColor: bgColor)
-                }
+                PopBanner(mode: .text, title: title, subTitle: subTitle, systemImage: systemImage, bgColor: bgColor)
             }
         } customize: { content in
             content
@@ -48,6 +40,7 @@ public extension View {
     /// 失败的提醒
     func simpleErrorBanner(
         error: Binding<Error?>,
+        systemImage: String? = nil,
         isTop: Bool = true,
         bgColor: Color? = nil,
         hasHaptic: Bool = true,
@@ -56,9 +49,9 @@ public extension View {
         self.popup(isPresented: .isPresented(error)) {
             if let simpleError = error.wrappedValue as? SimpleError,
                case let .customError(title, msg, _) = simpleError {
-                PopBanner(mode: .error, title: title, subTitle: msg, bgColor: bgColor)
+                PopBanner(mode: .error, title: title, subTitle: msg, systemImage: systemImage, bgColor: bgColor)
             }else {
-                PopBanner(mode: .error, title: error.wrappedValue?.localizedDescription ?? "发生错误", bgColor: bgColor)
+                PopBanner(mode: .error, title: error.wrappedValue?.localizedDescription ?? "发生错误", systemImage: systemImage, bgColor: bgColor)
             }
         } customize: { content in
             content
@@ -98,6 +91,7 @@ public extension View {
         isPresented: Binding<Bool>,
         title: String? = nil,
         subTitle: String? = nil,
+        systemImage: String? = nil,
         isCenter: Bool = false,
         bgColor: Color? = nil,
         hasHaptic: Bool = true,
@@ -108,7 +102,7 @@ public extension View {
             if isCenter {
                 PopHud(mode: .success, title: title, subTitle: subTitle, bgColor: bgColor)
             }else {
-                PopBanner(mode: .success, title: title, subTitle: subTitle, bgColor: bgColor)
+                PopBanner(mode: .success, title: title, subTitle: subTitle, systemImage: systemImage, bgColor: bgColor)
             }
         } customize: {
             var content = $0
@@ -126,6 +120,7 @@ public extension View {
     func simpleSuccessBanner(
         subTitle: Binding<String?>,
         title: String? = nil,
+        systemImage: String? = nil,
         isCenter: Bool = false,
         bgColor: Color? = nil,
         hasHaptic: Bool = true,
@@ -136,7 +131,7 @@ public extension View {
             if isCenter {
                 PopHud(mode: .success, title: title, subTitle: subTitle, bgColor: bgColor)
             }else {
-                PopBanner(mode: .success, title: title, subTitle: subTitle, bgColor: bgColor)
+                PopBanner(mode: .success, title: title, subTitle: subTitle, systemImage: systemImage, bgColor: bgColor)
             }
         } customize: {
             var content = $0
@@ -163,6 +158,7 @@ public extension View {
         isPresented: Binding<Bool>,
         title: String? = nil,
         subTitle: String? = nil,
+        systemImage: String? = nil,
         isCenter: Bool = true,
         closeOnTap: Bool = false,
         hasBackground: Bool = true,
@@ -170,9 +166,9 @@ public extension View {
     ) -> some View {
         self.popup(isPresented: isPresented) {
             if isCenter {
-                PopHud(mode: .loading, title: title, subTitle: subTitle)
+                PopHud(mode: .loading, title: title, subTitle: subTitle, systemImage: systemImage)
             }else {
-                PopBanner(mode: .loading, title: title, subTitle: subTitle)
+                PopBanner(mode: .loading, title: title, subTitle: subTitle, systemImage: systemImage)
             }
         } customize: { content in
             var content = content

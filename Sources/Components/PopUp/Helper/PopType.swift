@@ -71,39 +71,45 @@ public enum SimplePopupMode: Equatable, Identifiable {
 // MARK: - Banner
 extension SimplePopupMode {
     @ViewBuilder
-    func bannerIcon(_ bgColor: Color?) -> some View {
+    func bannerIcon(_ bgColor: Color?, systemImage: String? = nil) -> some View {
         let iconColor =
         if let bgColor = bannerBgColor(bgColor) { bgColor.textColor
         }else{ Color.primary }
-        switch self{
-        case .success:
-            Image(systemName: "checkmark")
+        if let systemImage {
+            Image(systemName: systemImage)
                 .imageModify(length: 20)
                 .foregroundStyle(iconColor)
-        case .error:
-            Image(systemName: "xmark")
-                .imageModify(length: 20)
-                .foregroundStyle(iconColor)
-        case .noInternet:
-            Image(systemName: "wifi.slash")
-                .imageModify(length: 20)
-                .foregroundStyle(iconColor)
-        case .systemImage(let systemName):
-            Image(systemName: systemName)
-                .imageModify(length: 20)
-                .foregroundStyle(iconColor)
-        case .image(let sfImage):
-            Image(sfImage: sfImage)
-                .imageModify(length: 28)
-        case .loading:
-            ProgressView()
-                .foregroundStyle(iconColor)
-            #if os(macOS)
-                .scaleEffect(0.6)
-            #endif
-                .frame(width: 22, height: 22)
-        default:
-            EmptyView()
+        }else {
+            switch self{
+            case .success:
+                Image(systemName: "checkmark")
+                    .imageModify(length: 20)
+                    .foregroundStyle(iconColor)
+            case .error:
+                Image(systemName: "xmark")
+                    .imageModify(length: 20)
+                    .foregroundStyle(iconColor)
+            case .noInternet:
+                Image(systemName: "wifi.slash")
+                    .imageModify(length: 20)
+                    .foregroundStyle(iconColor)
+            case .systemImage(let systemName):
+                Image(systemName: systemName)
+                    .imageModify(length: 20)
+                    .foregroundStyle(iconColor)
+            case .image(let sfImage):
+                Image(sfImage: sfImage)
+                    .imageModify(length: 28)
+            case .loading:
+                ProgressView()
+                    .foregroundStyle(iconColor)
+                    #if os(macOS)
+                    .scaleEffect(0.6)
+                    #endif
+                    .frame(width: 22, height: 22)
+            default:
+                EmptyView()
+            }
         }
     }
     
@@ -130,27 +136,33 @@ extension SimplePopupMode {
 // MARK: - Center HUD
 extension SimplePopupMode {
     @ViewBuilder
-    func hudIcon(_ bgColor: Color?) -> some View {
-        switch self {
-        case .success:
-            PopAnimatedCheckmark(.textColor(bgColor: bgColor, baseColor: .green))
-        case .error:
-            PopAnimatedXmark(.textColor(bgColor: bgColor, baseColor: .red))
-        case .systemImage(let systemName):
-            Image(systemName: systemName)
+    func hudIcon(_ bgColor: Color?, systemImage: String? = nil) -> some View {
+        if let systemImage {
+            Image(systemName: systemImage)
                 .imageModify(length: 50, watchLength: 26)
                 .foregroundStyle(Color.textColor(bgColor: bgColor))
-        case .image(let sfImage):
-            Image(sfImage: sfImage)
-                .imageModify(length: 50, watchLength: 26)
-        case .loading:
-            ProgressView()
-            #if os(iOS)
-                .scaleEffect(1.5)
-            #endif
-                .frame(width: 22, height: 22)
-        default:
-            EmptyView()
+        }else {
+            switch self {
+            case .success:
+                PopAnimatedCheckmark(.textColor(bgColor: bgColor, baseColor: .green))
+            case .error:
+                PopAnimatedXmark(.textColor(bgColor: bgColor, baseColor: .red))
+            case .systemImage(let systemName):
+                Image(systemName: systemName)
+                    .imageModify(length: 50, watchLength: 26)
+                    .foregroundStyle(Color.textColor(bgColor: bgColor))
+            case .image(let sfImage):
+                Image(sfImage: sfImage)
+                    .imageModify(length: 50, watchLength: 26)
+            case .loading:
+                ProgressView()
+                    #if os(iOS)
+                    .scaleEffect(1.5)
+                    #endif
+                    .frame(width: 22, height: 22)
+            default:
+                EmptyView()
+            }
         }
     }
 }

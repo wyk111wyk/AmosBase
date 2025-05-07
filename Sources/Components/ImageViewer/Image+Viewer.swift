@@ -23,15 +23,20 @@ struct MutiImageViewer: View {
                     ImageDetailView(
                         image: allImages[index].image,
                         caption: allImages[index].caption
-                    ).tag(index)
+                    )
+                    .tag(index)
+                    .overlay(alignment: .leading) {
+                        lastButton()
+                    }
+                    .overlay(alignment: .trailing) {
+                        nextButton()
+                    }
                 }
             }
         }
         .background(Color(r: 0.12, g: 0.12, b: 0.12), in: Rectangle())
-        #if os(iOS)
+        #if os(iOS) || os(watchOS) || os(tvOS)
         .tabViewStyle(.page(indexDisplayMode: .automatic))
-        #elseif os(macOS)
-        .tabViewStyle(.automatic)
         #endif
         .ignoresSafeArea(.all)
         .buttonCirclePage(
@@ -46,6 +51,48 @@ struct MutiImageViewer: View {
                 .padding(.top)
                 .padding(.trailing)
         }
+    }
+    
+    @ViewBuilder
+    private func lastButton() -> some View {
+        #if os(macOS)
+        if selectedIndex > 0 {
+            PlainButton {
+                selectedIndex -= 1
+            } label: {
+                Image(systemName: "arrowshape.left.fill")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .padding(8)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .foregroundStyle(.regularMaterial)
+                    }
+            }
+            .padding(.leading)
+        }
+        #endif
+    }
+    
+    @ViewBuilder
+    private func nextButton() -> some View {
+        #if os(macOS)
+        if selectedIndex < allImages.count - 1 {
+            PlainButton {
+                selectedIndex += 1
+            } label: {
+                Image(systemName: "arrowshape.right.fill")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .padding(8)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .foregroundStyle(.regularMaterial)
+                    }
+            }
+            .padding(.trailing)
+        }
+        #endif
     }
 }
 

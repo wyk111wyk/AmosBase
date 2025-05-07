@@ -71,20 +71,20 @@ public extension Image {
     func imageModify(
         mode: ContentMode = .fit,
         length: CGFloat? = nil,
-        watchLength: CGFloat? = nil,
-        width: CGFloat? = nil,
-        height: CGFloat? = nil
+        macLength: CGFloat? = nil,
+        watchLength: CGFloat? = nil
     ) -> some View {
         #if os(watchOS)
         let length: CGFloat? = watchLength ?? (length ?? nil)
+        #elseif os(macOS)
+        let length: CGFloat? = macLength ?? (length ?? nil)
         #endif
-        let width: CGFloat? = width ?? (length ?? nil)
-        let height: CGFloat? = height ?? (length ?? nil)
+        
         
         return self
             .resizable()
             .aspectRatio(contentMode: mode)
-            .frame(width: width, height: height)
+            .frame(width: length)
     }
 }
 
@@ -232,6 +232,12 @@ public extension SFImage {
         #endif
     }
     
+    convenience init?(base64: String?) {
+        guard let base64 = base64 else { return nil }
+        guard let data = Data(base64Encoded: base64) else { return nil }
+        self.init(data: data)
+    }
+    
     var width: Double {
         Double(self.size.width)
     }
@@ -242,11 +248,16 @@ public extension SFImage {
     
     /// 转换为可使用的临时路径
     func tempPath(_ name: String? = nil) -> URL? {
-        let tempDirectory = FileManager.default.temporaryDirectory
+        let file = FileManager.default
+        let tempDirectory = file.temporaryDirectory
         let tempFileURL = tempDirectory.appendingPathComponent("\(name ?? UUID().uuidString).png")
         
         guard let imageData = self.pngImageData() else {
             return nil
+        }
+        
+        guard !file.fileExists(atPath: tempFileURL.path()) else {
+            return tempFileURL
         }
         
         do {
