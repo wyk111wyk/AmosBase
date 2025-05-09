@@ -17,6 +17,8 @@ public extension UTType {
     
     static let xlsx = UTType(importedAs: "com.microsoft.excel.xlsx")
     
+    static let jpg = UTType(filenameExtension: "jpg")!
+    
     var isImage:Bool {
         self == .image || self == .png || self == .jpeg || self == .heic
     }

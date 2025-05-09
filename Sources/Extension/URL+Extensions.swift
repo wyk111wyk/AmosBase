@@ -47,6 +47,11 @@ public extension URL {
         }
         return path
     }
+    
+    var isImage: Bool {
+        let pathExtension = self.pathExtension.lowercased()
+        return ["jpg", "jpeg", "png", "webp", "heic", "heif", "tiff", "bmp", "gif"].contains(pathExtension)
+    }
 }
 
 // MARK: - Initializers

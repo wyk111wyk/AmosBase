@@ -238,6 +238,16 @@ public extension SFImage {
         self.init(data: data)
     }
     
+    convenience init?(contentsOf url: URL) {
+        #if canImport(UIKit)
+        self.init(contentsOfFile: url.path)
+        #elseif canImport(AppKit)
+        self.init(contentsOfFile: url.path)
+        #else
+        self.init(contentsOfFile: url.path)
+        #endif
+    }
+    
     var width: Double {
         Double(self.size.width)
     }
@@ -273,7 +283,7 @@ public extension SFImage {
     var fileSize: Double {
         #if canImport(UIKit)
         Double(self.pngData()?.count ?? 0)
-        #elseif os(macOS)
+        #elseif canImport(AppKit)
         Double(self.tiffRepresentation?.count ?? 0)
         #endif
     }
@@ -282,7 +292,7 @@ public extension SFImage {
     func pngImageData() -> Data? {
         #if canImport(UIKit)
         self.pngData()
-        #elseif os(macOS)
+        #elseif canImport(AppKit)
         guard let tiffRepresentation = self.tiffRepresentation,
               let bitmapImage = NSBitmapImageRep(data: tiffRepresentation) else {
             return nil
@@ -295,7 +305,7 @@ public extension SFImage {
     func jpegImageData(quality: CGFloat = 0.9) -> Data? {
         #if canImport(UIKit)
         self.jpegData(compressionQuality: quality)
-        #elseif os(macOS)
+        #elseif canImport(AppKit)
         guard let tiffRepresentation = self.tiffRepresentation,
               let bitmapImage = NSBitmapImageRep(data: tiffRepresentation) else {
             return nil
@@ -306,9 +316,9 @@ public extension SFImage {
 
     /// 复制图片到剪贴板
     func copyImageToClipboard() {
-        #if os(iOS)
+        #if canImport(UIKit)
         UIPasteboard.general.image = self
-        #elseif os(macOS)
+        #elseif canImport(AppKit)
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.writeObjects([self])
@@ -321,7 +331,7 @@ public extension SFImage {
     func adjustSize(length: CGFloat = 300) -> SFImage {
         #if canImport(UIKit)
         return adjustSizeToSmall(length: length)
-        #elseif os(macOS)
+        #elseif canImport(AppKit)
         return scaled(length: length)
         #endif
     }
@@ -332,7 +342,7 @@ public extension SFImage {
     func averageColor() -> SFColor? {
         #if !os(watchOS) && canImport(UIKit)
         return averageColor_ios()
-        #elseif os(macOS)
+        #elseif canImport(AppKit)
         return averageColor_mac()
         #else
         return nil
@@ -372,7 +382,7 @@ public extension SFImage {
     func effect(filter: CIEffectType) -> SFImage? {
         #if !os(watchOS) && canImport(UIKit)
         return effect_ios(filter: filter)
-        #elseif os(macOS)
+        #elseif canImport(AppKit)
         return effect_mac(filter: filter)
         #else
         return nil

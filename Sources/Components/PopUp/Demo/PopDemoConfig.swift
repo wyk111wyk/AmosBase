@@ -26,7 +26,6 @@ struct PopDemoConfig {
     var showBackground: Bool = false
     var closeOnTapOutside: Bool = false
     
-    var useKeyboardSafeArea: Bool = false
     var hasHaptic: Bool = true
 }
 
@@ -57,7 +56,6 @@ extension popup.PopupParameters {
             backgroundView = AnyView(PopBackgroundView())
         }
         closeOnTapOutside = config.closeOnTapOutside
-        useKeyboardSafeArea = config.useKeyboardSafeArea
         if config.hasHaptic {
             if mode == .success {
                 haptic = .success

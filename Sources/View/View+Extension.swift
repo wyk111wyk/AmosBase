@@ -51,6 +51,17 @@ public extension Picker {
 }
 
 public extension View {
+    func macPadding(
+        _ edges: Edge.Set = .all,
+        _ length: CGFloat? = nil
+    ) -> some View {
+        #if os(macOS)
+        self.padding(edges, length)
+        #else
+        self
+        #endif
+    }
+    
     func deviceButtonStyle() -> some View {
         #if os(macOS)
         self.buttonStyle(.bordered)

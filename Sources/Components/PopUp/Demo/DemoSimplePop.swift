@@ -296,7 +296,6 @@ struct DemoSimplePop: View {
                 Text("·外部点击关闭: \(config.closeOnTapOutside ? "开启" : "关闭")")
             }
             HStack(spacing: 15) {
-                Text("·计算键盘高度: \(config.useKeyboardSafeArea ? "开启" : "关闭")")
                 Text("·启用震动: \(config.hasHaptic ? "开启" : "关闭")")
             }
         }

@@ -146,9 +146,6 @@ extension Popup {
         /// Custom background view for outside area
         var backgroundView: AnyView?
 
-        /// move up for keyboardHeight when it is displayed
-        var useKeyboardSafeArea: Bool = false
-
         /// called when when dismiss animation starts
         var willDismissCallback: (DismissSource) -> () = {_ in}
 
@@ -240,12 +237,6 @@ extension Popup {
         public func backgroundView<BackgroundView: View>(_ backgroundView: ()->(BackgroundView)) -> PopupParameters {
             var params = self
             params.backgroundView = AnyView(backgroundView())
-            return params
-        }
-
-        public func useKeyboardSafeArea(_ useKeyboardSafeArea: Bool) -> PopupParameters {
-            var params = self
-            params.useKeyboardSafeArea = useKeyboardSafeArea
             return params
         }
 

@@ -261,7 +261,6 @@ public extension View {
             content.position = .bottom
             content.closeOnTap = false
             content.appearFrom = .bottomSlide
-            content.useKeyboardSafeArea = false
             if showBackground {
                 content.backgroundView = AnyView(PopBackgroundView())
             }

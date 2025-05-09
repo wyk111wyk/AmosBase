@@ -140,7 +140,6 @@ struct SimplePopSetting: View {
     
     private func otherSection() -> some View {
         Section {
-            Toggle("计算键盘高度", isOn: currentConfig.useKeyboardSafeArea)
             Toggle("启用震动（成功/失败）", isOn: currentConfig.hasHaptic)
         }
     }

@@ -31,7 +31,7 @@ public struct PopHud: View {
         if horizontalSizeClass == .compact {
             return 180
         } else {
-            return 220
+            return 200
         }
         #endif
     }
@@ -43,7 +43,7 @@ public struct PopHud: View {
         if horizontalSizeClass == .compact {
             return 220
         } else {
-            return 280
+            return 230
         }
         #endif
     }
@@ -55,7 +55,7 @@ public struct PopHud: View {
         if horizontalSizeClass == .compact {
             return 120
         } else {
-            return 160
+            return 140
         }
         #endif
     }

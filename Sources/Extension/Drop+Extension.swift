@@ -13,6 +13,7 @@ import UniformTypeIdentifiers
 
 // 拖拽内容 Drop
 public extension View {
+    /// 允许拖拽文字
     @ViewBuilder func dragText(content: String?) -> some View {
         if let content {
             self.draggable(content)
@@ -21,9 +22,11 @@ public extension View {
         }
     }
     
-    @ViewBuilder func dragImage(content: SFImage?) -> some View {
-        if let content {
-            self.draggable(content)
+    /// 允许拖拽图片
+    /// 必须直接附在图片下方（不能在 Button、Menu 下方）
+    @ViewBuilder func dragImage(image: SFImage?) -> some View {
+        if let image {
+            self.draggable(image)
         }else {
             self
         }
@@ -34,7 +37,8 @@ public extension View {
         isTargeted: Binding<Bool>? = nil,
         textReceive: @escaping (String) -> Void
     ) -> some View {
-        self.onDrop(
+        self
+            .onDrop(
             of: [.text, .plainText, .utf8PlainText, .utf16PlainText],
             isTargeted: isTargeted
         ) { providers in

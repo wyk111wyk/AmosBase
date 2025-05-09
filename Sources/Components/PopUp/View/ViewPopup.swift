@@ -27,7 +27,6 @@ public struct Popup<PopupContent: View>: ViewModifier {
         self.verticalPadding = params.type.verticalPadding
         self.horizontalPadding = params.type.horizontalPadding
         self.useSafeAreaInset = params.type.useSafeAreaInset
-        self.useKeyboardSafeArea = params.useKeyboardSafeArea
         self.animation = params.animation
         self.dragToDismiss = params.dragToDismiss
         self.dragToDismissDistance = params.dragToDismissDistance
@@ -76,7 +75,6 @@ public struct Popup<PopupContent: View>: ViewModifier {
     var verticalPadding: CGFloat
     var horizontalPadding: CGFloat
     var useSafeAreaInset: Bool
-    var useKeyboardSafeArea: Bool
 
     var animation: Animation
 
@@ -104,8 +102,6 @@ public struct Popup<PopupContent: View>: ViewModifier {
     var view: () -> PopupContent
 
     // MARK: - Private Properties
-
-    @StateObject var keyboardHeightHelper = KeyboardHeightHelper()
 
     /// The rect and safe area of the hosting controller
     @State private var presenterContentRect: CGRect = .zero
@@ -147,7 +143,6 @@ public struct Popup<PopupContent: View>: ViewModifier {
             }
             if position.isBottom {
                 return screenHeight - sheetContentRect.height
-                - (useKeyboardSafeArea ? keyboardHeightHelper.keyboardHeight : 0)
                 - verticalPadding
                 - (useSafeAreaInset ? safeAreaInsets.bottom : 0)
                 - safeAreaInsets.top
@@ -163,7 +158,6 @@ public struct Popup<PopupContent: View>: ViewModifier {
         if position.isBottom {
             return presenterContentRect.height
             - sheetContentRect.height
-            - (useKeyboardSafeArea ? keyboardHeightHelper.keyboardHeight : 0)
             - verticalPadding
             + safeAreaInsets.bottom
             - (useSafeAreaInset ? safeAreaInsets.bottom : 0)
@@ -360,118 +354,46 @@ public struct Popup<PopupContent: View>: ViewModifier {
     /// This is the builder for the sheet content
     @ViewBuilder
     func sheet() -> some View {
-        if #available(iOS 17.0, tvOS 17.0, macOS 14.0, watchOS 10.0, *) {
-            ZStack {
-                VStack {
-                    contentView()
-                        .addTapIfNotTV(if: closeOnTap) {
-                            dismissCallback(.tapInside)
-                        }
-                        .scaleEffect(actualScale) // scale is here to avoid it messing with frameGetter for sheetContentRect
-                        .opacity(actualOpacity)
-                }
-                .frameGetter($sheetContentRect)
-                .position(x: sheetContentRect.width/2 + actualCurrentOffset.x, y: sheetContentRect.height/2 + actualCurrentOffset.y)
-
-                .onChange(of: shouldShowContent.wrappedValue) {
-                    if actualCurrentOffset == CGPoint.pointFarAwayFromScreen { // don't animate initial positioning outside the screen
-                        DispatchQueue.main.async {
-                            actualCurrentOffset = hiddenOffset
-                            actualScale = hiddenScale
-                            actualOpacity = hiddenOpacity
-                        }
+        ZStack {
+            VStack {
+                contentView()
+                    .addTapIfNotTV(if: closeOnTap) {
+                        dismissCallback(.tapInside)
                     }
+                    .scaleEffect(actualScale) // scale is here to avoid it messing with frameGetter for sheetContentRect
+                    .opacity(actualOpacity)
+            }
+            .frameGetter($sheetContentRect)
+            .position(x: sheetContentRect.width/2 + actualCurrentOffset.x, y: sheetContentRect.height/2 + actualCurrentOffset.y)
 
+            .onChange(of: shouldShowContent.wrappedValue) {
+                if actualCurrentOffset == CGPoint.pointFarAwayFromScreen { // don't animate initial positioning outside the screen
                     DispatchQueue.main.async {
-                        withAnimation(animation) {
-                            changeParamsWithAnimation(shouldShowContent.wrappedValue)
-                        }
+                        actualCurrentOffset = hiddenOffset
+                        actualScale = hiddenScale
+                        actualOpacity = hiddenOpacity
                     }
                 }
 
-                .onChange(of: keyboardHeightHelper.keyboardHeight) {
-                    if shouldShowContent.wrappedValue {
-                        DispatchQueue.main.async {
-                            withAnimation(animation) {
-                                changeParamsWithAnimation(true)
-                            }
-                        }
+                DispatchQueue.main.async {
+                    withAnimation(animation) {
+                        changeParamsWithAnimation(shouldShowContent.wrappedValue)
                     }
                 }
+            }
 
-                .onChange(of: sheetContentRect.size) {
+            .onChange(of: sheetContentRect.size) {
 //                    print("Size change: \(sheetContentRect.size)")
-                    positionIsCalculatedCallback()
-                    if shouldShowContent.wrappedValue { // already displayed but the size has changed
-                        actualCurrentOffset = targetCurrentOffset
-                    }
-                }
-#if os(iOS)
-                .onOrientationChange(isLandscape: $isLandscape) {
+                positionIsCalculatedCallback()
+                if shouldShowContent.wrappedValue { // already displayed but the size has changed
                     actualCurrentOffset = targetCurrentOffset
                 }
-#endif
             }
-        } else { // ios 16
-            ZStack {
-                VStack {
-                    contentView()
-                        .addTapIfNotTV(if: closeOnTap) {
-                            dismissCallback(.tapInside)
-                        }
-                        .scaleEffect(actualScale) // scale is here to avoid it messing with frameGetter for sheetContentRect
-                        .opacity(actualOpacity)
-                }
-                .frameGetter($sheetContentRect)
-                .position(x: sheetContentRect.width/2 + actualCurrentOffset.x, y: sheetContentRect.height/2 + actualCurrentOffset.y)
-
-                .onChange(of: targetCurrentOffset) { newValue in
-                    if !shouldShowContent.wrappedValue, newValue == hiddenOffset { // don't animate initial positioning outside the screen
-                        actualCurrentOffset = newValue
-                        actualScale = targetScale
-                        actualOpacity = targetOpacity
-                    } else {
-                        withAnimation(animation) {
-                            actualCurrentOffset = newValue
-                            actualScale = targetScale
-                            actualOpacity = targetOpacity
-                        }
-                    }
-                }
-
-                .onChange(of: targetScale) { newValue in
-                    if !shouldShowContent.wrappedValue, newValue == hiddenScale { // don't animate initial positioning outside the screen
-                        actualCurrentOffset = targetCurrentOffset
-                        actualScale = newValue
-                    } else {
-                        withAnimation(animation) {
-                            actualCurrentOffset = targetCurrentOffset
-                            actualScale = newValue
-                        }
-                    }
-                }
-                
-                .onChange(of: targetOpacity) { newValue in
-                    if !shouldShowContent.wrappedValue, newValue == hiddenOpacity { // don't animate initial positioning outside the screen
-                        actualCurrentOffset = targetCurrentOffset
-                        actualOpacity = newValue
-                    } else {
-                        withAnimation(animation) {
-                            actualCurrentOffset = targetCurrentOffset
-                            actualOpacity = newValue
-                        }
-                    }
-                }
-
-                .onChange(of: sheetContentRect.size) { sheetContentRect in
-                    positionIsCalculatedCallback()
-                }
 #if os(iOS)
-                .onOrientationChange(isLandscape: $isLandscape) {
-                    actualCurrentOffset = targetCurrentOffset
-                }
-#endif
+            .onOrientationChange(isLandscape: $isLandscape) {
+                actualCurrentOffset = targetCurrentOffset
             }
+#endif
         }
     }
 #else
@@ -631,3 +553,26 @@ struct OrientationChangeModifier: ViewModifier {
 }
 
 #endif
+
+extension CGPoint {
+
+    @MainActor
+    static var pointFarAwayFromScreen: CGPoint {
+        CGPoint(x: 2*CGSize.screenSize.width, y: 2*CGSize.screenSize.height)
+    }
+}
+
+extension CGSize {
+    @MainActor
+    static var screenSize: CGSize {
+#if os(iOS) || os(tvOS)
+        return UIScreen.main.bounds.size
+#elseif os(watchOS)
+        return WKInterfaceDevice.current().screenBounds.size
+#elseif os(macOS)
+        return NSScreen.main?.frame.size ?? .zero
+#elseif os(visionOS)
+        return .zero
+#endif
+    }
+}
