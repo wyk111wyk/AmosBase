@@ -76,7 +76,13 @@ extension View {
                                  modifiers: EventModifiers? = nil,
                                  placement: ToolbarItemPlacement? = nil,
                                  callback: @escaping () -> Void = {}) -> some View {
-        modifier(CircleButtonNavi(role: role,
+        
+        #if os(macOS)
+        let isPresent = false
+        #else
+        let isPresent = isPresent
+        #endif
+        return modifier(CircleButtonNavi(role: role,
                                   title: title,
                                   imageName: imageName,
                                   labelColor: labelColor,
@@ -399,7 +405,6 @@ struct CircleButtonNavi: ViewModifier {
         self.imageName = imageName
         self.labelColor = labelColor
         self.isDisable = isDisable
-        self.isPresent = isPresent
         self.isLoading = isLoading
         self.callback = callback
         self.key = key
@@ -413,6 +418,7 @@ struct CircleButtonNavi: ViewModifier {
                 self.placement = .confirmationAction
             }
         }
+        self.isPresent = isPresent
     }
     
     func body(content: Content) -> some View {

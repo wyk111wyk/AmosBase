@@ -7,9 +7,25 @@
 
 import Foundation
 
-public enum SimpleSortOrder {
+public enum SimpleSortOrder: String, CaseIterable, Identifiable {
     case ascending
     case descending
+    
+    public var id: String { rawValue }
+    
+    public var title: String {
+        switch self {
+        case .ascending: return "升序"
+        case .descending: return "降序"
+        }
+    }
+    
+    public var imageName: String {
+        switch self {
+        case .ascending: return "arrow.up"
+        case .descending: return "arrow.down"
+        }
+    }
     
     public mutating func toggle() {
         self = self == .ascending ? .descending : .ascending

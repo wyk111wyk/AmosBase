@@ -74,7 +74,7 @@ public struct ImageDetailView: View {
 
 #Preview {
     ImageDetailView(
-        image: .randomGirl(),
+        image: .girl(),
         caption: "I am IronMan"
     )
 }

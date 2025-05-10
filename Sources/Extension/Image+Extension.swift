@@ -187,28 +187,26 @@ public extension SFImage {
         SFImage(bundle: .module, packageResource: "LAL_r", ofType: "png")!
     }
     
-    static func randomGirl() -> SFImage {
-        girl(Int.random(in: 1...20))
-    }
-    
-    static func girl(_ index: Int = 1) -> SFImage {
-        guard index > 0 && index < 21 else {
+    static func girl(_ index: Int? = nil) -> SFImage {
+        var girlIndex: Int = Int.random(in: 1...34)
+        if let index { girlIndex = index }
+        
+        guard girlIndex > 0 && girlIndex < 35 else {
             return SFImage(bundle: .module, packageResource: "Girl_1", ofType: "jpg")!
         }
         
-        return SFImage(bundle: .module, packageResource: "Girl_\(index)", ofType: "jpg")!
+        return SFImage(bundle: .module, packageResource: "Girl_\(girlIndex)", ofType: "jpg")!
     }
     
-    static func randomGymGirl() -> SFImage {
-        gymGirl(Int.random(in: 1...6))
-    }
-    
-    static func gymGirl(_ index: Int = 1) -> SFImage {
-        guard index > 0 && index < 7 else {
+    static func gymGirl(_ index: Int? = nil) -> SFImage {
+        var girlIndex: Int = Int.random(in: 1...6)
+        if let index { girlIndex = index }
+        
+        guard girlIndex > 0 && girlIndex < 7 else {
             return SFImage(bundle: .module, packageResource: "GymGirl_1", ofType: "jpg")!
         }
         
-        return SFImage(bundle: .module, packageResource: "GymGirl_\(index)", ofType: "jpg")!
+        return SFImage(bundle: .module, packageResource: "GymGirl_\(girlIndex)", ofType: "jpg")!
     }
 }
 

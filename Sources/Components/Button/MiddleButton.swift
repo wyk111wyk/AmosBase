@@ -10,11 +10,12 @@ import SwiftUI
 /// 简单UI组件 -  文字居中的按钮
 ///
 /// 可定制按钮类型，文字颜色为app主要色
-public struct SimpleMiddleButton: View {
+public struct SimpleMiddleButton<S : PrimitiveButtonStyle>: View {
     let title: LocalizedStringKey
     let systemImageName: String?
     let isLoading: Bool
     let role: ButtonRole?
+    let style: S
     let rowVisibility: Visibility
     let bundle: Bundle
     
@@ -26,6 +27,7 @@ public struct SimpleMiddleButton: View {
         systemImageName: String? = nil,
         isLoading: Bool = false,
         role: ButtonRole? = nil,
+        style: S = .plain,
         rowVisibility: Visibility = .hidden,
         bundle: Bundle = .main,
         action: @escaping () -> Void
@@ -34,6 +36,7 @@ public struct SimpleMiddleButton: View {
         self.systemImageName = systemImageName
         self.isLoading = isLoading
         self.role = role
+        self.style = style
         
         self.rowVisibility = rowVisibility
         self.bundle = bundle
@@ -47,6 +50,7 @@ public struct SimpleMiddleButton: View {
         systemImageName: String? = nil,
         isLoading: Bool = false,
         role: ButtonRole? = nil,
+        style: S = .borderless,
         rowVisibility: Visibility = .visible,
         bundle: Bundle = .main,
         key: KeyEquivalent? = nil,
@@ -57,6 +61,7 @@ public struct SimpleMiddleButton: View {
         self.systemImageName = systemImageName
         self.isLoading = isLoading
         self.role = role
+        self.style = style
         
         self.bundle = bundle
         self.rowVisibility = rowVisibility
@@ -80,7 +85,7 @@ public struct SimpleMiddleButton: View {
             }
         }
         #if !os(watchOS)
-        .buttonStyle(.borderless)
+        .buttonStyle(style)
         .listRowSeparator(rowVisibility)
         .modifier(
             ButtonShortkey(
