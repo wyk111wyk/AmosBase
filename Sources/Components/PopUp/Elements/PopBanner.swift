@@ -14,6 +14,7 @@ public struct PopBanner: View {
     var title: String? = nil
     var subTitle: String? = nil
     var systemImage: String? = nil
+    let bundle: Bundle
     @Binding var variableTitle: String?
     @Binding var variableSubTitle: String?
     
@@ -35,6 +36,7 @@ public struct PopBanner: View {
         mode: SimplePopupMode,
         title: String? = nil,
         subTitle: String? = nil,
+        bundle: Bundle = .main,
         systemImage: String? = nil,
         variableTitle: Binding<String?> = .constant(nil),
         variableSubTitle: Binding<String?> = .constant(nil),
@@ -46,6 +48,7 @@ public struct PopBanner: View {
         self.title = title
         self.subTitle = subTitle
         self.systemImage = systemImage
+        self.bundle = bundle
         self._variableTitle = variableTitle
         self._variableSubTitle = variableSubTitle
         self.showSystemSetting = showSystemSetting
@@ -59,7 +62,7 @@ public struct PopBanner: View {
     var wrappedTitle: String? {
         if mode == .loading {
             if let title { return title
-            }else { return "Loading..." }
+            }else { return .loading }
         }else if mode == .noInternet {
             return "Network temporarily unavailable."
         }else {
@@ -82,7 +85,7 @@ public struct PopBanner: View {
             if wrappedTitle != nil || subTitle != nil {
                 VStack(alignment: .leading, spacing: bannerLabelSpace){
                     if let variableTitle {
-                        Text(LocalizedStringKey(variableTitle))
+                        Text(LocalizedStringKey(variableTitle), bundle: bundle)
                             .lineLimit(2)
                             .font(Font.body.bold())
                             .foregroundStyle(mode.bannerTitleColor(bgColor))
@@ -93,7 +96,7 @@ public struct PopBanner: View {
                                 .font(Font.body.bold())
                                 .foregroundStyle(mode.bannerTitleColor(bgColor))
                         }else {
-                            Text(LocalizedStringKey(wrappedTitle))
+                            Text(LocalizedStringKey(wrappedTitle), bundle: bundle)
                                 .lineLimit(2)
                                 .font(Font.body.bold())
                                 .foregroundStyle(mode.bannerTitleColor(bgColor))
@@ -101,7 +104,7 @@ public struct PopBanner: View {
                     }
                     
                     if let variableSubTitle {
-                        Text(LocalizedStringKey(variableSubTitle))
+                        Text(LocalizedStringKey(variableSubTitle), bundle: bundle)
                             .lineLimit(3)
                             .font(.footnote)
                             .foregroundStyle(mode.bannerSubTitleColor(bgColor))
@@ -112,7 +115,7 @@ public struct PopBanner: View {
                                 .font(.footnote)
                                 .foregroundStyle(mode.bannerSubTitleColor(bgColor))
                         }else {
-                            Text(LocalizedStringKey(wrappedSubtitle))
+                            Text(LocalizedStringKey(wrappedSubtitle), bundle: bundle)
                                 .lineLimit(3)
                                 .font(.footnote)
                                 .foregroundStyle(mode.bannerSubTitleColor(bgColor))
@@ -128,7 +131,7 @@ public struct PopBanner: View {
                 } label: {
                     HStack(spacing: 5) {
                         Image(systemName: "gear")
-                        Text("Settings", bundle: .module)
+                        Text.setting
                     }
                     .simpleTag(.bg(contentFont: .callout, contentColor: .orange, bgColor: .orange))
                 }

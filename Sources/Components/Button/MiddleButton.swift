@@ -51,7 +51,7 @@ public struct SimpleMiddleButton<S : PrimitiveButtonStyle>: View {
         isLoading: Bool = false,
         role: ButtonRole? = nil,
         style: S = .borderless,
-        rowVisibility: Visibility = .visible,
+        rowVisibility: Visibility = .hidden,
         bundle: Bundle = .main,
         key: KeyEquivalent? = nil,
         modifiers: EventModifiers? = nil,

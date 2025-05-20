@@ -78,7 +78,7 @@ public struct SimpleMapMarker: Hashable {
     
     public static var example: SimpleMapMarker {
         .init(
-            title: "我是一个标题",
+            title: "📍预览地点坐标",
             systemIcon: "mappin",
             color: .blue,
             lat: 29.721462,

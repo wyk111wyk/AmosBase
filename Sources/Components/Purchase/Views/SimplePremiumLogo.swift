@@ -20,7 +20,7 @@ public struct SimplePremiumLogo: View {
         verticalPadding: CGFloat = 4.5,
         horizontalPadding: CGFloat = 6,
         cornerRadius: CGFloat = 3,
-        width: CGFloat = 84,
+        width: CGFloat = 80,
         isVersa: Bool = false
     ) {
         self.verticalPadding = verticalPadding

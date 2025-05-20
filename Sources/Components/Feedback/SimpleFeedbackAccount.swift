@@ -24,30 +24,38 @@ struct SimpleFeedbackAccount: View {
         NavigationStack {
             Form {
                 Section {
-                    SimpleCell("昵称", systemImage: "pencil.line") {
-                        TextField("", text: $account.nickName, prompt: Text("填写昵称"))
+                    SimpleCell("Nickname", systemImage: "pencil.line", localizationBundle: .module) {
+                        TextField(
+                            "",
+                            text: $account.nickName,
+                            prompt: Text("Enter nickname", bundle: .module)
+                        )
                             .multilineTextAlignment(.trailing)
                     }
-                    SimpleCell("性别", systemImage: "arrow.trianglehead.branch") {
+                    SimpleCell("Gender", systemImage: "arrow.trianglehead.branch", localizationBundle: .module) {
                         Picker("", selection: $account.gender) {
                             ForEach(Gender.allCases, id: \.self) { gender in
-                                Text(gender.title).tag(gender)
+                                Text(gender.title.toLocalizedKey(), bundle: .module).tag(gender)
                             }
                         }
                         .segmentStyle()
                     }
-                    SimpleCell("邮箱", systemImage: "envelope") {
-                        TextField("", text: $account.email, prompt: Text("填写邮箱（选填）"))
+                    SimpleCell("Email", systemImage: "envelope", localizationBundle: .module) {
+                        TextField("", text: $account.email, prompt: Text("Enter email", bundle: .module))
                             .multilineTextAlignment(.trailing)
                     }
-                    SimpleCell("微信", systemImage: "message") {
-                        TextField("", text: $account.weixin, prompt: Text("填写微信账号（选填）"))
+                    SimpleCell("Wechat", systemImage: "message", localizationBundle: .module) {
+                        TextField(
+                            "",
+                            text: $account.weixin,
+                            prompt: Text("Enter wechat account", bundle: .module)
+                        )
                             .multilineTextAlignment(.trailing)
                     }
                 } header: {
-                    Text("补全用户信息")
+                    Text("User Info", bundle: .module)
                 } footer: {
-                    Text("完善详细的基础信息可以提升反馈的效率，以便开发者联系后续与您针对问题进一步沟通。")
+                    Text("User info content", bundle: .module)
                 }
             }
             .formStyle(.grouped)
@@ -58,7 +66,7 @@ struct SimpleFeedbackAccount: View {
             .buttonCircleNavi(role: .cancel) {
                 dismissPage()
             }
-            .navigationTitle("反馈信息填写")
+            .navigationTitle(Text("User Info", bundle: .module))
             .inlineTitleForNavigationBar()
         }
     }
@@ -67,4 +75,5 @@ struct SimpleFeedbackAccount: View {
 #Preview {
     @Previewable @State var account: SimpleFeedbackModel = .init()
     SimpleFeedbackAccount(account: account)
+        .environment(\.locale, .zhHans)
 }

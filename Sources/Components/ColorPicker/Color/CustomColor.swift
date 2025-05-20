@@ -24,11 +24,46 @@ extension ShapeStyle where Self == Color {
     public static var gray_Nurse: Color { Color(r: 222, g: 229, b: 221) }
     
     // MARK: - Brown
-    public static var brown_Tundora: Color { Color(r: 168, g: 139, b: 76) }
+    public static var brown_01: Color { Color(hex: "#FAF6F0")! }
     
-    public static var brown_Americano: Color { Color(r: 200, g: 178, b: 114) }
+    public static var brown_02: Color { Color(hex: "#F2E5D3")! }
     
-    public static var brown_Gurkha: Color { Color(r: 83, g: 72, b: 50) }
+    public static var brown_03: Color { Color(hex: "#E3C7A4")! }
+    
+    public static var brown_04: Color { Color(hex: "#D5A874")! }
+    
+    public static var brown_05: Color { Color(hex: "#CB8E54")! }
+    
+    public static var brown_06: Color { Color(hex: "#C07240")! }
+    
+    public static var brown_07: Color { Color(hex: "#A85835")! }
+    
+    public static var brown_08: Color { Color(hex: "#8E422F")! }
+    
+    public static var brown_09: Color { Color(hex: "#74362C")! }
+    
+    public static var brown_10: Color { Color(hex: "#602F27")! }
+    
+    // MARK: - Indigo
+    public static var indigo_01: Color { Color(hex: "#F2F6FB")! }
+    
+    public static var indigo_02: Color { Color(hex: "#E6EFF9")! }
+    
+    public static var indigo_03: Color { Color(hex: "#D2E0F3")! }
+    
+    public static var indigo_04: Color { Color(hex: "#B7CAEA")! }
+    
+    public static var indigo_05: Color { Color(hex: "#9AAEDF")! }
+    
+    public static var indigo_06: Color { Color(hex: "#778BD0")! }
+    
+    public static var indigo_07: Color { Color(hex: "#6775C4")! }
+    
+    public static var indigo_08: Color { Color(hex: "#5661AC")! }
+    
+    public static var indigo_09: Color { Color(hex: "#48528B")! }
+    
+    public static var indigo_10: Color { Color(hex: "#3F4770")! }
     
     // MARK: - Purple
     public static var purple_01: Color { Color(r: 248, g: 240, b: 252) }
@@ -232,6 +267,8 @@ extension ShapeStyle where Self == Color {
     
     return Form {
         Section("自定义渐变色") {
+            systemColor(SimpleColorModel.allGradient_Brown)
+            systemColor(SimpleColorModel.allGradient_Indigo)
             systemColor(SimpleColorModel.allGradient_Green)
             systemColor(SimpleColorModel.allGradient_Blue)
             systemColor(SimpleColorModel.allGradient_Red)

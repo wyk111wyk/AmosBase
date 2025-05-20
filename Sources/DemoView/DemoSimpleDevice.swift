@@ -13,13 +13,11 @@ public struct DemoSimpleDevice: View {
     @Environment(\.dismiss) private var dismissPage
     
     let title: String
-    @ObservedObject var location = SimpleLocationHelper()
     public init(_ title: String = "Device Info") {
         self.title = title
     }
     
     @State private var wifiName: String?
-    @State private var mapLocation: CLLocationCoordinate2D? = nil
     
     public var body: some View {
         Form {
@@ -43,59 +41,9 @@ public struct DemoSimpleDevice: View {
                 SimpleCell("应用名称", stateText: SimpleDevice.getAppName())
                 SimpleCell("应用版本", stateText: SimpleDevice.getAppVersion())
             }
-            
-            #if !os(macOS)
-            Section {
-                SimpleCell("Wifi名称", stateText: wifiName)
-                SimpleCell("当前地址") {
-                    if let place = location.currentPlace {
-                        Text(place.toFullAddress())
-                            .font(.callout)
-                            .foregroundColor(.secondary)
-                    }else {
-                        ProgressView()
-                    }
-                }
-                Button {
-                    mapLocation = location.currentLocation
-                } label: {
-                    SimpleCell("经纬度") {
-                        if let coordinate = location.currentLocation {
-                            VStack(alignment: .trailing) {
-                                Text("Lat: \(coordinate.latitude)")
-                                Text("Lon: \(coordinate.longitude)")
-                            }
-                            .foregroundStyle(.secondary)
-                            .font(.callout)
-                        }else {
-                            ProgressView()
-                        }
-                    }
-                }
-                .disabled(location.currentLocation == nil)
-            } header: {
-                HStack {
-                    Text("位置信息")
-                    Spacer()
-                    Button {
-                        wifiName = SimpleDevice.wifiName()
-                        location.startLocation()
-                    } label: {
-                        Text("获取地点")
-                            .font(.footnote)
-                    }
-                }
-            }
-            #endif
         }
         .formStyle(.grouped)
         .navigationTitle(title)
-        .sheet(item: $mapLocation) { location in
-            SimpleMap(
-                isPushin: false,
-                pinMarker: .init(location: location.toLocation())
-            )
-        }
     }
 }
 

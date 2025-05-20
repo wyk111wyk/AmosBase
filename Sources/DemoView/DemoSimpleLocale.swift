@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 public struct DemoSimpleLocale: View {
-    let allTestStrings: [String] = ["Cancel", "Confirm", "Delete", "Edit", "Save", "Add", "Done", "Undo", "Back", "Loading", "Next", "Previous", "Skip", "Close", "Favorite", "Unfavorite", "Share", "None", "Required", "Default"]
+    let allTestStrings: [String] = ["Cancel", "Confirm", "Delete", "Edit", "Save", "Add", "Done", "Undo", "Back", .loading, "Next", "Previous", "Skip", "Close", "Favorite", "Unfavorite", "Share", "None", "Required", "Default", .selectAll, .selectNone, .selected, .title, .content, .tag, .tags, .upload, .setting, .male, .female]
     
     enum TextMode: String, CaseIterable, Identifiable {
         case string = "String"

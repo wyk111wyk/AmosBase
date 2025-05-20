@@ -64,7 +64,29 @@ public extension Optional where Wrapped == Bool {
     }
 }
 
+extension View {
+    /// 在视图的前面添加黄色星星
+    @ViewBuilder
+    public func addLeadingStar(
+        isAdd: Bool,
+        font: Font = .callout,
+        alignment: VerticalAlignment = .top
+    ) -> some View {
+        if isAdd {
+            HStack(alignment: alignment, spacing: 4) {
+                Image(systemName: "star.fill")
+                    .foregroundStyle(.yellow)
+                    .font(font)
+                self
+            }
+        }else {
+            self
+        }
+    }
+}
+
 #Preview{
+    @Previewable @State var isExpanded: Bool = true
     let bool01: Bool? = true
     let bool02: Bool? = false
     let bool03: Bool? = nil
@@ -73,6 +95,18 @@ public extension Optional where Wrapped == Bool {
         bool01.statusSign()
         bool02.statusSign()
         bool03.statusSign()
+        ExpandableHeader(
+            isExpanded: $isExpanded,
+            title: "标题",
+            imageName: "person.fill",
+            arrowColor: .blue
+        )
+            .contentBackground()
+        if isExpanded {
+            Text("隐藏的内容")
+                .addLeadingStar(isAdd: true)
+        }
     }
+    .padding()
     .environment(\.locale, .zhHans)
 }

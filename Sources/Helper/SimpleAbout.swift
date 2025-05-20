@@ -29,7 +29,6 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     @State private var showSubscribe = false
     
     let introWebLink = "https://www.amosstudio.com.cn/"
-    let appIntroWebLink: String?
     let feedbackLink: String?
     let appStoreLink: String?
     let hasSubscribe: Bool?
@@ -39,7 +38,6 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     let footerView: () -> Footer
     
     public init(
-        appWebExt: String? = nil,
         txcId: String? = nil,
         appStoreId: String? = nil,
         hasSubscribe: Bool? = nil,
@@ -63,14 +61,15 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
         self.showAppVersion = showAppVersion
         self.headerView = headerView
         self.footerView = footerView
-        if let appWebExt {
-            appIntroWebLink = "https://www.amosstudio.com.cn/\(appWebExt).html"
-        }else {
-            appIntroWebLink = nil
-        }
     }
     
     public var body: some View {
+        let showSheet = Binding<Bool>(get: {
+            showAccountSetting || showFeedback
+        }, set: { newValue in
+            showAccountSetting = false
+            showFeedback = false
+        })
         Section {
             settingSection()
             feedbackSection()
@@ -80,13 +79,19 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
             headerView()
         } footer: {
             footerVersionView()
-        }
-        .sheet(isPresented: $showAccountSetting) {
-            SimpleFeedbackAccount(account: SimpleFeedbackModel()) { account in
-                self.account = account
-            }
-                .presentationDetents([.height(330)])
-                .presentationDragIndicator(.visible)
+                #if os(iOS)
+                .sheet(isPresented: showSheet) {
+                    if showFeedback, let account, let url = URL(string: feedbackLink) {
+                        SimpleWebView(url: url, account: account)
+                    }else {
+                        SimpleFeedbackAccount(account: SimpleFeedbackModel()) { account in
+                            self.account = account
+                        }
+                            .presentationDetents([.height(350)])
+                            .presentationDragIndicator(.visible)
+                    }
+                }
+                #endif
         }
     }
     
@@ -116,12 +121,32 @@ extension SimpleCommonAbout {
             SimpleCell(
                 "System Setting",
                 systemImage: "gear",
-                content: "切换应用内语言，开启和关闭各类权限",
+                content: "System Setting Content",
                 localizationBundle: .module
             )
             .contentShape(Rectangle())
         })
         .buttonStyle(.plain)
+        
+        if let hasSubscribe {
+            PlainButton {
+                showSubscribe = true
+            } label: {
+                SimpleCell("Manage subscriptions", systemImage: "cart", localizationBundle: .module) {
+                    if hasSubscribe {
+                        Text("Subscribed", bundle: .module)
+                            .font(.footnote)
+                            .foregroundStyle(.blue_05)
+                    }else {
+                        Text("Unsubscribed", bundle: .module)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .contentShape(Rectangle())
+            }
+            .manageSubscriptionsSheet(isPresented: $showSubscribe)
+        }
         #endif
     }
     
@@ -143,20 +168,13 @@ extension SimpleCommonAbout {
                             .font(.callout)
                             .foregroundStyle(.secondary)
                     }else {
-                        Text("配置账户")
+                        Text("Create account", bundle: .module)
                             .font(.footnote)
                             .foregroundStyle(.blue_05)
                     }
                 }
                 .contentShape(Rectangle())
             }
-            #if os(iOS)
-            .sheet(isPresented: $showFeedback) {
-                if let account, let url = URL(string: feedbackLink) {
-                    SimpleWebView(url: url, account: account)
-                }
-            }
-            #endif
         }
     }
     
@@ -186,54 +204,16 @@ extension SimpleCommonAbout {
             }
         }
         #endif
-        
-        #if os(iOS)
-        if let hasSubscribe {
-            PlainButton {
-                showSubscribe = true
-            } label: {
-                SimpleCell("管理订阅", systemImage: "cart") {
-                    if hasSubscribe {
-                        Text("已订阅")
-                            .font(.footnote)
-                            .foregroundStyle(.blue_05)
-                    }else {
-                        Text("未订阅")
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .contentShape(Rectangle())
-            }
-            .manageSubscriptionsSheet(isPresented: $showSubscribe)
-        }
-        #endif
     }
     
     @ViewBuilder
     private func amosStudioIntroSction() -> some View {
-        if let appIntroWebLink,
-           let appUrl = URL(string: appIntroWebLink) {
-            PlainButton {
-                openURL(appUrl)
-            } label: {
-                SimpleCell(
-                    "查看介绍",
-                    systemImage: "info.square",
-                    content: "跳转应用官方网页，了解特性与介绍等"
-                ) {
-                    Text("官网")
-                        .simpleTag()
-                }
-                .contentShape(Rectangle())
-            }
-        }
         if let url = URL(string: introWebLink) {
             PlainButton {
                 openURL(url)
             } label: {
                 SimpleCell(
-                    "AmosStudio Apps",
+                    "Recommended Apps",
                     bundleImageName: "AmosLogoB",
                     bundleImageNameDark: "AmosLogoW",
                     bundleImageType: "png",
@@ -241,7 +221,7 @@ extension SimpleCommonAbout {
                     content: "Other Apps from us, equally concise and practical.",
                     localizationBundle: .module
                 ) {
-                    Text("工作室")
+                    Text("Studio", bundle: .module)
                         .simpleTag(.bg())
                 }
                 .contentShape(Rectangle())
@@ -270,12 +250,24 @@ extension SimpleCommonAbout {
     }
 }
 
-#Preview {
+#Preview("En") {
     Form {
         SimpleCommonAbout(
-            appWebExt: "amospoem",
             txcId: "673644",
-            appStoreId: "123"
+            appStoreId: "123",
+            hasSubscribe: true
+        )
+    }
+    .formStyle(.grouped)
+    .environment(\.locale, .enUS)
+}
+
+#Preview("中文") {
+    Form {
+        SimpleCommonAbout(
+            txcId: "673644",
+            appStoreId: "123",
+            hasSubscribe: true
         )
     }
     .formStyle(.grouped)

@@ -15,6 +15,7 @@ public struct PopHud: View {
     var title: String? = nil
     var subTitle: String? = nil
     var systemImage: String? = nil
+    let bundle: Bundle
     
     #if os(watchOS)
     let centerSpace: CGFloat = 6
@@ -64,6 +65,7 @@ public struct PopHud: View {
         mode: SimplePopupMode,
         title: String? = nil,
         subTitle: String? = nil,
+        bundle: Bundle = .main,
         systemImage: String? = nil,
         bgColor: Color? = nil
     ){
@@ -72,18 +74,14 @@ public struct PopHud: View {
         self.title = title
         self.subTitle = subTitle
         self.systemImage = systemImage
+        self.bundle = bundle
     }
     
     var wrappedTitle: String? {
         if mode == .loading {
-            if let title {
-                return title
-            }else {
-                return "Loading..."
-            }
-        }else {
-            return title
-        }
+            if let title { return title
+            }else { return .loading }
+        }else { return title }
     }
     
     public var body: some View {
@@ -101,7 +99,7 @@ public struct PopHud: View {
                                 .padding(.horizontal, 12)
                                 .multilineTextAlignment(.center)
                         }else {
-                            Text(LocalizedStringKey(wrappedTitle))
+                            Text(LocalizedStringKey(wrappedTitle), bundle: bundle)
                                 .font(.headline)
                                 .fontWeight(.medium)
                                 .foregroundStyle(Color.textColor(bgColor: bgColor))
@@ -110,7 +108,7 @@ public struct PopHud: View {
                         }
                     }
                     if let subTitle {
-                        Text(LocalizedStringKey(subTitle))
+                        Text(LocalizedStringKey(subTitle), bundle: bundle)
                             .font(.footnote)
                             .lineLimit(nil)
                             .foregroundStyle(Color.textColor(bgColor: bgColor, baseColor: .secondary))

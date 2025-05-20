@@ -8,20 +8,28 @@
 import SwiftUI
 
 /// 简单的确认用的按钮（默认Title是确认）
-public struct SimpleConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
+public struct BaseButton<V: View, S: PrimitiveButtonStyle>: View {
     let title: String?
     let systemImage: String?
     let role: ButtonRole?
     let style: S
+    let bundle: Bundle
     
+    let isInMiddle: Bool
+    let isLoading: Bool
+    
+    /// 自定义的视图无视居中属性
     @ViewBuilder var label: () -> V
     let action: () -> Void
     
     public init(
-        title: String? = "Confirm",
+        title: String? = .confirm,
         systemImage: String? = nil,
         role: ButtonRole? = nil,
         style: S = .borderless,
+        bundle: Bundle = .main,
+        isInMiddle: Bool = false,
+        isLoading: Bool = false,
         action: @escaping () -> Void,
         label: @escaping () -> V = { EmptyView() }
     ) {
@@ -29,6 +37,9 @@ public struct SimpleConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
         self.systemImage = systemImage
         self.role = role
         self.style = style
+        self.bundle = bundle
+        self.isInMiddle = isInMiddle
+        self.isLoading = isLoading
         self.label = label
         self.action = action
     }
@@ -37,20 +48,38 @@ public struct SimpleConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
         Button(role: role, action: action, label: {
             if V.self != EmptyView.self {
                 label()
+                    .contentShape(Rectangle())
             } else {
-                HStack {
-                    if let systemImage {
-                        Image(systemName: systemImage)
+                if isInMiddle {
+                    HStack {
+                        Spacer()
+                        labelView()
+                        Spacer()
                     }
-                    if let title {
-                        Text(title.localized())
+                    .contentShape(Rectangle())
+                }else {
+                    HStack {
+                        labelView()
+                        Spacer()
                     }
-                    Spacer()
+                        .contentShape(Rectangle())
                 }
-                .contentShape(Rectangle())
             }
         })
         .buttonStyle(style)
+    }
+    
+    private func labelView() -> some View {
+        HStack {
+            if isLoading {
+                ProgressView()
+            }else if let systemImage {
+                Image(systemName: systemImage)
+            }
+            if let title {
+                Text(title.toLocalizedKey(), bundle: bundle)
+            }
+        }
     }
 }
 

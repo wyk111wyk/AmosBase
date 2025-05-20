@@ -18,9 +18,9 @@ struct DemoSimpleWebLoad: View {
     @State private var isLoading = false
     @State private var currentError: Error?
     
-    @ObservedObject var location = SimpleLocationHelper()
-    @State private var currentLocation: CLLocation?
-    @State private var currentAddress: String?
+    @State private var selectedLocation: CLLocation?
+    @State private var selectedAddress: String?
+    @State private var showLocationPicker = false
     
     @State private var elevation: Double?
     @State private var amapAddress: AmapRegeoCode?
@@ -117,9 +117,9 @@ struct DemoSimpleWebLoad: View {
                     }
                     if let amapPOIs {
                         ForEach(amapPOIs) { poi in
-                            Button {
-                                currentLocation = poi.coordinate.toLocation()
-                                currentAddress = poi.fullAddress
+                            PlainButton {
+                                selectedLocation = poi.coordinate.toLocation()
+                                selectedAddress = poi.fullAddress
                                 cityCode = poi.adcode
                             } label: {
                                 SimpleCell(
@@ -127,7 +127,6 @@ struct DemoSimpleWebLoad: View {
                                     content: poi.address
                                 )
                             }
-                            .buttonStyle(.borderless)
                         }
                     }
                 } header: {
@@ -138,10 +137,34 @@ struct DemoSimpleWebLoad: View {
             .navigationTitle("网络传输 - Fetch")
             .simpleHud(isLoading: isLoading, title: "正在获取数据")
             .simpleErrorBanner(error: $currentError)
+            .navigationDestination(isPresented: $showLocationPicker) {
+                SimpleMap(
+                    pinMarker: selectedPin,
+                    showUserLocation: true,
+                    isSearchPOI: true
+                ) { marker in
+                    selectedLocation = marker.location
+                    selectedAddress = marker.place?.toFullAddress()
+                }
+            }
         }
-        .onChange(of: location.currentLocation) {
-            currentLocation = location.currentLocation?.toLocation()
-            currentAddress = location.currentPlace?.toFullAddress()
+    }
+    
+    private func locationPicker() -> some View {
+        Section {
+            PlainButton {
+                showLocationPicker = true
+            } label: {
+                SimpleCell(
+                    "系统地图地点",
+                    systemImage: "mappin.circle",
+                    content:  selectedLocation?.coordinate.toAmapString(),
+                    isPushButton: true
+                )
+            }
+            if let selectedAddress, selectedAddress.isNotEmpty {
+                Text(selectedAddress)
+            }
         }
     }
 }
@@ -153,7 +176,7 @@ extension DemoSimpleWebLoad {
     }
     
     private func fetchElevation() {
-        guard let coordinate = currentLocation?.coordinate else {
+        guard let coordinate = selectedLocation?.coordinate else {
             return
         }
         Task {
@@ -172,7 +195,7 @@ extension DemoSimpleWebLoad {
     }
     
     private func fetchAmapAddress() {
-        guard let coordinate = currentLocation?.coordinate else {
+        guard let coordinate = selectedLocation?.coordinate else {
             return
         }
         Task {
@@ -250,49 +273,17 @@ extension DemoSimpleWebLoad {
         }
     }
     
-    private var pin: SimpleMapMarker? {
-        if let currentLocation {
+    private var selectedPin: SimpleMapMarker? {
+        if let selectedLocation {
             return SimpleMapMarker(
                 title: "Pin",
                 systemIcon: nil,
                 color: .blue,
-                lat: currentLocation.coordinate.latitude,
-                long: currentLocation.coordinate.longitude
+                lat: selectedLocation.coordinate.latitude,
+                long: selectedLocation.coordinate.longitude
             )
         }else {
             return nil
-        }
-    }
-    
-    private func locationPicker() -> some View {
-        Section {
-            NavigationLink {
-                SimpleMap(
-                    pinMarker: pin,
-                    showUserLocation: true,
-                    isSearchPOI: true
-                ) { marker in
-                    currentLocation = marker.location
-                    currentAddress = marker.place?.toFullAddress()
-                }
-            } label: {
-                SimpleCell(
-                    "Apple地图地点",
-                    systemImage: "mappin.circle",
-                    content: currentLocation?.coordinate.toAmapString()
-                )
-            }
-            .buttonStyle(.borderless)
-            if let currentAddress {
-                Text(currentAddress)
-            }
-        } header: {
-            HStack {
-                Text("已选地址")
-                if location.isLoading {
-                    ProgressView()
-                }
-            }
         }
     }
 }

@@ -43,26 +43,14 @@ public struct DemoSimpleButton: View {
                         })
                 }
                 Section {
-                    SimpleMiddleButton(
-                        "Middle Button",
-                        rowVisibility: .visible
-                    ) {}
-                    SimpleMiddleButton(
-                        "Middle Button",
-                        role: .destructive,
-                        rowVisibility: .hidden
-                    ) {}.tint(.red)
-                }
-                Section {
-                    SimpleConfirmButton(
-                        title: "显示对话框"
-                    ) {
+                    ConfirmButton(tapAction: {})
+                    ConfirmButton(isInMiddle: true, tapAction: {})
+                    ConfirmButton(isLoading: true, tapAction: {})
+                    DeleteButton(tapAction: {})
+                    SimpleEditButton(tapAction: {})
+                    ConfirmButton(title: "显示对话框") {
                         showConfirm = true
                     }
-                    SimpleConfirmButton(
-                        title: "destructive 按钮",
-                        role: .destructive
-                    ) {}
                 }
                 Section {
                     SimpleAsyncButton {

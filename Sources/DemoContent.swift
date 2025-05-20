@@ -112,6 +112,7 @@ public struct DemoContent: View {
                 case "nl": DemoSimpleLanguage()
                 case "md": DemoSimpleText(markdown: String.testText(.markdown02))
                 case "aes": DemoSimpleCrypto()
+                case "location": DemoLocation()
                 default: Text(selectedPage.title)
                 }
             }
@@ -155,21 +156,19 @@ public struct DemoContent: View {
     
     private func navigationButtons() -> some View {
         Section("Navi - 导航") {
-            Button {
+            PlainButton {
                 showMapShare.toggle()
             } label: {
                 SimpleCell("Map - 导航", systemImage: "map")
             }
-            .buttonStyle(.borderless)
             .confirmationDialog("Map Share", isPresented: $showMapShare) {
                 SimpleNavigation(mode: .navi).navigationButtons()
             }
-            Button {
+            PlainButton {
                 showPositionShare.toggle()
             } label: {
                 SimpleCell("Map - 定位", systemImage: "mappin.circle")
             }
-            .buttonStyle(.borderless)
             .confirmationDialog(
                 "Map Share".localized(
                     bundle: .module
@@ -212,15 +211,16 @@ public struct Page: Identifiable, Equatable, Hashable {
     
     static func elementSection() -> [Self] {
         let commonElements: [Self] =
-        [.init(id: "locale", title: " Locale - 本地化", icon: "character.zh"),
-         .init(id: "ui", title: "UI - 页面元素", icon: "uiwindow.split.2x1"),
+        [.init(id: "ui", title: "UI - 页面元素", icon: "uiwindow.split.2x1"),
          .init(id: "animation", title: "Animation - 动画", icon: "play.circle"),
          .init(id: "sfsymbol", title: "SF Symbols", icon: "heart.text.clipboard"),
          .init(id: "button", title: "Button - 按钮", icon: "rectangle.inset.topleft.filled"),
          .init(id: "card", title: "Card - 卡片", icon: "rectangle.portrait.on.rectangle.portrait.angled"),
+         .init(id: "location", title: "Location - 位置信息", icon: "location"),
          .init(id: "device", title: "Device - 设备信息", icon: "iphone.gen3"),
          .init(id: "haptic", title: "Haptic - 震动", icon: "iphone.homebutton.radiowaves.left.and.right"),
-         .init(id: "holder", title: "Holder - 占位符", icon: "doc.text.image")
+         .init(id: "holder", title: "Holder - 占位符", icon: "doc.text.image"),
+         .init(id: "locale", title: " Locale - 本地化", icon: "character.zh")
          ]
         
         return commonElements

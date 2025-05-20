@@ -118,6 +118,9 @@ public struct SimpleMap: View {
                     ToolbarItem(placement: .destructiveAction) {
                         Button {
                             isCenterSelect.toggle()
+                            if !isCenterSelect {
+                                selectedMarker = nil
+                            }
                         } label: {
                             if isCenterSelect {
                                 Image(systemName: "smallcircle.filled.circle.fill")

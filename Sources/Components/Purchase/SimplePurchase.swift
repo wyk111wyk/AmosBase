@@ -339,13 +339,18 @@ struct DemoSimplePurchase: View {
                 allProductId: ["lifePremium","monthlyPremium","yearlyPremium"]
             )
         )
-        .environment(\.locale, .zhHans)
         #if os(macOS)
         .frame(height: 800)
         #endif
     }
 }
 
-#Preview {
+#Preview("En") {
     DemoSimplePurchase()
+        .environment(\.locale, .enUS)
+}
+
+#Preview("中文") {
+    DemoSimplePurchase()
+        .environment(\.locale, .zhHans)
 }

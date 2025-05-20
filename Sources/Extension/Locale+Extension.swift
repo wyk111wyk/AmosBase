@@ -62,6 +62,19 @@ public extension String {
     static var required: String { "Required" }
     static var loading: String { "Loading..." }
     static var `default`: String { "Default" }
+    static var selectAll: String { "Select all" }
+    static var selectNone: String { "Select none" }
+    static var selected: String { "Selected" }
+    static var title: String { "Title" }
+    static var content: String { "Content" }
+    static var tag: String { "Tag" }
+    static var tags: String { "Tags" }
+    static var upload: String { "Upload" }
+    static var setting: String { "Setting" }
+    static var male: String { "Male" }
+    static var female: String { "Female" }
+    static var type: String { "Type" }
+    static var copied: String { "Copied" }
 }
 
 public extension LocalizedStringKey {
@@ -85,6 +98,56 @@ public extension LocalizedStringKey {
     static var required: LocalizedStringKey { "Required" }
     static var loading: LocalizedStringKey { "Loading..." }
     static var `default`: LocalizedStringKey { "Default" }
+    static var selectAll: LocalizedStringKey { "Select all" }
+    static var selectNone: LocalizedStringKey { "Select none" }
+    static var selected: LocalizedStringKey { "Selected" }
+    static var title: LocalizedStringKey { "Title" }
+    static var content: LocalizedStringKey { "Content" }
+    static var tag: LocalizedStringKey { "Tag" }
+    static var tags: LocalizedStringKey { "Tags" }
+    static var upload: LocalizedStringKey { "Upload" }
+    static var setting: LocalizedStringKey { "Setting" }
+    static var male: LocalizedStringKey { "Male" }
+    static var female: LocalizedStringKey { "Female" }
+    static var type: LocalizedStringKey { "Type" }
+    static var copied: LocalizedStringKey { "Copied" }
+}
+
+public extension Text {
+    static var cancel: Text { .init(.cancel, bundle: .module) }
+    static var confirm: Text { .init(.confirm, bundle: .module) }
+    static var delete: Text { .init(.delete, bundle: .module) }
+    static var edit: Text { .init(.edit, bundle: .module) }
+    static var save: Text { .init(.save, bundle: .module) }
+    static var add: Text { .init(.add, bundle: .module) }
+    static var done: Text { .init(.done, bundle: .module) }
+    static var undo: Text { .init(.undo, bundle: .module) }
+    static var back: Text { .init(.back, bundle: .module) }
+    static var next: Text { .init(.next, bundle: .module) }
+    static var previous: Text { .init(.previous, bundle: .module) }
+    static var skip: Text { .init(.skip, bundle: .module) }
+    static var close: Text { .init(.close, bundle: .module) }
+    static var favorite: Text { .init(.favorite, bundle: .module) }
+    static var unfavorite: Text { .init(.unfavorite, bundle: .module) }
+    static var share: Text { .init(.share, bundle: .module) }
+    static var none: Text { .init(.none, bundle: .module) }
+    static var required: Text { .init(.required, bundle: .module) }
+    static var loading: Text { .init(.loading, bundle: .module) }
+    static var `default`: Text { .init(.default, bundle: .module) }
+    static var selectAll: Text { .init(.selectAll, bundle: .module) }
+    static var selectNone: Text { .init(.selectNone, bundle: .module) }
+    static var selected: Text { .init(.selected, bundle: .module) }
+    static var title: Text { .init(.title, bundle: .module) }
+    static var content: Text { .init(.content, bundle: .module) }
+    static var tag: Text { .init(.tag, bundle: .module) }
+    static var tags: Text { .init(.tags, bundle: .module) }
+    static var upload: Text { .init(.upload, bundle: .module) }
+    static var setting: Text { .init(.setting, bundle: .module) }
+    static var male: Text { .init(.male, bundle: .module) }
+    static var female: Text { .init(.female, bundle: .module) }
+    static var type: Text { .init(.type, bundle: .module) }
+    static var copied: Text { .init(.copied, bundle: .module) }
+    
 }
 
 // MARK: - 让Text显示多样式内容

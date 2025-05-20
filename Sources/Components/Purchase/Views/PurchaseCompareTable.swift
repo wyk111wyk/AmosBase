@@ -100,6 +100,7 @@ struct PurchaseCompareTable: View {
         VStack(alignment: .leading, spacing: 8) {
             premiumImage
                 .frame(height: 14)
+                .shimmering(active: true, gradient: Shimmer.defaultGradient02)
             Divider()
             ForEach(allItem) { item in
                 Text(item.premium)

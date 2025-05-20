@@ -15,6 +15,7 @@ public struct PopToast: View {
     
     var title: String? = nil
     var subTitle: String? = nil
+    let bundle: Bundle
     
     let topPadding: CGFloat
     let bottomPadding: CGFloat
@@ -41,6 +42,7 @@ public struct PopToast: View {
         isTop: Bool = true,
         title: String? = nil,
         subTitle: String? = nil,
+        bundle: Bundle = .main,
         bgColor: Color? = nil
     ){
         self.mode = mode
@@ -48,6 +50,7 @@ public struct PopToast: View {
         self.bgColor = bgColor
         self.title = title
         self.subTitle = subTitle
+        self.bundle = bundle
         #if os(watchOS)
         topPadding = 12
         bottomPadding = 12
@@ -72,13 +75,13 @@ public struct PopToast: View {
             if title != nil || subTitle != nil {
                 VStack(alignment: .leading, spacing: bannerLabelSpace){
                     if let title {
-                        Text(LocalizedStringKey(title))
+                        Text(LocalizedStringKey(title), bundle: bundle)
                             .lineLimit(2)
                             .font(Font.body.bold())
                             .foregroundStyle(mode.bannerTitleColor(bgColor))
                     }
                     if let subTitle {
-                        Text(LocalizedStringKey(subTitle))
+                        Text(LocalizedStringKey(subTitle), bundle: bundle)
                             .lineLimit(3)
                             .font(.footnote)
                             .foregroundStyle(mode.bannerSubTitleColor(bgColor))

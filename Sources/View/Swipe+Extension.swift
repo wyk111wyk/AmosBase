@@ -101,12 +101,13 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
     }
     
     func deleteButton(_ action: @escaping () -> Void) -> some View {
-        Button(role: .destructive, action: action, label: {
+        Button(action: action, label: {
             HStack {
                 Image(systemName: "trash")
                 Text(.delete, bundle: .module)
             }
         })
+        .tint(.red)
     }
     
     func editButton(_ action: @escaping () -> Void) -> some View {

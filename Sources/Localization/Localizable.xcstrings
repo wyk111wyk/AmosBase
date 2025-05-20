@@ -111,10 +111,19 @@
     "← Right-to-left layout direction" : {
 
     },
+    "📍位置信息" : {
+
+    },
     "🔍 搜索" : {
 
     },
     "🔍 搜索：地址 ｜ 地点" : {
+
+    },
+    "🧭指南针信息" : {
+
+    },
+    "🛰GPS信息" : {
 
     },
     "1" : {
@@ -244,23 +253,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Amos基礎庫"
-          }
-        }
-      }
-    },
-    "AmosStudio Apps" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "工作室应用"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "工作室應用"
           }
         }
       }
@@ -617,6 +609,23 @@
         }
       }
     },
+    "Content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内容"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "內容"
+          }
+        }
+      }
+    },
     "Continue" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -634,6 +643,23 @@
         }
       }
     },
+    "Copied" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已复制"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已複製"
+          }
+        }
+      }
+    },
     "Could Not Determine" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -647,6 +673,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法確認"
+          }
+        }
+      }
+    },
+    "Create account" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "配置账户"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "組態帳戶"
           }
         }
       }
@@ -819,8 +862,76 @@
         }
       }
     },
+    "Email" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "邮箱"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "信箱"
+          }
+        }
+      }
+    },
     "En" : {
 
+    },
+    "Enter email" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填写邮箱"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填寫信箱"
+          }
+        }
+      }
+    },
+    "Enter nickname" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填写昵称"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填寫暱稱"
+          }
+        }
+      }
+    },
+    "Enter wechat account" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填写微信账号"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "填寫微信帳號"
+          }
+        }
+      }
     },
     "Favorite" : {
       "extractionState" : "manual",
@@ -869,6 +980,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "來自資料夾"
+          }
+        }
+      }
+    },
+    "Gender" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "性别"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "性別"
           }
         }
       }
@@ -1019,9 +1147,6 @@
         }
       }
     },
-    "Lat: %lf" : {
-
-    },
     "Lifetime" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1138,9 +1263,6 @@
         }
       }
     },
-    "Lon: %lf" : {
-
-    },
     "Male" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1154,6 +1276,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "男"
+          }
+        }
+      }
+    },
+    "Manage subscriptions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理订阅"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理訂閱"
           }
         }
       }
@@ -1180,9 +1319,6 @@
           }
         }
       }
-    },
-    "Middle Button" : {
-
     },
     "More Buttons" : {
 
@@ -1239,6 +1375,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "下一項"
+          }
+        }
+      }
+    },
+    "Nickname" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "昵称"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暱稱"
           }
         }
       }
@@ -1492,6 +1645,23 @@
         }
       }
     },
+    "Recommended Apps" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "应用推荐"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "應用推薦"
+          }
+        }
+      }
+    },
     "Regular" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1593,6 +1763,57 @@
         }
       }
     },
+    "Select all" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全选"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全選"
+          }
+        }
+      }
+    },
+    "Select none" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全不选"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全不選"
+          }
+        }
+      }
+    },
+    "Selected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已选"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已選"
+          }
+        }
+      }
+    },
     "Service Description 1:%@ 2:%@ 3:%@" : {
       "localizations" : {
         "en" : {
@@ -1615,7 +1836,7 @@
         }
       }
     },
-    "Settings" : {
+    "Setting" : {
       "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
@@ -1734,6 +1955,40 @@
         }
       }
     },
+    "Studio" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工作室"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "工作室"
+          }
+        }
+      }
+    },
+    "Subscribed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已订阅"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已訂閱"
+          }
+        }
+      }
+    },
     "SwiftUI Shimmer" : {
 
     },
@@ -1767,6 +2022,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "系統設置"
+          }
+        }
+      }
+    },
+    "System Setting Content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch the language within the application and enable and disable various permissions"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "切换应用内语言，开启和关闭各类权限"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "切換應用內語言，開啟和關閉各類權限"
+          }
+        }
+      }
+    },
+    "Tag" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标签"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標籤"
           }
         }
       }
@@ -1849,6 +2144,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "標題"
+          }
+        }
+      }
+    },
+    "Type" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "类型"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "類型"
           }
         }
       }
@@ -1963,6 +2275,23 @@
         }
       }
     },
+    "Unsubscribed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未订阅"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未訂閱"
+          }
+        }
+      }
+    },
     "Upload" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2014,6 +2343,46 @@
         }
       }
     },
+    "User Info" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户信息"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用者資訊"
+          }
+        }
+      }
+    },
+    "User info content" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perfecting detailed basic information can enhance the efficiency of feedback, enabling developers to contact you subsequently for further communication regarding the issue."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完善详细的基础信息可以提升反馈的效率，以便开发者联系后续与您针对问题进一步沟通。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完善詳細的基礎資訊可以提升反饋的效率，以便開發者聯絡後續與您針對問題進一步溝通。"
+          }
+        }
+      }
+    },
     "w: %@" : {
       "localizations" : {
         "zh-Hans" : {
@@ -2032,6 +2401,23 @@
     },
     "Web - 网络关联" : {
 
+    },
+    "Wechat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "微信"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "微信"
+          }
+        }
+      }
     },
     "Welcome - 欢迎页" : {
 
@@ -2100,7 +2486,7 @@
     "仅限视图内" : {
 
     },
-    "位置信息" : {
+    "位置 Demo" : {
 
     },
     "储存" : {
@@ -2163,9 +2549,6 @@
     "压缩比率：%.1f" : {
 
     },
-    "反馈信息填写" : {
-
-    },
     "取消" : {
 
     },
@@ -2208,34 +2591,16 @@
     "基础数组：%@" : {
 
     },
-    "填写微信账号（选填）" : {
-
-    },
-    "填写昵称" : {
-
-    },
-    "填写邮箱（选填）" : {
-
-    },
     "外部点击关闭" : {
 
     },
-    "完善详细的基础信息可以提升反馈的效率，以便开发者联系后续与您针对问题进一步沟通。" : {
-
-    },
     "完成" : {
-
-    },
-    "官网" : {
 
     },
     "导入" : {
 
     },
     "尊敬的用户" : {
-
-    },
-    "工作室" : {
 
     },
     "已订阅" : {
@@ -2250,9 +2615,6 @@
           }
         }
       }
-    },
-    "已选地址" : {
-
     },
     "布尔值" : {
 
@@ -2324,9 +2686,6 @@
 
     },
     "服务测试" : {
-
-    },
-    "未订阅" : {
 
     },
     "未进行编码" : {
@@ -2413,16 +2772,13 @@
     "自然语言分析" : {
 
     },
-    "获取地点" : {
+    "获取当前地点" : {
 
     },
     "获取时间" : {
 
     },
     "虎扑" : {
-
-    },
-    "补全用户信息" : {
 
     },
     "设备信息" : {
@@ -2482,9 +2838,6 @@
     "速度 Speed" : {
 
     },
-    "配置账户" : {
-
-    },
     "锐度: %@" : {
 
     },
@@ -2498,6 +2851,9 @@
 
     },
     "附加按钮" : {
+
+    },
+    "隐藏的内容" : {
 
     },
     "随机文字" : {

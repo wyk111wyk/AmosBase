@@ -83,6 +83,34 @@ extension SimpleColorModel {
         ]
     }
     
+    static var allGradient_Brown: [SimpleColorModel] {
+        [.init(name: "Brown01", color: .brown_01),
+         .init(name: "Brown02", color: .brown_02),
+         .init(name: "Brown03", color: .brown_03),
+         .init(name: "Brown04", color: .brown_04),
+         .init(name: "Brown05", color: .brown_05),
+         .init(name: "Brown06", color: .brown_06),
+         .init(name: "Brown07", color: .brown_07),
+         .init(name: "Brown08", color: .brown_08),
+         .init(name: "Brown09", color: .brown_09),
+         .init(name: "Brown10", color: .brown_10)
+        ]
+    }
+    
+    static var allGradient_Indigo: [SimpleColorModel] {
+        [.init(name: "Indigo01", color: .indigo_01),
+         .init(name: "Indigo02", color: .indigo_02),
+         .init(name: "Indigo03", color: .indigo_03),
+         .init(name: "Indigo04", color: .indigo_04),
+         .init(name: "Indigo05", color: .indigo_05),
+         .init(name: "Indigo06", color: .indigo_06),
+         .init(name: "Indigo07", color: .indigo_07),
+         .init(name: "Indigo08", color: .indigo_08),
+         .init(name: "Indigo09", color: .indigo_09),
+         .init(name: "Indigo10", color: .indigo_10)
+        ]
+    }
+    
     static var allGradient_Purple: [SimpleColorModel] {
         [.init(name: "Purple01", color: .purple_01),
          .init(name: "Purple02", color: .purple_02),
@@ -168,10 +196,7 @@ extension SimpleColorModel {
         [.init(name: "Space", color: .gray_Space),
          .init(name: "Charade", color: .gray_Charade),
          .init(name: "Hit", color: .gray_Hit),
-         .init(name: "Nurse", color: .gray_Nurse),
-         .init(name: "Gurkha", color: .brown_Gurkha),
-         .init(name: "Tundora", color: .brown_Tundora),
-         .init(name: "Americano", color: .brown_Americano)
+         .init(name: "Nurse", color: .gray_Nurse)
         ]
     }
 }

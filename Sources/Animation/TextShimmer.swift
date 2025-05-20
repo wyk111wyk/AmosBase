@@ -54,6 +54,12 @@ public struct Shimmer: ViewModifier {
         .black, // opaque
         .black.opacity(0.3) // translucent
     ])
+    
+    public static let defaultGradient02 = Gradient(colors: [
+        .black, // translucent
+        .black.opacity(0.3), // opaque
+        .black // translucent
+    ])
 
     /*
      Calculating the gradient's animated start and end unit points:

@@ -81,10 +81,12 @@ public struct SimpleColorPicker: View {
                 Section {
                     if isShowCustomGradient {
                         systemColor(SimpleColorModel.allGradient_Blue)
+                        systemColor(SimpleColorModel.allGradient_Indigo)
                         systemColor(SimpleColorModel.allGradient_Red)
                         systemColor(SimpleColorModel.allGradient_Pink)
                         systemColor(SimpleColorModel.allGradient_Green)
                         systemColor(SimpleColorModel.allGradient_Purple)
+                        systemColor(SimpleColorModel.allGradient_Brown)
                     }
                 } header: {
                     colorHeader(

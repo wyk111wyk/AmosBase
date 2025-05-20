@@ -144,10 +144,11 @@ public extension View {
     func simpleSearch(
         text: Binding<String>,
         prompt: String? = nil,
-        isAlwaysShow: Bool = true
+        isAlwaysShow: Bool = true,
+        bundle: Bundle = .main
     ) -> some View {
         let promptText: Text? =
-        if let prompt { Text(prompt) } else { nil }
+        if let prompt { Text(prompt.toLocalizedKey(), bundle: bundle) } else { nil }
         #if os(iOS)
         return self.searchable(
             text: text,

@@ -18,23 +18,34 @@ import CoreLocation
  2. 使用需要 @ObservedObject var location = SimpleLocationHelper()
  */
 
-public class SimpleLocationHelper: NSObject, ObservableObject {
+@Observable
+public class SimpleLocationHelper: NSObject {
     let manager: CLLocationManager = CLLocationManager()
-    @Published public var currentLocation: CLLocationCoordinate2D? = nil
-    @Published public var currentPlace: CLPlacemark? = nil
-    @Published public var isLoading: Bool = false
+    /// 位置信息
+    public var currentLocation: CLLocationCoordinate2D? = nil
+    public var currentPlace: CLPlacemark? = nil
+    /// GPS 信息
+    /// 速度: location.speed (以米/秒为单位，负值表示速度无效)
+    public var currentSpeed: Double? = nil
+    /// 海拔: location.altitude (以米为单位，正值表示高于海平面)
+    public var currentAltitude: Double? = nil
+    public var currentVerticalAccuracy: Double? = nil
+    /// 方向/航向 (Course): location.course (设备移动的方向，相对于正北方向的度数)
+    public var currentCourse: Double? = nil
+    
+    /// 指南针信息
+    /// 真北方向 (True North): heading.trueHeading (相对于真北方向的度数)
+    public var currentTrueHeading: Double? = nil
+    /// 磁北方向 (Magnetic North): heading.magneticHeading (相对于磁北方向的度数)
+    public var currentMagneticHeading: Double? = nil
+    
+    public var isLoading: Bool = false
     
     @discardableResult
     public override init() {
         super.init()
         manager.delegate = self
         currentLocation = manager.location?.coordinate
-        
-        if manager.authorizationStatus.rawValue < 3 {
-            manager.requestWhenInUseAuthorization()
-        }else if currentLocation == nil {
-            startLocation()
-        }
     }
     
     public func startLocation() {
@@ -42,14 +53,23 @@ public class SimpleLocationHelper: NSObject, ObservableObject {
         #if os(macOS)
         if manager.authorizationStatus == .authorizedAlways {
             manager.requestLocation()
+            manager.startUpdatingHeading()
             debugPrint("mac 开始获取设备位置...")
         }
         #else
         if manager.authorizationStatus == .authorizedWhenInUse ||
             manager.authorizationStatus == .authorizedAlways {
             manager.requestLocation()
+            manager.startUpdatingHeading()
             debugPrint("phone 开始获取设备位置...")
         }
+        #endif
+    }
+    
+    public func stopLocation() {
+        manager.stopUpdatingLocation()
+        #if !os(macOS)
+        manager.stopUpdatingHeading()
         #endif
     }
 }
@@ -65,6 +85,14 @@ extension SimpleLocationHelper: CLLocationManagerDelegate {
         if let loction = locations.last {
             debugPrint("定位成功：lat - \(loction.coordinate.latitude) long - \(loction.coordinate.longitude)")
             currentLocation = loction.coordinate.toChinaLocation()
+            
+            currentSpeed = loction.speed
+            currentAltitude = loction.altitude
+            currentVerticalAccuracy = loction.verticalAccuracy
+            if loction.course > 0 {
+                currentCourse = loction.course
+            }
+            
             if let currentLocation {
                 Task { @MainActor in
                     currentPlace = await currentLocation.toPlace(locale: .zhHans)
@@ -77,6 +105,11 @@ extension SimpleLocationHelper: CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         debugPrint("定位失败:\(error)")
         isLoading = false
+    }
+    
+    public func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        currentTrueHeading = newHeading.trueHeading
+        currentMagneticHeading = newHeading.magneticHeading
     }
 }
 

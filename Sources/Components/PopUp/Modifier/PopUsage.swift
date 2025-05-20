@@ -44,7 +44,7 @@ public extension View {
         isTop: Bool = true,
         bgColor: Color? = nil,
         hasHaptic: Bool = true,
-        duration: Double = 2.0
+        duration: Double = 2.2
     ) -> some View {
         self.popup(isPresented: .isPresented(error)) {
             if let simpleError = error.wrappedValue as? SimpleError,
@@ -120,6 +120,7 @@ public extension View {
     func simpleSuccessBanner(
         subTitle: Binding<String?>,
         title: String? = nil,
+        bundle: Bundle = .main,
         systemImage: String? = nil,
         isCenter: Bool = false,
         bgColor: Color? = nil,
@@ -129,9 +130,9 @@ public extension View {
     ) -> some View {
         self.popup(item: subTitle) { subTitle in
             if isCenter {
-                PopHud(mode: .success, title: title, subTitle: subTitle, bgColor: bgColor)
+                PopHud(mode: .success, title: title, subTitle: subTitle, bundle: bundle, bgColor: bgColor)
             }else {
-                PopBanner(mode: .success, title: title, subTitle: subTitle, systemImage: systemImage, bgColor: bgColor)
+                PopBanner(mode: .success, title: title, subTitle: subTitle, bundle: bundle, systemImage: systemImage, bgColor: bgColor)
             }
         } customize: {
             var content = $0
@@ -144,6 +145,21 @@ public extension View {
             
             return content
         }
+    }
+    
+    /// 成功复制的提醒
+    func simpleCopyBanner(
+        subTitle: Binding<String?>,
+        isCenter: Bool = false,
+        bgColor: Color? = .indigo_07) -> some View {
+            self.simpleSuccessBanner(
+                subTitle: subTitle,
+                title: .copied,
+                bundle: .module,
+                systemImage: "list.bullet.clipboard",
+                isCenter: isCenter,
+                bgColor: bgColor
+            )
     }
     
     /// 加载的提醒

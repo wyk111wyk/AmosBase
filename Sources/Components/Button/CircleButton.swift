@@ -65,34 +65,40 @@ extension View {
     /// 类型分为nil, cancel, destructive 三种，影响按钮行为和颜色
     ///
     /// 可自定义图标颜色，不设置role可自定义图标
-    public func buttonCircleNavi(role: ButtonRole? = nil,
-                                 title: String? = nil,
-                                 imageName: String? = nil,
-                                 labelColor: Color? = nil,
-                                 isDisable: Bool = false,
-                                 isPresent: Bool = true,
-                                 isLoading: Bool = false,
-                                 key: KeyEquivalent? = nil,
-                                 modifiers: EventModifiers? = nil,
-                                 placement: ToolbarItemPlacement? = nil,
-                                 callback: @escaping () -> Void = {}) -> some View {
+    public func buttonCircleNavi(
+        role: ButtonRole? = nil,
+        title: String? = nil,
+        imageName: String? = nil,
+        labelColor: Color? = nil,
+        isDisable: Bool = false,
+        isPresent: Bool = true,
+        isLoading: Bool = false,
+        key: KeyEquivalent? = nil,
+        modifiers: EventModifiers? = nil,
+        placement: ToolbarItemPlacement? = nil,
+        callback: @escaping () -> Void = {}
+    ) -> some View {
         
         #if os(macOS)
         let isPresent = false
         #else
         let isPresent = isPresent
         #endif
-        return modifier(CircleButtonNavi(role: role,
-                                  title: title,
-                                  imageName: imageName,
-                                  labelColor: labelColor,
-                                  isDisable: isDisable,
-                                  isPresent: isPresent,
-                                  isLoading: isLoading,
-                                  key: key,
-                                  modifiers: modifiers,
-                                  placement: placement,
-                                  callback: callback))
+        return modifier(
+            CircleButtonNavi(
+                role: role,
+                title: title,
+                imageName: imageName,
+                labelColor: labelColor,
+                isDisable: isDisable,
+                isPresent: isPresent,
+                isLoading: isLoading,
+                key: key,
+                modifiers: modifiers,
+                placement: placement,
+                callback: callback
+            )
+        )
     }
     
     /// 普通页面角落的圆形按钮 - 例如Sheet页面
@@ -152,7 +158,7 @@ public struct CircleButton: View {
     ) {
         self.role = role
         if role == .cancel {
-            self.title = LocalizedStringKey("Cancel")
+            self.title = .cancel
             self.imageName = "xmark"
             if labelColor != nil {
                 self.labelColor = labelColor
@@ -160,11 +166,11 @@ public struct CircleButton: View {
                 self.labelColor = .primary
             }
         }else if role == .destructive {
-            self.title = LocalizedStringKey("Confirm")
+            self.title = .confirm
             self.imageName = "checkmark"
             self.labelColor = labelColor
         }else {
-            self.title = LocalizedStringKey("Confirm")
+            self.title = .confirm
             self.imageName = imageName ?? "checkmark"
             self.labelColor = labelColor
         }
@@ -217,7 +223,7 @@ public struct CircleButton: View {
     ) {
         self.role = role
         if role == .cancel {
-            self.title = LocalizedStringKey("Cancel")
+            self.title = .cancel
             self.imageName = "xmark"
             if labelColor != nil {
                 self.labelColor = labelColor
@@ -225,11 +231,11 @@ public struct CircleButton: View {
                 self.labelColor = .primary
             }
         }else if role == .destructive {
-            self.title = LocalizedStringKey("Confirm")
+            self.title = .confirm
             self.imageName = "checkmark"
             self.labelColor = labelColor
         }else {
-            self.title = LocalizedStringKey("Confirm")
+            self.title = .confirm
             self.imageName = imageName ?? "checkmark"
             self.labelColor = labelColor
         }

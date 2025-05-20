@@ -206,20 +206,6 @@ public extension String {
         }
     }
     
-    /// SwifterSwift: Copy string to global pasteboard.
-    ///
-    ///        "SomeText".copyToPasteboard() // copies "SomeText" to pasteboard
-    ///
-    func copyToPasteboard() {
-        #if os(iOS)
-        UIPasteboard.general.string = self
-        #elseif os(macOS)
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(self, forType: .string)
-        #else
-        #endif
-    }
-    
 #if !os(watchOS)
     /// 将文本生成QRCode
     func generateQRCode() -> SFImage? {
