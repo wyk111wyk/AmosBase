@@ -18,6 +18,7 @@ public struct SimpleTextField<
     
     let title: String
     let prompt: String?
+    let bundle: Bundle
     let systemImage: String?
     let startLine: Int
     let endLine: Int
@@ -34,6 +35,7 @@ public struct SimpleTextField<
         _ inputText: Binding<String>,
         title: String = "",
         prompt: String? = nil,
+        bundle: Bundle = .main,
         systemImage: String? = nil,
         startLine: Int = 4,
         endLine: Int = 10,
@@ -46,6 +48,7 @@ public struct SimpleTextField<
         self._inputText = inputText
         self.title = title
         self.prompt = prompt
+        self.bundle = bundle
         self.systemImage = systemImage
         if endLine <= startLine {
             self.startLine = endLine
@@ -62,7 +65,7 @@ public struct SimpleTextField<
     }
     
     var promptText: Text {
-        if let prompt { return Text(prompt) }
+        if let prompt { return Text(prompt.toLocalizedKey(), bundle: bundle) }
         else { return Text("Please enter the content", bundle: .module) }
     }
     

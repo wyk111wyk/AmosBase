@@ -42,6 +42,10 @@ public extension String {
         LocalizedStringKey(self)
     }
     
+    var localText: Text {
+        Text(self.toLocalizedKey(), bundle: .module)
+    }
+    
     static var cancel: String { "Cancel" }
     static var confirm: String { "Confirm" }
     static var delete: String { "Delete" }
@@ -61,6 +65,7 @@ public extension String {
     static var none: String { "None" }
     static var required: String { "Required" }
     static var loading: String { "Loading..." }
+    static var searching: String { "Searching..." }
     static var `default`: String { "Default" }
     static var selectAll: String { "Select all" }
     static var selectNone: String { "Select none" }
@@ -78,6 +83,10 @@ public extension String {
 }
 
 public extension LocalizedStringKey {
+    var localText: Text {
+        Text(self, bundle: .module)
+    }
+    
     static var cancel: LocalizedStringKey { "Cancel" }
     static var confirm: LocalizedStringKey { "Confirm" }
     static var delete: LocalizedStringKey { "Delete" }
@@ -97,6 +106,7 @@ public extension LocalizedStringKey {
     static var none: LocalizedStringKey { "None" }
     static var required: LocalizedStringKey { "Required" }
     static var loading: LocalizedStringKey { "Loading..." }
+    static var searching: LocalizedStringKey { "Searching..." }
     static var `default`: LocalizedStringKey { "Default" }
     static var selectAll: LocalizedStringKey { "Select all" }
     static var selectNone: LocalizedStringKey { "Select none" }
@@ -133,6 +143,7 @@ public extension Text {
     static var none: Text { .init(.none, bundle: .module) }
     static var required: Text { .init(.required, bundle: .module) }
     static var loading: Text { .init(.loading, bundle: .module) }
+    static var searching: Text { .init(.searching, bundle: .module) }
     static var `default`: Text { .init(.default, bundle: .module) }
     static var selectAll: Text { .init(.selectAll, bundle: .module) }
     static var selectNone: Text { .init(.selectNone, bundle: .module) }

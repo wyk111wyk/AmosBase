@@ -24,6 +24,7 @@ extension String: @retroactive Identifiable {
 
 // MARK: - 进行转换
 public extension String {
+    
     /// 将包含 Unicode 转义序列的字符串转换为实际字符
     /// 支持格式：\Uxxxx (4 位), \Uxxxxxxxx (8 位), \uxxxx (4 位)
     /// - Returns: 转换后的字符串，如果转换失败则返回原始字符串

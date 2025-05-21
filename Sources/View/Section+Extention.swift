@@ -55,7 +55,7 @@ public struct ExpandableHeader<V: View>: View {
 
 public struct ButtonHeader<V: View>: View {
     @Binding var toggle: Bool
-    let title: String?
+    let titleText: Text?
     let imageName: String?
     
     let buttonTitle: String
@@ -67,7 +67,7 @@ public struct ButtonHeader<V: View>: View {
     
     public init(
         toggle: Binding<Bool>,
-        title: String? = nil,
+        titleText: Text? = nil,
         imageName: String? = nil,
         buttonTitle: String = .add,
         buttonImageName: String = "plus",
@@ -77,7 +77,7 @@ public struct ButtonHeader<V: View>: View {
     ) {
         self._toggle = toggle
         self.imageName = imageName
-        self.title = title
+        self.titleText = titleText
         self.buttonTitle = buttonTitle
         self.buttonImageName = buttonImageName
         self.buttonColor = buttonColor
@@ -90,8 +90,8 @@ public struct ButtonHeader<V: View>: View {
             if let imageName {
                 Image(systemName: imageName)
             }
-            if let title {
-                Text(title)
+            if let titleText {
+                titleText
             }
             if V.self != EmptyView.self {
                 header()
@@ -138,7 +138,13 @@ struct DemoSection: View {
                         .addLeadingStar(isAdd: true)
                 }
             } header: {
-                ButtonHeader(toggle: $isAdd, title: "Addable Header", buttonTitle: .add, buttonImageName: "plus", buttonColor: .blue)
+                ButtonHeader(
+                    toggle: $isAdd,
+                    titleText: Text("Addable Header"),
+                    buttonTitle: .add,
+                    buttonImageName: "plus",
+                    buttonColor: .blue
+                )
                     .environment(\.locale, .zhHans)
             }
         }

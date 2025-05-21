@@ -19,6 +19,7 @@ public extension View {
         type: SimpleAlertType = .singleConfirm,
         title: String?,
         message: LocalizedStringKey? = nil,
+        Bundle: Bundle = .main,
         isPresented: Binding<Bool>,
         confirmTap: @escaping () -> Void = {},
         cancelTap: @escaping () -> Void = {}
@@ -28,6 +29,7 @@ public extension View {
                 title: title,
                 message: message,
                 type: type,
+                messageBundle: Bundle,
                 isPresented: isPresented,
                 confirmTap: confirmTap,
                 cancelTap: cancelTap
@@ -39,6 +41,7 @@ public extension View {
         type: SimpleAlertType = .singleConfirm,
         title: String?,
         message: LocalizedStringKey? = nil,
+        Bundle: Bundle = .main,
         item: Binding<V?>,
         confirmTap: @escaping (V?) -> Void = {_ in},
         cancelTap: @escaping () -> Void = {}
@@ -48,6 +51,7 @@ public extension View {
                 title: title,
                 message: message,
                 type: type,
+                messageBundle: Bundle,
                 item: item,
                 confirmTap: confirmTap,
                 cancelTap: cancelTap
@@ -94,6 +98,7 @@ public extension View {
         type: SimpleAlertType = .singleConfirm,
         title: String?,
         message: LocalizedStringKey? = nil,
+        Bundle: Bundle = .main,
         isPresented: Binding<Bool>,
         confirmTap: @escaping () -> Void = {},
         cancelTap: @escaping () -> Void = {}
@@ -103,6 +108,7 @@ public extension View {
                 title: title,
                 message: message,
                 type: type,
+                messageBundle: Bundle,
                 isPresented: isPresented,
                 confirmTap: confirmTap,
                 cancelTap: cancelTap
@@ -114,6 +120,7 @@ public extension View {
         type: SimpleAlertType = .singleConfirm,
         title: String?,
         message: LocalizedStringKey? = nil,
+        Bundle: Bundle = .main,
         item: Binding<V?>,
         confirmTap: @escaping (V?) -> Void = {_ in},
         cancelTap: @escaping () -> Void = {}
@@ -123,6 +130,7 @@ public extension View {
                 title: title,
                 message: message,
                 type: type,
+                messageBundle: Bundle,
                 item: item,
                 confirmTap: confirmTap,
                 cancelTap: cancelTap
