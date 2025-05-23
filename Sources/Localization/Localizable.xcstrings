@@ -1892,6 +1892,23 @@
         }
       }
     },
+    "Send" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发送"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "傳送"
+          }
+        }
+      }
+    },
     "Service Description 1:%@ 2:%@ 3:%@" : {
       "localizations" : {
         "en" : {

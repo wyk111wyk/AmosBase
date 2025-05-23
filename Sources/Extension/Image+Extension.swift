@@ -188,14 +188,22 @@ public extension SFImage {
     }
     
     static func girl(_ index: Int? = nil) -> SFImage {
-        var girlIndex: Int = Int.random(in: 1...34)
+        var girlIndex: Int = Int.random(in: 1...28)
         if let index { girlIndex = index }
         
-        guard girlIndex > 0 && girlIndex < 35 else {
+        guard girlIndex > 0 && girlIndex < 29 else {
             return SFImage(bundle: .module, packageResource: "Girl_1", ofType: "jpg")!
         }
         
         return SFImage(bundle: .module, packageResource: "Girl_\(girlIndex)", ofType: "jpg")!
+    }
+    
+    static func allGirls() -> [SFImage] {
+        var images: [SFImage] = []
+        for i in 1...28 {
+            images.append(SFImage(bundle: .module, packageResource: "Girl_\(i)", ofType: "jpg")!)
+        }
+        return images
     }
     
     static func gymGirl(_ index: Int? = nil) -> SFImage {

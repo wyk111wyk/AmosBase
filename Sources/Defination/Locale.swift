@@ -51,6 +51,7 @@ public extension String {
     static var delete: String { "Delete" }
     static var edit: String { "Edit" }
     static var save: String { "Save" }
+    static var send: String { "Send" }
     static var add: String { "Add" }
     static var done: String { "Done" }
     static var undo: String { "Undo" }
@@ -93,6 +94,7 @@ public extension LocalizedStringKey {
     static var delete: LocalizedStringKey { "Delete" }
     static var edit: LocalizedStringKey { "Edit" }
     static var save: LocalizedStringKey { "Save" }
+    static var send: LocalizedStringKey { "Send" }
     static var add: LocalizedStringKey { "Add" }
     static var done: LocalizedStringKey { "Done" }
     static var undo: LocalizedStringKey { "Undo" }
@@ -131,6 +133,7 @@ public extension Text {
     static var delete: Text { .init(.delete, bundle: .module) }
     static var edit: Text { .init(.edit, bundle: .module) }
     static var save: Text { .init(.save, bundle: .module) }
+    static var send: Text { .init(.send, bundle: .module) }
     static var add: Text { .init(.add, bundle: .module) }
     static var done: Text { .init(.done, bundle: .module) }
     static var undo: Text { .init(.undo, bundle: .module) }

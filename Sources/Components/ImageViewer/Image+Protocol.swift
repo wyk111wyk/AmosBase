@@ -30,8 +30,7 @@ public struct ImageStoreModel: SimpleImageStore {
     }
     
     static func examples() -> [ImageStoreModel] {
-        let images: [SFImage] = (1...34).map { .girl($0) }
-        let allImages:[ImageStoreModel] = images.compactMap {
+        let allImages:[ImageStoreModel] = SFImage.allGirls().compactMap {
             ImageStoreModel(image: $0, caption: "caption") }
         return allImages
     }
