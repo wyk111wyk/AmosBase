@@ -2,10 +2,10 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "shouldTranslate" : false
     },
     "·" : {
-
+      "shouldTranslate" : false
     },
     "·出现动画: %@" : {
 
@@ -38,13 +38,13 @@
 
     },
     "“" : {
-
+      "shouldTranslate" : false
     },
     "(" : {
-
+      "shouldTranslate" : false
     },
     ")" : {
-
+      "shouldTranslate" : false
     },
     "%@" : {
       "localizations" : {
@@ -60,7 +60,8 @@
             "value" : "%@"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "%@ 切换结果：%lld" : {
       "localizations" : {
@@ -127,7 +128,7 @@
 
     },
     "1" : {
-
+      "shouldTranslate" : false
     },
     "7-day free trial, then %@/year subscription." : {
       "localizations" : {
@@ -163,7 +164,7 @@
       }
     },
     "About - 关于" : {
-
+      "shouldTranslate" : false
     },
     "Add" : {
       "extractionState" : "manual",
@@ -241,7 +242,7 @@
       }
     },
     "Amos" : {
-
+      "shouldTranslate" : false
     },
     "AmosBase" : {
       "extractionState" : "manual",
@@ -527,6 +528,12 @@
             "state" : "translated",
             "value" : "代码兑换"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "程式碼兌換"
+          }
         }
       }
     },
@@ -680,6 +687,23 @@
         }
       }
     },
+    "Copy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "複製"
+          }
+        }
+      }
+    },
     "Could Not Determine" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -809,7 +833,7 @@
       }
     },
     "Data - 数据处理" : {
-
+      "shouldTranslate" : false
     },
     "Data 编解码" : {
 
@@ -1335,10 +1359,10 @@
       }
     },
     "Map - 定位" : {
-
+      "shouldTranslate" : false
     },
     "Map - 导航" : {
-
+      "shouldTranslate" : false
     },
     "Map Share" : {
       "extractionState" : "manual",
@@ -1361,10 +1385,10 @@
 
     },
     "Navi - 导航" : {
-
+      "shouldTranslate" : false
     },
     "NBA官网" : {
-
+      "shouldTranslate" : false
     },
     "Network" : {
       "localizations" : {
@@ -1468,10 +1492,10 @@
       }
     },
     "Only for iOS" : {
-
+      "shouldTranslate" : false
     },
     "Only for iOS / macOS" : {
-
+      "shouldTranslate" : false
     },
     "Other Apps from us, equally concise and practical." : {
       "extractionState" : "manual",
@@ -2091,13 +2115,13 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "切换应用内语言，开启和关闭各类权限"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "切換應用內語言，開啟和關閉各類權限"
           }
         }
@@ -2220,10 +2244,10 @@
       }
     },
     "UI - 提醒" : {
-
+      "shouldTranslate" : false
     },
     "UI - 页面元素" : {
-
+      "shouldTranslate" : false
     },
     "UI元素" : {
 
@@ -2454,7 +2478,7 @@
       }
     },
     "Web - 网络关联" : {
-
+      "shouldTranslate" : false
     },
     "Wechat" : {
       "extractionState" : "manual",
@@ -2474,7 +2498,7 @@
       }
     },
     "Welcome - 欢迎页" : {
-
+      "shouldTranslate" : false
     },
     "Welcome to use" : {
       "extractionState" : "manual",
@@ -2511,10 +2535,10 @@
       }
     },
     "שלום" : {
-
+      "shouldTranslate" : false
     },
     "مرحبًا" : {
-
+      "shouldTranslate" : false
     },
     "上一张" : {
 

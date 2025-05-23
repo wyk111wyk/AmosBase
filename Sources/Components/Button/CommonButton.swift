@@ -59,7 +59,7 @@ public struct ConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
     public init(
         title: String = .confirm,
         systemImage: String = "checkmark.circle",
-        style: S = .automatic,
+        style: S = .borderless,
         role: ButtonRole? = nil,
         isInMiddle: Bool = false,
         isLoading: Bool = false,
@@ -89,6 +89,52 @@ public struct ConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
             label: label
         )
         .tint(.green)
+    }
+}
+
+public struct CancelButton<V: View, S: PrimitiveButtonStyle>: View {
+    let title: String
+    let systemImage: String
+    let style: S
+    let role: ButtonRole?
+    let isInMiddle: Bool
+    let isLoading: Bool
+    let label: () -> V
+    let tapAction: () -> Void
+    
+    public init(
+        title: String = .cancel,
+        systemImage: String = "xmark.circle",
+        style: S = .borderless,
+        role: ButtonRole? = nil,
+        isInMiddle: Bool = false,
+        isLoading: Bool = false,
+        tapAction: @escaping () -> Void,
+        @ViewBuilder label: @escaping () -> V = {EmptyView()}
+    ) {
+        self.title = title
+        self.systemImage = systemImage
+        self.style = style
+        self.role = role
+        self.isInMiddle = isInMiddle
+        self.isLoading = isLoading
+        self.label = label
+        self.tapAction = tapAction
+    }
+    
+    public var body: some View {
+        BaseButton(
+            title: title,
+            systemImage: systemImage,
+            role: role,
+            style: style,
+            bundle: .module,
+            isInMiddle: isInMiddle,
+            isLoading: isLoading,
+            action: tapAction,
+            label: label
+        )
+        .tint(.gray)
     }
 }
 

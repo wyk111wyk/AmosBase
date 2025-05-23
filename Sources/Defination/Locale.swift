@@ -79,6 +79,7 @@ public extension String {
     static var male: String { "Male" }
     static var female: String { "Female" }
     static var type: String { "Type" }
+    static var copy: String { "Copy" }
     static var copied: String { "Copied" }
 }
 
@@ -120,6 +121,7 @@ public extension LocalizedStringKey {
     static var male: LocalizedStringKey { "Male" }
     static var female: LocalizedStringKey { "Female" }
     static var type: LocalizedStringKey { "Type" }
+    static var copy: LocalizedStringKey { "Copy" }
     static var copied: LocalizedStringKey { "Copied" }
 }
 
@@ -157,6 +159,7 @@ public extension Text {
     static var male: Text { .init(.male, bundle: .module) }
     static var female: Text { .init(.female, bundle: .module) }
     static var type: Text { .init(.type, bundle: .module) }
+    static var copy: Text { .init(.copy, bundle: .module) }
     static var copied: Text { .init(.copied, bundle: .module) }
     
 }
