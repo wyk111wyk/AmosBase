@@ -61,6 +61,7 @@ public extension String {
     static var skip: String { "Skip" }
     static var close: String { "Close" }
     static var favorite: String { "Favorite" }
+    static var favorited: String { "Favorited" }
     static var unfavorite: String { "Unfavorite" }
     static var share: String { "Share" }
     static var none: String { "None" }
@@ -104,6 +105,7 @@ public extension LocalizedStringKey {
     static var skip: LocalizedStringKey { "Skip" }
     static var close: LocalizedStringKey { "Close" }
     static var favorite: LocalizedStringKey { "Favorite" }
+    static var favorited: LocalizedStringKey { "Favorited" }
     static var unfavorite: LocalizedStringKey { "Unfavorite" }
     static var share: LocalizedStringKey { "Share" }
     static var none: LocalizedStringKey { "None" }
@@ -143,6 +145,7 @@ public extension Text {
     static var skip: Text { .init(.skip, bundle: .module) }
     static var close: Text { .init(.close, bundle: .module) }
     static var favorite: Text { .init(.favorite, bundle: .module) }
+    static var favorited: Text { .init(.favorited, bundle: .module) }
     static var unfavorite: Text { .init(.unfavorite, bundle: .module) }
     static var share: Text { .init(.share, bundle: .module) }
     static var none: Text { .init(.none, bundle: .module) }

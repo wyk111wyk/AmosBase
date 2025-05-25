@@ -150,27 +150,21 @@ public extension View {
 struct ShimmerDemo: View {
     var body: some View {
         VStack(spacing: 20) {
-            Group {
-                Text("SwiftUI Shimmer")
-                Text("SwiftUI Shimmer")
-                Text("SwiftUI Shimmer")
-                
-                VStack(alignment: .leading) {
-                    Text("Loading...").font(.title)
-                    Text(String(repeating: "Shimmer", count: 12))
-                        .redacted(reason: .placeholder)
-                }.frame(maxWidth: 200)
-            }
-            .shimmering()
-                
+            Text("SwiftUI Shimmer")
+                .shimmering()
+            
             VStack(alignment: .leading) {
-                Text("مرحبًا")
-                Text("← Right-to-left layout direction").font(.body)
-                Text("שלום")
+                Text("Loading...").font(.title)
+                Text(String(repeating: "Shimmer", count: 12))
+                    .redacted(reason: .placeholder)
             }
-            .font(.largeTitle)
-            .environment(\.layoutDirection, .rightToLeft)
+            .frame(maxWidth: 260)
             .shimmering()
+            
+            Text("← Right-to-left layout direction")
+            .font(.title)
+            .shimmering()
+            .environment(\.layoutDirection, .rightToLeft)
 
             Text("Custom Gradient Mode").bold()
                 .font(.largeTitle)

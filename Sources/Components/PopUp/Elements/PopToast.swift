@@ -100,7 +100,7 @@ public struct PopToast: View {
                 cornerRadius: 0
             )
         )
-        .modifier(ShadowModifier(isTop: isTop))
+        .modifier(ShadowModifier(isForwardTop: isTop))
         .compositingGroup()
     }
 }

@@ -140,9 +140,7 @@ extension AttributedString {
             for intent in intentBlock.components {
                 switch intent.kind {
                 case .paragraph:
-                    if block == .generic {
-                        block = .paragraph
-                    }
+                    if block == .generic { block = .paragraph }
                 case .header(level: let level):
                     block = .headline(level)
                 case .orderedList:

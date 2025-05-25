@@ -11,6 +11,7 @@ import SwiftUI
 public struct BaseButton<V: View, S: PrimitiveButtonStyle>: View {
     let title: String?
     let systemImage: String?
+    let imageBgColor: Color?
     let role: ButtonRole?
     let style: S
     let bundle: Bundle
@@ -25,6 +26,7 @@ public struct BaseButton<V: View, S: PrimitiveButtonStyle>: View {
     public init(
         title: String? = .confirm,
         systemImage: String? = nil,
+        imageBgColor: Color? = nil,
         role: ButtonRole? = nil,
         style: S = .borderless,
         bundle: Bundle = .main,
@@ -35,6 +37,7 @@ public struct BaseButton<V: View, S: PrimitiveButtonStyle>: View {
     ) {
         self.title = title
         self.systemImage = systemImage
+        self.imageBgColor = imageBgColor
         self.role = role
         self.style = style
         self.bundle = bundle
@@ -74,7 +77,29 @@ public struct BaseButton<V: View, S: PrimitiveButtonStyle>: View {
             if isLoading {
                 ProgressView()
             }else if let systemImage {
-                Image(systemName: systemImage)
+                if let imageBgColor {
+                    ZStack {
+                        Circle()
+                            .foregroundStyle(imageBgColor.opacity(0.3))
+                            #if os(macOS)
+                            .frame(width: 22, height: 22)
+                            #else
+                            .frame(width: 26, height: 26)
+                            #endif
+                        Circle()
+                            .foregroundStyle(.regularMaterial)
+                            #if os(macOS)
+                                .frame(width: 22, height: 22)
+                            #else
+                                .frame(width: 26, height: 26)
+                            #endif
+                        Image(systemName: systemImage)
+                            .imageScale(.medium)
+                    }
+                    .compositingGroup()
+                }else {
+                    Image(systemName: systemImage)
+                }
             }
             if let title {
                 Text(title.toLocalizedKey(), bundle: bundle)
@@ -102,3 +127,7 @@ struct ButtonShortkey: ViewModifier {
     }
 }
 #endif
+
+#Preview {
+    DemoCommonButton()
+}

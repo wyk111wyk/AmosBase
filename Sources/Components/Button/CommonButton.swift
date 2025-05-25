@@ -10,6 +10,7 @@ import SwiftUI
 public struct DeleteButton<V: View, S: PrimitiveButtonStyle>: View {
     let style: S
     let role: ButtonRole?
+    let color: Color?
     let isInMiddle: Bool
     let isLoading: Bool
     let label: () -> V
@@ -18,6 +19,7 @@ public struct DeleteButton<V: View, S: PrimitiveButtonStyle>: View {
     public init(
         style: S = .automatic,
         role: ButtonRole? = .destructive,
+        color: Color? = nil,
         isInMiddle: Bool = false,
         isLoading: Bool = false,
         tapAction: @escaping () -> Void,
@@ -25,6 +27,7 @@ public struct DeleteButton<V: View, S: PrimitiveButtonStyle>: View {
     ) {
         self.style = style
         self.role = role
+        self.color = color
         self.isInMiddle = isInMiddle
         self.isLoading = isLoading
         self.label = label
@@ -35,6 +38,7 @@ public struct DeleteButton<V: View, S: PrimitiveButtonStyle>: View {
         BaseButton(
             title: .delete,
             systemImage: "trash",
+            imageBgColor: color,
             role: role,
             style: style,
             bundle: .module,
@@ -43,6 +47,7 @@ public struct DeleteButton<V: View, S: PrimitiveButtonStyle>: View {
             action: tapAction,
             label: label
         )
+        .tint(color)
     }
 }
 
@@ -51,6 +56,7 @@ public struct ConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
     let systemImage: String
     let style: S
     let role: ButtonRole?
+    let color: Color?
     let isInMiddle: Bool
     let isLoading: Bool
     let label: () -> V
@@ -58,9 +64,10 @@ public struct ConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
     
     public init(
         title: String = .confirm,
-        systemImage: String = "checkmark.circle",
+        systemImage: String = "checkmark",
         style: S = .borderless,
         role: ButtonRole? = nil,
+        color: Color? = .green,
         isInMiddle: Bool = false,
         isLoading: Bool = false,
         tapAction: @escaping () -> Void,
@@ -70,6 +77,7 @@ public struct ConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
         self.systemImage = systemImage
         self.style = style
         self.role = role
+        self.color = color
         self.isInMiddle = isInMiddle
         self.isLoading = isLoading
         self.label = label
@@ -80,6 +88,7 @@ public struct ConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
         BaseButton(
             title: title,
             systemImage: systemImage,
+            imageBgColor: color,
             role: role,
             style: style,
             bundle: .module,
@@ -88,7 +97,7 @@ public struct ConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
             action: tapAction,
             label: label
         )
-        .tint(.green)
+        .tint(color)
     }
 }
 
@@ -97,6 +106,7 @@ public struct CancelButton<V: View, S: PrimitiveButtonStyle>: View {
     let systemImage: String
     let style: S
     let role: ButtonRole?
+    let color: Color
     let isInMiddle: Bool
     let isLoading: Bool
     let label: () -> V
@@ -104,9 +114,10 @@ public struct CancelButton<V: View, S: PrimitiveButtonStyle>: View {
     
     public init(
         title: String = .cancel,
-        systemImage: String = "xmark.circle",
+        systemImage: String = "xmark",
         style: S = .borderless,
         role: ButtonRole? = nil,
+        color: Color = .gray,
         isInMiddle: Bool = false,
         isLoading: Bool = false,
         tapAction: @escaping () -> Void,
@@ -116,6 +127,7 @@ public struct CancelButton<V: View, S: PrimitiveButtonStyle>: View {
         self.systemImage = systemImage
         self.style = style
         self.role = role
+        self.color = color
         self.isInMiddle = isInMiddle
         self.isLoading = isLoading
         self.label = label
@@ -126,6 +138,7 @@ public struct CancelButton<V: View, S: PrimitiveButtonStyle>: View {
         BaseButton(
             title: title,
             systemImage: systemImage,
+            imageBgColor: color,
             role: role,
             style: style,
             bundle: .module,
@@ -134,7 +147,7 @@ public struct CancelButton<V: View, S: PrimitiveButtonStyle>: View {
             action: tapAction,
             label: label
         )
-        .tint(.gray)
+        .tint(color)
     }
 }
 
@@ -176,4 +189,23 @@ public struct SimpleEditButton<V: View, S: PrimitiveButtonStyle>: View {
         )
         .tint(.blue)
     }
+}
+
+package struct DemoCommonButton: View {
+    package init() {}
+    package var body: some View {
+        NavigationStack {
+            Form {
+                DeleteButton(tapAction: {})
+                ConfirmButton(tapAction: {})
+                CancelButton(tapAction: {})
+                SimpleEditButton(tapAction: {})
+            }
+            .formStyle(.grouped)
+        }
+    }
+}
+
+#Preview {
+    DemoCommonButton()
 }

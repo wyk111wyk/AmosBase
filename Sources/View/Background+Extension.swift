@@ -44,7 +44,7 @@ public extension View {
     func standardShadow(
         isTop: Bool = true
     ) -> some View {
-        modifier(ShadowModifier(isTop: isTop))
+        modifier(ShadowModifier(isForwardTop: isTop))
     }
 }
 
@@ -178,9 +178,9 @@ struct BackgroundColorModifier: ViewModifier {
 
 struct ShadowModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
-    let isTop: Bool
-    init(isTop: Bool = true) {
-        self.isTop = isTop
+    let isForwardTop: Bool
+    init(isForwardTop: Bool = true) {
+        self.isForwardTop = isForwardTop
     }
     
     @ViewBuilder
@@ -190,16 +190,16 @@ struct ShadowModifier: ViewModifier {
                 .shadow(
                     color: Color.primary.opacity(0.1),
                     radius: 5,
-                    x: isTop ? 0 : 6,
-                    y: isTop ? 6 : 0
+                    x: isForwardTop ? 0 : 6,
+                    y: isForwardTop ? 6 : 0
                 )
         }else{
             content
                 .shadow(
                     color: Color.primary.opacity(0.05),
                     radius: 5,
-                    x: isTop ? 0 : 5,
-                    y: isTop ? 5 : 0
+                    x: isForwardTop ? 0 : 5,
+                    y: isForwardTop ? 5 : 0
                 )
         }
     }
@@ -216,6 +216,9 @@ struct ShadowModifier: ViewModifier {
         Text("Shadow")
             .contentBackground(shadowRadius: 5, color: .green)
     }
+    #if os(macOS)
+    .frame(width: 500, height: 400)
+    #endif
 }
 
 #Preview("Banner") {

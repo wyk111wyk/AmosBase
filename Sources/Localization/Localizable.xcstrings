@@ -1011,6 +1011,23 @@
         }
       }
     },
+    "Favorited" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已收藏"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已收藏"
+          }
+        }
+      }
+    },
     "Female" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2550,12 +2567,6 @@
           }
         }
       }
-    },
-    "שלום" : {
-      "shouldTranslate" : false
-    },
-    "مرحبًا" : {
-      "shouldTranslate" : false
     },
     "上一张" : {
 
