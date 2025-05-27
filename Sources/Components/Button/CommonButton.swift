@@ -148,6 +148,7 @@ public struct CancelButton<V: View, S: PrimitiveButtonStyle>: View {
             label: label
         )
         .tint(color)
+        .simpleKeyboardEspace()
     }
 }
 

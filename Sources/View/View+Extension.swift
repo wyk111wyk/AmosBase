@@ -192,6 +192,14 @@ public extension View {
         #endif
     }
     
+    func simpleKeyboardCommandReturn() -> some View {
+        #if !os(watchOS)
+        self.keyboardShortcut(.return, modifiers: .command)
+        #else
+        self
+        #endif
+    }
+    
     func simpleKeyboardEspace() -> some View {
         #if !os(watchOS)
         self.keyboardShortcut(.escape, modifiers: [])

@@ -51,7 +51,7 @@ public extension View {
                case let .customError(title, msg, _) = simpleError {
                 PopBanner(mode: .error, title: title, subTitle: msg, systemImage: systemImage, bgColor: bgColor)
             }else {
-                PopBanner(mode: .error, title: error.wrappedValue?.localizedDescription ?? "发生错误", systemImage: systemImage, bgColor: bgColor)
+                PopBanner(mode: .error, title: error.wrappedValue?.localizedDescription ?? "An error occurred", systemImage: systemImage, bgColor: bgColor)
             }
         } customize: { content in
             content

@@ -33,8 +33,8 @@ public extension Int {
         var result = ""
         if withComma { result =  "\(self)"
         }else { result = String(self) }
-        if let prefix { result = "\(prefix)\(result)" }
-        if let suxfix { result = "\(result)\(suxfix)" }
+        if let prefix { result = "\(prefix.localized())\(result)" }
+        if let suxfix { result = "\(result)\(suxfix.localized())" }
         return result
     }
     

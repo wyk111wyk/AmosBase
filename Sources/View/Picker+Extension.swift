@@ -38,13 +38,13 @@ public struct OptionalPicker<
     }
     
     public var body: some View {
-        Picker(label, selection: Binding(
+        Picker(label.toLocalizedKey(), selection: Binding(
             get: { selection.wrappedValue },
             set: { newValue in selection.wrappedValue = newValue }
         )) {
             // 添加 nil 选项
             if let nilOptionText {
-                Text(nilOptionText).tag(SelectionValue?.none)
+                Text(nilOptionText.toLocalizedKey()).tag(SelectionValue?.none)
             }else {
                 Text("None", bundle: .module).tag(SelectionValue?.none)
             }

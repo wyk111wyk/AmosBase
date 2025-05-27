@@ -14,6 +14,7 @@ public extension View {
     func simpleSwipe<V: View>(
         hasSwipe: Bool = true,
         edge: HorizontalEdge = .trailing,
+        isDisabled: Bool = false,
         allowsFullSwipe: Bool = false,
         hasContextMenu: Bool = true,
         isFavor: Bool? = nil,
@@ -25,6 +26,7 @@ public extension View {
                 SimpleSwipeModify(
                     hasSwipe: hasSwipe,
                     edge: edge,
+                    isDisabled: isDisabled,
                     allowsFullSwipe: allowsFullSwipe,
                     hasContextMenu: hasContextMenu,
                     isFavor: isFavor,
@@ -41,6 +43,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
     
     let hasSwipe: Bool
     let edge: HorizontalEdge
+    let isDisabled: Bool
     let allowsFullSwipe: Bool
     
     let hasContextMenu: Bool
@@ -55,6 +58,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
     init(
         hasSwipe: Bool = true,
         edge: HorizontalEdge = .trailing,
+        isDisabled: Bool = false,
         allowsFullSwipe: Bool = false,
         hasContextMenu: Bool = true,
         isFavor: Bool? = nil,
@@ -65,6 +69,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
     ) {
         self.hasSwipe = hasSwipe
         self.edge = edge
+        self.isDisabled = isDisabled
         self.allowsFullSwipe = allowsFullSwipe
         self.hasContextMenu = hasContextMenu
         self.isFavor = isFavor
@@ -77,7 +82,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
     func body(content: Content) -> some View {
         content
             .swipeActions(edge: edge, allowsFullSwipe: allowsFullSwipe) {
-                if hasSwipe {
+                if hasSwipe && !isDisabled {
                     if let deleteAction { deleteButton(deleteAction) }
                     if let editAction { editButton(editAction) }
                     if let favorAction { favorButton(favorAction) }
@@ -88,7 +93,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
             }
         #if !os(watchOS)
             .contextMenu {
-                if hasContextMenu {
+                if hasContextMenu && !isDisabled {
                     if V.self != EmptyView.self {
                         buttonView()
                     }

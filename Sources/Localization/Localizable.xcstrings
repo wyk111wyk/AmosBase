@@ -8,34 +8,34 @@
       "shouldTranslate" : false
     },
     "·出现动画: %@" : {
-
+      "shouldTranslate" : false
     },
     "·启用震动: %@" : {
-
+      "shouldTranslate" : false
     },
     "·外部点击关闭: %@" : {
-
+      "shouldTranslate" : false
     },
     "·弹窗位置: %@" : {
-
+      "shouldTranslate" : false
     },
     "·技术方案: %@" : {
-
+      "shouldTranslate" : false
     },
     "·拖拽关闭: %@" : {
-
+      "shouldTranslate" : false
     },
     "·显示模态背景: %@" : {
-
+      "shouldTranslate" : false
     },
     "·消失动画: %@" : {
-
+      "shouldTranslate" : false
     },
     "·点击关闭: %@" : {
-
+      "shouldTranslate" : false
     },
     "·自动消失: %@" : {
-
+      "shouldTranslate" : false
     },
     "“" : {
       "shouldTranslate" : false
@@ -257,6 +257,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Amos基礎庫"
+          }
+        }
+      }
+    },
+    "An error occurred" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发生错误"
           }
         }
       }

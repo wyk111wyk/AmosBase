@@ -85,7 +85,7 @@ public struct DemoSimpleLocale: View {
         HStack {
             Text(String(key.localized(bundle: .module, locale: .zhHans)))
             Spacer()
-            Text(String(key.localized(bundle: .module)))
+            Text(String(key.localized(bundle: .module, locale: .enUS)))
         }
     }
 }
