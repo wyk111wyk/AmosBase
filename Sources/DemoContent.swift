@@ -20,6 +20,9 @@ public struct DemoContent: View {
     @State private var showPurchasePage = false
     @State private var showWelcomePage = false
     
+    @State private var showPhotoIndex: Int? = nil
+    
+    
     let iCloudIdentifier: String
     let additionViews: [AnyView]
     
@@ -152,6 +155,16 @@ public struct DemoContent: View {
                 continueType: .dismiss)
             .interactiveDismissDisabled(true)
         }
+        
+        PlainButton {
+            showPhotoIndex = 0
+        } label: {
+            SimpleCell("Image - 图片预览", systemImage: "photo")
+        }
+        .simpleImageViewer(
+            selectedIndex: $showPhotoIndex,
+            allPhotos: ImageStoreModel.examples()
+        )
     }
     
     private func navigationButtons() -> some View {

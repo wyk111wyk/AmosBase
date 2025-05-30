@@ -18,15 +18,16 @@ public extension LocalizedStringResource {
 }
 
 public extension String {
-    /// SwifterSwift: Returns a localized string, with an optional comment for translators.
+    /// 本地化的字符串（仅跟随应用语言的设置改变而变化）
     ///
-    ///        "Hello world".localized() -> Hallo Welt
+    ///        "Hello world".localized() -> 你好人类
     ///
+    /// - Parameter locale: 用于本地化插值值（例如数字）的区域设置。这不会更改系统用于查找本地化字符串的区域设置。
     /// - Parameter comment: Optional comment for translators.
     /// - Returns: Localized string.
     func localized(
-        bundle: Bundle = .main,
         table: String = "Localizable",
+        bundle: Bundle = .main,
         locale: Locale = .current
     ) -> String {
         String(

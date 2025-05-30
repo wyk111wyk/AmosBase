@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 public extension Optional where Wrapped == Bool {
+    /// 显示连接状态
     @ViewBuilder
     func statusSign(
         connectedText: String? = nil,
@@ -65,17 +66,18 @@ public extension Optional where Wrapped == Bool {
 }
 
 extension View {
-    /// 在视图的前面添加黄色星星
+    /// 在视图的前面添加星星
     @ViewBuilder
     public func addLeadingStar(
         isAdd: Bool,
         font: Font = .callout,
-        alignment: VerticalAlignment = .top
+        alignment: VerticalAlignment = .top,
+        color: Color = .yellow
     ) -> some View {
         if isAdd {
             HStack(alignment: alignment, spacing: 4) {
                 Image(systemName: "star.fill")
-                    .foregroundStyle(.yellow)
+                    .foregroundStyle(color)
                     .font(font)
                 self
             }

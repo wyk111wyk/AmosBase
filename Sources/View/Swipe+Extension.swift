@@ -21,6 +21,7 @@ public extension View {
         deleteAction: (() -> Void)? = nil,
         editAction: (() -> Void)? = nil,
         favorAction: (() -> Void)? = nil,
+        customButtons: [SwipeButton] = [],
         @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }) -> some View {
             modifier(
                 SimpleSwipeModify(
@@ -33,6 +34,7 @@ public extension View {
                     deleteAction: deleteAction,
                     editAction: editAction,
                     favorAction: favorAction,
+                    customButtons: customButtons,
                     buttonView: buttonView
                 )
             )
@@ -53,6 +55,8 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
     let deleteAction: (() -> Void)?
     let editAction: (() -> Void)?
     let favorAction: (() -> Void)?
+    
+    let customButtons: [SwipeButton]
     @ViewBuilder let buttonView: () -> V
     
     init(
@@ -65,6 +69,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
         deleteAction: (() -> Void)? = nil,
         editAction: (() -> Void)? = nil,
         favorAction: (() -> Void)? = nil,
+        customButtons: [SwipeButton],
         @ViewBuilder buttonView: @escaping () -> V = { EmptyView() }
     ) {
         self.hasSwipe = hasSwipe
@@ -76,6 +81,7 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
         self.deleteAction = deleteAction
         self.editAction = editAction
         self.favorAction = favorAction
+        self.customButtons = customButtons
         self.buttonView = buttonView
     }
     
@@ -86,6 +92,11 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
                     if let deleteAction { deleteButton(deleteAction) }
                     if let editAction { editButton(editAction) }
                     if let favorAction { favorButton(favorAction) }
+                    ForEach(customButtons.indices, id: \.self) { index in
+                        if customButtons[index].isShowInSwipe {
+                            customButtons[index]
+                        }
+                    }
                     if V.self != EmptyView.self {
                         buttonView()
                     }
@@ -96,6 +107,11 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
                 if hasContextMenu && !isDisabled {
                     if V.self != EmptyView.self {
                         buttonView()
+                    }
+                    ForEach(customButtons.indices, id: \.self) { index in
+                        if customButtons[index].isShowInContextMenu {
+                            customButtons[index]
+                        }
                     }
                     if let favorAction { favorButton(favorAction) }
                     if let editAction { editButton(editAction) }
@@ -132,5 +148,51 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
                 Text(isFavor == true ? .unfavorite : .favorite, bundle: .module)
             }
         }).tint(.yellow)
+    }
+}
+
+public struct SwipeButton: View {
+    let isShowInSwipe: Bool
+    let isShowInContextMenu: Bool
+    
+    let role: ButtonRole?
+    let bundle: Bundle
+    
+    let title: String
+    let imageName: String?
+    let color: Color?
+    let action: () -> Void
+    
+    public init(
+        isShowInSwipe: Bool = true,
+        isShowInContextMenu: Bool = true,
+        role: ButtonRole? = nil,
+        title: String,
+        imageName: String? = nil,
+        color: Color? = nil,
+        bundle: Bundle = .main,
+        action: @escaping () -> Void
+    ) {
+        self.isShowInSwipe = isShowInSwipe
+        self.isShowInContextMenu = isShowInContextMenu
+        self.role = role
+        self.title = title
+        self.imageName = imageName
+        self.color = color
+        self.bundle = bundle
+        self.action = action
+    }
+    
+    public var body: some View {
+        Button(role: role, action: action, label: {
+            HStack {
+                if let imageName {
+                    Image(systemName: imageName)
+                }
+                Text(title.toLocalizedKey(), bundle: bundle)
+            }
+                .contentShape(Rectangle())
+        })
+        .tint(color)
     }
 }

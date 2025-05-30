@@ -299,13 +299,13 @@ public struct SimplePlaceholder<V: View>: View {
                         Text(LocalizedStringKey(subtitle))
                             .font(subtitleFont)
                             .foregroundStyle(subtitleColor)
-                            .lineLimit(2)
+                            .lineLimit(6)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     if let content {
                         Text(LocalizedStringKey(content))
                             .font(contentFont)
-                            .lineLimit(8)
+                            .lineLimit(10)
                             .foregroundStyle(contentColor)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -326,6 +326,7 @@ public struct SimplePlaceholder<V: View>: View {
         }
         .frame(maxWidth: maxWidth)
         .offset(x: 0, y: offsetY)
+        .transition(.move(edge: .bottom).combined(with: .opacity).combined(with: .scale))
     }
 }
 

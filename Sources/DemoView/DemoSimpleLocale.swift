@@ -70,22 +70,16 @@ public struct DemoSimpleLocale: View {
     private func stringSection() -> some View {
         Section {
             ForEach(allTestStrings) { key in
-                stringContent(key)
+                Text(key.localized(bundle: .module))
             }
         } header: {
-            HStack {
-                Text("中文")
-                Spacer()
-                Text("En")
-            }
-        }
-    }
-    
-    private func stringContent(_ key: String) -> some View {
-        HStack {
-            Text(String(key.localized(bundle: .module, locale: .zhHans)))
-            Spacer()
-            Text(String(key.localized(bundle: .module, locale: .enUS)))
+            ButtonHeader(
+                titleText: Text("当前系统语言：\(SimpleDevice.getSystemLanguage())"),
+                buttonTitle: "设置语言",
+                buttonImageName: "gearshape.fill",
+                tapAction:  {
+                    SimpleDevice.openSystemSetting()
+                })
         }
     }
 }

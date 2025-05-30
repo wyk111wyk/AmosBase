@@ -65,7 +65,7 @@ public struct ImageDetailView: View {
                         .padding(.horizontal, 15)
                 }
             }
-            .transition(AnyTransition.opacity.animation(.easeInOut(duration: 0.2)))
+            .transition(.opacity.animation(.easeInOut(duration: 0.2)))
             .onAppear() {
                 self.dragOffset = .zero
             }

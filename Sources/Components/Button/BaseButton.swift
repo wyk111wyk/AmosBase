@@ -65,7 +65,7 @@ public struct BaseButton<V: View, S: PrimitiveButtonStyle>: View {
                         labelView()
                         Spacer()
                     }
-                        .contentShape(Rectangle())
+                    .contentShape(Rectangle())
                 }
             }
         })

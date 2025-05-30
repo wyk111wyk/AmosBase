@@ -26,8 +26,6 @@ public struct DemoSimpleImage: View {
     @State private var scanText: String? = nil
     @State private var faceCount: Int? = nil
     
-    @State private var selectedPhotoIndex: Int? = nil
-    
     @State private var aveColor: Color?
     @State private var randomColor: Color?
     
@@ -75,17 +73,6 @@ public struct DemoSimpleImage: View {
                 SimpleCell("识别脸孔") {
                     if let faceCount { Text(faceCount.toString()) }
                 }
-            }
-            Section {
-                Button {
-                    selectedPhotoIndex = 0
-                } label: {
-                    Label("图片查看浏览", systemImage: "photo.on.rectangle.angled")
-                }
-                .simpleImageViewer(
-                    selectedIndex: $selectedPhotoIndex,
-                    allPhotos: ImageStoreModel.examples()
-                )
             }
         }
         .formStyle(.grouped)

@@ -64,16 +64,18 @@ public struct ButtonHeader<V: View>: View {
     let showButtonTitle: Bool
     
     let header: () -> V
+    let tapAction: () -> Void
     
     public init(
-        toggle: Binding<Bool>,
+        toggle: Binding<Bool> = .constant(false),
         titleText: Text? = nil,
         imageName: String? = nil,
         buttonTitle: String = .add,
         buttonImageName: String = "plus",
         buttonColor: Color = .secondary,
         showButtonTitle: Bool = true,
-        @ViewBuilder header: @escaping () -> V = { EmptyView() }
+        @ViewBuilder header: @escaping () -> V = { EmptyView() },
+        tapAction: @escaping () -> Void = {}
     ) {
         self._toggle = toggle
         self.imageName = imageName
@@ -83,6 +85,7 @@ public struct ButtonHeader<V: View>: View {
         self.buttonColor = buttonColor
         self.showButtonTitle = showButtonTitle
         self.header = header
+        self.tapAction = tapAction
     }
     
     public var body: some View {
@@ -99,6 +102,7 @@ public struct ButtonHeader<V: View>: View {
             Spacer()
             PlainButton {
                 toggle.toggle()
+                tapAction()
             } label: {
                 HStack(spacing: 2) {
                     Image(systemName: buttonImageName)
@@ -145,7 +149,7 @@ struct DemoSection: View {
                     buttonImageName: "plus",
                     buttonColor: .blue
                 )
-                    .environment(\.locale, .zhHans)
+                .environment(\.locale, .zhHans)
             }
         }
     }

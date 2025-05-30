@@ -47,9 +47,9 @@ public class SimpleDevice: NSObject {
         #endif
     }
     
-    ///获取系统语言
+    ///获取系统语言: zh / en
     public static func getSystemLanguage() -> String {
-        return Locale.current.identifier
+        return Locale.current.language.languageCode?.identifier ?? Locale.current.identifier
     }
     
     ///获取设备类型: phone, pad, mac, vision, tv, carplay

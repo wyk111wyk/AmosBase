@@ -106,36 +106,45 @@ extension View {
     /// 类型分为nil, cancel, destructive 三种，影响按钮行为和颜色
     ///
     /// 可自定义图标颜色，不设置role可自定义图标
-    public func buttonCirclePage(role: ButtonRole? = nil,
-                                 title: String? = nil,
-                                 imageName: String? = nil,
-                                 labelColor: Color? = nil,
-                                 isDisable: Bool = false,
-                                 isPresent: Bool = true,
-                                 isLoading: Bool = false,
-                                 key: KeyEquivalent? = nil,
-                                 modifiers: EventModifiers? = nil,
-                                 alignment: Alignment? = nil,
-                                 callback: @escaping () -> Void = {}) -> some View {
-        modifier(CircleButtonPage(role: role,
-                                  title: title,
-                                  imageName: imageName,
-                                  labelColor: labelColor,
-                                  isDisable: isDisable,
-                                  isPresent: isPresent,
-                                  isLoading: isLoading,
-                                  key: key,
-                                  modifiers: modifiers,
-                                  alignment: alignment,
-                                  callback: callback))
+    public func buttonCirclePage<S: PrimitiveButtonStyle>(
+        role: ButtonRole? = nil,
+        style: S = .automatic,
+        title: String? = nil,
+        imageName: String? = nil,
+        labelColor: Color? = nil,
+        isDisable: Bool = false,
+        isPresent: Bool = true,
+        isLoading: Bool = false,
+        key: KeyEquivalent? = nil,
+        modifiers: EventModifiers? = nil,
+        alignment: Alignment? = nil,
+        callback: @escaping () -> Void = {}
+    ) -> some View {
+        modifier(
+            CircleButtonPage(
+                role: role,
+                style: style,
+                title: title,
+                imageName: imageName,
+                labelColor: labelColor,
+                isDisable: isDisable,
+                isPresent: isPresent,
+                isLoading: isLoading,
+                key: key,
+                modifiers: modifiers,
+                alignment: alignment,
+                callback: callback
+            )
+        )
     }
     #endif
 }
 
 // MARK: - 基础的按钮组件
 
-public struct CircleButton: View {
+public struct CircleButton<S: PrimitiveButtonStyle>: View {
     let role: ButtonRole?
+    let style: S
     let labelColor: Color?
     let callback: () -> Void
     
@@ -148,6 +157,7 @@ public struct CircleButton: View {
     let modifiers: EventModifiers?
     public init(
         role: ButtonRole? = nil,
+        style: S = .automatic,
         title: String? = nil,
         imageName: String? = nil,
         labelColor: Color? = nil,
@@ -157,6 +167,7 @@ public struct CircleButton: View {
         callback: @escaping () -> Void = {}
     ) {
         self.role = role
+        self.style = style
         if role == .cancel {
             self.title = .cancel
             self.imageName = "xmark"
@@ -215,6 +226,7 @@ public struct CircleButton: View {
     #else
     public init(
         role: ButtonRole? = nil,
+        style: S = .automatic,
         title: String? = nil,
         imageName: String? = nil,
         labelColor: Color? = nil,
@@ -222,6 +234,7 @@ public struct CircleButton: View {
         callback: @escaping () -> Void = {}
     ) {
         self.role = role
+        self.style = style
         if role == .cancel {
             self.title = .cancel
             self.imageName = "xmark"
@@ -260,8 +273,9 @@ public struct CircleButton: View {
     #endif
 }
 
-struct CircleButtonPage: ViewModifier {
+struct CircleButtonPage<S: PrimitiveButtonStyle>: ViewModifier {
     let role: ButtonRole?
+    let style: S
     let title: String?
     let imageName: String?
     let labelColor: Color?
@@ -276,18 +290,22 @@ struct CircleButtonPage: ViewModifier {
     #if !os(watchOS)
     let key: KeyEquivalent?
     let modifiers: EventModifiers?
-    init(role: ButtonRole? = nil,
-         title: String? = nil,
-         imageName: String? = nil,
-         labelColor: Color? = nil,
-         isDisable: Bool = false,
-         isPresent: Bool = true,
-         isLoading: Bool = false,
-         key: KeyEquivalent? = nil,
-         modifiers: EventModifiers? = nil,
-         alignment: Alignment? = nil,
-         callback: @escaping () -> Void = {}) {
+    init(
+        role: ButtonRole? = nil,
+        style: S = .automatic,
+        title: String? = nil,
+        imageName: String? = nil,
+        labelColor: Color? = nil,
+        isDisable: Bool = false,
+        isPresent: Bool = true,
+        isLoading: Bool = false,
+        key: KeyEquivalent? = nil,
+        modifiers: EventModifiers? = nil,
+        alignment: Alignment? = nil,
+        callback: @escaping () -> Void = {}
+    ) {
         self.role = role
+        self.style = style
         self.title = title
         self.imageName = imageName
         self.labelColor = labelColor
@@ -313,6 +331,7 @@ struct CircleButtonPage: ViewModifier {
             content.overlay(alignment: alignment) {
                 CircleButton(
                     role: role,
+                    style: style,
                     title: title,
                     imageName: imageName,
                     labelColor: labelColor,
@@ -330,6 +349,7 @@ struct CircleButtonPage: ViewModifier {
     }
     #else
     init(role: ButtonRole? = nil,
+         style: S = .automatic,
          title: String? = nil,
          imageName: String? = nil,
          labelColor: Color? = nil,
@@ -339,6 +359,7 @@ struct CircleButtonPage: ViewModifier {
          alignment: Alignment? = nil,
          callback: @escaping () -> Void = {}) {
         self.role = role
+        self.style = style
         self.title = title
         self.imageName = imageName
         self.labelColor = labelColor
@@ -362,6 +383,7 @@ struct CircleButtonPage: ViewModifier {
             content.overlay(alignment: alignment) {
                 CircleButton(
                     role: role,
+                    style: style,
                     title: title,
                     imageName: imageName,
                     labelColor: labelColor,

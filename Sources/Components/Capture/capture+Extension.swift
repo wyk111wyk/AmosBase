@@ -14,7 +14,13 @@ public extension View {
         let render = ImageRenderer(
             content: self
         )
-        render.scale = 2
+        #if os(macOS)
+        render.scale = NSScreen.main?.backingScaleFactor ?? 1
+        #else
+        render.scale = UIScreen.main.scale
+        #endif
+        
+        render.proposedSize = .unspecified
         #if os(macOS)
         return render.nsImage
         #else
