@@ -69,6 +69,7 @@ public struct DemoSimpleLocale: View {
     
     private func stringSection() -> some View {
         Section {
+            Text("I have \(5) books".localized(bundle: .module))
             ForEach(allTestStrings) { key in
                 Text(key.localized(bundle: .module))
             }
@@ -87,5 +88,6 @@ public struct DemoSimpleLocale: View {
 #Preview {
     NavigationStack {
         DemoSimpleLocale()
+            .environment(\.locale, .zhHans)
     }
 }

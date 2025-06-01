@@ -79,7 +79,7 @@ struct MutiImageViewer: View {
             .padding()
         }
         .safeAreaInset(edge: .bottom) {
-            Slider(value: $thumbnailWidth, in: 60...sliderMax)
+            Slider(value: $thumbnailWidth, in: 60...sliderMax, step: 10)
                 .padding()
                 .contentBackground(verticalPadding: 0, horizontalPadding: 0, cornerRadius: 60)
                 .padding(.horizontal)

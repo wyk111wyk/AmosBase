@@ -65,6 +65,22 @@ public class SimpleDevice: NSObject {
         #endif
     }
     
+    public static var isWatchUse: Bool {
+        SimpleDevice.getDevice() == .watch
+    }
+    
+    public static var isPhoneUse: Bool {
+        SimpleDevice.getDevice() == .phone
+    }
+    
+    public static var isPadUse: Bool {
+        SimpleDevice.getDevice() == .pad
+    }
+    
+    public static var isMacUse: Bool {
+        SimpleDevice.getDevice() == .mac
+    }
+    
     /*
      - 在 iOS 上，获取 Wi-Fi 信息需要使用 NetworkExtension 框架的 NEHotspotHelper。
      1. 在项目的 Info.plist 中添加以下键：
@@ -166,7 +182,7 @@ extension SimpleDevice {
     public enum DeviceSize {
         case small, medium, large, iPad
     }
-    /// 获取 iPhone 的尺寸级别
+    
     public static func deviceSize() -> DeviceSize {
         let deviceName = deviceName()
         if deviceName.contains("iPhone") {

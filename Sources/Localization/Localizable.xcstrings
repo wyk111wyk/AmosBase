@@ -1186,6 +1186,17 @@
         }
       }
     },
+    "I have %lld books" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我有%lld本书"
+          }
+        }
+      }
+    },
     "Imagebed path" : {
       "extractionState" : "manual",
       "localizations" : {

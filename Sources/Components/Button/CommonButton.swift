@@ -67,7 +67,7 @@ public struct ConfirmButton<V: View, S: PrimitiveButtonStyle>: View {
         systemImage: String = "checkmark",
         style: S = .borderless,
         role: ButtonRole? = nil,
-        color: Color? = .green,
+        color: Color? = .accentColor,
         isInMiddle: Bool = false,
         isLoading: Bool = false,
         tapAction: @escaping () -> Void,

@@ -20,16 +20,18 @@ public extension View {
         withMaterial: Bool = true,
         isAppear: Bool = true
     ) -> some View {
-        modifier(ContentBackgroundView(
-            verticalPadding: verticalPadding,
-            horizontalPadding: horizontalPadding,
-            cornerRadius: cornerRadius,
-            shadowRadius: shadowRadius,
-            shadowY: shadowY,
-            color: color,
-            withMaterial: withMaterial,
-            isAppear: isAppear
-        ))
+        modifier(
+            ContentBackgroundView(
+                verticalPadding: verticalPadding,
+                horizontalPadding: horizontalPadding,
+                cornerRadius: cornerRadius,
+                shadowRadius: shadowRadius,
+                shadowY: shadowY,
+                color: color,
+                withMaterial: withMaterial,
+                isAppear: isAppear
+            )
+        )
     }
     
     /// 对 View 进行背景颜色的直接渲染（或玻璃模糊）

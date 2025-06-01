@@ -71,7 +71,7 @@ public struct SimpleTextField<
     
     public var body: some View {
         TextField(
-            title,
+            title.toLocalizedKey(),
             text: $inputText,
             prompt: promptText,
             axis: .vertical

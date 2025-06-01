@@ -11,9 +11,9 @@ import Combine
 
 public struct SimpleAudioPlayBar: View {
     @State private var audioHelper: SimpleAudioHelper?
+    @Binding var isPresenting: Bool
     
     let title: String?
-    @Binding var isPresenting: Bool
     let showDismissButton: Bool
     let isPlay: Bool
     
@@ -197,7 +197,7 @@ extension SimpleAudioPlayBar {
         Circle()
             .stroke(lineWidth: 2)
             .frame(width: 36)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(.secondary.opacity(0.6))
     }
     
     private func loadingButton() -> some View {
@@ -220,7 +220,7 @@ extension SimpleAudioPlayBar {
         ZStack {
             buttonCircle
             Image(systemName: "pause.fill")
-                .foregroundStyle(.orange)
+                .foregroundStyle(.blue)
         }
     }
     

@@ -28,14 +28,21 @@ public extension String {
     func localized(
         table: String = "Localizable",
         bundle: Bundle = .main,
-        locale: Locale = .current
+        locale: Locale = .current,
+        _ arguments: CVarArg...
     ) -> String {
-        String(
+        let localizedString = String(
             localized: String.LocalizationValue(self),
             table: table,
             bundle: bundle,
             locale: locale
         )
+        
+        if arguments.isEmpty {
+            return localizedString
+        } else {
+            return String(format: localizedString, arguments: arguments)
+        }
     }
     
     /// 转换为 LocalizedStringKey

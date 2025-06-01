@@ -294,7 +294,7 @@ public struct SimplePlaceholder<V: View>: View {
                     Text(LocalizedStringKey(title))
                         .font(titleFont)
                         .foregroundStyle(titleColor)
-                        .lineLimit(1)
+                        .lineLimit(3)
                     if let subtitle {
                         Text(LocalizedStringKey(subtitle))
                             .font(subtitleFont)

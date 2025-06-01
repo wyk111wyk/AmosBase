@@ -46,6 +46,7 @@ public struct SimpleCell<V: View>: View {
     // content
     let contentSystemImage: String?
     let content: String?
+    let contentSubfix: String?
     let contentLine: Int?
     let contentFont: Font
     let contentColor: Color?
@@ -75,6 +76,7 @@ public struct SimpleCell<V: View>: View {
         numberIcon: Int? = nil,
         iconColor: Color? = nil,
         content: String? = nil,
+        contentSubfix: String? = nil,
         contentLine: Int? = nil,
         contentFont: Font = .caption,
         contentColor: Color? = .secondary,
@@ -103,6 +105,7 @@ public struct SimpleCell<V: View>: View {
         self.subtitleLine = subtitleLine
         self.contentSystemImage = contentSystemImage
         self.content = content
+        self.contentSubfix = contentSubfix
         self.contentLine = contentLine
         self.contentFont = contentFont
         self.contentColor = contentColor
@@ -221,6 +224,14 @@ public struct SimpleCell<V: View>: View {
                                 .font(contentFont)
                                 .lineLimit(contentLine)
                                 .multilineTextAlignment(.leading)
+                            
+                            if let contentSubfix {
+                                Text(LocalizedStringKey(contentSubfix), bundle: localizationBundle)
+                                    .foregroundColor(contentColor)
+                                    .font(contentFont)
+                                    .lineLimit(contentLine)
+                                    .multilineTextAlignment(.leading)
+                            }
                         }
                     }
                 }

@@ -71,3 +71,7 @@ public enum SimplePlaceholderType: String, Identifiable, CaseIterable {
         }
     }
 }
+
+#Preview(body: {
+    DemoSimplePlaceholder()
+})

@@ -15,17 +15,20 @@ public struct SimpleTokenTextField: View {
     let tokenTitle: String
     let prompt: String
     let tintColor: Color
+    let bundle: Bundle
     
-    init(
+    public init(
         _ tokenText: Binding<String>,
         tokenTitle: String = "密钥",
         prompt: String = "请输入密钥",
-        tintColor: Color = .accentColor
+        tintColor: Color = .accentColor,
+        bundle: Bundle = .main
     ) {
         self._tokenText = tokenText
         self.tokenTitle = tokenTitle
         self.prompt = prompt
         self.tintColor = tintColor
+        self.bundle = bundle
     }
     
     public var body: some View {
@@ -34,6 +37,7 @@ public struct SimpleTokenTextField: View {
                 $tokenText,
                 title: tokenTitle,
                 prompt: prompt,
+                bundle: bundle,
                 endLine: 1,
                 tintColor: tintColor
             )

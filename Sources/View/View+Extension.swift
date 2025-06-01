@@ -53,12 +53,13 @@ public extension Picker {
 public extension View {
     func macPadding(
         _ edges: Edge.Set = .all,
-        _ length: CGFloat? = nil
+        _ length: CGFloat? = nil,
+        incloudPad: Bool = true
     ) -> some View {
         #if os(macOS)
         self.padding(edges, length)
         #else
-        self
+        self.padding(edges, (incloudPad && SimpleDevice.isPadUse) ? length : 0)
         #endif
     }
     
