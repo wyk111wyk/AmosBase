@@ -163,6 +163,11 @@ public struct PopBanner: View {
                 title: String.randomChinese(short: true),
                 subTitle: String.randomChinese(long: true)
             )
+            PopBanner(
+                mode: .copy,
+                title: String.randomChinese(short: true),
+                subTitle: String.randomChinese(long: true)
+            )
             PopBanner(mode: .loading)
                 .environment(\.locale, .zhHans)
             PopBanner(

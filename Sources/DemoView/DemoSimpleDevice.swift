@@ -36,7 +36,7 @@ public struct DemoSimpleDevice: View {
                 #endif
                 SimpleCell("设备型号", stateText: SimpleDevice.getFullModel())
                 SimpleCell("总磁盘", stateText: SimpleDevice.getDiskTotalSize())
-                SimpleCell("可用空间", stateText: SimpleDevice.getDiskTotalSize())
+                SimpleCell("可用空间", stateText: SimpleDevice.getAvalibleDiskSize())
                 SimpleCell("当前IP", stateText: SimpleDevice.getDeviceIP())
                 SimpleCell("应用名称", stateText: SimpleDevice.getAppName())
                 SimpleCell("应用版本", stateText: SimpleDevice.getAppVersion())

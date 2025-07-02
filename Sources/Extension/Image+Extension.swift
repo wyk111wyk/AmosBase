@@ -144,12 +144,12 @@ public extension SFImage {
         SFImage(bundle: .module, packageResource: "AmosLogoW", ofType: "png")!
     }
     
-    static var logoNameWhite: SFImage {
-        SFImage(bundle: .module, packageResource: "Logo-White", ofType: "png")!
+    static var amosStudioWhite: SFImage {
+        SFImage(bundle: .module, packageResource: "AmosStudio-W", ofType: "png")!
     }
     
-    static var logoNameBlack: SFImage {
-        SFImage(bundle: .module, packageResource: "Logo-Black", ofType: "png")!
+    static var amosStudioBlack: SFImage {
+        SFImage(bundle: .module, packageResource: "AmosStudio-B", ofType: "png")!
     }
     
     // IAP
@@ -157,26 +157,33 @@ public extension SFImage {
         SFImage(bundle: .module, packageResource: "dimond", ofType: "heic")!
     }
     
-    static var premium: SFImage {
-        SFImage(bundle: .module, packageResource: "premium", ofType: "heic")!
-    }
-    
     static var dimond_w: SFImage {
         SFImage(bundle: .module, packageResource: "dimond-w", ofType: "heic")!
-    }
-    
-    static var premium_w: SFImage {
-        SFImage(bundle: .module, packageResource: "premium-w", ofType: "heic")!
     }
     
     static var sale: SFImage {
         SFImage(bundle: .module, packageResource: "sale", ofType: "png")!
     }
     
-    static var lock: SFImage {
-        SFImage(bundle: .module, packageResource: "lock", ofType: "heic")!
+    static var basic: SFImage {
+        SFImage(bundle: .module, packageResource: "Basic", ofType: "png")!
     }
     
+    static var pro: SFImage {
+        SFImage(bundle: .module, packageResource: "Pro", ofType: "png")!
+    }
+    
+    static var premium: SFImage {
+        SFImage(bundle: .module, packageResource: "PREMIUM", ofType: "png")!
+    }
+    
+    static var ultra: SFImage {
+        SFImage(bundle: .module, packageResource: "ULTRA", ofType: "png")!
+    }
+    
+    static var amos: SFImage {
+        SFImage(bundle: .module, packageResource: "Amos", ofType: "png")!
+    }
     
     // Demo
     static var device: SFImage {

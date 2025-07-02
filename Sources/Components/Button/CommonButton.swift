@@ -201,6 +201,8 @@ package struct DemoCommonButton: View {
                 ConfirmButton(tapAction: {})
                 CancelButton(tapAction: {})
                 SimpleEditButton(tapAction: {})
+                ConfirmButton(isInMiddle: true, tapAction: {})
+                CancelButton(isInMiddle: true, tapAction: {})
             }
             .formStyle(.grouped)
         }

@@ -12,6 +12,8 @@ public extension Bundle {
     ///
     /// let file = Bundle.main.decode(url)
     ///
+    /// let pinyinJson = "hanzi-pinyin-table".decodeJSON()
+    ///
     /// 例： Bundle.main.decode("teams.json")
     func decode<T: Codable>(_ file: String) -> T {
         guard let url = self.url(forResource: file, withExtension: nil) else {

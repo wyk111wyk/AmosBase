@@ -22,6 +22,7 @@ struct ImageViewerModifier: ViewModifier {
     @State private var lastScale: CGFloat = 1.0
     @State private var isDragging: Bool = false
     @State private var isZooming: Bool = false
+    @State private var startAnchor: UnitPoint = .center
     
     private let minScale: CGFloat = 1.0
     private let maxScale: CGFloat = 5.0
@@ -29,7 +30,7 @@ struct ImageViewerModifier: ViewModifier {
     func body(content: Content) -> some View {
         GeometryReader { geometry in
             content
-                .scaleEffect(scale)
+                .scaleEffect(scale, anchor: startAnchor)
                 .offset(offset)
                 .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
                 .highPriorityGesture(
@@ -83,10 +84,13 @@ struct ImageViewerModifier: ViewModifier {
     }
     
     private func zoomGesture(in geometry: GeometryProxy) -> some Gesture {
-        let magnificationGesture = MagnificationGesture()
+        let magnificationGesture = MagnifyGesture()
             .onChanged { value in
                 isZooming = true
-                let newScale = lastScale * value
+                if scale == minScale {
+                    startAnchor = value.startAnchor
+                }
+                let newScale = lastScale * value.magnification
                 scale = min(max(newScale, minScale), maxScale)
                 updateOffset(for: geometry)
             }

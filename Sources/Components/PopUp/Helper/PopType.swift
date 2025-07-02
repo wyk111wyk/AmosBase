@@ -50,6 +50,7 @@ public enum SimplePopupMode: Equatable, Identifiable {
     case loading
     case text
     case noInternet
+    case copy
     case custom
     
     var title: String {
@@ -61,6 +62,7 @@ public enum SimplePopupMode: Equatable, Identifiable {
         case .loading: "加载中"
         case .text: "文本"
         case .noInternet: "无法联网"
+        case .copy: "复制"
         case .custom: "自定义"
         }
     }
@@ -85,10 +87,29 @@ extension SimplePopupMode {
                 Image(systemName: "checkmark")
                     .imageModify(length: 20)
                     .foregroundStyle(iconColor)
+                    .background {
+                        RoundedRectangle(cornerRadius: 6)
+                            .frame(width: 36, height: 36)
+                            .foregroundStyle(.regularMaterial.opacity(0.16))
+                    }
             case .error:
                 Image(systemName: "xmark")
                     .imageModify(length: 20)
                     .foregroundStyle(iconColor)
+                    .background {
+                        RoundedRectangle(cornerRadius: 6)
+                            .frame(width: 36, height: 36)
+                            .foregroundStyle(.regularMaterial.opacity(0.16))
+                    }
+            case .copy:
+                Image(systemName: "list.bullet.clipboard")
+                    .imageModify(length: 18)
+                    .foregroundStyle(iconColor)
+                    .background {
+                        RoundedRectangle(cornerRadius: 6)
+                            .frame(width: 36, height: 36)
+                            .foregroundStyle(.regularMaterial.opacity(0.16))
+                    }
             case .noInternet:
                 Image(systemName: "wifi.slash")
                     .imageModify(length: 20)
@@ -119,6 +140,8 @@ extension SimplePopupMode {
             return bgColor ?? .green
         case .error:
             return bgColor ?? .red
+        case .copy:
+            return bgColor ?? .indigo_07
         default:
             return bgColor ?? nil
         }
@@ -147,6 +170,10 @@ extension SimplePopupMode {
                 PopAnimatedCheckmark(.textColor(bgColor: bgColor, baseColor: .green))
             case .error:
                 PopAnimatedXmark(.textColor(bgColor: bgColor, baseColor: .red))
+            case .copy:
+                Image(systemName: "list.bullet.clipboard")
+                    .imageModify(length: 46, watchLength: 26)
+                    .foregroundStyle(Color.textColor(bgColor: bgColor, baseColor: .indigo_07))
             case .systemImage(let systemName):
                 Image(systemName: systemName)
                     .imageModify(length: 50, watchLength: 26)

@@ -8,10 +8,13 @@
 import SwiftUI
 import StoreKit
 
+/// 适用于 月订阅,年订阅,终身购买
 public struct SimplePurchaseView: View {
     @Environment(\.dismiss) private var dismissPage
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    @Bindable var storeData: IapStore
     
     @State private var showPrivacySheet: Bool = false
     @State private var showRedeemSheet: Bool = false
@@ -19,26 +22,30 @@ public struct SimplePurchaseView: View {
     @State private var isLoading: Bool = false
     
     let logger: SimpleLogger = .console(subsystem: "IAP")
-    let allItem: [SimplePurchaseItem]
-    let config: SimplePurchaseConfig
+    /// 产品介绍的条目
+    let allItem: [PurchaseItem]
+    /// 展示页面的配置项
+    let config: PurchaseConfig
     
     @State var monthlyProduct: SimpleProduct? = nil
     @State var yearlyProduct: SimpleProduct? = nil
     @State var lifetimeProduct: SimpleProduct? = nil
     
     let startPurchaseAction: (Product) -> Void
-    let recoverPurchaseAction: (StoreKit.Transaction) -> Void
+    let refreshAction: () -> Void
     
     public init(
-        allItem: [SimplePurchaseItem],
-        config: SimplePurchaseConfig,
+        storeData: IapStore,
+        allItem: [PurchaseItem],
+        config: PurchaseConfig,
         startPurchaseAction: @escaping (Product) -> Void = {_ in},
-        recoverPurchaseAction: @escaping (StoreKit.Transaction) -> Void = {_ in}
+        refreshAction: @escaping () -> Void = {}
     ) {
+        self.storeData = storeData
         self.allItem = allItem
         self.config = config
         self.startPurchaseAction = startPurchaseAction
-        self.recoverPurchaseAction = recoverPurchaseAction
+        self.refreshAction = refreshAction
     }
     
     var backgroundColor: Color {
@@ -91,56 +98,39 @@ public struct SimplePurchaseView: View {
             }
         }
         #endif
+        .refreshable {
+            fetchProduct()
+        }
         .task {
-            await fetchProduct()
+            fetchProduct()
+        }
+        .onChange(of: storeData.allProducts.count) {
+            fetchProduct()
         }
     }
     
-    private func fetchProduct() async {
-        do {
-#if DEBUG
-            lifetimeProduct = .lifeExample
-            yearlyProduct = .yearExample
-            monthlyProduct = .monthExample
-#else
-            let storeProducts = try await Product.products(for: config.allProductId)
-            for product in storeProducts {
-//                logger.debug(product.id, title: "获取商品")
-                switch product.simpleType {
-                case .lifetime:
-                    lifetimeProduct = product.toSimpleProduct()
-                case .yearly:
-                    yearlyProduct = product.toSimpleProduct()
-                case .monthly:
-                    monthlyProduct = product.toSimpleProduct()
-                default: break
-                }
+    private func fetchProduct() {
+        for product in storeData.allProducts {
+            logger.debug(product.id, title: "展示 IAP 商品")
+            if product.isMonthlySubscription {
+                monthlyProduct = product
+            }else if product.isYearlySubscription {
+                yearlyProduct = product
+            }else if product.isPermanent {
+                lifetimeProduct = product
             }
-            
-#endif
-        }catch {
-            logger.error(error)
-            showError = error
         }
     }
-}
-
-extension SimplePurchaseView {
+    
     @MainActor
     private func recoverPurchase() async {
         isLoading = true
-        for await result in Transaction.currentEntitlements {
-            if case .verified(let transaction) = result {
-                logger.debug(transaction.productID, title: "恢复购买的ID")
-                recoverPurchaseAction(transaction)
-            }
+        if await storeData.refresh() {
+            refreshAction()
+            isLoading = false
+            dismissPage()
         }
         isLoading = false
-    }
-        
-    @MainActor
-    private func redeemPurchase() async {
-        
     }
 }
 
@@ -171,7 +161,7 @@ extension SimplePurchaseView {
                     Image(sfImage: .dimond_w)
                         .resizable().scaledToFit()
                         .frame(width: 36)
-                    Image(sfImage: .premium_w)
+                    Image(sfImage: .premium)
                         .resizable().scaledToFit()
                         .frame(width: 90)
                 }
@@ -316,19 +306,20 @@ extension SimplePurchaseView {
 }
 
 struct DemoSimplePurchase: View {
-    var allItem: [SimplePurchaseItem] {
+    var allItem: [PurchaseItem] {
         [
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "学习计划", regular: "仅限预设", premium: "自由创建和更改"),
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品详情", regular: "解析、佳句", premium: "介绍、译文、评论、百科"),
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "诵读引擎", regular: "系统合成音效", premium: "专项训练的神经网络引擎"),
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品成图", regular: "无法生成图片", premium: "多维定制生成诗词图片"),
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "数据同步", regular: "仅限本地使用", premium: "多设备无缝实时同步使用"),
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "多端使用", regular: "多平台", premium: "单次购买 · 多端同享")
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "学习计划", regular: "仅限预设", premium: "自由创建和更改"),
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品详情", regular: "解析、佳句", premium: "介绍、译文、评论、百科"),
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "诵读引擎", regular: "系统合成音效", premium: "专项训练的神经网络引擎"),
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品成图", regular: "无法生成图片", premium: "多维定制生成诗词图片"),
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "数据同步", regular: "仅限本地使用", premium: "多设备无缝实时同步使用"),
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "多端使用", regular: "多平台", premium: "单次购买 · 多端同享")
         ]
     }
     
     var body: some View {
         SimplePurchaseView(
+            storeData: IapStore(),
             allItem: allItem,
             config: .init(
                 title: "体验完整文学魅力",
@@ -336,7 +327,7 @@ struct DemoSimplePurchase: View {
                 titleImage_b: Image(sfImage: .device),
                 imageCaption: "单次购买 · 多端同享",
                 devNote: "我们的愿景是希望用App解决生活中的“小问题”。这意味着对日常用户而言，免费版本也必须足够好用。\n10万诗词文章离线可查，核心的阅读、检索、学习体验完整而简洁，加上现代化的设计和全平台的体验完全开放。\n而高级版本又将解锁一系列新的特性。让诗词赏析的体验进一步提升，更私人、更灵活、更智能、更值得。",
-                allProductId: ["lifePremium","monthlyPremium","yearlyPremium"]
+                hasFreeTrial: true
             )
         )
         #if os(macOS)

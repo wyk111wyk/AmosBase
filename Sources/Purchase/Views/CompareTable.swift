@@ -11,7 +11,7 @@ struct PurchaseCompareTable: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.colorScheme) private var colorScheme
     
-    let allItem: [SimplePurchaseItem]
+    let allItem: [PurchaseItem]
     
     var body: some View {
         if horizontalSizeClass == .compact {
@@ -73,10 +73,8 @@ struct PurchaseCompareTable: View {
     
     private func regularColumns() -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Regular", bundle: .module)
-                .font(.callout.weight(.light))
-                .foregroundStyle(.secondary)
-                .padding(.horizontal, 6)
+            Image(sfImage: .basic)
+                .resizable().scaledToFit()
                 .frame(height: 14)
             Divider()
             ForEach(allItem) { item in
@@ -98,7 +96,8 @@ struct PurchaseCompareTable: View {
     
     private func premiumColumns() -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            premiumImage
+            Image(sfImage: .premium)
+                .resizable().scaledToFit()
                 .frame(height: 14)
                 .shimmering(active: true, gradient: Shimmer.defaultGradient02)
             Divider()
@@ -118,27 +117,17 @@ struct PurchaseCompareTable: View {
             }
         }
     }
-    
-    private var premiumImage: some View {
-        if colorScheme == .light {
-            Image(sfImage: .premium)
-                .resizable().scaledToFit()
-        }else {
-            Image(sfImage: .premium_w)
-                .resizable().scaledToFit()
-        }
-    }
 }
 
 #Preview {
-    var allItem: [SimplePurchaseItem] {
+    var allItem: [PurchaseItem] {
         [
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "学习计划", regular: "仅限预设", premium: "自由创建和更改"),
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品详情", regular: "解析、佳句", premium: "介绍、译文、评论、百科"),
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "诵读引擎", regular: "系统合成音效", premium: "专项训练的神经网络引擎"),
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品成图", regular: "无法生成图片", premium: "多维定制生成诗词图片"),
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "数据同步", regular: "仅限本地使用", premium: "多设备无缝实时同步使用"),
-            SimplePurchaseItem(icon: Image(sfImage: .lal_nba), title: "多端使用", regular: "多平台", premium: "单次购买 · 多端同享")
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "学习计划", regular: "仅限预设", premium: "自由创建和更改"),
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品详情", regular: "解析、佳句", premium: "介绍、译文、评论、百科"),
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "诵读引擎", regular: "系统合成音效", premium: "专项训练的神经网络引擎"),
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品成图", regular: "无法生成图片", premium: "多维定制生成诗词图片"),
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "数据同步", regular: "仅限本地使用", premium: "多设备无缝实时同步使用"),
+            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "多端使用", regular: "多平台", premium: "单次购买 · 多端同享")
         ]
     }
     

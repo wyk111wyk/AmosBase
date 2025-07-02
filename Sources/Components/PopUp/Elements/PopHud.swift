@@ -140,6 +140,7 @@ public struct PopHud: View {
             PopHud(mode: .loading)
             PopHud(mode: .error, title: String.randomChinese(short: true), subTitle: String.randomChinese(medium: true))
             PopHud(mode: .success, title: String.randomChinese(short: true), subTitle: String.randomChinese(medium: true))
+            PopHud(mode: .copy, title: String.randomChinese(short: true), subTitle: String.randomChinese(medium: true))
             PopHud(mode: .loading)
             PopHud(mode: .systemImage("trash"), title: String.randomChinese(long: true), subTitle: String.randomChinese(long: true), bgColor: .blue)
             PopHud(mode: .text, title: String.randomChinese(short: true), subTitle: String.randomChinese(medium: true))

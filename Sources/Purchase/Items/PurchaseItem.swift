@@ -8,7 +8,7 @@
 import SwiftUI
 
 /// 对 IAP 的介绍列表内容
-public struct SimplePurchaseItem: Identifiable {
+public struct PurchaseItem: Identifiable {
     public let id: UUID = UUID()
     
     let icon: Image
@@ -16,7 +16,12 @@ public struct SimplePurchaseItem: Identifiable {
     let regular: String
     let premium: String
     
-    public init(icon: Image, title: String, regular: String, premium: String) {
+    public init(
+        icon: Image,
+        title: String,
+        regular: String,
+        premium: String
+    ) {
         self.icon = icon
         self.title = title
         self.regular = regular

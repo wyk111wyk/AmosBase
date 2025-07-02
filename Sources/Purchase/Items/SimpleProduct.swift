@@ -8,74 +8,74 @@
 import Foundation
 import StoreKit
 
-struct SimpleProduct: Identifiable {
-    let id: String
-    let displayName: String
-    let price: Decimal
-    let displayPrice: String
-    let product: Product?
-    let type: Product.ProductType?
+public struct SimpleProduct: Identifiable {
+    public let id: String
+    public let displayName: String
+    public let description: String
+    public let price: Decimal
+    public let displayPrice: String
+    public let product: Product?
+    public let type: Product.ProductType?
     
-    init(
+    public init(
         id: String,
         displayName: String,
+        description: String = "",
         displayPrice: String,
         price: Decimal,
         product: Product? = nil
     ) {
         self.id = id
         self.displayName = displayName
+        self.description = description
         self.displayPrice = displayPrice
         self.price = price
         self.product = product
         self.type = product?.type
     }
     
-    init(product: Product) {
+    public init(product: Product) {
         self.id = product.id
         self.displayName = product.displayName
+        self.description = product.description
         self.displayPrice = product.displayPrice
         self.price = product.price
         self.product = product
         self.type = product.type
     }
     
-    var weekPromotion: String? {
+    public var weekPromotion: String? {
         let price = NSDecimalNumber(decimal: price).doubleValue
-        switch simpleType {
-        case .lifetime: return "Lifetime"
+        switch span {
+        case .permanent: return PurchaseSpan.permanent.title
         case .yearly:
             let weekPrice = price / 365 * 7
-            return String(format: "%.2f / 周", weekPrice)
+            return String(format: "%.2f / Week", weekPrice)
         case .monthly:
             let weekPrice = price / 30 * 7
-            return String(format: "%.2f / 周", weekPrice)
+            return String(format: "%.2f / Week", weekPrice)
         default: return "-"
         }
     }
     
-    var simpleType: SimpleProductType {
-        if id.hasPrefix("yearlyPremium") {
-            return .yearly
-        }else if id.hasPrefix("monthlyPremium") {
-            return .monthly
-        }else if id.hasPrefix("lifePremium") {
-            return .lifetime
-        }else {
-            return .unknow
-        }
-    }
-    
-    var isAvailable: Bool {
-        if self.simpleType == .unknow {
-            return false
-        }else {
-            return true
-        }
+    public var span: PurchaseSpan? {
+        product?.id.toPurchaseSpan
     }
 }
 
 extension SimpleProduct {
+    public var isMonthlySubscription: Bool {
+        id.toPurchaseSpan == .monthly
+    }
+    
+    public var isYearlySubscription: Bool {
+        id.toPurchaseSpan == .yearly
+    }
+    
+    public var isPermanent: Bool {
+        id.toPurchaseSpan == .permanent
+    }
+    
     static var yearExample: SimpleProduct {
         SimpleProduct(id: "yearlyPremium", displayName: "Yearly", displayPrice: "$19.99", price: 19.99)
     }

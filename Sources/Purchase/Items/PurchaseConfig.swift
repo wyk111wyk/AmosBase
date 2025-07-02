@@ -8,13 +8,13 @@
 import SwiftUI
 
 /// IAP 配置
-public struct SimplePurchaseConfig {
+public struct PurchaseConfig {
     let title: String?
     let titleImage_w: Image
     let titleImage_b: Image?
     let imageCaption: String?
     let devNote: String?
-    let allProductId: [String]
+    let hasFreeTrial: Bool
     
     public init(
         title: String?,
@@ -22,13 +22,13 @@ public struct SimplePurchaseConfig {
         titleImage_b: Image? = nil,
         imageCaption: String? = nil,
         devNote: String? = nil,
-        allProductId: [String] = []
+        hasFreeTrial: Bool = false
     ) {
         self.title = title
         self.titleImage_w = titleImage_w
         self.titleImage_b = titleImage_b
         self.imageCaption = imageCaption
         self.devNote = devNote
-        self.allProductId = allProductId
+        self.hasFreeTrial = hasFreeTrial
     }
 }

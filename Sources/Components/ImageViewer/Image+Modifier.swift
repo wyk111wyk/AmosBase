@@ -8,26 +8,61 @@
 import SwiftUI
 
 public extension View {
+    @ViewBuilder
     func simpleImageViewer(
         selectedIndex: Binding<Int?>,
-        allPhotos: [any SimpleImageStore]
+        allPhotos: [any SimpleImageStore],
+        isFullScreen: Bool = false
     ) -> some View {
+        #if os(macOS)
         modifier(
-            SimpleImageViewer(
+            SimpleImageSheet(
                 selectedIndex: selectedIndex,
                 allPhotos: allPhotos
             )
         )
+        #else
+        if isFullScreen {
+            modifier(
+                SimpleImageFullScreen(
+                    selectedIndex: selectedIndex,
+                    allPhotos: allPhotos
+                )
+            )
+        }else {
+            modifier(
+                SimpleImageSheet(
+                    selectedIndex: selectedIndex,
+                    allPhotos: allPhotos
+                )
+            )
+        }
+        #endif
     }
 }
 
-struct SimpleImageViewer: ViewModifier {
+struct SimpleImageSheet: ViewModifier {
     @Binding var selectedIndex: Int?
     let allPhotos: [any SimpleImageStore]
     
     func body(content: Content) -> some View {
         content
             .sheet(item: $selectedIndex) { select in
+                MutiImageViewer(
+                    allImages: allPhotos,
+                    selectedIndex: select
+                )
+            }
+    }
+}
+
+struct SimpleImageFullScreen: ViewModifier {
+    @Binding var selectedIndex: Int?
+    let allPhotos: [any SimpleImageStore]
+    
+    func body(content: Content) -> some View {
+        content
+            .fullScreenCover(item: $selectedIndex) { select in
                 MutiImageViewer(
                     allImages: allPhotos,
                     selectedIndex: select

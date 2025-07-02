@@ -163,7 +163,8 @@ public struct DemoContent: View {
         }
         .simpleImageViewer(
             selectedIndex: $showPhotoIndex,
-            allPhotos: ImageStoreModel.examples()
+            allPhotos: ImageStoreModel.examples(),
+            isFullScreen: SimpleDevice.isPadUse
         )
     }
     

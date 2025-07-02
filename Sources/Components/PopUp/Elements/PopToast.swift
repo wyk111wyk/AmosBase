@@ -110,6 +110,7 @@ public struct PopToast: View {
         VStack(spacing: 20) {
             PopToast(mode: .error, title: String.randomChinese(short: true), subTitle: String.randomChinese(long: true))
             PopToast(mode: .success, title: String.randomChinese(short: true), subTitle: String.randomChinese(medium: true))
+            PopToast(mode: .copy, title: String.randomChinese(short: true), subTitle: String.randomChinese(medium: true))
             PopToast(mode: .loading, title: "正在载入...")
             PopToast(mode: .systemImage("trash"), title: String.randomChinese(long: true), subTitle: String.randomChinese(long: true), bgColor: .blue)
             PopToast(mode: .text, title: String.randomChinese(short: true), subTitle: String.randomChinese(medium: true))

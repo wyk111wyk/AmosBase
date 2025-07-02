@@ -69,7 +69,7 @@ public struct DemoSimpleLocale: View {
     
     private func stringSection() -> some View {
         Section {
-            Text("I have \(5) books".localized(bundle: .module))
+            Text("I have %lld books".localized(bundle: .module, 10))
             ForEach(allTestStrings) { key in
                 Text(key.localized(bundle: .module))
             }

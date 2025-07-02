@@ -22,7 +22,7 @@ extension SimplePurchaseView {
                     } label: {
                         productButton(monthlyProduct, width: width)
                     }
-                    .disabled(monthlyProduct == nil || monthlyProduct?.isAvailable == false)
+                    .disabled(monthlyProduct?.product == nil)
                     PlainButton {
                         if let product = yearlyProduct?.product {
                             startPurchaseAction(product)
@@ -30,7 +30,7 @@ extension SimplePurchaseView {
                     } label: {
                         productButton(yearlyProduct, isRecommend: true, width: width)
                     }
-                    .disabled(yearlyProduct == nil || yearlyProduct?.isAvailable == false)
+                    .disabled(yearlyProduct?.product == nil)
                     PlainButton {
                         if let product = lifetimeProduct?.product {
                             startPurchaseAction(product)
@@ -38,35 +38,38 @@ extension SimplePurchaseView {
                     } label: {
                         productButton(lifetimeProduct, width: width)
                     }
-                    .disabled(lifetimeProduct == nil || lifetimeProduct?.isAvailable == false)
+                    .disabled(lifetimeProduct?.product == nil)
                     Spacer()
                 }
             }
             .frame(height: 100)
-            PlainButton {
-                if let product = yearlyProduct?.product {
-                    startPurchaseAction(product)
-                }
-            } label: {
-                ZStack {
-                    Capsule()
-                        .foregroundStyle(.blue_06)
-                    VStack(spacing: 2) {
-                        Text("Start Free Trial", bundle: .module)
-                            .font(.title3.bold())
-                            .foregroundStyle(.white)
-                        if let yearlyProduct {
-                            Text("7-day free trial, then \(yearlyProduct.displayPrice)/year subscription.", bundle: .module)
-                                .font(.caption)
+            
+            if config.hasFreeTrial && yearlyProduct?.product != nil {
+                PlainButton {
+                    if let product = yearlyProduct?.product {
+                        startPurchaseAction(product)
+                    }
+                } label: {
+                    ZStack {
+                        Capsule()
+                            .foregroundStyle(.blue_06)
+                        VStack(spacing: 2) {
+                            Text("Start Free Trial", bundle: .module)
+                                .font(.title3.bold())
                                 .foregroundStyle(.white)
+                            if let yearlyProduct {
+                                Text("7-day free trial, then \(yearlyProduct.displayPrice)/year subscription.", bundle: .module)
+                                    .font(.caption)
+                                    .foregroundStyle(.white)
+                            }
                         }
                     }
+                    .frame(width: 310, height: 50)
                 }
-                .frame(width: 310, height: 50)
+                .disabled(yearlyProduct == nil)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
             }
-            .disabled(yearlyProduct == nil || yearlyProduct?.isAvailable == false)
-            .font(.footnote)
-            .foregroundStyle(.secondary)
         }
         .padding(.top)
         .padding(.bottom, 8)
@@ -142,6 +145,7 @@ extension SimplePurchaseView {
         Text("Hello")
     }.safeAreaInset(edge: .bottom) {
         SimplePurchaseView(
+            storeData: IapStore(),
             allItem: [],
             config: .init(title: "", titleImage_w: Image(sfImage: .dimond))
         ).bottomPurchase()

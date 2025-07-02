@@ -27,7 +27,7 @@ public struct SimpleLogoView: View {
     }
     
     private var logoImage: SFImage {
-        colorScheme == .dark ? .logoNameWhite : .logoNameBlack
+        colorScheme == .dark ? .amosStudioWhite : .amosStudioBlack
     }
     
     private func logoView() -> some View {

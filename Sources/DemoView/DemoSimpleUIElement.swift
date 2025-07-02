@@ -81,7 +81,7 @@ public struct DemoSimpleUIElement: View {
                 bundleImageName: "LAL_r",
                 bundleImageType: "png",
                 content: randomContent01,
-                isPremium: true,
+                purchaseLevel: .premium,
                 localizationBundle: .module
             ) {
                 HStack {

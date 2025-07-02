@@ -63,6 +63,22 @@
       },
       "shouldTranslate" : false
     },
+    "%@ auto-renewal" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@自动续费"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@自動續費"
+          }
+        }
+      }
+    },
     "%@ 切换结果：%lld" : {
       "localizations" : {
         "en" : {
@@ -849,6 +865,74 @@
     "Data 编解码" : {
 
     },
+    "Dawn is approaching." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "黎明将至"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "黎明將至"
+          }
+        }
+      }
+    },
+    "Dear advanced user" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尊敬的高级会员"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尊敬的高級會員"
+          }
+        }
+      }
+    },
+    "Dear subscription user" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尊敬的订阅会员"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尊敬的訂閱會員"
+          }
+        }
+      }
+    },
+    "Dear user" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尊敬的用户"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "尊敬的使用者"
+          }
+        }
+      }
+    },
     "Default" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1093,6 +1177,91 @@
     "Github密钥" : {
 
     },
+    "Good afternoon!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下午好！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "下午好！"
+          }
+        }
+      }
+    },
+    "Good evening!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "傍晚好！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "傍晚好！"
+          }
+        }
+      }
+    },
+    "Good morning!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "早上好！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "早上好！"
+          }
+        }
+      }
+    },
+    "Good night!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "晚上好！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "晚上好！"
+          }
+        }
+      }
+    },
+    "Good noon!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中午好！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "中午好！"
+          }
+        }
+      }
+    },
     "Google Map" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1210,6 +1379,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "圖床路徑"
+          }
+        }
+      }
+    },
+    "It's midnight. Good night!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "夜深了，晚安！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "夜深了，晚安！"
           }
         }
       }
@@ -1420,6 +1606,40 @@
         }
       }
     },
+    "Membership ends at: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前会员结束于：%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "當前會員結束於：%@"
+          }
+        }
+      }
+    },
+    "Membership has expired: %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会员已过期：%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "會員已過期：%@"
+          }
+        }
+      }
+    },
     "More Buttons" : {
 
     },
@@ -1542,13 +1762,30 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "工作室的其他作品，同样的简洁与实用"
+            "value" : "简洁实用的其他作品"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "工作室的其他作品，同樣的簡潔與實用"
+            "value" : "簡潔實用的其他作品"
+          }
+        }
+      }
+    },
+    "Permanent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永久"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永久"
           }
         }
       }
@@ -1599,6 +1836,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "請檢查系統設定和應用權限"
+          }
+        }
+      }
+    },
+    "Please check the status of the network connection" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查网络连接状态"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請檢查網路連線狀態"
+          }
+        }
+      }
+    },
+    "Please check the system account, payment and other related configurations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请检查系统账号和支付等相关配置"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請檢查系統帳號和支付等相關組態"
           }
         }
       }
@@ -2282,6 +2553,23 @@
         }
       }
     },
+    "Trial" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "试用版"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "試用版"
+          }
+        }
+      }
+    },
     "Type" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2307,6 +2595,23 @@
     },
     "UI元素" : {
 
+    },
+    "Unable to purchase" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法购买"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法購買"
+          }
+        }
+      }
     },
     "Unavailable" : {
       "extractionState" : "manual",
@@ -2626,9 +2931,6 @@
     "储存 Upload" : {
 
     },
-    "免费版" : {
-
-    },
     "关闭" : {
 
     },
@@ -2725,12 +3027,6 @@
     "导入" : {
 
     },
-    "尊敬的用户" : {
-
-    },
-    "已订阅" : {
-
-    },
     "已选：%lld / %lld" : {
       "localizations" : {
         "en" : {
@@ -2787,9 +3083,6 @@
 
     },
     "无效" : {
-
-    },
-    "无法购买" : {
 
     },
     "日期选择" : {
@@ -2870,9 +3163,6 @@
     "点击跳跃" : {
 
     },
-    "状态未知" : {
-
-    },
     "狗狗" : {
 
     },
@@ -2915,25 +3205,13 @@
     "设备操作" : {
 
     },
-    "试用版" : {
-
-    },
     "语义描述 - .toString_Relative" : {
-
-    },
-    "请检查系统账号等相关配置" : {
-
-    },
-    "请检查网络连接状态" : {
 
     },
     "读取 Download" : {
 
     },
     "转换为文字" : {
-
-    },
-    "载入会员状态..." : {
 
     },
     "输入关键词搜索地点" : {
@@ -2985,9 +3263,6 @@
 
     },
     "随机文字" : {
-
-    },
-    "高级版" : {
 
     },
     "鸭子" : {

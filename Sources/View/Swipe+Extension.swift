@@ -152,7 +152,9 @@ struct SimpleSwipeModify<V: View>: ViewModifier {
 }
 
 public struct SwipeButton: View {
+    // 是否在划动按钮中显示
     let isShowInSwipe: Bool
+    // 是否在右键菜单中显示
     let isShowInContextMenu: Bool
     
     let role: ButtonRole?

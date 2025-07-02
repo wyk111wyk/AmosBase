@@ -22,7 +22,7 @@ public struct SimpleCell<V: View>: View {
     let isDisplay: Bool // 是否展示
     let isPushButton: Bool // 是否是Navi
     let isCellButton: Bool // 是否是列表中的按钮（右侧填充空白）
-    let isPremium: Bool // 是否是Premium
+    let purchaseLevel: PurchaseLevel? // 是否是Premium
     // Title
     let titleSystemImage: String?
     let titleImageColor: Color?
@@ -84,7 +84,7 @@ public struct SimpleCell<V: View>: View {
         isDisplay: Bool = true,
         isPushButton: Bool = false,
         isCellButton: Bool = true,
-        isPremium: Bool = false,
+        purchaseLevel: PurchaseLevel? = nil,
         contentSpace: Double = 12,
         stateText: String? = nil,
         localizationBundle: Bundle = .main,
@@ -93,7 +93,7 @@ public struct SimpleCell<V: View>: View {
         self.isDisplay = isDisplay
         self.isPushButton = isPushButton
         self.isCellButton = isCellButton
-        self.isPremium = isPremium
+        self.purchaseLevel = purchaseLevel
         
         self.title = title
         self.titleSystemImage = titleSystemImage
@@ -196,8 +196,10 @@ public struct SimpleCell<V: View>: View {
                                     .lineLimit(titleLine)
                                     .multilineTextAlignment(.leading)
                                     .layoutPriority(1)
-                                if isPremium {
-                                    SimplePremiumLogo()
+                                if let purchaseLevel {
+                                    purchaseLevel.logoImage
+                                        .resizable().scaledToFit()
+                                        .frame(height: 13)
                                         .layoutPriority(2)
                                 }
                             }
