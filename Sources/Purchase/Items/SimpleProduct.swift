@@ -17,13 +17,19 @@ public struct SimpleProduct: Identifiable {
     public let product: Product?
     public let type: Product.ProductType?
     
+    public let isFamilyShareable: Bool
+    public let hasFreeTrial: Bool
+    public let isRecommended: Bool
+    
     public init(
         id: String,
         displayName: String,
         description: String = "",
         displayPrice: String,
         price: Decimal,
-        product: Product? = nil
+        product: Product? = nil,
+        hasFreeTrial: Bool = false,
+        isRecommended: Bool = false
     ) {
         self.id = id
         self.displayName = displayName
@@ -32,9 +38,16 @@ public struct SimpleProduct: Identifiable {
         self.price = price
         self.product = product
         self.type = product?.type
+        self.isFamilyShareable = product?.isFamilyShareable ?? true
+        self.hasFreeTrial = hasFreeTrial
+        self.isRecommended = isRecommended
     }
     
-    public init(product: Product) {
+    public init(
+        product: Product,
+        hasFreeTrial: Bool = false,
+        isRecommended: Bool = false
+    ) {
         self.id = product.id
         self.displayName = product.displayName
         self.description = product.description
@@ -42,24 +55,31 @@ public struct SimpleProduct: Identifiable {
         self.price = product.price
         self.product = product
         self.type = product.type
+        self.isFamilyShareable = product.isFamilyShareable
+        self.hasFreeTrial = hasFreeTrial
+        self.isRecommended = isRecommended
     }
     
     public var weekPromotion: String? {
-        let price = NSDecimalNumber(decimal: price).doubleValue
+        let amount = NSDecimalNumber(decimal: price).doubleValue
         switch span {
-        case .permanent: return PurchaseSpan.permanent.title
+        case .permanent:
+            return PurchaseSpan.permanent.title
         case .yearly:
-            let weekPrice = price / 365 * 7
+            let weekPrice = amount / 365 * 7
             return String(format: "%.2f / Week", weekPrice)
         case .monthly:
-            let weekPrice = price / 30 * 7
+            let weekPrice = amount / 30 * 7
             return String(format: "%.2f / Week", weekPrice)
-        default: return "-"
         }
     }
     
-    public var span: PurchaseSpan? {
-        product?.id.toPurchaseSpan
+    public var span: PurchaseSpan {
+        id.toPurchaseSpan
+    }
+    
+    public var level: PurchaseLevel {
+        id.toPurchaseLevel
     }
 }
 
@@ -76,15 +96,19 @@ extension SimpleProduct {
         id.toPurchaseSpan == .permanent
     }
     
-    static var yearExample: SimpleProduct {
-        SimpleProduct(id: "yearlyPremium", displayName: "Yearly", displayPrice: "$19.99", price: 19.99)
+    static var allExamples: [SimpleProduct] {
+        [.monthExample, .yearExample, .lifeExample]
     }
     
     static var monthExample: SimpleProduct {
-        SimpleProduct(id: "monthlyPremium", displayName: "Monthly", displayPrice: "$4.99", price: 4.99)
+        SimpleProduct(id: "com.subscription.pro.monthly.amospoem", displayName: "Monthly", displayPrice: "$4.99", price: 4.99, isRecommended: true)
+    }
+    
+    static var yearExample: SimpleProduct {
+        SimpleProduct(id: "com.subscription.premium.yearly.amospoem", displayName: "Yearly", displayPrice: "$19.99", price: 19.99, hasFreeTrial: true)
     }
     
     static var lifeExample: SimpleProduct {
-        SimpleProduct(id: "lifePremium", displayName: "Lifetime", displayPrice: "$29.99", price: 29.99)
+        SimpleProduct(id: "com.update.ultra.permanent.amospoem", displayName: "Lifetime", displayPrice: "$29.99", price: 29.99)
     }
 }

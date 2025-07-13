@@ -15,7 +15,7 @@ import PhotosUI
  想使用从文件夹读取需要配置：
  1. 选择App Sandbox，将文件写入\读取权限打开
  */
-public struct SimpleImagePicker<V: View>: View {
+public struct LLMAnswerImagePicker<V: View>: View {
     public enum PickerType {
         case library, carmera, both
     }
@@ -168,7 +168,7 @@ public struct SimpleImagePicker<V: View>: View {
     }
 }
 
-extension SimpleImagePicker {
+extension LLMAnswerImagePicker {
     private func showPhotoLibrary() {
         showLibrary = true
     }
@@ -222,7 +222,7 @@ extension SimpleImagePicker {
     }
 }
 
-extension SimpleImagePicker {
+extension LLMAnswerImagePicker {
     @ViewBuilder
     private func photoView() -> some View {
         if let adjustedImage {
@@ -260,7 +260,7 @@ extension SimpleImagePicker {
     
     NavigationStack {
         Form {
-            SimpleImagePicker(
+            LLMAnswerImagePicker(
                 originalImage: $originalImage,
                 adjustedImage: $adjustedImage,
                 pickerType: .both

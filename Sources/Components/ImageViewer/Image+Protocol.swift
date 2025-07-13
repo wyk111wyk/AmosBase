@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+/// 在图片查看器中的图片必须遵守的协议
 public protocol SimpleImageStore: Identifiable, Sendable {
     var id: String { get set }
     var image: SFImage { get set }

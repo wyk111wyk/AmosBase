@@ -266,7 +266,7 @@ extension DemoSimpleCloud {
     }
     
     private func imageUpload(isData: Bool = false) -> some View {
-        SimpleImagePicker(adjustedImage: $uploadImage, adjustWidth: 800)
+        LLMAnswerImagePicker(adjustedImage: $uploadImage, adjustWidth: 800)
             .onChange(of: uploadImage) {
                 if saveType.recordType() == "Data" {
                     uploadData = uploadImage?.jpegImageData()

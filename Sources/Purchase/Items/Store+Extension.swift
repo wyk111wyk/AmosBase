@@ -26,13 +26,15 @@ public extension StoreKit.Transaction {
         if self.productType == .autoRenewable {
             guard let expirationDate else { return .unknown }
             if let revocationDate {
-                // 用户已取消订阅
                 if expirationDate < .now {
+                    // 用户订阅已过期
                     return .expired(expirationDate: expirationDate)
                 }else {
+                    // 用户已取消订阅
                     return .revoked(revocationDate: revocationDate, expirationDate: expirationDate)
                 }
             }else if expirationDate < .now {
+                // 用户订阅已过期
                 return .expired(expirationDate: expirationDate)
             }else {
                 return .subscripted(expirationDate: expirationDate)
@@ -50,7 +52,7 @@ public extension StoreKit.Transaction {
 }
 
 extension Product {
-    func toSimpleProduct() -> SimpleProduct {
-        SimpleProduct(product: self)
+    func toSimpleProduct(hasFreeTrial: Bool, isRecommended: Bool) -> SimpleProduct {
+        SimpleProduct(product: self, hasFreeTrial: hasFreeTrial, isRecommended: isRecommended)
     }
 }

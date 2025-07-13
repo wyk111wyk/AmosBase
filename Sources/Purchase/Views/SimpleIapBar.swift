@@ -8,17 +8,25 @@
 import SwiftUI
 
 public struct SimpleIapStateBar: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
     let state: PurchaseState
     let transactionStatus: TransactionStatus
+    let showPromotionForBasic: Bool
+    let isInList: Bool
     let tapAction: () -> Void
     
     public init(
         state: PurchaseState,
         transactionStatus: TransactionStatus = .unknown,
+        showPromotionForBasic: Bool = true,
+        isInList: Bool = false,
         tapAction: @escaping () -> Void = {}
     ) {
         self.state = state
         self.transactionStatus = transactionStatus
+        self.showPromotionForBasic = showPromotionForBasic
+        self.isInList = isInList
         self.tapAction = tapAction
     }
     
@@ -30,31 +38,66 @@ public struct SimpleIapStateBar: View {
                 tapAction()
             }
         } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(greeting(), bundle: .module)
-                        .foregroundStyle(.primary)
-                        .font(.title)
-                        .fontWeight(.medium)
-                    if state == .unknown {
-                        Text("Please check the status of the network connection", bundle: .module)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }else if state == .cannotPurchase {
-                        Text("Please check the system account, payment and other related configurations", bundle: .module)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }else {
-                        userType()
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                Spacer()
-                stateContent()
+            if showPromotionForBasic && state == .basic {
+                SimpleIapBar()
+                    .contentBackground(
+                        verticalPadding: 12,
+                        color: .black.opacity(0.9),
+                        withMaterial: colorScheme == .dark,
+                        isAppear: !isInList
+                    )
+            }else {
+                userBarView()
+                    .contentBackground(
+                        verticalPadding: 12,
+                        isAppear: !isInList
+                    )
+                    .contentShape(Rectangle())
             }
-            .contentShape(Rectangle())
         }
+        .listRowBackground(showListBackground ? backgroundGradient : nil)
+    }
+    
+    private var showListBackground: Bool {
+        showPromotionForBasic && state == .basic && isInList
+    }
+    
+    private var backgroundGradient: LinearGradient {
+        LinearGradient(
+            colors: [
+                Color.init(white: 0.2),
+                Color.init(white: 0)
+            ],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
+    
+    private func userBarView() -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(greeting(), bundle: .module)
+                    .foregroundStyle(.primary)
+                    .font(.title)
+                    .fontWeight(.medium)
+                if state == .unknown {
+                    Text("Please check the status of the network connection", bundle: .module)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }else if state == .cannotPurchase {
+                    Text("Please check the system account, payment and other related configurations", bundle: .module)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }else {
+                    userType()
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            Spacer()
+            stateContent()
+        }
+        .contentShape(Rectangle())
     }
     
     @ViewBuilder
@@ -63,7 +106,8 @@ public struct SimpleIapStateBar: View {
         case .unknown:
             Text("Unknown", bundle: .module).font(.callout).foregroundStyle(.secondary)
         case .cannotPurchase:
-            Text(.setting, bundle: .module).font(.callout).foregroundStyle(.secondary)
+            Text(.setting, bundle: .module)
+                .simpleTag(.border())
         case .flightTest:
             Text("Trial", bundle: .module).simpleTag(.border(contentColor: .purple))
         case .loyaltyUser(let level, _):
@@ -108,61 +152,52 @@ public struct SimpleIapBar: View {
     let subTitle: String?
     let titleColor: Color
     let buttonColor: Color
-    let bundle: Bundle
-    
-    let tapAction: () -> Void
     
     public init(
-        title: String = "升级高级版",
-        subTitle: String? = "体验完整文学魅力",
+        title: String = "Upgrade",
+        subTitle: String? = nil,
         titleColor: Color = .black,
-        buttonColor: Color = .white,
-        bundle: Bundle = .main,
-        tapAction: @escaping () -> Void = {}
+        buttonColor: Color = .white
     ) {
         self.title = title
         self.subTitle = subTitle
         self.titleColor = titleColor
         self.buttonColor = buttonColor
-        self.bundle = bundle
-        self.tapAction = tapAction
     }
     
     public var body: some View {
-        PlainButton(tapAction: tapAction) {
-            VStack(spacing: 15) {
-                HStack(spacing: 12) {
-                    Image(sfImage: .dimond_w)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 26)
-                    Image(sfImage: .premium)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 12)
-                    Spacer()
-                }
-                
-                VStack(spacing: 6) {
-                    Text(title.toLocalizedKey(), bundle: bundle)
-                        .simpleTag(
-                            .full(
-                                verticalPad: 7,
-                                horizontalPad: 12,
-                                contentFont: .body,
-                                contentColor: titleColor,
-                                bgColor: buttonColor
-                            )
+        VStack(spacing: 15) {
+            HStack(spacing: 12) {
+                Image(sfImage: .dimond_w)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 26)
+                Image(sfImage: .premium)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 12)
+                Spacer()
+            }
+            
+            VStack(spacing: 6) {
+                Text(title.toLocalizedKey(), bundle: .module)
+                    .simpleTag(
+                        .full(
+                            verticalPad: 6,
+                            horizontalPad: 18,
+                            contentFont: .body,
+                            contentColor: titleColor,
+                            bgColor: buttonColor
                         )
-                    if let subTitle {
-                        Text(subTitle.toLocalizedKey(), bundle: bundle)
-                            .font(.caption)
-                            .foregroundStyle(.gray)
-                    }
+                    )
+                if let subTitle {
+                    Text(subTitle.toLocalizedKey(), bundle: .main)
+                        .font(.caption)
+                        .foregroundStyle(.gray)
                 }
             }
-            .contentShape(Rectangle())
         }
+        .contentShape(Rectangle())
     }
 }
 
@@ -170,22 +205,11 @@ public struct SimpleIapBar: View {
     @Previewable @Environment(\.colorScheme) var colorScheme
     ScrollView {
         LazyVStack {
-            SimpleIapBar()
-                .contentBackground(
-                    verticalPadding: 12,
-                    color: .black.opacity(0.9),
-                    withMaterial: colorScheme == .dark
-                )
-            
             ForEach(PurchaseState.allCases) { state in
                 SimpleIapStateBar(state: state)
-                    .contentBackground(verticalPadding: 12)
                 SimpleIapStateBar(state: state, transactionStatus: .subscripted(expirationDate: .now))
-                    .contentBackground(verticalPadding: 12)
                 SimpleIapStateBar(state: state, transactionStatus: .expired(expirationDate: .now.add(hour: -60)))
-                    .contentBackground(verticalPadding: 12)
                 SimpleIapStateBar(state: state, transactionStatus: .revoked(revocationDate: .now, expirationDate: .now))
-                    .contentBackground(verticalPadding: 12)
             }
         }
         .padding()
@@ -196,18 +220,11 @@ public struct SimpleIapBar: View {
 #Preview("Form") {
     @Previewable @Environment(\.colorScheme) var colorScheme
     Form {
-        SimpleIapBar()
-            .contentBackground(
-                verticalPadding: 12,
-                color: .black.opacity(0.9),
-                withMaterial: colorScheme == .dark
-            )
-        
         ForEach(PurchaseState.allCases) { state in
-            SimpleIapStateBar(state: state)
-            SimpleIapStateBar(state: state, transactionStatus: .subscripted(expirationDate: .now))
-            SimpleIapStateBar(state: state, transactionStatus: .expired(expirationDate: .now.add(hour: -60)))
-            SimpleIapStateBar(state: state, transactionStatus: .revoked(revocationDate: .now, expirationDate: .now))
+            SimpleIapStateBar(state: state, isInList: true)
+            SimpleIapStateBar(state: state, transactionStatus: .subscripted(expirationDate: .now), isInList: true)
+            SimpleIapStateBar(state: state, transactionStatus: .expired(expirationDate: .now.add(hour: -60)), isInList: true)
+            SimpleIapStateBar(state: state, transactionStatus: .revoked(revocationDate: .now, expirationDate: .now), isInList: true)
         }
     }
 }

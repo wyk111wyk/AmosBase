@@ -83,6 +83,20 @@ extension SimpleColorModel {
         ]
     }
     
+    static var allGradient_Teal: [SimpleColorModel] {
+        [.init(name: "Teal01", color: .teal_01),
+         .init(name: "Teal02", color: .teal_02),
+         .init(name: "Teal03", color: .teal_03),
+         .init(name: "Teal04", color: .teal_04),
+         .init(name: "Teal05", color: .teal_05),
+         .init(name: "Teal06", color: .teal_06),
+         .init(name: "Teal07", color: .teal_07),
+         .init(name: "Teal08", color: .teal_08),
+         .init(name: "Teal09", color: .teal_09),
+         .init(name: "Teal10", color: .teal_10)
+        ]
+    }
+    
     static var allGradient_Brown: [SimpleColorModel] {
         [.init(name: "Brown01", color: .brown_01),
          .init(name: "Brown02", color: .brown_02),
@@ -94,6 +108,20 @@ extension SimpleColorModel {
          .init(name: "Brown08", color: .brown_08),
          .init(name: "Brown09", color: .brown_09),
          .init(name: "Brown10", color: .brown_10)
+        ]
+    }
+    
+    static var allGradient_Orange: [SimpleColorModel] {
+        [.init(name: "Orange01", color: .orange_01),
+         .init(name: "Orange02", color: .orange_02),
+         .init(name: "Orange03", color: .orange_03),
+         .init(name: "Orange04", color: .orange_04),
+         .init(name: "Orange05", color: .orange_05),
+         .init(name: "Orange06", color: .orange_06),
+         .init(name: "Orange07", color: .orange_07),
+         .init(name: "Orange08", color: .orange_08),
+         .init(name: "Orange09", color: .orange_09),
+         .init(name: "Orange10", color: .orange_10)
         ]
     }
     
@@ -136,67 +164,6 @@ extension SimpleColorModel {
          .init(name: "Pink08", color: .pink_08),
          .init(name: "Pink09", color: .pink_09),
          .init(name: "Pink10", color: .pink_10)
-        ]
-    }
-    
-    static var allGreen: [SimpleColorModel] {
-        [.init(name: "Ice", color: .green_Ice),
-         .init(name: "Pastal", color: .green_Pastel),
-         .init(name: "Spring", color: .green_Spring),
-         .init(name: "Caribben", color: .green_Caribbean),
-         .init(name: "Downy", color: .green_Downy),
-         .init(name: "Keppel", color: .green_Keppel),
-         .init(name: "Olive", color: .green_Olive),
-         .init(name: "Leaf", color: .green_Leaf)]
-    }
-    
-    static var allBlue: [SimpleColorModel] {
-        [.init(name: "French", color: .blue_French),
-         .init(name: "Downy", color: .blue_Downy),
-         .init(name: "Neptune", color: .blue_Neptune),
-         .init(name: "Seagull", color: .blue_Seagull),
-         .init(name: "Piction", color: .blue_Picton),
-         .init(name: "Cornflower", color: .blue_Cornflower),
-         .init(name: "Orient", color: .blue_Orient),
-         .init(name: "Regal", color: .blue_Regal)
-        ]
-    }
-    
-    static var allRed: [SimpleColorModel] {
-        [.init(name: "Peach", color: .red_Peach),
-         .init(name: "Vivid", color: .red_vivid),
-         .init(name: "Geraldine", color: .red_Geraldine),
-         .init(name: "Sunglo", color: .red_Sunglo),
-         .init(name: "Sunset", color: .red_Sunset),
-         .init(name: "Amaranth", color: .red_Amaranth),
-         .init(name: "Lipstick", color: .red_Lipstick)
-        ]
-    }
-    
-    static var allYellow: [SimpleColorModel] {
-        [.init(name: "Champagne", color: .yellow_Champagne),
-         .init(name: "Bus", color: .yellow_Bus),
-         .init(name: "Golden", color: .yellow_Golden),
-         .init(name: "Sandy", color: .yellow_Sandy),
-         .init(name: "Rajah", color: .yellow_Rajah),
-         .init(name: "Neon", color: .yellow_Neon)
-        ]
-    }
-    
-    static var allPurple: [SimpleColorModel] {
-        [.init(name: "Spindle", color: .purple_Spindle),
-         .init(name: "Heliotrope", color: .purple_Heliotrope),
-         .init(name: "Wisteria", color: .purple_Wisteria),
-         .init(name: "Razzle", color: .purple_Razzle),
-         .init(name: "Orchid", color: .pink_Orchid)
-        ]
-    }
-    
-    static var allGray: [SimpleColorModel] {
-        [.init(name: "Space", color: .gray_Space),
-         .init(name: "Charade", color: .gray_Charade),
-         .init(name: "Hit", color: .gray_Hit),
-         .init(name: "Nurse", color: .gray_Nurse)
         ]
     }
 }

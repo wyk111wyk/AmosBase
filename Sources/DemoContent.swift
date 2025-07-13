@@ -73,7 +73,7 @@ public struct DemoContent: View {
                 SimpleCommonAbout(
                     txcId: "123",
                     appStoreId: "123",
-                    hasSubscribe: true,
+                    hasSubscription: true,
                     headerView: {
                     Text("About - 关于")
                 })
@@ -105,7 +105,7 @@ public struct DemoContent: View {
                 case "date": DemoSimpleDate()
                 case "image":
                     #if !os(watchOS)
-                    DemoSimpleImage()
+                    DemoLLMAnswerImage()
                     #else
                     Text("Only for iOS")
                     #endif

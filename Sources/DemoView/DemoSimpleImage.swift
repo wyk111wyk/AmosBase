@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 
 #if !os(watchOS)
-public struct DemoSimpleImage: View {
+public struct DemoLLMAnswerImage: View {
     let title: String
     public init(_ title: String = "Image 图片") {
         self.title = title
@@ -92,10 +92,10 @@ public struct DemoSimpleImage: View {
     }
 }
 
-extension DemoSimpleImage {
+extension DemoLLMAnswerImage {
     @ViewBuilder
     private func imagePicker() -> some View {
-        SimpleImagePicker(
+        LLMAnswerImagePicker(
             originalImage: $originalImage,
             adjustedImage: $adjustedImage
         )
@@ -133,7 +133,7 @@ extension DemoSimpleImage {
 
 #Preview("Image") {
     NavigationStack {
-        DemoSimpleImage()
+        DemoLLMAnswerImage()
     }
 }
 #endif

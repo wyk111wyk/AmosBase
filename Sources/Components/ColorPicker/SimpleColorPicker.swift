@@ -83,8 +83,10 @@ public struct SimpleColorPicker: View {
                         systemColor(SimpleColorModel.allGradient_Blue)
                         systemColor(SimpleColorModel.allGradient_Indigo)
                         systemColor(SimpleColorModel.allGradient_Red)
+                        systemColor(SimpleColorModel.allGradient_Orange)
                         systemColor(SimpleColorModel.allGradient_Pink)
                         systemColor(SimpleColorModel.allGradient_Green)
+                        systemColor(SimpleColorModel.allGradient_Teal)
                         systemColor(SimpleColorModel.allGradient_Purple)
                         systemColor(SimpleColorModel.allGradient_Brown)
                     }
@@ -92,21 +94,6 @@ public struct SimpleColorPicker: View {
                     colorHeader(
                         title: "Custom gradient color",
                         isPresent: $isShowCustomGradient
-                    )
-                }
-                Section {
-                    if isShowCustomColor {
-                        systemColor(SimpleColorModel.allGray)
-                        systemColor(SimpleColorModel.allGreen)
-                        systemColor(SimpleColorModel.allBlue)
-                        systemColor(SimpleColorModel.allPurple)
-                        systemColor(SimpleColorModel.allRed)
-                        systemColor(SimpleColorModel.allYellow)
-                    }
-                } header: {
-                    colorHeader(
-                        title: "Custom single color",
-                        isPresent: $isShowCustomColor
                     )
                 }
             }

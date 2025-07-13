@@ -98,7 +98,7 @@ public struct DemoSimpleUpload: View {
     
     @ViewBuilder
     private func imagePicker() -> some View {
-        SimpleImagePicker(
+        LLMAnswerImagePicker(
             originalImage: $originalImage,
             adjustedImage: $adjustedImage,
             adjustWidth: isCrop ? newWidth.toCGFloat : nil,

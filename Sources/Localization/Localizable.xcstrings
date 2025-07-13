@@ -4,6 +4,9 @@
     "" : {
       "shouldTranslate" : false
     },
+    "-" : {
+
+    },
     "·" : {
       "shouldTranslate" : false
     },
@@ -45,6 +48,9 @@
     },
     ")" : {
       "shouldTranslate" : false
+    },
+    "/" : {
+
     },
     "%@" : {
       "localizations" : {
@@ -336,6 +342,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "升序"
+          }
+        }
+      }
+    },
+    "Auto-renews for %@ until canceled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消前将以%@自动续费"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消前將以￼%@自動續費"
           }
         }
       }
@@ -1089,6 +1112,23 @@
         }
       }
     },
+    "Family share" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家人共享"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家人共享"
+          }
+        }
+      }
+    },
     "Favorite" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1136,6 +1176,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "女"
+          }
+        }
+      }
+    },
+    "Free trial" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免费试用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免費試用"
           }
         }
       }
@@ -1304,6 +1361,9 @@
     "Hello SwiftUI!" : {
 
     },
+    "Hello, Creater" : {
+
+    },
     "Hello, World!" : {
 
     },
@@ -1363,6 +1423,12 @@
             "state" : "translated",
             "value" : "我有%lld本书"
           }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我有%lld本书"
+          }
         }
       }
     },
@@ -1379,6 +1445,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "圖床路徑"
+          }
+        }
+      }
+    },
+    "Includes all properties of preceding levels" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "包含前序等级的所有特性"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "包含前序等級的所有特性"
           }
         }
       }
@@ -1606,6 +1689,23 @@
         }
       }
     },
+    "Membership" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会员升级"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "會員升級"
+          }
+        }
+      }
+    },
     "Membership ends at: %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1636,6 +1736,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "會員已過期：%@"
+          }
+        }
+      }
+    },
+    "Monthly" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月"
           }
         }
       }
@@ -1733,6 +1850,23 @@
         }
       }
     },
+    "No purchased products found!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未找到已购产品！"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未找到已購產品！"
+          }
+        }
+      }
+    },
     "None" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1755,6 +1889,29 @@
     },
     "Only for iOS / macOS" : {
       "shouldTranslate" : false
+    },
+    "Ordering Service Instructions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "[Ordering Service Instructions]\n\n1. Payment: Payment will be charged to your iTunes account upon confirmation of purchase.\n  \n2. Automatic Renewal: Your iTunes account will be charged within 24 hours prior to renewal.  Upon successful payment, the subscription period will be extended by one subscription cycle.\n  \n3. Cancelling the Service: You can manage your automatic subscription in your Apple device's \"Settings\" -> \"iTunes & App Store\" -> tap your \"Apple ID\", select \"View Apple ID\", go to \"Account Settings\", tap \"Subscriptions\". To cancel, do so at least 24 hours before the end of each billing cycle.  No further charges will be made if cancelled within 24 hours of renewal.\n  \n4. Terms of Service (EULA): [Tap to Link](http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/)\n  \n5. Privacy Policy: [Tap to Link](https://www.amosstudio.com.cn/amosgym-privacydeal.html)\n  \n6. Other Support:\n    ▪︎  Feel free to provide feedback and discuss on the forum.\n    ▪︎  Family Sharing supported (up to 6 people).\n    ▪︎  Subscriptions and trials can be cancelled at any time."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "【订购服务说明】\n\n1. 付款：用户确认购买并付款后计入iTunes账户\n\n2. 自动续费：苹果iTunes 账户会在到期前 24小时内扣费，扣费成功后订阅周期顺延一个订阅周期\n\n3. 关闭服务：您可以在苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击“Apple ID”，选择\"查看 Apple ID\"，进入\"账户设置\"页面，点击“订阅”，管理自动订阅服务，如需取消，每个计费周期结束前 24小时关闭即可，到期前 24小时内则不再扣费\n\n4. 使用条款（EULA）：[点击查看](http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/)\n\n5. 隐私条款（Privacy policy）：[点击查看](https://www.amosstudio.com.cn/amosgym-privacydeal.html)\n\n6. 其他支持：\n·随时在论坛进行反馈交流\n·支持与家人共享（最多6人）\n·订阅和试用随时可以取消"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "【訂購服務說明】\n\n1. 付款：使用者確認購買並付款後計入iTunes帳戶\n\n2. 自動續費：蘋果iTunes 帳戶會在到期前 24小時內扣費，扣費成功後訂閱週期順延一個訂閱週期\n\n3. 關閉服務：您可以在蘋果手機“設定” --> 進入“iTunes Store 與 App Store”-->點選“Apple ID”，選擇\"查看 Apple ID\"，進入\"帳戶設定\"頁面，點選“訂閱”，管理自動訂閱服務，如需取消，每個計費週期結束前 24小時關閉即可，到期前 24小時內則不再扣費\n\n4. 使用條款（EULA）：[點選查看](http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/)\n\n5. 隱私條款（Privacy policy）：[點選查看](https://www.amosstudio.com.cn/amosgym-privacydeal.html)\n\n6. 其他支援：\n·隨時在論壇進行反饋交流\n·支援與家人共享（最多6人）\n·訂閱和試用隨時可以取消"
+          }
+        }
+      }
     },
     "Other Apps from us, equally concise and practical." : {
       "extractionState" : "manual",
@@ -2219,28 +2376,6 @@
         }
       }
     },
-    "Service Description 1:%@ 2:%@ 3:%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Automatic Subscription Service Description\n  \n1. Subscription Services:\n    A) Premium Service Monthly Subscription (1 month), Premium Service Annual Subscription (12 months)\n    B) Premium Service One-Time Purchase (Lifetime)\n  \n2. Subscription Prices:\n    a) Premium Service: Monthly subscription is %1$@/month, annual subscription is %2$@/year.\n    c) Premium Service: One-time purchase is %3$@.\n  \n3. Payment: Payment will be charged to your iTunes account upon confirmation of purchase.\n  \n4. Automatic Renewal: Your iTunes account will be charged within 24 hours prior to renewal.  Upon successful payment, the subscription period will be extended by one subscription cycle.\n  \n5. Cancelling the Service: You can manage your automatic subscription in your Apple device's \"Settings\" -> \"iTunes & App Store\" -> tap your \"Apple ID\", select \"View Apple ID\", go to \"Account Settings\", tap \"Subscriptions\". To cancel, do so at least 24 hours before the end of each billing cycle.  No further charges will be made if cancelled within 24 hours of renewal.\n  \n6. Terms of Service (EULA): http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/\n  \n7. Privacy Policy: https://www.amosstudio.com.cn/amosgym-privacydeal.html\n  \n8. Other Support:\n    ▪︎  Feel free to provide feedback and discuss on the forum.\n    ▪︎  Family Sharing supported (up to 6 people).\n    ▪︎  Subscriptions and trials can be cancelled at any time."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "【自动订阅服务说明】\n\n1. 订阅服务：\nA）高级服务连续包月（1个月）、高级服务连续包年（12个月)\nB）高级服务买断（终身）\n\n2. 订阅价格：\na）高级服务：连续包月产品为 %1$@/月，连续包年产品为 %2$@/年\nc）高级服务：买断服务为 %3$@\n\n3. 付款：用户确认购买并付款后计入iTunes账户\n\n4. 自动续费：苹果iTunes 账户会在到期前 24小时内扣费，扣费成功后订阅周期顺延一个订阅周期\n\n5. 关闭服务：您可以在苹果手机“设置” --> 进入“iTunes Store 与 App Store”-->点击“Apple ID”，选择\"查看 Apple ID\"，进入\"账户设置\"页面，点击“订阅”，管理自动订阅服务，如需取消，每个计费周期结束前 24小时关闭即可，到期前 24小时内则不再扣费\n\n6. 使用条款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/\n\n7. 隐私条款（Privacy policy）：https://www.amosstudio.com.cn/amosgym-privacydeal.html\n\n8. 其他支持：\n·随时在论坛进行反馈交流\n·支持与家人共享（最多6人）\n·订阅和试用随时可以取消"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "【自動訂閱服務說明】\n\n1. 訂閱服務：\nA）高級服務連續包月（1個月）、高級服務連續包年（12個月)\nB）高級服務買斷（終身）\n\n2. 訂閱價格：\na）高級服務：連續包月產品為 %1$@/月，連續包年產品為 %2$@/年\nc）高級服務：買斷服務為 %3$@\n\n3. 付款：使用者確認購買並付款後計入iTunes帳戶\n\n4. 自動續費：蘋果iTunes 帳戶會在到期前 24小時內扣費，扣費成功後訂閱週期順延一個訂閱週期\n\n5. 關閉服務：您可以在蘋果手機“設定” --> 進入“iTunes Store 與 App Store”-->點選“Apple ID”，選擇\"查看 Apple ID\"，進入\"帳戶設定\"頁面，點選“訂閱”，管理自動訂閱服務，如需取消，每個計費週期結束前 24小時關閉即可，到期前 24小時內則不再扣費\n\n6. 使用條款（EULA）：http://www.apple.com/legal/internet-services/itunes/appstore/dev/stdeula/\n\n7. 隱私條款（Privacy policy）：https://www.amosstudio.com.cn/amosgym-privacydeal.html\n\n8. 其他支援：\n·隨時在論壇進行反饋交流\n·支援與家人共享（最多6人）\n·訂閱和試用隨時可以取消"
-          }
-        }
-      }
-    },
     "Setting" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2283,6 +2418,23 @@
     },
     "Show buttons confirmation" : {
 
+    },
+    "Single Purchase · Devices Access" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "单次购买 · 多端同享"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "單次購買 · 多端同享"
+          }
+        }
+      }
     },
     "Siri is thinking..." : {
 
@@ -2373,6 +2525,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "工作室"
+          }
+        }
+      }
+    },
+    "Subscribe" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开启订阅"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開啟訂閱"
           }
         }
       }
@@ -2731,6 +2900,40 @@
         }
       }
     },
+    "Upgrade" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "升级高级版"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "升級高級版"
+          }
+        }
+      }
+    },
+    "Upgrade Now" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即升级"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即升級"
+          }
+        }
+      }
+    },
     "Upload" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2874,6 +3077,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "歡迎使用"
+          }
+        }
+      }
+    },
+    "Yearly" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年"
           }
         }
       }

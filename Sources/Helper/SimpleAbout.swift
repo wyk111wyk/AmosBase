@@ -31,7 +31,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     let introWebLink = "https://www.amosstudio.com.cn/"
     let feedbackLink: String?
     let appStoreLink: String?
-    let hasSubscribe: Bool?
+    let hasSubscription: Bool
     let showAppVersion: Bool
     
     let headerView: () -> Header
@@ -40,7 +40,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
     public init(
         txcId: String? = nil,
         appStoreId: String? = nil,
-        hasSubscribe: Bool? = nil,
+        hasSubscription: Bool = false,
         showAppVersion: Bool = true,
         @ViewBuilder headerView: @escaping () -> Header = {EmptyView()},
         @ViewBuilder footerView: @escaping () -> Footer = {EmptyView()}
@@ -57,7 +57,7 @@ public struct SimpleCommonAbout<Header: View, Footer: View>: View {
             appStoreLink = nil
         }
         
-        self.hasSubscribe = hasSubscribe
+        self.hasSubscription = hasSubscription
         self.showAppVersion = showAppVersion
         self.headerView = headerView
         self.footerView = footerView
@@ -128,20 +128,14 @@ extension SimpleCommonAbout {
         })
         .buttonStyle(.plain)
         
-        if let hasSubscribe {
+        if hasSubscription {
             PlainButton {
                 showSubscribe = true
             } label: {
                 SimpleCell("Manage subscriptions", systemImage: "cart", localizationBundle: .module) {
-                    if hasSubscribe {
-                        Text("Subscribed", bundle: .module)
-                            .font(.footnote)
-                            .foregroundStyle(.blue_05)
-                    }else {
-                        Text("Unsubscribed", bundle: .module)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
+                    Text("Subscribed", bundle: .module)
+                        .font(.footnote)
+                        .foregroundStyle(.blue_05)
                 }
                 .contentShape(Rectangle())
             }
@@ -254,8 +248,7 @@ extension SimpleCommonAbout {
     Form {
         SimpleCommonAbout(
             txcId: "673644",
-            appStoreId: "123",
-            hasSubscribe: true
+            appStoreId: "123"
         )
     }
     .formStyle(.grouped)
@@ -267,7 +260,7 @@ extension SimpleCommonAbout {
         SimpleCommonAbout(
             txcId: "673644",
             appStoreId: "123",
-            hasSubscribe: true
+            hasSubscription: true
         )
     }
     .formStyle(.grouped)

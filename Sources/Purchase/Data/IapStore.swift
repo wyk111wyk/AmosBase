@@ -9,6 +9,11 @@ import Foundation
 import StoreKit
 import SwiftUI
 
+package let basicTestId = "basic"
+package let proTestId = "pro"
+package let premiumTestId = "premium"
+package let ultraTestId = "ultra"
+
 @Observable
 public class IapStore {
     let logger: SimpleLogger = .console(subsystem: "IapStore")
@@ -26,10 +31,21 @@ public class IapStore {
     public var showPurchase = false
     /// 所有的产品
     public var allProducts: [SimpleProduct] = []
+    /// 展示的时候默认展开
+    public let recommendedProductIds: Set<String>
+    /// 带有试用期的产品
+    public let freeTrialProductIds: Set<String>
+    
     /// 错误
     public var purchaseError: Error?
     
-    public init(productIdentifiers: [String] = []) {
+    public init(
+        productIdentifiers: [String] = [],
+        recommendedProductIds: Set<String> = [],
+        freeTrialProductIds: Set<String> = []
+    ) {
+        self.recommendedProductIds = recommendedProductIds
+        self.freeTrialProductIds = freeTrialProductIds
         updateListenerTask = listenForTransactions()
         Task {
             // 从Apple服务器载入所有的产品
@@ -48,7 +64,10 @@ public class IapStore {
     }
     
     public var hasSubscription: Bool {
-        userState.hasSubscription
+        switch transactionStatus {
+        case .subscripted(_): true
+        default: false
+        }
     }
     
     /// 刷新用户购买信息 / 并更新用户等级
@@ -69,8 +88,9 @@ public class IapStore {
     }
     
     /// 查询当前用户是否是已购买的用户
-    public func checkPremium(complate: @escaping (() -> Void)) {
+    public func checkPremium(complate: @escaping (() -> Void) = {}) {
         if userState.isPremium {
+            // 检查确认为付费用户后的回调方法
             complate()
         }else {
             showPurchasePage()
@@ -108,7 +128,14 @@ public class IapStore {
             //Filter the products into different categories based on their type.
             for product in storeProducts {
 //                logger.debug(product.id, title: "读取 IAP 商品")
-                allProducts.append(product.toSimpleProduct())
+                let hasFreeTrial = freeTrialProductIds.contains(product.id)
+                let isRecommended = recommendedProductIds.contains(product.id)
+                allProducts.append(
+                    product.toSimpleProduct(
+                        hasFreeTrial: hasFreeTrial,
+                        isRecommended: isRecommended
+                    )
+                )
             }
             allProducts.sort(by: { $0.price < $1.price })
         } catch {
@@ -216,7 +243,6 @@ extension IapStore {
         case .subscripted(let expirationDate):
             userState = transaction.productID.toPurchaseState(expiresDate: expirationDate)
             print("UserState: \(userState)")
-            print("Is Premium: \(userState.isPremium.toString())")
             currentProductID = transaction.productID
             return true
         case .revoked(_, let expirationDate):

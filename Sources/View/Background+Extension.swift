@@ -82,8 +82,8 @@ struct ContentBackgroundView: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .padding(.vertical, verticalPadding)
-            .padding(.horizontal, horizontalPadding)
+            .padding(.vertical, isAppear ? verticalPadding : 0)
+            .padding(.horizontal, isAppear ? horizontalPadding : 0)
             .background {
                 if isAppear {
                     if let shadowRadius {

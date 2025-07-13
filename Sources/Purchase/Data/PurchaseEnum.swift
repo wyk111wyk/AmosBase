@@ -31,6 +31,16 @@ public enum PurchaseLevel: Int, Identifiable, CaseIterable {
         case .amos: Image(sfImage: .amos)
         }
     }
+    
+    public var color: Color {
+        switch self {
+        case .basic: .secondary
+        case .pro: .blue_05
+        case .premium: .indigo_07
+        case .ultra: .purple_07
+        case .amos: .green_06
+        }
+    }
 }
 
 public enum PurchaseSpan: Equatable {
@@ -148,7 +158,11 @@ public enum PurchaseState: Equatable, Identifiable {
 #Preview("IAP Logo", body: {
     Form {
         ForEach(PurchaseLevel.allCases) { level in
-            SimpleCell(level.title, purchaseLevel: level)
+            SimpleCell(level.title, purchaseLevel: level) {
+                RoundedRectangle(cornerRadius: 5)
+                    .frame(width: 80, height: 26)
+                    .foregroundStyle(level.color)
+            }
         }
     }
 })

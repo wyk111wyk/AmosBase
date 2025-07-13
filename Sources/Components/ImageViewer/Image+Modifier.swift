@@ -16,7 +16,7 @@ public extension View {
     ) -> some View {
         #if os(macOS)
         modifier(
-            SimpleImageSheet(
+            LLMAnswerImageSheet(
                 selectedIndex: selectedIndex,
                 allPhotos: allPhotos
             )
@@ -24,14 +24,14 @@ public extension View {
         #else
         if isFullScreen {
             modifier(
-                SimpleImageFullScreen(
+                LLMAnswerImageFullScreen(
                     selectedIndex: selectedIndex,
                     allPhotos: allPhotos
                 )
             )
         }else {
             modifier(
-                SimpleImageSheet(
+                LLMAnswerImageSheet(
                     selectedIndex: selectedIndex,
                     allPhotos: allPhotos
                 )
@@ -41,7 +41,7 @@ public extension View {
     }
 }
 
-struct SimpleImageSheet: ViewModifier {
+struct LLMAnswerImageSheet: ViewModifier {
     @Binding var selectedIndex: Int?
     let allPhotos: [any SimpleImageStore]
     
@@ -52,11 +52,13 @@ struct SimpleImageSheet: ViewModifier {
                     allImages: allPhotos,
                     selectedIndex: select
                 )
+                .interactiveDismissDisabled(true)
             }
     }
 }
 
-struct SimpleImageFullScreen: ViewModifier {
+#if os(iOS)
+struct LLMAnswerImageFullScreen: ViewModifier {
     @Binding var selectedIndex: Int?
     let allPhotos: [any SimpleImageStore]
     
@@ -70,3 +72,4 @@ struct SimpleImageFullScreen: ViewModifier {
             }
     }
 }
+#endif

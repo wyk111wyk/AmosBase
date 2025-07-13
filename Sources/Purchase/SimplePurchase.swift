@@ -18,34 +18,24 @@ public struct SimplePurchaseView: View {
     
     @State private var showPrivacySheet: Bool = false
     @State private var showRedeemSheet: Bool = false
-    @State private var showError: Error? = nil
+    @State private var showFailRecover: Bool = false
+    
     @State private var isLoading: Bool = false
     
     let logger: SimpleLogger = .console(subsystem: "IAP")
-    /// 产品介绍的条目
-    let allItem: [PurchaseItem]
     /// 展示页面的配置项
     let config: PurchaseConfig
     
-    @State var monthlyProduct: SimpleProduct? = nil
-    @State var yearlyProduct: SimpleProduct? = nil
-    @State var lifetimeProduct: SimpleProduct? = nil
-    
     let startPurchaseAction: (Product) -> Void
-    let refreshAction: () -> Void
     
     public init(
         storeData: IapStore,
-        allItem: [PurchaseItem],
         config: PurchaseConfig,
-        startPurchaseAction: @escaping (Product) -> Void = {_ in},
-        refreshAction: @escaping () -> Void = {}
+        startPurchaseAction: @escaping (Product) -> Void = {_ in}
     ) {
         self.storeData = storeData
-        self.allItem = allItem
         self.config = config
         self.startPurchaseAction = startPurchaseAction
-        self.refreshAction = refreshAction
     }
     
     var backgroundColor: Color {
@@ -65,16 +55,12 @@ public struct SimplePurchaseView: View {
             backgroundColor.ignoresSafeArea()
             ScrollView {
                 VStack(spacing: 6) {
-                    topLogoContent()
-                    largeImage()
-                    compareTable()
+                    topContent()
+                    productDetailView()
                     introContent()
                     policyContent()
                 }
                 .padding(.horizontal)
-            }
-            .safeAreaInset(edge: .bottom) {
-                bottomPurchase()
             }
         }
         .buttonCirclePage(role: .cancel) {
@@ -82,7 +68,8 @@ public struct SimplePurchaseView: View {
         }
         .simpleHud(isLoading: isLoading)
         #if !os(watchOS)
-        .simpleErrorAlert(error: $showError)
+        .simpleErrorAlert(error: $storeData.purchaseError)
+        .simpleAlert(title: "No purchased products found!", isPresented: $showFailRecover)
         .sheet(isPresented: $showPrivacySheet) {
             SimpleWebView(url: privacyPolicy, isPushIn: false)
         }
@@ -94,41 +81,20 @@ public struct SimplePurchaseView: View {
                 logger.debug("兑换Code成功")
                 dismissPage()
             case .failure(let error):
-                showError = error
+                storeData.purchaseError = error
             }
         }
         #endif
-        .refreshable {
-            fetchProduct()
-        }
-        .task {
-            fetchProduct()
-        }
-        .onChange(of: storeData.allProducts.count) {
-            fetchProduct()
-        }
-    }
-    
-    private func fetchProduct() {
-        for product in storeData.allProducts {
-            logger.debug(product.id, title: "展示 IAP 商品")
-            if product.isMonthlySubscription {
-                monthlyProduct = product
-            }else if product.isYearlySubscription {
-                yearlyProduct = product
-            }else if product.isPermanent {
-                lifetimeProduct = product
-            }
-        }
     }
     
     @MainActor
     private func recoverPurchase() async {
         isLoading = true
         if await storeData.refresh() {
-            refreshAction()
             isLoading = false
             dismissPage()
+        }else {
+            showFailRecover = true
         }
         isLoading = false
     }
@@ -136,204 +102,112 @@ public struct SimplePurchaseView: View {
 
 extension SimplePurchaseView {
     
-    private var deviceImage: some View {
-        if colorScheme == .light {
-            config.titleImage_w
-                .resizable().scaledToFit()
-        } else {
-            if let titleImage_b = config.titleImage_b {
-                titleImage_b
-                    .resizable().scaledToFit()
-            }else {
-                config.titleImage_w
-                    .resizable().scaledToFit()
-            }
-        }
-    }
-    
-    private var topLog: some View {
-        if colorScheme == .light {
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .foregroundStyle(.black.opacity(0.8))
-                    .frame(width: 160, height: 40)
-                HStack(spacing: 12) {
-                    Image(sfImage: .dimond_w)
-                        .resizable().scaledToFit()
-                        .frame(width: 36)
-                    Image(sfImage: .premium)
-                        .resizable().scaledToFit()
-                        .frame(width: 90)
-                }
-            }
-        }else {
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .foregroundStyle(.white.opacity(0.96))
-                    .frame(width: 160, height: 40)
-                HStack(spacing: 12) {
-                    Image(sfImage: .dimond)
-                        .resizable().scaledToFit()
-                        .frame(width: 36)
-                    Image(sfImage: .premium)
-                        .resizable().scaledToFit()
-                        .frame(width: 90)
-                }
-            }
-        }
+    private func topContent() -> some View {
+        PurchaseTopImage(
+            titleSlogen: config.title,
+            titleImage_w: config.titleImage_w,
+            titleImage_b: config.titleImage_b
+        )
+        .padding(.top)
+        .padding(.bottom)
     }
     
     @ViewBuilder
-    private func compareTable() -> some View {
-        PurchaseCompareTable(allItem: allItem)
-    }
-}
-
-
-
-extension SimplePurchaseView {
-    private func topLogoContent() -> some View {
-        HStack {
-            Spacer()
-            VStack(alignment: .center, spacing: 8) {
-                topLog
-                if let title = config.title {
-                    Text(title)
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
+    private func productDetailView() -> some View {
+        // Basic的内容介绍
+        PurchaseDetailCompare(
+            level: .basic,
+            simpleProduct: nil,
+            features: config.productDescription["basic"]
+        )
+            .padding(.bottom, 12)
+        // 内购项目内容介绍
+        ForEach(storeData.allProducts) { product in
+            PurchaseDetailCompare(
+                isExpanded: product.isRecommended,
+                level: product.level,
+                simpleProduct: product,
+                features: config.productDescription[product.id]
+            ) { product in
+                startPurchaseAction(product)
+            }
+            .padding(.bottom, 12)
+        }
+        #if DEBUG
+        // 在 Demo 预览中进行查看的案例
+        if storeData.allProducts.isEmpty {
+            ForEach(SimpleProduct.allExamples) { product in
+                PurchaseDetailCompare(
+                    isExpanded: product.isRecommended,
+                    level: product.level,
+                    simpleProduct: product,
+                    features: config.productDescription[product.id]
+                ) { product in
+                    logger.debug(product.id, title: "点击购买")
                 }
+                .padding(.bottom, 12)
             }
         }
-        .padding(.top)
-        .padding(.bottom, 6)
-    }
-    
-    private func largeImage() -> some View {
-        VStack(spacing: 10) {
-            deviceImage
-            if let imageCaption = config.imageCaption {
-                Text(imageCaption)
-                    .simpleTag(
-                        .border(
-                            horizontalPad: 28,
-                            cornerRadius: 15,
-                            contentFont: .body.weight(.medium),
-                            contentColor: .secondary
-                        )
-                    )
-            }
-        }
-        .padding(.horizontal, 2)
-        .padding(.bottom)
+        #endif
     }
     
     @ViewBuilder
     private func introContent() -> some View {
-        if let devNote = config.devNote {
-            let textColor: Color = .hexColor("f1f2f4")
-            let bgColor: Color = .hexColor("367098")
-            let shadowColor: Color = .hexColor("78abaf")
-            Text(devNote)
-                .allowsTightening(true)
-                .lineSpacing(6)
-                .font(.callout)
-                .foregroundStyle(textColor)
-                .padding(.horizontal)
-                .padding(.bottom)
-                .padding(.top, 66)
-                .background {
-                    ZStack(alignment: .topLeading) {
-                        RoundedRectangle(cornerRadius: 8)
-                            .foregroundStyle(bgColor.opacity(0.9))
-                            .shadow(color: shadowColor.opacity(0.9), radius: 0, x: 10, y: 10)
-                        HStack {
-                            Text("“")
-                                .font(.system(size: 100))
-                            Text("Product Message", bundle: .module)
-                                .fontDesign(.rounded)
-                                .fontWeight(.semibold)
-                                .font(.title)
-                                .offset(y: -20)
-                        }
-                        .foregroundStyle(textColor)
-                        .offset(x: 15)
-                    }
-                }
-                .padding(.bottom)
-        }
+        PurchaseProductMessage(message: config.devNote)
+            .padding(.bottom, 30)
     }
     
     private func policyContent() -> some View {
-        VStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Service Description 1:\(monthlyProduct?.displayPrice ?? "N/A") 2:\(yearlyProduct?.displayPrice ?? "N/A") 3:\(lifetimeProduct?.displayPrice ?? "N/A")", bundle: .module)
+        PurchasePolicyContent(showPrivacyAction: {
+            showPrivacySheet = true
+        }, resumePurchasesAction: {
+            Task {
+                await recoverPurchase()
             }
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            HStack(spacing: 12) {
-                Button {
-                    showPrivacySheet = true
-                } label: {
-                    Text("Privacy Policy", bundle: .module)
-                        .foregroundStyle(.blue)
-                }
-                Text("·").foregroundStyle(.secondary)
-                Button {
-                    Task {
-                        await recoverPurchase()
-                    }
-                } label: {
-                    Text("Resume purchases", bundle: .module)
-                        .foregroundStyle(.blue)
-                }
-                #if os(iOS)
-                Text("·").foregroundStyle(.secondary)
-                Button {
-                    showRedeemSheet = true
-                } label: {
-                    Text("Code Redemption", bundle: .module)
-                        .foregroundStyle(.blue)
-                }
-                #endif
-            }
-            .font(.callout)
-            .padding(.top, 10)
-            SimpleLogoView()
-                .padding(.top, 10)
-        }
-        .padding(.bottom)
+        }, redeemCodeAction: {
+            showRedeemSheet = true
+        })
+        .padding(.horizontal, 8)
     }
 }
 
 struct DemoSimplePurchase: View {
-    var allItem: [PurchaseItem] {
-        [
-            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "学习计划", regular: "仅限预设", premium: "自由创建和更改"),
-            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品详情", regular: "解析、佳句", premium: "介绍、译文、评论、百科"),
-            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "诵读引擎", regular: "系统合成音效", premium: "专项训练的神经网络引擎"),
-            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "作品成图", regular: "无法生成图片", premium: "多维定制生成诗词图片"),
-            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "数据同步", regular: "仅限本地使用", premium: "多设备无缝实时同步使用"),
-            PurchaseItem(icon: Image(sfImage: .lal_nba), title: "多端使用", regular: "多平台", premium: "单次购买 · 多端同享")
-        ]
-    }
-    
     var body: some View {
         SimplePurchaseView(
             storeData: IapStore(),
-            allItem: allItem,
             config: .init(
                 title: "体验完整文学魅力",
                 titleImage_w: Image(sfImage: .device),
                 titleImage_b: Image(sfImage: .device),
-                imageCaption: "单次购买 · 多端同享",
                 devNote: "我们的愿景是希望用App解决生活中的“小问题”。这意味着对日常用户而言，免费版本也必须足够好用。\n10万诗词文章离线可查，核心的阅读、检索、学习体验完整而简洁，加上现代化的设计和全平台的体验完全开放。\n而高级版本又将解锁一系列新的特性。让诗词赏析的体验进一步提升，更私人、更灵活、更智能、更值得。",
-                hasFreeTrial: true
+                productDescription: [
+                    basicTestId: basicFeatures,
+                    SimpleProduct.monthExample.id: premiumFeatures,
+                    SimpleProduct.yearExample.id: ["这是 Premium 相关的特性介绍"],
+                    SimpleProduct.lifeExample.id: ["这是 Ultra 相关的特性介绍"]
+                ]
             )
         )
         #if os(macOS)
         .frame(height: 800)
         #endif
     }
+    
+    var basicFeatures: [String] {[
+        "10万诗词文章离线可查",
+        "现代化设计的阅读体验",
+        "系统 TTS 语音朗读",
+        "可查作品的解析和佳句",
+        "完整的阅读、检索、收藏体验"
+    ]}
+    
+    var premiumFeatures: [String] {[
+        "创建和更改学习计划",
+        "自定义阅读和分享主题",
+        "作品详细的介绍、译文、评论、百科查看",
+        "富含感情的 AI 神经引擎语音朗诵",
+        "多设备在线同步收藏和学习记录"
+    ]}
 }
 
 #Preview("En") {

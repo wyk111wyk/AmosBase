@@ -198,26 +198,15 @@ public extension Double {
     }
     
     /// 转换为文字
-    ///
-    /// 默认不带小数点，最多8位
     func toString(digit: Int? = nil) -> String {
-        if digit == 0 {
-            return String(format: "%.0f", self)
-        } else if digit == 1 {
-            return String(format: "%.1f", self)
-        } else if digit == 2 {
-            return String(format: "%.2f", self)
-        } else if digit == 3 {
-            return String(format: "%.3f", self)
-        } else if digit == 4 {
-            return String(format: "%.4f", self)
-        } else if digit == 5 {
-            return String(format: "%.5f", self)
-        } else if digit == 6 {
-            return String(format: "%.6f", self)
-        } else if digit == 7 {
-            return String(format: "%.7f", self)
+        // 检查 digit 是否存在且在有效范围 (0 到 8) 内
+        if let digit {
+            // 动态构建格式字符串，例如 "%.0f", "%.1f", ..., "%.8f"
+            // 注意：在格式字符串中，如果需要一个字面量的 '%'，需要使用 '%%' 进行转义
+            let formatString = String(format: "%%.%df", digit)
+            return String(format: formatString, self)
         } else {
+            // 如果 digit 为 nil 或超出 0-8 的范围，则回退到默认的字符串转换
             return String(self)
         }
     }

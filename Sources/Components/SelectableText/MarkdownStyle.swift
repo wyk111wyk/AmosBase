@@ -70,7 +70,16 @@ extension AttributedString {
         #endif
 
         // MARK: Inline Intents
-        let inlineIntents: [InlinePresentationIntent] = [.emphasized, .stronglyEmphasized, .code, .strikethrough, .softBreak, .lineBreak, .inlineHTML, .blockHTML]
+        let inlineIntents: [InlinePresentationIntent] = [
+            .emphasized,
+            .stronglyEmphasized,
+            .code,
+            .strikethrough,
+            .softBreak,
+            .lineBreak,
+            .inlineHTML,
+            .blockHTML
+        ]
 
         for inlineIntent in inlineIntents {
 
@@ -129,7 +138,9 @@ extension AttributedString {
 
         var previousListID = 0
 
-        for (intentBlock, intentRange) in inputString.runs[AttributeScopes.FoundationAttributes.PresentationIntentAttribute.self].reversed() {
+        for (intentBlock, intentRange) in inputString
+            .runs[AttributeScopes.FoundationAttributes.PresentationIntentAttribute.self]
+            .reversed() {
             guard let intentBlock = intentBlock else { continue }
 
             var block: MarkdownStyledBlock = .generic
@@ -236,8 +247,8 @@ extension NSParagraphStyle: @unchecked @retroactive Sendable {}
 
 @Sendable func defaultParagraphStyle() -> NSParagraphStyle {
     let paragraphStyle = NSMutableParagraphStyle()
-    paragraphStyle.lineSpacing = 6
-    paragraphStyle.paragraphSpacing = 6.0
+    paragraphStyle.lineSpacing = 8
+    paragraphStyle.paragraphSpacing = 10.0
     paragraphStyle.minimumLineHeight = 16.0
     return paragraphStyle
 }
@@ -246,7 +257,7 @@ extension NSParagraphStyle: @unchecked @retroactive Sendable {}
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.tabStops = [NSTextTab(textAlignment: .left, location: 20)]
     paragraphStyle.headIndent = 20
-    paragraphStyle.lineSpacing = 6
+    paragraphStyle.lineSpacing = 7
     paragraphStyle.minimumLineHeight = 20.0
     return paragraphStyle
 }
@@ -255,7 +266,7 @@ extension NSParagraphStyle: @unchecked @retroactive Sendable {}
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.tabStops = [NSTextTab(textAlignment: .left, location: 20)]
     paragraphStyle.headIndent = 20
-    paragraphStyle.lineSpacing = 6
+    paragraphStyle.lineSpacing = 7
     paragraphStyle.minimumLineHeight = 20.0
     paragraphStyle.paragraphSpacing = 20.0
     return paragraphStyle
@@ -264,8 +275,8 @@ extension NSParagraphStyle: @unchecked @retroactive Sendable {}
 @Sendable func codeParagraphStyle() -> NSParagraphStyle {
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.minimumLineHeight = 18
-    paragraphStyle.lineSpacing = 2
-    paragraphStyle.paragraphSpacing = 2
+    paragraphStyle.lineSpacing = 3
+    paragraphStyle.paragraphSpacing = 4
     paragraphStyle.firstLineHeadIndent = 20
     paragraphStyle.headIndent = 20
     return paragraphStyle
